@@ -41,6 +41,18 @@ Methods:
 
 - <code title="get /hardware">client.hardware.<a href="./src/replicate_client/resources/hardware.py">list</a>() -> <a href="./src/replicate_client/types/hardware_list_response.py">HardwareListResponse</a></code>
 
+# Accounts
+
+Types:
+
+```python
+from replicate_client.types import AccountListResponse
+```
+
+Methods:
+
+- <code title="get /account">client.accounts.<a href="./src/replicate_client/resources/accounts.py">list</a>() -> <a href="./src/replicate_client/types/account_list_response.py">AccountListResponse</a></code>
+
 # Models
 
 Methods:
