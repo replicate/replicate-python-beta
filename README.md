@@ -36,9 +36,7 @@ client = ReplicateClient(
     ),  # This is the default and can be omitted
 )
 
-client.collections.retrieve(
-    "collection_slug",
-)
+client.collections.list()
 ```
 
 While you can provide a `bearer_token` keyword argument,
@@ -63,9 +61,7 @@ client = AsyncReplicateClient(
 
 
 async def main() -> None:
-    await client.collections.retrieve(
-        "collection_slug",
-    )
+    await client.collections.list()
 
 
 asyncio.run(main())
@@ -98,9 +94,7 @@ from replicate_client import ReplicateClient
 client = ReplicateClient()
 
 try:
-    client.collections.retrieve(
-        "collection_slug",
-    )
+    client.collections.list()
 except replicate_client.APIConnectionError as e:
     print("The server could not be reached")
     print(e.__cause__)  # an underlying Exception, likely raised within httpx.
@@ -143,9 +137,7 @@ client = ReplicateClient(
 )
 
 # Or, configure per-request:
-client.with_options(max_retries=5).collections.retrieve(
-    "collection_slug",
-)
+client.with_options(max_retries=5).collections.list()
 ```
 
 ### Timeouts
@@ -168,9 +160,7 @@ client = ReplicateClient(
 )
 
 # Override per-request:
-client.with_options(timeout=5.0).collections.retrieve(
-    "collection_slug",
-)
+client.with_options(timeout=5.0).collections.list()
 ```
 
 On timeout, an `APITimeoutError` is thrown.
@@ -211,12 +201,10 @@ The "raw" Response object can be accessed by prefixing `.with_raw_response.` to 
 from replicate_client import ReplicateClient
 
 client = ReplicateClient()
-response = client.collections.with_raw_response.retrieve(
-    "collection_slug",
-)
+response = client.collections.with_raw_response.list()
 print(response.headers.get('X-My-Header'))
 
-collection = response.parse()  # get the object that `collections.retrieve()` would have returned
+collection = response.parse()  # get the object that `collections.list()` would have returned
 print(collection)
 ```
 
@@ -231,9 +219,7 @@ The above interface eagerly reads the full response body when you make the reque
 To stream the response body, use `.with_streaming_response` instead, which requires a context manager and only reads the response body once you call `.read()`, `.text()`, `.json()`, `.iter_bytes()`, `.iter_text()`, `.iter_lines()` or `.parse()`. In the async client, these are async methods.
 
 ```python
-with client.collections.with_streaming_response.retrieve(
-    "collection_slug",
-) as response:
+with client.collections.with_streaming_response.list() as response:
     print(response.headers.get("X-My-Header"))
 
     for line in response.iter_lines():
