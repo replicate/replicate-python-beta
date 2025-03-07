@@ -4,8 +4,8 @@ from typing import Sequence
 
 import pytest
 
-from replicate_client._types import FileTypes
-from replicate_client._utils import extract_files
+from replicate._types import FileTypes
+from replicate._utils import extract_files
 
 
 def test_removes_files_from_input() -> None:

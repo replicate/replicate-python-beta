@@ -5,8 +5,8 @@ from typing import Iterator, AsyncIterator
 import httpx
 import pytest
 
-from replicate_client import ReplicateClient, AsyncReplicateClient
-from replicate_client._streaming import Stream, AsyncStream, ServerSentEvent
+from replicate import ReplicateClient, AsyncReplicateClient
+from replicate._streaming import Stream, AsyncStream, ServerSentEvent
 
 
 @pytest.mark.asyncio

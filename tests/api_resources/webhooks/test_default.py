@@ -7,9 +7,9 @@ from typing import Any, cast
 
 import pytest
 
+from replicate import ReplicateClient, AsyncReplicateClient
 from tests.utils import assert_matches_type
-from replicate_client import ReplicateClient, AsyncReplicateClient
-from replicate_client.types.webhooks import DefaultRetrieveSecretResponse
+from replicate.types.webhooks import DefaultRetrieveSecretResponse
 
 base_url = os.environ.get("TEST_API_BASE_URL", "http://127.0.0.1:4010")
 

@@ -7,9 +7,9 @@ import pytest
 import pydantic
 from pydantic import Field
 
-from replicate_client._utils import PropertyInfo
-from replicate_client._compat import PYDANTIC_V2, parse_obj, model_dump, model_json
-from replicate_client._models import BaseModel, construct_type
+from replicate._utils import PropertyInfo
+from replicate._compat import PYDANTIC_V2, parse_obj, model_dump, model_json
+from replicate._models import BaseModel, construct_type
 
 
 class BasicModel(BaseModel):

@@ -6,8 +6,8 @@ import httpx
 import pytest
 import pydantic
 
-from replicate_client import BaseModel, ReplicateClient, AsyncReplicateClient
-from replicate_client._response import (
+from replicate import BaseModel, ReplicateClient, AsyncReplicateClient
+from replicate._response import (
     APIResponse,
     BaseAPIResponse,
     AsyncAPIResponse,
@@ -15,8 +15,8 @@ from replicate_client._response import (
     AsyncBinaryAPIResponse,
     extract_response_type,
 )
-from replicate_client._streaming import Stream
-from replicate_client._base_client import FinalRequestOptions
+from replicate._streaming import Stream
+from replicate._base_client import FinalRequestOptions
 
 
 class ConcreteBaseAPIResponse(APIResponse[bytes]): ...
@@ -37,7 +37,7 @@ def test_extract_response_type_direct_classes() -> None:
 def test_extract_response_type_direct_class_missing_type_arg() -> None:
     with pytest.raises(
         RuntimeError,
-        match="Expected type <class 'replicate_client._response.AsyncAPIResponse'> to have a type argument at index 0 but it did not",
+        match="Expected type <class 'replicate._response.AsyncAPIResponse'> to have a type argument at index 0 but it did not",
     ):
         extract_response_type(AsyncAPIResponse)
 
@@ -68,7 +68,7 @@ def test_response_parse_mismatched_basemodel(client: ReplicateClient) -> None:
 
     with pytest.raises(
         TypeError,
-        match="Pydantic models must subclass our base model type, e.g. `from replicate_client import BaseModel`",
+        match="Pydantic models must subclass our base model type, e.g. `from replicate import BaseModel`",
     ):
         response.parse(to=PydanticModel)
 
@@ -86,7 +86,7 @@ async def test_async_response_parse_mismatched_basemodel(async_client: AsyncRepl
 
     with pytest.raises(
         TypeError,
-        match="Pydantic models must subclass our base model type, e.g. `from replicate_client import BaseModel`",
+        match="Pydantic models must subclass our base model type, e.g. `from replicate import BaseModel`",
     ):
         await response.parse(to=PydanticModel)
 

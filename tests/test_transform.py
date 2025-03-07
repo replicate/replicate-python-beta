@@ -8,15 +8,15 @@ from typing_extensions import Required, Annotated, TypedDict
 
 import pytest
 
-from replicate_client._types import Base64FileInput
-from replicate_client._utils import (
+from replicate._types import Base64FileInput
+from replicate._utils import (
     PropertyInfo,
     transform as _transform,
     parse_datetime,
     async_transform as _async_transform,
 )
-from replicate_client._compat import PYDANTIC_V2
-from replicate_client._models import BaseModel
+from replicate._compat import PYDANTIC_V2
+from replicate._models import BaseModel
 
 _T = TypeVar("_T")
 

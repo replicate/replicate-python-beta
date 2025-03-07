@@ -7,7 +7,7 @@ from typing import Any, cast
 
 import pytest
 
-from replicate_client import ReplicateClient, AsyncReplicateClient
+from replicate import ReplicateClient, AsyncReplicateClient
 
 base_url = os.environ.get("TEST_API_BASE_URL", "http://127.0.0.1:4010")
 

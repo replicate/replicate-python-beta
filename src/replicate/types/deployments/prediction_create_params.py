@@ -5,12 +5,12 @@ from __future__ import annotations
 from typing import List
 from typing_extensions import Literal, Required, Annotated, TypedDict
 
-from .._utils import PropertyInfo
+from ..._utils import PropertyInfo
 
-__all__ = ["DeploymentCreatePredictionParams"]
+__all__ = ["PredictionCreateParams"]
 
 
-class DeploymentCreatePredictionParams(TypedDict, total=False):
+class PredictionCreateParams(TypedDict, total=False):
     deployment_owner: Required[str]
 
     input: Required[object]

@@ -21,17 +21,12 @@ import pytest
 from respx import MockRouter
 from pydantic import ValidationError
 
-from replicate_client import ReplicateClient, AsyncReplicateClient, APIResponseValidationError
-from replicate_client._types import Omit
-from replicate_client._models import BaseModel, FinalRequestOptions
-from replicate_client._constants import RAW_RESPONSE_HEADER
-from replicate_client._exceptions import (
-    APIStatusError,
-    APITimeoutError,
-    ReplicateClientError,
-    APIResponseValidationError,
-)
-from replicate_client._base_client import (
+from replicate import ReplicateClient, AsyncReplicateClient, APIResponseValidationError
+from replicate._types import Omit
+from replicate._models import BaseModel, FinalRequestOptions
+from replicate._constants import RAW_RESPONSE_HEADER
+from replicate._exceptions import APIStatusError, APITimeoutError, ReplicateClientError, APIResponseValidationError
+from replicate._base_client import (
     DEFAULT_TIMEOUT,
     HTTPX_DEFAULT_TIMEOUT,
     BaseClient,
@@ -238,10 +233,10 @@ class TestReplicateClient:
                         # to_raw_response_wrapper leaks through the @functools.wraps() decorator.
                         #
                         # removing the decorator fixes the leak for reasons we don't understand.
-                        "replicate_client/_legacy_response.py",
-                        "replicate_client/_response.py",
+                        "replicate/_legacy_response.py",
+                        "replicate/_response.py",
                         # pydantic.BaseModel.model_dump || pydantic.BaseModel.dict leak memory for some reason.
-                        "replicate_client/_compat.py",
+                        "replicate/_compat.py",
                         # Standard library leaks we don't care about.
                         "/logging/__init__.py",
                     ]
@@ -742,7 +737,7 @@ class TestReplicateClient:
         calculated = client._calculate_retry_timeout(remaining_retries, options, headers)
         assert calculated == pytest.approx(timeout, 0.5 * 0.875)  # pyright: ignore[reportUnknownMemberType]
 
-    @mock.patch("replicate_client._base_client.BaseClient._calculate_retry_timeout", _low_retry_timeout)
+    @mock.patch("replicate._base_client.BaseClient._calculate_retry_timeout", _low_retry_timeout)
     @pytest.mark.respx(base_url=base_url)
     def test_retrying_timeout_errors_doesnt_leak(self, respx_mock: MockRouter) -> None:
         respx_mock.get("/account").mock(side_effect=httpx.TimeoutException("Test timeout error"))
@@ -752,7 +747,7 @@ class TestReplicateClient:
 
         assert _get_open_connections(self.client) == 0
 
-    @mock.patch("replicate_client._base_client.BaseClient._calculate_retry_timeout", _low_retry_timeout)
+    @mock.patch("replicate._base_client.BaseClient._calculate_retry_timeout", _low_retry_timeout)
     @pytest.mark.respx(base_url=base_url)
     def test_retrying_status_errors_doesnt_leak(self, respx_mock: MockRouter) -> None:
         respx_mock.get("/account").mock(return_value=httpx.Response(500))
@@ -763,7 +758,7 @@ class TestReplicateClient:
         assert _get_open_connections(self.client) == 0
 
     @pytest.mark.parametrize("failures_before_success", [0, 2, 4])
-    @mock.patch("replicate_client._base_client.BaseClient._calculate_retry_timeout", _low_retry_timeout)
+    @mock.patch("replicate._base_client.BaseClient._calculate_retry_timeout", _low_retry_timeout)
     @pytest.mark.respx(base_url=base_url)
     @pytest.mark.parametrize("failure_mode", ["status", "exception"])
     def test_retries_taken(
@@ -794,7 +789,7 @@ class TestReplicateClient:
         assert int(response.http_request.headers.get("x-stainless-retry-count")) == failures_before_success
 
     @pytest.mark.parametrize("failures_before_success", [0, 2, 4])
-    @mock.patch("replicate_client._base_client.BaseClient._calculate_retry_timeout", _low_retry_timeout)
+    @mock.patch("replicate._base_client.BaseClient._calculate_retry_timeout", _low_retry_timeout)
     @pytest.mark.respx(base_url=base_url)
     def test_omit_retry_count_header(
         self, client: ReplicateClient, failures_before_success: int, respx_mock: MockRouter
@@ -817,7 +812,7 @@ class TestReplicateClient:
         assert len(response.http_request.headers.get_list("x-stainless-retry-count")) == 0
 
     @pytest.mark.parametrize("failures_before_success", [0, 2, 4])
-    @mock.patch("replicate_client._base_client.BaseClient._calculate_retry_timeout", _low_retry_timeout)
+    @mock.patch("replicate._base_client.BaseClient._calculate_retry_timeout", _low_retry_timeout)
     @pytest.mark.respx(base_url=base_url)
     def test_overwrite_retry_count_header(
         self, client: ReplicateClient, failures_before_success: int, respx_mock: MockRouter
@@ -1018,10 +1013,10 @@ class TestAsyncReplicateClient:
                         # to_raw_response_wrapper leaks through the @functools.wraps() decorator.
                         #
                         # removing the decorator fixes the leak for reasons we don't understand.
-                        "replicate_client/_legacy_response.py",
-                        "replicate_client/_response.py",
+                        "replicate/_legacy_response.py",
+                        "replicate/_response.py",
                         # pydantic.BaseModel.model_dump || pydantic.BaseModel.dict leak memory for some reason.
-                        "replicate_client/_compat.py",
+                        "replicate/_compat.py",
                         # Standard library leaks we don't care about.
                         "/logging/__init__.py",
                     ]
@@ -1528,7 +1523,7 @@ class TestAsyncReplicateClient:
         calculated = client._calculate_retry_timeout(remaining_retries, options, headers)
         assert calculated == pytest.approx(timeout, 0.5 * 0.875)  # pyright: ignore[reportUnknownMemberType]
 
-    @mock.patch("replicate_client._base_client.BaseClient._calculate_retry_timeout", _low_retry_timeout)
+    @mock.patch("replicate._base_client.BaseClient._calculate_retry_timeout", _low_retry_timeout)
     @pytest.mark.respx(base_url=base_url)
     async def test_retrying_timeout_errors_doesnt_leak(self, respx_mock: MockRouter) -> None:
         respx_mock.get("/account").mock(side_effect=httpx.TimeoutException("Test timeout error"))
@@ -1540,7 +1535,7 @@ class TestAsyncReplicateClient:
 
         assert _get_open_connections(self.client) == 0
 
-    @mock.patch("replicate_client._base_client.BaseClient._calculate_retry_timeout", _low_retry_timeout)
+    @mock.patch("replicate._base_client.BaseClient._calculate_retry_timeout", _low_retry_timeout)
     @pytest.mark.respx(base_url=base_url)
     async def test_retrying_status_errors_doesnt_leak(self, respx_mock: MockRouter) -> None:
         respx_mock.get("/account").mock(return_value=httpx.Response(500))
@@ -1553,7 +1548,7 @@ class TestAsyncReplicateClient:
         assert _get_open_connections(self.client) == 0
 
     @pytest.mark.parametrize("failures_before_success", [0, 2, 4])
-    @mock.patch("replicate_client._base_client.BaseClient._calculate_retry_timeout", _low_retry_timeout)
+    @mock.patch("replicate._base_client.BaseClient._calculate_retry_timeout", _low_retry_timeout)
     @pytest.mark.respx(base_url=base_url)
     @pytest.mark.asyncio
     @pytest.mark.parametrize("failure_mode", ["status", "exception"])
@@ -1585,7 +1580,7 @@ class TestAsyncReplicateClient:
         assert int(response.http_request.headers.get("x-stainless-retry-count")) == failures_before_success
 
     @pytest.mark.parametrize("failures_before_success", [0, 2, 4])
-    @mock.patch("replicate_client._base_client.BaseClient._calculate_retry_timeout", _low_retry_timeout)
+    @mock.patch("replicate._base_client.BaseClient._calculate_retry_timeout", _low_retry_timeout)
     @pytest.mark.respx(base_url=base_url)
     @pytest.mark.asyncio
     async def test_omit_retry_count_header(
@@ -1609,7 +1604,7 @@ class TestAsyncReplicateClient:
         assert len(response.http_request.headers.get_list("x-stainless-retry-count")) == 0
 
     @pytest.mark.parametrize("failures_before_success", [0, 2, 4])
-    @mock.patch("replicate_client._base_client.BaseClient._calculate_retry_timeout", _low_retry_timeout)
+    @mock.patch("replicate._base_client.BaseClient._calculate_retry_timeout", _low_retry_timeout)
     @pytest.mark.respx(base_url=base_url)
     @pytest.mark.asyncio
     async def test_overwrite_retry_count_header(
@@ -1643,8 +1638,8 @@ class TestAsyncReplicateClient:
         import nest_asyncio
         import threading
 
-        from replicate_client._utils import asyncify
-        from replicate_client._base_client import get_platform 
+        from replicate._utils import asyncify
+        from replicate._base_client import get_platform 
 
         async def test_main() -> None:
             result = await asyncify(get_platform)()

@@ -8,8 +8,8 @@ from typing import Any, TypeVar, Iterator, cast
 from datetime import date, datetime
 from typing_extensions import Literal, get_args, get_origin, assert_type
 
-from replicate_client._types import Omit, NoneType
-from replicate_client._utils import (
+from replicate._types import Omit, NoneType
+from replicate._utils import (
     is_dict,
     is_list,
     is_list_type,
@@ -18,8 +18,8 @@ from replicate_client._utils import (
     is_annotated_type,
     is_type_alias_type,
 )
-from replicate_client._compat import PYDANTIC_V2, field_outer_type, get_model_fields
-from replicate_client._models import BaseModel
+from replicate._compat import PYDANTIC_V2, field_outer_type, get_model_fields
+from replicate._models import BaseModel
 
 BaseModelT = TypeVar("BaseModelT", bound=BaseModel)
 
