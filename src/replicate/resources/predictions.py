@@ -37,7 +37,7 @@ class PredictionsResource(SyncAPIResource):
         This property can be used as a prefix for any HTTP method call to return
         the raw response object instead of the parsed content.
 
-        For more information, see https://www.github.com/stainless-sdks/replicate-client-python#accessing-raw-response-data-eg-headers
+        For more information, see https://www.github.com/zeke/replicate-client-python-prod-for-fun#accessing-raw-response-data-eg-headers
         """
         return PredictionsResourceWithRawResponse(self)
 
@@ -46,7 +46,7 @@ class PredictionsResource(SyncAPIResource):
         """
         An alternative to `.with_raw_response` that doesn't eagerly read the response body.
 
-        For more information, see https://www.github.com/stainless-sdks/replicate-client-python#with_streaming_response
+        For more information, see https://www.github.com/zeke/replicate-client-python-prod-for-fun#with_streaming_response
         """
         return PredictionsResourceWithStreamingResponse(self)
 
@@ -447,7 +447,7 @@ class AsyncPredictionsResource(AsyncAPIResource):
         This property can be used as a prefix for any HTTP method call to return
         the raw response object instead of the parsed content.
 
-        For more information, see https://www.github.com/stainless-sdks/replicate-client-python#accessing-raw-response-data-eg-headers
+        For more information, see https://www.github.com/zeke/replicate-client-python-prod-for-fun#accessing-raw-response-data-eg-headers
         """
         return AsyncPredictionsResourceWithRawResponse(self)
 
@@ -456,7 +456,7 @@ class AsyncPredictionsResource(AsyncAPIResource):
         """
         An alternative to `.with_raw_response` that doesn't eagerly read the response body.
 
-        For more information, see https://www.github.com/stainless-sdks/replicate-client-python#with_streaming_response
+        For more information, see https://www.github.com/zeke/replicate-client-python-prod-for-fun#with_streaming_response
         """
         return AsyncPredictionsResourceWithStreamingResponse(self)
 
