@@ -24,7 +24,7 @@ from ._utils import (
     get_async_library,
 )
 from ._version import __version__
-from .resources import accounts, hardware, trainings, collections, deployments, predictions
+from .resources import accounts, hardware, trainings, collections, predictions
 from ._streaming import Stream as Stream, AsyncStream as AsyncStream
 from ._exceptions import APIStatusError, ReplicateClientError
 from ._base_client import (
@@ -34,6 +34,7 @@ from ._base_client import (
 )
 from .resources.models import models
 from .resources.webhooks import webhooks
+from .resources.deployments import deployments
 
 __all__ = [
     "Timeout",

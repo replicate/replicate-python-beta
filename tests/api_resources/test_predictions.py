@@ -7,13 +7,10 @@ from typing import Any, cast
 
 import pytest
 
+from replicate import ReplicateClient, AsyncReplicateClient
 from tests.utils import assert_matches_type
-from replicate_client import ReplicateClient, AsyncReplicateClient
-from replicate_client.types import (
-    PredictionResponse,
-    PredictionListResponse,
-)
-from replicate_client._utils import parse_datetime
+from replicate.types import PredictionResponse, PredictionListResponse
+from replicate._utils import parse_datetime
 
 base_url = os.environ.get("TEST_API_BASE_URL", "http://127.0.0.1:4010")
 
