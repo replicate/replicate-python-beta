@@ -39,58 +39,6 @@ class HardwareResource(SyncAPIResource):
         """
         return HardwareResourceWithStreamingResponse(self)
 
-    def retrieve(
-        self,
-        collection_slug: str,
-        *,
-        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
-        # The extra values given here take precedence over values defined on the client or passed to this method.
-        extra_headers: Headers | None = None,
-        extra_query: Query | None = None,
-        extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> None:
-        """
-        Example cURL request:
-
-        ```console
-        curl -s \\
-          -H "Authorization: Bearer $REPLICATE_API_TOKEN" \\
-          https://api.replicate.com/v1/collections/super-resolution
-        ```
-
-        The response will be a collection object with a nested list of the models in
-        that collection:
-
-        ```json
-        {
-          "name": "Super resolution",
-          "slug": "super-resolution",
-          "description": "Upscaling models that create high-quality images from low-quality images.",
-          "models": [...]
-        }
-        ```
-
-        Args:
-          extra_headers: Send extra headers
-
-          extra_query: Add additional query parameters to the request
-
-          extra_body: Add additional JSON properties to the request
-
-          timeout: Override the client-level default timeout for this request, in seconds
-        """
-        if not collection_slug:
-            raise ValueError(f"Expected a non-empty value for `collection_slug` but received {collection_slug!r}")
-        extra_headers = {"Accept": "*/*", **(extra_headers or {})}
-        return self._get(
-            f"/collections/{collection_slug}",
-            options=make_request_options(
-                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
-            ),
-            cast_to=NoneType,
-        )
-
     def list(
         self,
         *,
@@ -129,28 +77,7 @@ class HardwareResource(SyncAPIResource):
             cast_to=HardwareListResponse,
         )
 
-
-class AsyncHardwareResource(AsyncAPIResource):
-    @cached_property
-    def with_raw_response(self) -> AsyncHardwareResourceWithRawResponse:
-        """
-        This property can be used as a prefix for any HTTP method call to return
-        the raw response object instead of the parsed content.
-
-        For more information, see https://www.github.com/zeke/replicate-client-python-prod-for-fun#accessing-raw-response-data-eg-headers
-        """
-        return AsyncHardwareResourceWithRawResponse(self)
-
-    @cached_property
-    def with_streaming_response(self) -> AsyncHardwareResourceWithStreamingResponse:
-        """
-        An alternative to `.with_raw_response` that doesn't eagerly read the response body.
-
-        For more information, see https://www.github.com/zeke/replicate-client-python-prod-for-fun#with_streaming_response
-        """
-        return AsyncHardwareResourceWithStreamingResponse(self)
-
-    async def retrieve(
+    def retrieve_collections(
         self,
         collection_slug: str,
         *,
@@ -194,13 +121,34 @@ class AsyncHardwareResource(AsyncAPIResource):
         if not collection_slug:
             raise ValueError(f"Expected a non-empty value for `collection_slug` but received {collection_slug!r}")
         extra_headers = {"Accept": "*/*", **(extra_headers or {})}
-        return await self._get(
+        return self._get(
             f"/collections/{collection_slug}",
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
             cast_to=NoneType,
         )
+
+
+class AsyncHardwareResource(AsyncAPIResource):
+    @cached_property
+    def with_raw_response(self) -> AsyncHardwareResourceWithRawResponse:
+        """
+        This property can be used as a prefix for any HTTP method call to return
+        the raw response object instead of the parsed content.
+
+        For more information, see https://www.github.com/zeke/replicate-client-python-prod-for-fun#accessing-raw-response-data-eg-headers
+        """
+        return AsyncHardwareResourceWithRawResponse(self)
+
+    @cached_property
+    def with_streaming_response(self) -> AsyncHardwareResourceWithStreamingResponse:
+        """
+        An alternative to `.with_raw_response` that doesn't eagerly read the response body.
+
+        For more information, see https://www.github.com/zeke/replicate-client-python-prod-for-fun#with_streaming_response
+        """
+        return AsyncHardwareResourceWithStreamingResponse(self)
 
     async def list(
         self,
@@ -240,16 +188,68 @@ class AsyncHardwareResource(AsyncAPIResource):
             cast_to=HardwareListResponse,
         )
 
+    async def retrieve_collections(
+        self,
+        collection_slug: str,
+        *,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+    ) -> None:
+        """
+        Example cURL request:
+
+        ```console
+        curl -s \\
+          -H "Authorization: Bearer $REPLICATE_API_TOKEN" \\
+          https://api.replicate.com/v1/collections/super-resolution
+        ```
+
+        The response will be a collection object with a nested list of the models in
+        that collection:
+
+        ```json
+        {
+          "name": "Super resolution",
+          "slug": "super-resolution",
+          "description": "Upscaling models that create high-quality images from low-quality images.",
+          "models": [...]
+        }
+        ```
+
+        Args:
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        if not collection_slug:
+            raise ValueError(f"Expected a non-empty value for `collection_slug` but received {collection_slug!r}")
+        extra_headers = {"Accept": "*/*", **(extra_headers or {})}
+        return await self._get(
+            f"/collections/{collection_slug}",
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=NoneType,
+        )
+
 
 class HardwareResourceWithRawResponse:
     def __init__(self, hardware: HardwareResource) -> None:
         self._hardware = hardware
 
-        self.retrieve = to_raw_response_wrapper(
-            hardware.retrieve,
-        )
         self.list = to_raw_response_wrapper(
             hardware.list,
+        )
+        self.retrieve_collections = to_raw_response_wrapper(
+            hardware.retrieve_collections,
         )
 
 
@@ -257,11 +257,11 @@ class AsyncHardwareResourceWithRawResponse:
     def __init__(self, hardware: AsyncHardwareResource) -> None:
         self._hardware = hardware
 
-        self.retrieve = async_to_raw_response_wrapper(
-            hardware.retrieve,
-        )
         self.list = async_to_raw_response_wrapper(
             hardware.list,
+        )
+        self.retrieve_collections = async_to_raw_response_wrapper(
+            hardware.retrieve_collections,
         )
 
 
@@ -269,11 +269,11 @@ class HardwareResourceWithStreamingResponse:
     def __init__(self, hardware: HardwareResource) -> None:
         self._hardware = hardware
 
-        self.retrieve = to_streamed_response_wrapper(
-            hardware.retrieve,
-        )
         self.list = to_streamed_response_wrapper(
             hardware.list,
+        )
+        self.retrieve_collections = to_streamed_response_wrapper(
+            hardware.retrieve_collections,
         )
 
 
@@ -281,9 +281,9 @@ class AsyncHardwareResourceWithStreamingResponse:
     def __init__(self, hardware: AsyncHardwareResource) -> None:
         self._hardware = hardware
 
-        self.retrieve = async_to_streamed_response_wrapper(
-            hardware.retrieve,
-        )
         self.list = async_to_streamed_response_wrapper(
             hardware.list,
+        )
+        self.retrieve_collections = async_to_streamed_response_wrapper(
+            hardware.retrieve_collections,
         )
