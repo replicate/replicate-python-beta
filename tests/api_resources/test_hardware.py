@@ -19,48 +19,6 @@ class TestHardware:
 
     @pytest.mark.skip()
     @parametrize
-    def test_method_retrieve(self, client: ReplicateClient) -> None:
-        hardware = client.hardware.retrieve(
-            "collection_slug",
-        )
-        assert hardware is None
-
-    @pytest.mark.skip()
-    @parametrize
-    def test_raw_response_retrieve(self, client: ReplicateClient) -> None:
-        response = client.hardware.with_raw_response.retrieve(
-            "collection_slug",
-        )
-
-        assert response.is_closed is True
-        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
-        hardware = response.parse()
-        assert hardware is None
-
-    @pytest.mark.skip()
-    @parametrize
-    def test_streaming_response_retrieve(self, client: ReplicateClient) -> None:
-        with client.hardware.with_streaming_response.retrieve(
-            "collection_slug",
-        ) as response:
-            assert not response.is_closed
-            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
-
-            hardware = response.parse()
-            assert hardware is None
-
-        assert cast(Any, response.is_closed) is True
-
-    @pytest.mark.skip()
-    @parametrize
-    def test_path_params_retrieve(self, client: ReplicateClient) -> None:
-        with pytest.raises(ValueError, match=r"Expected a non-empty value for `collection_slug` but received ''"):
-            client.hardware.with_raw_response.retrieve(
-                "",
-            )
-
-    @pytest.mark.skip()
-    @parametrize
     def test_method_list(self, client: ReplicateClient) -> None:
         hardware = client.hardware.list()
         assert_matches_type(HardwareListResponse, hardware, path=["response"])
@@ -87,51 +45,51 @@ class TestHardware:
 
         assert cast(Any, response.is_closed) is True
 
-
-class TestAsyncHardware:
-    parametrize = pytest.mark.parametrize("async_client", [False, True], indirect=True, ids=["loose", "strict"])
-
     @pytest.mark.skip()
     @parametrize
-    async def test_method_retrieve(self, async_client: AsyncReplicateClient) -> None:
-        hardware = await async_client.hardware.retrieve(
+    def test_method_retrieve_collections(self, client: ReplicateClient) -> None:
+        hardware = client.hardware.retrieve_collections(
             "collection_slug",
         )
         assert hardware is None
 
     @pytest.mark.skip()
     @parametrize
-    async def test_raw_response_retrieve(self, async_client: AsyncReplicateClient) -> None:
-        response = await async_client.hardware.with_raw_response.retrieve(
+    def test_raw_response_retrieve_collections(self, client: ReplicateClient) -> None:
+        response = client.hardware.with_raw_response.retrieve_collections(
             "collection_slug",
         )
 
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
-        hardware = await response.parse()
+        hardware = response.parse()
         assert hardware is None
 
     @pytest.mark.skip()
     @parametrize
-    async def test_streaming_response_retrieve(self, async_client: AsyncReplicateClient) -> None:
-        async with async_client.hardware.with_streaming_response.retrieve(
+    def test_streaming_response_retrieve_collections(self, client: ReplicateClient) -> None:
+        with client.hardware.with_streaming_response.retrieve_collections(
             "collection_slug",
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
-            hardware = await response.parse()
+            hardware = response.parse()
             assert hardware is None
 
         assert cast(Any, response.is_closed) is True
 
     @pytest.mark.skip()
     @parametrize
-    async def test_path_params_retrieve(self, async_client: AsyncReplicateClient) -> None:
+    def test_path_params_retrieve_collections(self, client: ReplicateClient) -> None:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `collection_slug` but received ''"):
-            await async_client.hardware.with_raw_response.retrieve(
+            client.hardware.with_raw_response.retrieve_collections(
                 "",
             )
+
+
+class TestAsyncHardware:
+    parametrize = pytest.mark.parametrize("async_client", [False, True], indirect=True, ids=["loose", "strict"])
 
     @pytest.mark.skip()
     @parametrize
@@ -160,3 +118,45 @@ class TestAsyncHardware:
             assert_matches_type(HardwareListResponse, hardware, path=["response"])
 
         assert cast(Any, response.is_closed) is True
+
+    @pytest.mark.skip()
+    @parametrize
+    async def test_method_retrieve_collections(self, async_client: AsyncReplicateClient) -> None:
+        hardware = await async_client.hardware.retrieve_collections(
+            "collection_slug",
+        )
+        assert hardware is None
+
+    @pytest.mark.skip()
+    @parametrize
+    async def test_raw_response_retrieve_collections(self, async_client: AsyncReplicateClient) -> None:
+        response = await async_client.hardware.with_raw_response.retrieve_collections(
+            "collection_slug",
+        )
+
+        assert response.is_closed is True
+        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+        hardware = await response.parse()
+        assert hardware is None
+
+    @pytest.mark.skip()
+    @parametrize
+    async def test_streaming_response_retrieve_collections(self, async_client: AsyncReplicateClient) -> None:
+        async with async_client.hardware.with_streaming_response.retrieve_collections(
+            "collection_slug",
+        ) as response:
+            assert not response.is_closed
+            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+
+            hardware = await response.parse()
+            assert hardware is None
+
+        assert cast(Any, response.is_closed) is True
+
+    @pytest.mark.skip()
+    @parametrize
+    async def test_path_params_retrieve_collections(self, async_client: AsyncReplicateClient) -> None:
+        with pytest.raises(ValueError, match=r"Expected a non-empty value for `collection_slug` but received ''"):
+            await async_client.hardware.with_raw_response.retrieve_collections(
+                "",
+            )
