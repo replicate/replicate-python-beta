@@ -2,7 +2,6 @@
 
 Methods:
 
-- <code title="get /collections/{collection_slug}">client.collections.<a href="./src/replicate/resources/collections.py">retrieve</a>(collection_slug) -> None</code>
 - <code title="get /collections">client.collections.<a href="./src/replicate/resources/collections.py">list</a>() -> None</code>
 
 # Deployments
@@ -45,6 +44,7 @@ from replicate.types import HardwareListResponse
 
 Methods:
 
+- <code title="get /collections/{collection_slug}">client.hardware.<a href="./src/replicate/resources/hardware.py">retrieve</a>(collection_slug) -> None</code>
 - <code title="get /hardware">client.hardware.<a href="./src/replicate/resources/hardware.py">list</a>() -> <a href="./src/replicate/types/hardware_list_response.py">HardwareListResponse</a></code>
 
 # Accounts
