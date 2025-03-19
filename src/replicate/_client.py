@@ -228,24 +228,6 @@ class ReplicateClient(SyncAPIClient):
         if response.status_code >= 500:
             return _exceptions.InternalServerError(err_msg, response=response, body=body)
         return APIStatusError(err_msg, response=response, body=body)
-    
-    def run(
-        self,
-        ref: str,
-        input: dict[str, Any] | None = None,
-        *,
-        use_file_output: bool = True,
-        ) -> Any:
-        """
-        Example custom method
-
-        """
-
-        # there is some custom logic like run you can embed
-        # e.g. version, owner, name, version_id = identifier._resolve(ref)
-        prediction = self.predictions.create(version = "placeholder", input=input)
-
-        return prediction.output
 
 
 class AsyncReplicateClient(AsyncAPIClient):
@@ -428,7 +410,6 @@ class AsyncReplicateClient(AsyncAPIClient):
         if response.status_code >= 500:
             return _exceptions.InternalServerError(err_msg, response=response, body=body)
         return APIStatusError(err_msg, response=response, body=body)
-
 
 
 class ReplicateClientWithRawResponse:
