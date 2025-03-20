@@ -9,8 +9,9 @@ import pytest
 
 from replicate import ReplicateClient, AsyncReplicateClient
 from tests.utils import assert_matches_type
-from replicate.types import PredictionResponse, PredictionListResponse
+from replicate.types import PredictionResponse
 from replicate._utils import parse_datetime
+from replicate.pagination import SyncCursorURLPage, AsyncCursorURLPage
 
 base_url = os.environ.get("TEST_API_BASE_URL", "http://127.0.0.1:4010")
 
@@ -72,7 +73,7 @@ class TestPredictions:
     @parametrize
     def test_method_list(self, client: ReplicateClient) -> None:
         prediction = client.predictions.list()
-        assert_matches_type(PredictionListResponse, prediction, path=["response"])
+        assert_matches_type(SyncCursorURLPage[PredictionResponse], prediction, path=["response"])
 
     @pytest.mark.skip()
     @parametrize
@@ -81,7 +82,7 @@ class TestPredictions:
             created_after=parse_datetime("2025-01-01T00:00:00Z"),
             created_before=parse_datetime("2025-02-01T00:00:00Z"),
         )
-        assert_matches_type(PredictionListResponse, prediction, path=["response"])
+        assert_matches_type(SyncCursorURLPage[PredictionResponse], prediction, path=["response"])
 
     @pytest.mark.skip()
     @parametrize
@@ -91,7 +92,7 @@ class TestPredictions:
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
         prediction = response.parse()
-        assert_matches_type(PredictionListResponse, prediction, path=["response"])
+        assert_matches_type(SyncCursorURLPage[PredictionResponse], prediction, path=["response"])
 
     @pytest.mark.skip()
     @parametrize
@@ -101,7 +102,7 @@ class TestPredictions:
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
             prediction = response.parse()
-            assert_matches_type(PredictionListResponse, prediction, path=["response"])
+            assert_matches_type(SyncCursorURLPage[PredictionResponse], prediction, path=["response"])
 
         assert cast(Any, response.is_closed) is True
 
@@ -247,7 +248,7 @@ class TestAsyncPredictions:
     @parametrize
     async def test_method_list(self, async_client: AsyncReplicateClient) -> None:
         prediction = await async_client.predictions.list()
-        assert_matches_type(PredictionListResponse, prediction, path=["response"])
+        assert_matches_type(AsyncCursorURLPage[PredictionResponse], prediction, path=["response"])
 
     @pytest.mark.skip()
     @parametrize
@@ -256,7 +257,7 @@ class TestAsyncPredictions:
             created_after=parse_datetime("2025-01-01T00:00:00Z"),
             created_before=parse_datetime("2025-02-01T00:00:00Z"),
         )
-        assert_matches_type(PredictionListResponse, prediction, path=["response"])
+        assert_matches_type(AsyncCursorURLPage[PredictionResponse], prediction, path=["response"])
 
     @pytest.mark.skip()
     @parametrize
@@ -266,7 +267,7 @@ class TestAsyncPredictions:
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
         prediction = await response.parse()
-        assert_matches_type(PredictionListResponse, prediction, path=["response"])
+        assert_matches_type(AsyncCursorURLPage[PredictionResponse], prediction, path=["response"])
 
     @pytest.mark.skip()
     @parametrize
@@ -276,7 +277,7 @@ class TestAsyncPredictions:
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
             prediction = await response.parse()
-            assert_matches_type(PredictionListResponse, prediction, path=["response"])
+            assert_matches_type(AsyncCursorURLPage[PredictionResponse], prediction, path=["response"])
 
         assert cast(Any, response.is_closed) is True
 
