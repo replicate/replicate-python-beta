@@ -23,9 +23,9 @@ from .._response import (
     async_to_raw_response_wrapper,
     async_to_streamed_response_wrapper,
 )
-from .._base_client import make_request_options
+from ..pagination import SyncCursorURLPage, AsyncCursorURLPage
+from .._base_client import AsyncPaginator, make_request_options
 from ..types.prediction_response import PredictionResponse
-from ..types.prediction_list_response import PredictionListResponse
 
 __all__ = ["PredictionsResource", "AsyncPredictionsResource"]
 
@@ -200,7 +200,7 @@ class PredictionsResource(SyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> PredictionListResponse:
+    ) -> SyncCursorURLPage[PredictionResponse]:
         """
         Get a paginated list of all predictions created by the user or organization
         associated with the provided API token.
@@ -285,8 +285,9 @@ class PredictionsResource(SyncAPIResource):
 
           timeout: Override the client-level default timeout for this request, in seconds
         """
-        return self._get(
+        return self._get_api_list(
             "/predictions",
+            page=SyncCursorURLPage[PredictionResponse],
             options=make_request_options(
                 extra_headers=extra_headers,
                 extra_query=extra_query,
@@ -300,7 +301,7 @@ class PredictionsResource(SyncAPIResource):
                     prediction_list_params.PredictionListParams,
                 ),
             ),
-            cast_to=PredictionListResponse,
+            model=PredictionResponse,
         )
 
     def cancel(
@@ -599,7 +600,7 @@ class AsyncPredictionsResource(AsyncAPIResource):
             cast_to=PredictionResponse,
         )
 
-    async def list(
+    def list(
         self,
         *,
         created_after: Union[str, datetime] | NotGiven = NOT_GIVEN,
@@ -610,7 +611,7 @@ class AsyncPredictionsResource(AsyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> PredictionListResponse:
+    ) -> AsyncPaginator[PredictionResponse, AsyncCursorURLPage[PredictionResponse]]:
         """
         Get a paginated list of all predictions created by the user or organization
         associated with the provided API token.
@@ -695,14 +696,15 @@ class AsyncPredictionsResource(AsyncAPIResource):
 
           timeout: Override the client-level default timeout for this request, in seconds
         """
-        return await self._get(
+        return self._get_api_list(
             "/predictions",
+            page=AsyncCursorURLPage[PredictionResponse],
             options=make_request_options(
                 extra_headers=extra_headers,
                 extra_query=extra_query,
                 extra_body=extra_body,
                 timeout=timeout,
-                query=await async_maybe_transform(
+                query=maybe_transform(
                     {
                         "created_after": created_after,
                         "created_before": created_before,
@@ -710,7 +712,7 @@ class AsyncPredictionsResource(AsyncAPIResource):
                     prediction_list_params.PredictionListParams,
                 ),
             ),
-            cast_to=PredictionListResponse,
+            model=PredictionResponse,
         )
 
     async def cancel(
