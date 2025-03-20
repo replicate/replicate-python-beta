@@ -77,6 +77,69 @@ Nested request parameters are [TypedDicts](https://docs.python.org/3/library/typ
 
 Typed requests and responses provide autocomplete and documentation within your editor. If you would like to see type errors in VS Code to help catch bugs earlier, set `python.analysis.typeCheckingMode` to `basic`.
 
+## Pagination
+
+List methods in the Replicate Client API are paginated.
+
+This library provides auto-paginating iterators with each list response, so you do not have to request successive pages manually:
+
+```python
+from replicate import ReplicateClient
+
+client = ReplicateClient()
+
+all_predictions = []
+# Automatically fetches more pages as needed.
+for prediction in client.predictions.list():
+    # Do something with prediction here
+    all_predictions.append(prediction)
+print(all_predictions)
+```
+
+Or, asynchronously:
+
+```python
+import asyncio
+from replicate import AsyncReplicateClient
+
+client = AsyncReplicateClient()
+
+
+async def main() -> None:
+    all_predictions = []
+    # Iterate through items across all pages, issuing requests as needed.
+    async for prediction in client.predictions.list():
+        all_predictions.append(prediction)
+    print(all_predictions)
+
+
+asyncio.run(main())
+```
+
+Alternatively, you can use the `.has_next_page()`, `.next_page_info()`, or `.get_next_page()` methods for more granular control working with pages:
+
+```python
+first_page = await client.predictions.list()
+if first_page.has_next_page():
+    print(f"will fetch next page using these details: {first_page.next_page_info()}")
+    next_page = await first_page.get_next_page()
+    print(f"number of items we just fetched: {len(next_page.results)}")
+
+# Remove `await` for non-async usage.
+```
+
+Or just work directly with the returned data:
+
+```python
+first_page = await client.predictions.list()
+
+print(f"next URL: {first_page.next}")  # => "next URL: ..."
+for prediction in first_page.results:
+    print(prediction.id)
+
+# Remove `await` for non-async usage.
+```
+
 ## Handling errors
 
 When the library is unable to connect to the API (for example, due to network connection problems or a timeout), a subclass of `replicate.APIConnectionError` is raised.
