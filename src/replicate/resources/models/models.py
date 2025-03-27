@@ -302,7 +302,7 @@ class ModelsResource(SyncAPIResource):
           https://api.replicate.com/v1/models
         ```
 
-        The response will be a paginated JSON array of model objects.
+        The response will be a pagination object containing a list of model objects.
 
         See the [`models.get`](#models.get) docs for more details about the model
         object.
@@ -779,7 +779,7 @@ class AsyncModelsResource(AsyncAPIResource):
           https://api.replicate.com/v1/models
         ```
 
-        The response will be a paginated JSON array of model objects.
+        The response will be a pagination object containing a list of model objects.
 
         See the [`models.get`](#models.get) docs for more details about the model
         object.
