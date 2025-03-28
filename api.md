@@ -87,9 +87,9 @@ from replicate.types import Prediction, PredictionOutput, PredictionRequest
 Methods:
 
 - <code title="post /predictions">client.predictions.<a href="./src/replicate/resources/predictions.py">create</a>(\*\*<a href="src/replicate/types/prediction_create_params.py">params</a>) -> <a href="./src/replicate/types/prediction.py">Prediction</a></code>
+- <code title="get /predictions/{prediction_id}">client.predictions.<a href="./src/replicate/resources/predictions.py">retrieve</a>(prediction_id) -> <a href="./src/replicate/types/prediction.py">Prediction</a></code>
 - <code title="get /predictions">client.predictions.<a href="./src/replicate/resources/predictions.py">list</a>(\*\*<a href="src/replicate/types/prediction_list_params.py">params</a>) -> <a href="./src/replicate/types/prediction.py">SyncCursorURLPage[Prediction]</a></code>
 - <code title="post /predictions/{prediction_id}/cancel">client.predictions.<a href="./src/replicate/resources/predictions.py">cancel</a>(prediction_id) -> None</code>
-- <code title="get /predictions/{prediction_id}">client.predictions.<a href="./src/replicate/resources/predictions.py">list_by_id</a>(prediction_id) -> <a href="./src/replicate/types/prediction.py">Prediction</a></code>
 
 # Trainings
 
