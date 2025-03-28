@@ -1,10 +1,11 @@
 # File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-from typing import Dict, List, Union, Optional
+from typing import Dict, Union, Optional
 from datetime import datetime
 from typing_extensions import Literal
 
 from .._models import BaseModel
+from .prediction_output import PredictionOutput
 
 __all__ = ["Prediction", "URLs"]
 
@@ -38,7 +39,7 @@ class Prediction(BaseModel):
     model: str
     """The name of the model that created the prediction"""
 
-    output: Union[Optional[Dict[str, object]], Optional[List[object]], Optional[str], Optional[float], Optional[bool]]
+    output: PredictionOutput
 
     status: Literal["starting", "processing", "succeeded", "failed", "canceled"]
 
