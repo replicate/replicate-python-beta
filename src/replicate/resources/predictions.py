@@ -25,7 +25,7 @@ from .._response import (
 )
 from ..pagination import SyncCursorURLPage, AsyncCursorURLPage
 from .._base_client import AsyncPaginator, make_request_options
-from ..types.prediction_response import PredictionResponse
+from ..types.prediction import Prediction
 
 __all__ = ["PredictionsResource", "AsyncPredictionsResource"]
 
@@ -65,7 +65,7 @@ class PredictionsResource(SyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> PredictionResponse:
+    ) -> Prediction:
         """
         Create a prediction for the model version and inputs you provide.
 
@@ -186,7 +186,7 @@ class PredictionsResource(SyncAPIResource):
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=PredictionResponse,
+            cast_to=Prediction,
         )
 
     def list(
@@ -200,7 +200,7 @@ class PredictionsResource(SyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> SyncCursorURLPage[PredictionResponse]:
+    ) -> SyncCursorURLPage[Prediction]:
         """
         Get a paginated list of all predictions created by the user or organization
         associated with the provided API token.
@@ -287,7 +287,7 @@ class PredictionsResource(SyncAPIResource):
         """
         return self._get_api_list(
             "/predictions",
-            page=SyncCursorURLPage[PredictionResponse],
+            page=SyncCursorURLPage[Prediction],
             options=make_request_options(
                 extra_headers=extra_headers,
                 extra_query=extra_query,
@@ -301,7 +301,7 @@ class PredictionsResource(SyncAPIResource):
                     prediction_list_params.PredictionListParams,
                 ),
             ),
-            model=PredictionResponse,
+            model=Prediction,
         )
 
     def cancel(
@@ -348,7 +348,7 @@ class PredictionsResource(SyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> PredictionResponse:
+    ) -> Prediction:
         """
         Get the current state of a prediction.
 
@@ -437,7 +437,7 @@ class PredictionsResource(SyncAPIResource):
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=PredictionResponse,
+            cast_to=Prediction,
         )
 
 
@@ -476,7 +476,7 @@ class AsyncPredictionsResource(AsyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> PredictionResponse:
+    ) -> Prediction:
         """
         Create a prediction for the model version and inputs you provide.
 
@@ -597,7 +597,7 @@ class AsyncPredictionsResource(AsyncAPIResource):
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=PredictionResponse,
+            cast_to=Prediction,
         )
 
     def list(
@@ -611,7 +611,7 @@ class AsyncPredictionsResource(AsyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> AsyncPaginator[PredictionResponse, AsyncCursorURLPage[PredictionResponse]]:
+    ) -> AsyncPaginator[Prediction, AsyncCursorURLPage[Prediction]]:
         """
         Get a paginated list of all predictions created by the user or organization
         associated with the provided API token.
@@ -698,7 +698,7 @@ class AsyncPredictionsResource(AsyncAPIResource):
         """
         return self._get_api_list(
             "/predictions",
-            page=AsyncCursorURLPage[PredictionResponse],
+            page=AsyncCursorURLPage[Prediction],
             options=make_request_options(
                 extra_headers=extra_headers,
                 extra_query=extra_query,
@@ -712,7 +712,7 @@ class AsyncPredictionsResource(AsyncAPIResource):
                     prediction_list_params.PredictionListParams,
                 ),
             ),
-            model=PredictionResponse,
+            model=Prediction,
         )
 
     async def cancel(
@@ -759,7 +759,7 @@ class AsyncPredictionsResource(AsyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> PredictionResponse:
+    ) -> Prediction:
         """
         Get the current state of a prediction.
 
@@ -848,7 +848,7 @@ class AsyncPredictionsResource(AsyncAPIResource):
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=PredictionResponse,
+            cast_to=Prediction,
         )
 
 

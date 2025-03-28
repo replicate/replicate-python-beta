@@ -22,8 +22,8 @@ from ..._response import (
     async_to_streamed_response_wrapper,
 )
 from ..._base_client import make_request_options
+from ...types.prediction import Prediction
 from ...types.deployments import prediction_create_params
-from ...types.prediction_response import PredictionResponse
 
 __all__ = ["PredictionsResource", "AsyncPredictionsResource"]
 
@@ -64,7 +64,7 @@ class PredictionsResource(SyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> PredictionResponse:
+    ) -> Prediction:
         """
         Create a prediction for the deployment and inputs you provide.
 
@@ -181,7 +181,7 @@ class PredictionsResource(SyncAPIResource):
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=PredictionResponse,
+            cast_to=Prediction,
         )
 
 
@@ -221,7 +221,7 @@ class AsyncPredictionsResource(AsyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> PredictionResponse:
+    ) -> Prediction:
         """
         Create a prediction for the deployment and inputs you provide.
 
@@ -338,7 +338,7 @@ class AsyncPredictionsResource(AsyncAPIResource):
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=PredictionResponse,
+            cast_to=Prediction,
         )
 
 

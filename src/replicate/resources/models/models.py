@@ -31,7 +31,7 @@ from ..._response import (
     async_to_streamed_response_wrapper,
 )
 from ..._base_client import make_request_options
-from ...types.prediction_response import PredictionResponse
+from ...types.prediction import Prediction
 
 __all__ = ["ModelsResource", "AsyncModelsResource"]
 
@@ -388,7 +388,7 @@ class ModelsResource(SyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> PredictionResponse:
+    ) -> Prediction:
         """
         Create a prediction using an
         [official model](https://replicate.com/changelog/2025-01-29-official-models).
@@ -509,7 +509,7 @@ class ModelsResource(SyncAPIResource):
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=PredictionResponse,
+            cast_to=Prediction,
         )
 
 
@@ -865,7 +865,7 @@ class AsyncModelsResource(AsyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> PredictionResponse:
+    ) -> Prediction:
         """
         Create a prediction using an
         [official model](https://replicate.com/changelog/2025-01-29-official-models).
@@ -986,7 +986,7 @@ class AsyncModelsResource(AsyncAPIResource):
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=PredictionResponse,
+            cast_to=Prediction,
         )
 
 
