@@ -10,8 +10,6 @@ Types:
 
 ```python
 from replicate.types import (
-    PredictionRequest,
-    PredictionResponse,
     DeploymentCreateResponse,
     DeploymentRetrieveResponse,
     DeploymentUpdateResponse,
@@ -32,7 +30,7 @@ Methods:
 
 Methods:
 
-- <code title="post /deployments/{deployment_owner}/{deployment_name}/predictions">client.deployments.predictions.<a href="./src/replicate/resources/deployments/predictions.py">create</a>(deployment_name, \*, deployment_owner, \*\*<a href="src/replicate/types/deployments/prediction_create_params.py">params</a>) -> <a href="./src/replicate/types/prediction_response.py">PredictionResponse</a></code>
+- <code title="post /deployments/{deployment_owner}/{deployment_name}/predictions">client.deployments.predictions.<a href="./src/replicate/resources/deployments/predictions.py">create</a>(deployment_name, \*, deployment_owner, \*\*<a href="src/replicate/types/deployments/prediction_create_params.py">params</a>) -> <a href="./src/replicate/types/prediction.py">Prediction</a></code>
 
 # Hardware
 
@@ -67,7 +65,7 @@ Methods:
 - <code title="get /models/{model_owner}/{model_name}">client.models.<a href="./src/replicate/resources/models/models.py">retrieve</a>(model_name, \*, model_owner) -> None</code>
 - <code title="get /models">client.models.<a href="./src/replicate/resources/models/models.py">list</a>() -> None</code>
 - <code title="delete /models/{model_owner}/{model_name}">client.models.<a href="./src/replicate/resources/models/models.py">delete</a>(model_name, \*, model_owner) -> None</code>
-- <code title="post /models/{model_owner}/{model_name}/predictions">client.models.<a href="./src/replicate/resources/models/models.py">create_prediction</a>(model_name, \*, model_owner, \*\*<a href="src/replicate/types/model_create_prediction_params.py">params</a>) -> <a href="./src/replicate/types/prediction_response.py">PredictionResponse</a></code>
+- <code title="post /models/{model_owner}/{model_name}/predictions">client.models.<a href="./src/replicate/resources/models/models.py">create_prediction</a>(model_name, \*, model_owner, \*\*<a href="src/replicate/types/model_create_prediction_params.py">params</a>) -> <a href="./src/replicate/types/prediction.py">Prediction</a></code>
 
 ## Versions
 
@@ -80,12 +78,18 @@ Methods:
 
 # Predictions
 
+Types:
+
+```python
+from replicate.types import Prediction, PredictionRequest
+```
+
 Methods:
 
-- <code title="post /predictions">client.predictions.<a href="./src/replicate/resources/predictions.py">create</a>(\*\*<a href="src/replicate/types/prediction_create_params.py">params</a>) -> <a href="./src/replicate/types/prediction_response.py">PredictionResponse</a></code>
-- <code title="get /predictions">client.predictions.<a href="./src/replicate/resources/predictions.py">list</a>(\*\*<a href="src/replicate/types/prediction_list_params.py">params</a>) -> <a href="./src/replicate/types/prediction_response.py">SyncCursorURLPage[PredictionResponse]</a></code>
+- <code title="post /predictions">client.predictions.<a href="./src/replicate/resources/predictions.py">create</a>(\*\*<a href="src/replicate/types/prediction_create_params.py">params</a>) -> <a href="./src/replicate/types/prediction.py">Prediction</a></code>
+- <code title="get /predictions">client.predictions.<a href="./src/replicate/resources/predictions.py">list</a>(\*\*<a href="src/replicate/types/prediction_list_params.py">params</a>) -> <a href="./src/replicate/types/prediction.py">SyncCursorURLPage[Prediction]</a></code>
 - <code title="post /predictions/{prediction_id}/cancel">client.predictions.<a href="./src/replicate/resources/predictions.py">cancel</a>(prediction_id) -> None</code>
-- <code title="get /predictions/{prediction_id}">client.predictions.<a href="./src/replicate/resources/predictions.py">list_by_id</a>(prediction_id) -> <a href="./src/replicate/types/prediction_response.py">PredictionResponse</a></code>
+- <code title="get /predictions/{prediction_id}">client.predictions.<a href="./src/replicate/resources/predictions.py">list_by_id</a>(prediction_id) -> <a href="./src/replicate/types/prediction.py">Prediction</a></code>
 
 # Trainings
 

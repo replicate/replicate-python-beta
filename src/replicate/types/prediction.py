@@ -6,7 +6,7 @@ from typing_extensions import Literal
 
 from .._models import BaseModel
 
-__all__ = ["PredictionResponse", "URLs"]
+__all__ = ["Prediction", "URLs"]
 
 
 class URLs(BaseModel):
@@ -20,7 +20,7 @@ class URLs(BaseModel):
     """An event source to stream the output of the prediction"""
 
 
-class PredictionResponse(BaseModel):
+class Prediction(BaseModel):
     id: str
 
     created_at: datetime

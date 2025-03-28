@@ -9,7 +9,7 @@ import pytest
 
 from replicate import ReplicateClient, AsyncReplicateClient
 from tests.utils import assert_matches_type
-from replicate.types import PredictionResponse
+from replicate.types import Prediction
 
 base_url = os.environ.get("TEST_API_BASE_URL", "http://127.0.0.1:4010")
 
@@ -25,7 +25,7 @@ class TestPredictions:
             deployment_owner="deployment_owner",
             input={},
         )
-        assert_matches_type(PredictionResponse, prediction, path=["response"])
+        assert_matches_type(Prediction, prediction, path=["response"])
 
     @pytest.mark.skip()
     @parametrize
@@ -39,7 +39,7 @@ class TestPredictions:
             webhook_events_filter=["start"],
             prefer="wait=5",
         )
-        assert_matches_type(PredictionResponse, prediction, path=["response"])
+        assert_matches_type(Prediction, prediction, path=["response"])
 
     @pytest.mark.skip()
     @parametrize
@@ -53,7 +53,7 @@ class TestPredictions:
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
         prediction = response.parse()
-        assert_matches_type(PredictionResponse, prediction, path=["response"])
+        assert_matches_type(Prediction, prediction, path=["response"])
 
     @pytest.mark.skip()
     @parametrize
@@ -67,7 +67,7 @@ class TestPredictions:
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
             prediction = response.parse()
-            assert_matches_type(PredictionResponse, prediction, path=["response"])
+            assert_matches_type(Prediction, prediction, path=["response"])
 
         assert cast(Any, response.is_closed) is True
 
@@ -100,7 +100,7 @@ class TestAsyncPredictions:
             deployment_owner="deployment_owner",
             input={},
         )
-        assert_matches_type(PredictionResponse, prediction, path=["response"])
+        assert_matches_type(Prediction, prediction, path=["response"])
 
     @pytest.mark.skip()
     @parametrize
@@ -114,7 +114,7 @@ class TestAsyncPredictions:
             webhook_events_filter=["start"],
             prefer="wait=5",
         )
-        assert_matches_type(PredictionResponse, prediction, path=["response"])
+        assert_matches_type(Prediction, prediction, path=["response"])
 
     @pytest.mark.skip()
     @parametrize
@@ -128,7 +128,7 @@ class TestAsyncPredictions:
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
         prediction = await response.parse()
-        assert_matches_type(PredictionResponse, prediction, path=["response"])
+        assert_matches_type(Prediction, prediction, path=["response"])
 
     @pytest.mark.skip()
     @parametrize
@@ -142,7 +142,7 @@ class TestAsyncPredictions:
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
             prediction = await response.parse()
-            assert_matches_type(PredictionResponse, prediction, path=["response"])
+            assert_matches_type(Prediction, prediction, path=["response"])
 
         assert cast(Any, response.is_closed) is True
 

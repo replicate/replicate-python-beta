@@ -9,7 +9,7 @@ import pytest
 
 from replicate import ReplicateClient, AsyncReplicateClient
 from tests.utils import assert_matches_type
-from replicate.types import PredictionResponse
+from replicate.types import Prediction
 
 base_url = os.environ.get("TEST_API_BASE_URL", "http://127.0.0.1:4010")
 
@@ -216,7 +216,7 @@ class TestModels:
             model_owner="model_owner",
             input={},
         )
-        assert_matches_type(PredictionResponse, model, path=["response"])
+        assert_matches_type(Prediction, model, path=["response"])
 
     @pytest.mark.skip()
     @parametrize
@@ -230,7 +230,7 @@ class TestModels:
             webhook_events_filter=["start"],
             prefer="wait=5",
         )
-        assert_matches_type(PredictionResponse, model, path=["response"])
+        assert_matches_type(Prediction, model, path=["response"])
 
     @pytest.mark.skip()
     @parametrize
@@ -244,7 +244,7 @@ class TestModels:
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
         model = response.parse()
-        assert_matches_type(PredictionResponse, model, path=["response"])
+        assert_matches_type(Prediction, model, path=["response"])
 
     @pytest.mark.skip()
     @parametrize
@@ -258,7 +258,7 @@ class TestModels:
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
             model = response.parse()
-            assert_matches_type(PredictionResponse, model, path=["response"])
+            assert_matches_type(Prediction, model, path=["response"])
 
         assert cast(Any, response.is_closed) is True
 
@@ -482,7 +482,7 @@ class TestAsyncModels:
             model_owner="model_owner",
             input={},
         )
-        assert_matches_type(PredictionResponse, model, path=["response"])
+        assert_matches_type(Prediction, model, path=["response"])
 
     @pytest.mark.skip()
     @parametrize
@@ -496,7 +496,7 @@ class TestAsyncModels:
             webhook_events_filter=["start"],
             prefer="wait=5",
         )
-        assert_matches_type(PredictionResponse, model, path=["response"])
+        assert_matches_type(Prediction, model, path=["response"])
 
     @pytest.mark.skip()
     @parametrize
@@ -510,7 +510,7 @@ class TestAsyncModels:
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
         model = await response.parse()
-        assert_matches_type(PredictionResponse, model, path=["response"])
+        assert_matches_type(Prediction, model, path=["response"])
 
     @pytest.mark.skip()
     @parametrize
@@ -524,7 +524,7 @@ class TestAsyncModels:
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
             model = await response.parse()
-            assert_matches_type(PredictionResponse, model, path=["response"])
+            assert_matches_type(Prediction, model, path=["response"])
 
         assert cast(Any, response.is_closed) is True
 
