@@ -81,7 +81,7 @@ Methods:
 Types:
 
 ```python
-from replicate.types import Prediction, PredictionRequest
+from replicate.types import Prediction, PredictionOutput, PredictionRequest
 ```
 
 Methods:
