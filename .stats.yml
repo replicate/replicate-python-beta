@@ -1,4 +1,4 @@
 configured_endpoints: 27
-openapi_spec_url: https://storage.googleapis.com/stainless-sdk-openapi-specs/replicate-mpatankar%2Freplicate-client-b45f922f6a041550870a96f5acec02aa6d8830046fc98b95a275c6486f7586fc.yml
+openapi_spec_url: https://storage.googleapis.com/stainless-sdk-openapi-specs/replicate%2Freplicate-client-b45f922f6a041550870a96f5acec02aa6d8830046fc98b95a275c6486f7586fc.yml
 openapi_spec_hash: ef7fddfb49b4d9c440b0635d2c86f341
-config_hash: ff75d189c98bb571ce62b1d338862231
+config_hash: ce31624b6bbb996036f4bcc4b9525ed6
