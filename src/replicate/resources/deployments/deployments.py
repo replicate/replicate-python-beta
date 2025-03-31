@@ -26,7 +26,8 @@ from .predictions import (
     PredictionsResourceWithStreamingResponse,
     AsyncPredictionsResourceWithStreamingResponse,
 )
-from ..._base_client import make_request_options
+from ...pagination import SyncCursorURLPage, AsyncCursorURLPage
+from ..._base_client import AsyncPaginator, make_request_options
 from ...types.deployment_list_response import DeploymentListResponse
 from ...types.deployment_create_response import DeploymentCreateResponse
 from ...types.deployment_update_response import DeploymentUpdateResponse
@@ -345,7 +346,7 @@ class DeploymentsResource(SyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> DeploymentListResponse:
+    ) -> SyncCursorURLPage[DeploymentListResponse]:
         """
         Get a list of deployments associated with the current account, including the
         latest release configuration for each deployment.
@@ -392,12 +393,13 @@ class DeploymentsResource(SyncAPIResource):
         }
         ```
         """
-        return self._get(
+        return self._get_api_list(
             "/deployments",
+            page=SyncCursorURLPage[DeploymentListResponse],
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=DeploymentListResponse,
+            model=DeploymentListResponse,
         )
 
     def delete(
@@ -798,7 +800,7 @@ class AsyncDeploymentsResource(AsyncAPIResource):
             cast_to=DeploymentUpdateResponse,
         )
 
-    async def list(
+    def list(
         self,
         *,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
@@ -807,7 +809,7 @@ class AsyncDeploymentsResource(AsyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> DeploymentListResponse:
+    ) -> AsyncPaginator[DeploymentListResponse, AsyncCursorURLPage[DeploymentListResponse]]:
         """
         Get a list of deployments associated with the current account, including the
         latest release configuration for each deployment.
@@ -854,12 +856,13 @@ class AsyncDeploymentsResource(AsyncAPIResource):
         }
         ```
         """
-        return await self._get(
+        return self._get_api_list(
             "/deployments",
+            page=AsyncCursorURLPage[DeploymentListResponse],
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=DeploymentListResponse,
+            model=DeploymentListResponse,
         )
 
     async def delete(

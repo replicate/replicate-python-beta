@@ -1,21 +1,15 @@
 # File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-from typing import List, Optional
+from typing import Optional
 from datetime import datetime
 from typing_extensions import Literal
 
 from .._models import BaseModel
 
-__all__ = [
-    "DeploymentListResponse",
-    "Result",
-    "ResultCurrentRelease",
-    "ResultCurrentReleaseConfiguration",
-    "ResultCurrentReleaseCreatedBy",
-]
+__all__ = ["DeploymentListResponse", "CurrentRelease", "CurrentReleaseConfiguration", "CurrentReleaseCreatedBy"]
 
 
-class ResultCurrentReleaseConfiguration(BaseModel):
+class CurrentReleaseConfiguration(BaseModel):
     hardware: Optional[str] = None
     """The SKU for the hardware used to run the model."""
 
@@ -26,7 +20,7 @@ class ResultCurrentReleaseConfiguration(BaseModel):
     """The minimum number of instances for scaling."""
 
 
-class ResultCurrentReleaseCreatedBy(BaseModel):
+class CurrentReleaseCreatedBy(BaseModel):
     type: Literal["organization", "user"]
     """The account type of the creator. Can be a user or an organization."""
 
@@ -43,13 +37,13 @@ class ResultCurrentReleaseCreatedBy(BaseModel):
     """The name of the account that created the release."""
 
 
-class ResultCurrentRelease(BaseModel):
-    configuration: Optional[ResultCurrentReleaseConfiguration] = None
+class CurrentRelease(BaseModel):
+    configuration: Optional[CurrentReleaseConfiguration] = None
 
     created_at: Optional[datetime] = None
     """The time the release was created."""
 
-    created_by: Optional[ResultCurrentReleaseCreatedBy] = None
+    created_by: Optional[CurrentReleaseCreatedBy] = None
 
     model: Optional[str] = None
     """The model identifier string in the format of `{model_owner}/{model_name}`."""
@@ -65,22 +59,11 @@ class ResultCurrentRelease(BaseModel):
     """The ID of the model version used in the release."""
 
 
-class Result(BaseModel):
-    current_release: Optional[ResultCurrentRelease] = None
+class DeploymentListResponse(BaseModel):
+    current_release: Optional[CurrentRelease] = None
 
     name: Optional[str] = None
     """The name of the deployment."""
 
     owner: Optional[str] = None
     """The owner of the deployment."""
-
-
-class DeploymentListResponse(BaseModel):
-    next: Optional[str] = None
-    """A URL pointing to the next page of deployment objects if any"""
-
-    previous: Optional[str] = None
-    """A URL pointing to the previous page of deployment objects if any"""
-
-    results: Optional[List[Result]] = None
-    """An array containing a page of deployment objects"""
