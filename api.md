@@ -22,7 +22,7 @@ Methods:
 - <code title="post /deployments">client.deployments.<a href="./src/replicate/resources/deployments/deployments.py">create</a>(\*\*<a href="src/replicate/types/deployment_create_params.py">params</a>) -> <a href="./src/replicate/types/deployment_create_response.py">DeploymentCreateResponse</a></code>
 - <code title="get /deployments/{deployment_owner}/{deployment_name}">client.deployments.<a href="./src/replicate/resources/deployments/deployments.py">retrieve</a>(deployment_name, \*, deployment_owner) -> <a href="./src/replicate/types/deployment_retrieve_response.py">DeploymentRetrieveResponse</a></code>
 - <code title="patch /deployments/{deployment_owner}/{deployment_name}">client.deployments.<a href="./src/replicate/resources/deployments/deployments.py">update</a>(deployment_name, \*, deployment_owner, \*\*<a href="src/replicate/types/deployment_update_params.py">params</a>) -> <a href="./src/replicate/types/deployment_update_response.py">DeploymentUpdateResponse</a></code>
-- <code title="get /deployments">client.deployments.<a href="./src/replicate/resources/deployments/deployments.py">list</a>() -> <a href="./src/replicate/types/deployment_list_response.py">DeploymentListResponse</a></code>
+- <code title="get /deployments">client.deployments.<a href="./src/replicate/resources/deployments/deployments.py">list</a>() -> <a href="./src/replicate/types/deployment_list_response.py">SyncCursorURLPage[DeploymentListResponse]</a></code>
 - <code title="delete /deployments/{deployment_owner}/{deployment_name}">client.deployments.<a href="./src/replicate/resources/deployments/deployments.py">delete</a>(deployment_name, \*, deployment_owner) -> None</code>
 - <code title="get /collections">client.deployments.<a href="./src/replicate/resources/deployments/deployments.py">list_em_all</a>() -> None</code>
 
@@ -88,7 +88,7 @@ Methods:
 
 - <code title="post /predictions">client.predictions.<a href="./src/replicate/resources/predictions.py">create</a>(\*\*<a href="src/replicate/types/prediction_create_params.py">params</a>) -> <a href="./src/replicate/types/prediction.py">Prediction</a></code>
 - <code title="get /predictions/{prediction_id}">client.predictions.<a href="./src/replicate/resources/predictions.py">retrieve</a>(prediction_id) -> <a href="./src/replicate/types/prediction.py">Prediction</a></code>
-- <code title="get /predictions">client.predictions.<a href="./src/replicate/resources/predictions.py">list</a>(\*\*<a href="src/replicate/types/prediction_list_params.py">params</a>) -> <a href="./src/replicate/types/prediction.py">SyncCursorURLPage[Prediction]</a></code>
+- <code title="get /predictions">client.predictions.<a href="./src/replicate/resources/predictions.py">list</a>(\*\*<a href="src/replicate/types/prediction_list_params.py">params</a>) -> <a href="./src/replicate/types/prediction.py">SyncCursorURLPageWithCreatedFilters[Prediction]</a></code>
 - <code title="post /predictions/{prediction_id}/cancel">client.predictions.<a href="./src/replicate/resources/predictions.py">cancel</a>(prediction_id) -> None</code>
 
 # Trainings

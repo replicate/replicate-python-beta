@@ -15,6 +15,7 @@ from replicate.types import (
     DeploymentUpdateResponse,
     DeploymentRetrieveResponse,
 )
+from replicate.pagination import SyncCursorURLPage, AsyncCursorURLPage
 
 base_url = os.environ.get("TEST_API_BASE_URL", "http://127.0.0.1:4010")
 
@@ -192,7 +193,7 @@ class TestDeployments:
     @parametrize
     def test_method_list(self, client: ReplicateClient) -> None:
         deployment = client.deployments.list()
-        assert_matches_type(DeploymentListResponse, deployment, path=["response"])
+        assert_matches_type(SyncCursorURLPage[DeploymentListResponse], deployment, path=["response"])
 
     @pytest.mark.skip()
     @parametrize
@@ -202,7 +203,7 @@ class TestDeployments:
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
         deployment = response.parse()
-        assert_matches_type(DeploymentListResponse, deployment, path=["response"])
+        assert_matches_type(SyncCursorURLPage[DeploymentListResponse], deployment, path=["response"])
 
     @pytest.mark.skip()
     @parametrize
@@ -212,7 +213,7 @@ class TestDeployments:
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
             deployment = response.parse()
-            assert_matches_type(DeploymentListResponse, deployment, path=["response"])
+            assert_matches_type(SyncCursorURLPage[DeploymentListResponse], deployment, path=["response"])
 
         assert cast(Any, response.is_closed) is True
 
@@ -470,7 +471,7 @@ class TestAsyncDeployments:
     @parametrize
     async def test_method_list(self, async_client: AsyncReplicateClient) -> None:
         deployment = await async_client.deployments.list()
-        assert_matches_type(DeploymentListResponse, deployment, path=["response"])
+        assert_matches_type(AsyncCursorURLPage[DeploymentListResponse], deployment, path=["response"])
 
     @pytest.mark.skip()
     @parametrize
@@ -480,7 +481,7 @@ class TestAsyncDeployments:
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
         deployment = await response.parse()
-        assert_matches_type(DeploymentListResponse, deployment, path=["response"])
+        assert_matches_type(AsyncCursorURLPage[DeploymentListResponse], deployment, path=["response"])
 
     @pytest.mark.skip()
     @parametrize
@@ -490,7 +491,7 @@ class TestAsyncDeployments:
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
             deployment = await response.parse()
-            assert_matches_type(DeploymentListResponse, deployment, path=["response"])
+            assert_matches_type(AsyncCursorURLPage[DeploymentListResponse], deployment, path=["response"])
 
         assert cast(Any, response.is_closed) is True
 

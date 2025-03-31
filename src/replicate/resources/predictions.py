@@ -23,7 +23,7 @@ from .._response import (
     async_to_raw_response_wrapper,
     async_to_streamed_response_wrapper,
 )
-from ..pagination import SyncCursorURLPage, AsyncCursorURLPage
+from ..pagination import SyncCursorURLPageWithCreatedFilters, AsyncCursorURLPageWithCreatedFilters
 from .._base_client import AsyncPaginator, make_request_options
 from ..types.prediction import Prediction
 
@@ -302,7 +302,7 @@ class PredictionsResource(SyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> SyncCursorURLPage[Prediction]:
+    ) -> SyncCursorURLPageWithCreatedFilters[Prediction]:
         """
         Get a paginated list of all predictions created by the user or organization
         associated with the provided API token.
@@ -389,7 +389,7 @@ class PredictionsResource(SyncAPIResource):
         """
         return self._get_api_list(
             "/predictions",
-            page=SyncCursorURLPage[Prediction],
+            page=SyncCursorURLPageWithCreatedFilters[Prediction],
             options=make_request_options(
                 extra_headers=extra_headers,
                 extra_query=extra_query,
@@ -713,7 +713,7 @@ class AsyncPredictionsResource(AsyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> AsyncPaginator[Prediction, AsyncCursorURLPage[Prediction]]:
+    ) -> AsyncPaginator[Prediction, AsyncCursorURLPageWithCreatedFilters[Prediction]]:
         """
         Get a paginated list of all predictions created by the user or organization
         associated with the provided API token.
@@ -800,7 +800,7 @@ class AsyncPredictionsResource(AsyncAPIResource):
         """
         return self._get_api_list(
             "/predictions",
-            page=AsyncCursorURLPage[Prediction],
+            page=AsyncCursorURLPageWithCreatedFilters[Prediction],
             options=make_request_options(
                 extra_headers=extra_headers,
                 extra_query=extra_query,
