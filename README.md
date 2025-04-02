@@ -33,8 +33,8 @@ client = ReplicateClient(
     ),  # This is the default and can be omitted
 )
 
-account = client.accounts.list()
-print(account.type)
+accounts = client.accounts.list()
+print(accounts.type)
 ```
 
 While you can provide a `bearer_token` keyword argument,
@@ -59,8 +59,8 @@ client = AsyncReplicateClient(
 
 
 async def main() -> None:
-    account = await client.accounts.list()
-    print(account.type)
+    accounts = await client.accounts.list()
+    print(accounts.type)
 
 
 asyncio.run(main())
