@@ -76,12 +76,12 @@ def test_default_query_option() -> None:
 
 
 def test_http_client_option() -> None:
-    assert openai.http_client is None
+    assert replicate.http_client is None
 
-    original_http_client = openai.completions._client._client
+    original_http_client = replicate.collections._client._client
     assert original_http_client is not None
 
     new_client = httpx.Client()
-    openai.http_client = new_client
+    replicate.http_client = new_client
 
-    assert openai.completions._client._client is new_client
+    assert replicate.collections._client._client is new_client
