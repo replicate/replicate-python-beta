@@ -12,6 +12,7 @@ Full Changelog: [v0.0.1-alpha.0...v0.1.0-alpha.1](https://github.com/replicate/r
 * **api:** manual updates ([#22](https://github.com/replicate/replicate-python-stainless/issues/22)) ([573bbb3](https://github.com/replicate/replicate-python-stainless/commit/573bbb3fa46346d1703d076daa85541b947c27a2))
 * **api:** manual updates ([#23](https://github.com/replicate/replicate-python-stainless/issues/23)) ([7962ea7](https://github.com/replicate/replicate-python-stainless/commit/7962ea7f5c5e3c8f253f66b8f13eadc9927fae7d))
 * **api:** manual updates ([#24](https://github.com/replicate/replicate-python-stainless/issues/24)) ([d31ada3](https://github.com/replicate/replicate-python-stainless/commit/d31ada3ab8d19413c1ca55535f1788ae9b5d443d))
+* **api:** re-enable module client ([4f83487](https://github.com/replicate/replicate-python-stainless/commit/4f8348757c683395344c8dea1adb75af941f67e1))
 * **api:** update pagination configs ([#25](https://github.com/replicate/replicate-python-stainless/issues/25)) ([8a2cc9f](https://github.com/replicate/replicate-python-stainless/commit/8a2cc9f87cf6edb18ad906bbb0b82372b4b82099))
 * **api:** update via SDK Studio ([3bf3415](https://github.com/replicate/replicate-python-stainless/commit/3bf3415ce21bb9fc55f80809239e58d64f34fb61))
 * **api:** update via SDK Studio ([aafbabf](https://github.com/replicate/replicate-python-stainless/commit/aafbabfdbac1c43a547f277769c82585c616a3b4))
@@ -27,16 +28,27 @@ Full Changelog: [v0.0.1-alpha.0...v0.1.0-alpha.1](https://github.com/replicate/r
 
 * **ci:** ensure pip is always available ([#14](https://github.com/replicate/replicate-python-stainless/issues/14)) ([d4f8f18](https://github.com/replicate/replicate-python-stainless/commit/d4f8f18d0d369dedc9e09551e87483f8f1787fd7))
 * **ci:** remove publishing patch ([#15](https://github.com/replicate/replicate-python-stainless/issues/15)) ([002b758](https://github.com/replicate/replicate-python-stainless/commit/002b7581debae5b5bc97ec24cc0cea129100dfde))
+* **perf:** optimize some hot paths ([d14ecac](https://github.com/replicate/replicate-python-stainless/commit/d14ecaca89424e6aac85827ae0efd5e6da7d8c03))
+* **perf:** skip traversing types for NotGiven values ([35ce48c](https://github.com/replicate/replicate-python-stainless/commit/35ce48c5e3e93605a70f90270487e02e121561b5))
+* pluralize `list` response variables ([#26](https://github.com/replicate/replicate-python-stainless/issues/26)) ([19f7bd9](https://github.com/replicate/replicate-python-stainless/commit/19f7bd9fe7d8422ae7abe6d5070e29f4a572a1d7))
 * **types:** handle more discriminated union shapes ([#13](https://github.com/replicate/replicate-python-stainless/issues/13)) ([4ca1ca8](https://github.com/replicate/replicate-python-stainless/commit/4ca1ca8606fef7bc40144c1ae6246784ed754687))
 
 
 ### Chores
 
+* **client:** minor internal fixes ([21d9c7b](https://github.com/replicate/replicate-python-stainless/commit/21d9c7be7c1c5cb93466b6f6d16804a7d38701b2))
 * fix typos ([#18](https://github.com/replicate/replicate-python-stainless/issues/18)) ([54d4e6d](https://github.com/replicate/replicate-python-stainless/commit/54d4e6da6a757ad6e5c899b79018ca39eed2a124))
 * go live ([#1](https://github.com/replicate/replicate-python-stainless/issues/1)) ([bd9a84a](https://github.com/replicate/replicate-python-stainless/commit/bd9a84ae91a2c72fa49182f9ff8ea0b78e7cc343))
 * **internal:** bump rye to 0.44.0 ([#12](https://github.com/replicate/replicate-python-stainless/issues/12)) ([c9d2593](https://github.com/replicate/replicate-python-stainless/commit/c9d2593f4e9d324c12e2ca323563a317d0ea1751))
 * **internal:** codegen related update ([#11](https://github.com/replicate/replicate-python-stainless/issues/11)) ([41c787d](https://github.com/replicate/replicate-python-stainless/commit/41c787d2c196d59c48ec3056d93dd48bf530de72))
+* **internal:** expand CI branch coverage ([183a5dc](https://github.com/replicate/replicate-python-stainless/commit/183a5dc798f30ff70e7e96ecb3b5c8ade704af6a))
+* **internal:** fix module client tests ([fc9ac15](https://github.com/replicate/replicate-python-stainless/commit/fc9ac15ad5580b72719da024d95e067316f04ef2))
+* **internal:** reduce CI branch coverage ([2c61820](https://github.com/replicate/replicate-python-stainless/commit/2c6182009bbee43f3995be0844983c18e4b147fb))
 * **internal:** remove extra empty newlines ([#10](https://github.com/replicate/replicate-python-stainless/issues/10)) ([1c63514](https://github.com/replicate/replicate-python-stainless/commit/1c635145a8a70f3cb0ea432387f72eafa64ca5f6))
+* **internal:** remove trailing character ([#27](https://github.com/replicate/replicate-python-stainless/issues/27)) ([0a6e3f2](https://github.com/replicate/replicate-python-stainless/commit/0a6e3f29ddeecd0267c57536cf0fa07218c18d03))
+* **internal:** slight transform perf improvement ([#28](https://github.com/replicate/replicate-python-stainless/issues/28)) ([da30360](https://github.com/replicate/replicate-python-stainless/commit/da303609abb6a7d069b4e35036f68bae7b009cb2))
+* **internal:** update pyright settings ([65494e5](https://github.com/replicate/replicate-python-stainless/commit/65494e5b623b3d2cf248b6da88c7f3e50160dc94))
 * **internal:** updates ([b7424d7](https://github.com/replicate/replicate-python-stainless/commit/b7424d7cc1c9fa440b58fa9e51331f3c77fbd83d))
 * remove custom code ([31aa7ed](https://github.com/replicate/replicate-python-stainless/commit/31aa7edc04d5c9f408c06e4051c0ba343b9761ac))
+* sync repo ([9a71c71](https://github.com/replicate/replicate-python-stainless/commit/9a71c71fd94f1e216398c616dc6c24e0eff10c89))
 * update SDK settings ([#3](https://github.com/replicate/replicate-python-stainless/issues/3)) ([27b5f18](https://github.com/replicate/replicate-python-stainless/commit/27b5f1897b823349b29dbc82b1f6742d5d704c9e))
