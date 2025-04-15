@@ -1,6 +1,6 @@
 # Replicate Client Python API library
 
-[![PyPI version](https://img.shields.io/pypi/v/replicate-zeke-test-stainless.svg)](https://pypi.org/project/replicate-zeke-test-stainless/)
+[![PyPI version](https://img.shields.io/pypi/v/replicate-stainless.svg)](https://pypi.org/project/replicate-stainless/)
 
 The Replicate Client Python library provides convenient access to the Replicate Client REST API from any Python 3.8+
 application. The library includes type definitions for all request params and response fields,
@@ -16,7 +16,7 @@ The REST API documentation can be found on [replicate.com](https://replicate.com
 
 ```sh
 # install from PyPI
-pip install --pre replicate-zeke-test-stainless
+pip install --pre replicate-stainless
 ```
 
 ## Usage
@@ -270,9 +270,9 @@ account = response.parse()  # get the object that `accounts.list()` would have r
 print(account.type)
 ```
 
-These methods return an [`APIResponse`](https://github.com/zeke/replicate-client-python-prod-for-fun/tree/main/src/replicate/_response.py) object.
+These methods return an [`APIResponse`](https://github.com/replicate/replicate-python-stainless/tree/main/src/replicate/_response.py) object.
 
-The async client returns an [`AsyncAPIResponse`](https://github.com/zeke/replicate-client-python-prod-for-fun/tree/main/src/replicate/_response.py) with the same structure, the only difference being `await`able methods for reading the response content.
+The async client returns an [`AsyncAPIResponse`](https://github.com/replicate/replicate-python-stainless/tree/main/src/replicate/_response.py) with the same structure, the only difference being `await`able methods for reading the response content.
 
 #### `.with_streaming_response`
 
@@ -376,7 +376,7 @@ This package generally follows [SemVer](https://semver.org/spec/v2.0.0.html) con
 
 We take backwards-compatibility seriously and work hard to ensure you can rely on a smooth upgrade experience.
 
-We are keen for your feedback; please open an [issue](https://www.github.com/zeke/replicate-client-python-prod-for-fun/issues) with questions, bugs, or suggestions.
+We are keen for your feedback; please open an [issue](https://www.github.com/replicate/replicate-python-stainless/issues) with questions, bugs, or suggestions.
 
 ### Determining the installed version
 

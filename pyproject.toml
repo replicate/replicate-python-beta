@@ -1,5 +1,5 @@
 [project]
-name = "replicate-zeke-test-stainless"
+name = "replicate-stainless"
 version = "0.0.1-alpha.0"
 description = "The official Python library for the replicate-client API"
 dynamic = ["readme"]
@@ -34,8 +34,8 @@ classifiers = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/zeke/replicate-client-python-prod-for-fun"
-Repository = "https://github.com/zeke/replicate-client-python-prod-for-fun"
+Homepage = "https://github.com/replicate/replicate-python-stainless"
+Repository = "https://github.com/replicate/replicate-python-stainless"
 
 
 [tool.rye]
@@ -121,7 +121,7 @@ path = "README.md"
 [[tool.hatch.metadata.hooks.fancy-pypi-readme.substitutions]]
 # replace relative links with absolute links
 pattern = '\[(.+?)\]\(((?!https?://)\S+?)\)'
-replacement = '[\1](https://github.com/zeke/replicate-client-python-prod-for-fun/tree/main/\g<2>)'
+replacement = '[\1](https://github.com/replicate/replicate-python-stainless/tree/main/\g<2>)'
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
