@@ -30,8 +30,10 @@ from ..._response import (
     async_to_raw_response_wrapper,
     async_to_streamed_response_wrapper,
 )
-from ..._base_client import make_request_options
+from ...pagination import SyncCursorURLPage, AsyncCursorURLPage
+from ..._base_client import AsyncPaginator, make_request_options
 from ...types.prediction import Prediction
+from ...types.model_list_response import ModelListResponse
 
 __all__ = ["ModelsResource", "AsyncModelsResource"]
 
@@ -290,7 +292,7 @@ class ModelsResource(SyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> None:
+    ) -> SyncCursorURLPage[ModelListResponse]:
         """
         Get a paginated list of public models.
 
@@ -307,13 +309,13 @@ class ModelsResource(SyncAPIResource):
         See the [`models.get`](#models.get) docs for more details about the model
         object.
         """
-        extra_headers = {"Accept": "*/*", **(extra_headers or {})}
-        return self._get(
+        return self._get_api_list(
             "/models",
+            page=SyncCursorURLPage[ModelListResponse],
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=NoneType,
+            model=ModelListResponse,
         )
 
     def delete(
@@ -758,7 +760,7 @@ class AsyncModelsResource(AsyncAPIResource):
             cast_to=NoneType,
         )
 
-    async def list(
+    def list(
         self,
         *,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
@@ -767,7 +769,7 @@ class AsyncModelsResource(AsyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> None:
+    ) -> AsyncPaginator[ModelListResponse, AsyncCursorURLPage[ModelListResponse]]:
         """
         Get a paginated list of public models.
 
@@ -784,13 +786,13 @@ class AsyncModelsResource(AsyncAPIResource):
         See the [`models.get`](#models.get) docs for more details about the model
         object.
         """
-        extra_headers = {"Accept": "*/*", **(extra_headers or {})}
-        return await self._get(
+        return self._get_api_list(
             "/models",
+            page=AsyncCursorURLPage[ModelListResponse],
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=NoneType,
+            model=ModelListResponse,
         )
 
     async def delete(

@@ -59,11 +59,17 @@ Methods:
 
 # Models
 
+Types:
+
+```python
+from replicate.types import ModelListResponse
+```
+
 Methods:
 
 - <code title="post /models">client.models.<a href="./src/replicate/resources/models/models.py">create</a>(\*\*<a href="src/replicate/types/model_create_params.py">params</a>) -> None</code>
 - <code title="get /models/{model_owner}/{model_name}">client.models.<a href="./src/replicate/resources/models/models.py">retrieve</a>(model_name, \*, model_owner) -> None</code>
-- <code title="get /models">client.models.<a href="./src/replicate/resources/models/models.py">list</a>() -> None</code>
+- <code title="get /models">client.models.<a href="./src/replicate/resources/models/models.py">list</a>() -> <a href="./src/replicate/types/model_list_response.py">SyncCursorURLPage[ModelListResponse]</a></code>
 - <code title="delete /models/{model_owner}/{model_name}">client.models.<a href="./src/replicate/resources/models/models.py">delete</a>(model_name, \*, model_owner) -> None</code>
 - <code title="post /models/{model_owner}/{model_name}/predictions">client.models.<a href="./src/replicate/resources/models/models.py">create_prediction</a>(model_name, \*, model_owner, \*\*<a href="src/replicate/types/model_create_prediction_params.py">params</a>) -> <a href="./src/replicate/types/prediction.py">Prediction</a></code>
 
