@@ -75,12 +75,18 @@ Methods:
 
 ## Versions
 
+Types:
+
+```python
+from replicate.types.models import VersionCreateTrainingResponse
+```
+
 Methods:
 
 - <code title="get /models/{model_owner}/{model_name}/versions/{version_id}">client.models.versions.<a href="./src/replicate/resources/models/versions.py">retrieve</a>(version_id, \*, model_owner, model_name) -> None</code>
 - <code title="get /models/{model_owner}/{model_name}/versions">client.models.versions.<a href="./src/replicate/resources/models/versions.py">list</a>(model_name, \*, model_owner) -> None</code>
 - <code title="delete /models/{model_owner}/{model_name}/versions/{version_id}">client.models.versions.<a href="./src/replicate/resources/models/versions.py">delete</a>(version_id, \*, model_owner, model_name) -> None</code>
-- <code title="post /models/{model_owner}/{model_name}/versions/{version_id}/trainings">client.models.versions.<a href="./src/replicate/resources/models/versions.py">create_training</a>(version_id, \*, model_owner, model_name, \*\*<a href="src/replicate/types/models/version_create_training_params.py">params</a>) -> None</code>
+- <code title="post /models/{model_owner}/{model_name}/versions/{version_id}/trainings">client.models.versions.<a href="./src/replicate/resources/models/versions.py">create_training</a>(version_id, \*, model_owner, model_name, \*\*<a href="src/replicate/types/models/version_create_training_params.py">params</a>) -> <a href="./src/replicate/types/models/version_create_training_response.py">VersionCreateTrainingResponse</a></code>
 
 # Predictions
 
@@ -99,11 +105,17 @@ Methods:
 
 # Trainings
 
+Types:
+
+```python
+from replicate.types import TrainingRetrieveResponse, TrainingListResponse, TrainingCancelResponse
+```
+
 Methods:
 
-- <code title="get /trainings/{training_id}">client.trainings.<a href="./src/replicate/resources/trainings.py">retrieve</a>(training_id) -> None</code>
-- <code title="get /trainings">client.trainings.<a href="./src/replicate/resources/trainings.py">list</a>() -> None</code>
-- <code title="post /trainings/{training_id}/cancel">client.trainings.<a href="./src/replicate/resources/trainings.py">cancel</a>(training_id) -> None</code>
+- <code title="get /trainings/{training_id}">client.trainings.<a href="./src/replicate/resources/trainings.py">retrieve</a>(training_id) -> <a href="./src/replicate/types/training_retrieve_response.py">TrainingRetrieveResponse</a></code>
+- <code title="get /trainings">client.trainings.<a href="./src/replicate/resources/trainings.py">list</a>() -> <a href="./src/replicate/types/training_list_response.py">SyncCursorURLPage[TrainingListResponse]</a></code>
+- <code title="post /trainings/{training_id}/cancel">client.trainings.<a href="./src/replicate/resources/trainings.py">cancel</a>(training_id) -> <a href="./src/replicate/types/training_cancel_response.py">TrainingCancelResponse</a></code>
 
 # Webhooks
 

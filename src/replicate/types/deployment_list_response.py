@@ -49,11 +49,7 @@ class CurrentRelease(BaseModel):
     """The model identifier string in the format of `{model_owner}/{model_name}`."""
 
     number: Optional[int] = None
-    """The release number.
-
-    This is an auto-incrementing integer that starts at 1, and is set automatically
-    when a deployment is created.
-    """
+    """The release number."""
 
     version: Optional[str] = None
     """The ID of the model version used in the release."""

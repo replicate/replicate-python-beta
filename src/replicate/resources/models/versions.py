@@ -22,6 +22,7 @@ from ..._response import (
 )
 from ..._base_client import make_request_options
 from ...types.models import version_create_training_params
+from ...types.models.version_create_training_response import VersionCreateTrainingResponse
 
 __all__ = ["VersionsResource", "AsyncVersionsResource"]
 
@@ -281,7 +282,7 @@ class VersionsResource(SyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> None:
+    ) -> VersionCreateTrainingResponse:
         """
         Start a new training of the model version you specify.
 
@@ -398,7 +399,6 @@ class VersionsResource(SyncAPIResource):
             raise ValueError(f"Expected a non-empty value for `model_name` but received {model_name!r}")
         if not version_id:
             raise ValueError(f"Expected a non-empty value for `version_id` but received {version_id!r}")
-        extra_headers = {"Accept": "*/*", **(extra_headers or {})}
         return self._post(
             f"/models/{model_owner}/{model_name}/versions/{version_id}/trainings",
             body=maybe_transform(
@@ -413,7 +413,7 @@ class VersionsResource(SyncAPIResource):
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=NoneType,
+            cast_to=VersionCreateTrainingResponse,
         )
 
 
@@ -672,7 +672,7 @@ class AsyncVersionsResource(AsyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> None:
+    ) -> VersionCreateTrainingResponse:
         """
         Start a new training of the model version you specify.
 
@@ -789,7 +789,6 @@ class AsyncVersionsResource(AsyncAPIResource):
             raise ValueError(f"Expected a non-empty value for `model_name` but received {model_name!r}")
         if not version_id:
             raise ValueError(f"Expected a non-empty value for `version_id` but received {version_id!r}")
-        extra_headers = {"Accept": "*/*", **(extra_headers or {})}
         return await self._post(
             f"/models/{model_owner}/{model_name}/versions/{version_id}/trainings",
             body=await async_maybe_transform(
@@ -804,7 +803,7 @@ class AsyncVersionsResource(AsyncAPIResource):
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=NoneType,
+            cast_to=VersionCreateTrainingResponse,
         )
 
 

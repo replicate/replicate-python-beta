@@ -8,6 +8,9 @@ from typing import Any, cast
 import pytest
 
 from replicate import ReplicateClient, AsyncReplicateClient
+from tests.utils import assert_matches_type
+from replicate.types import TrainingListResponse, TrainingCancelResponse, TrainingRetrieveResponse
+from replicate.pagination import SyncCursorURLPage, AsyncCursorURLPage
 
 base_url = os.environ.get("TEST_API_BASE_URL", "http://127.0.0.1:4010")
 
@@ -21,7 +24,7 @@ class TestTrainings:
         training = client.trainings.retrieve(
             "training_id",
         )
-        assert training is None
+        assert_matches_type(TrainingRetrieveResponse, training, path=["response"])
 
     @pytest.mark.skip()
     @parametrize
@@ -33,7 +36,7 @@ class TestTrainings:
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
         training = response.parse()
-        assert training is None
+        assert_matches_type(TrainingRetrieveResponse, training, path=["response"])
 
     @pytest.mark.skip()
     @parametrize
@@ -45,7 +48,7 @@ class TestTrainings:
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
             training = response.parse()
-            assert training is None
+            assert_matches_type(TrainingRetrieveResponse, training, path=["response"])
 
         assert cast(Any, response.is_closed) is True
 
@@ -61,7 +64,7 @@ class TestTrainings:
     @parametrize
     def test_method_list(self, client: ReplicateClient) -> None:
         training = client.trainings.list()
-        assert training is None
+        assert_matches_type(SyncCursorURLPage[TrainingListResponse], training, path=["response"])
 
     @pytest.mark.skip()
     @parametrize
@@ -71,7 +74,7 @@ class TestTrainings:
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
         training = response.parse()
-        assert training is None
+        assert_matches_type(SyncCursorURLPage[TrainingListResponse], training, path=["response"])
 
     @pytest.mark.skip()
     @parametrize
@@ -81,7 +84,7 @@ class TestTrainings:
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
             training = response.parse()
-            assert training is None
+            assert_matches_type(SyncCursorURLPage[TrainingListResponse], training, path=["response"])
 
         assert cast(Any, response.is_closed) is True
 
@@ -91,7 +94,7 @@ class TestTrainings:
         training = client.trainings.cancel(
             "training_id",
         )
-        assert training is None
+        assert_matches_type(TrainingCancelResponse, training, path=["response"])
 
     @pytest.mark.skip()
     @parametrize
@@ -103,7 +106,7 @@ class TestTrainings:
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
         training = response.parse()
-        assert training is None
+        assert_matches_type(TrainingCancelResponse, training, path=["response"])
 
     @pytest.mark.skip()
     @parametrize
@@ -115,7 +118,7 @@ class TestTrainings:
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
             training = response.parse()
-            assert training is None
+            assert_matches_type(TrainingCancelResponse, training, path=["response"])
 
         assert cast(Any, response.is_closed) is True
 
@@ -137,7 +140,7 @@ class TestAsyncTrainings:
         training = await async_client.trainings.retrieve(
             "training_id",
         )
-        assert training is None
+        assert_matches_type(TrainingRetrieveResponse, training, path=["response"])
 
     @pytest.mark.skip()
     @parametrize
@@ -149,7 +152,7 @@ class TestAsyncTrainings:
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
         training = await response.parse()
-        assert training is None
+        assert_matches_type(TrainingRetrieveResponse, training, path=["response"])
 
     @pytest.mark.skip()
     @parametrize
@@ -161,7 +164,7 @@ class TestAsyncTrainings:
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
             training = await response.parse()
-            assert training is None
+            assert_matches_type(TrainingRetrieveResponse, training, path=["response"])
 
         assert cast(Any, response.is_closed) is True
 
@@ -177,7 +180,7 @@ class TestAsyncTrainings:
     @parametrize
     async def test_method_list(self, async_client: AsyncReplicateClient) -> None:
         training = await async_client.trainings.list()
-        assert training is None
+        assert_matches_type(AsyncCursorURLPage[TrainingListResponse], training, path=["response"])
 
     @pytest.mark.skip()
     @parametrize
@@ -187,7 +190,7 @@ class TestAsyncTrainings:
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
         training = await response.parse()
-        assert training is None
+        assert_matches_type(AsyncCursorURLPage[TrainingListResponse], training, path=["response"])
 
     @pytest.mark.skip()
     @parametrize
@@ -197,7 +200,7 @@ class TestAsyncTrainings:
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
             training = await response.parse()
-            assert training is None
+            assert_matches_type(AsyncCursorURLPage[TrainingListResponse], training, path=["response"])
 
         assert cast(Any, response.is_closed) is True
 
@@ -207,7 +210,7 @@ class TestAsyncTrainings:
         training = await async_client.trainings.cancel(
             "training_id",
         )
-        assert training is None
+        assert_matches_type(TrainingCancelResponse, training, path=["response"])
 
     @pytest.mark.skip()
     @parametrize
@@ -219,7 +222,7 @@ class TestAsyncTrainings:
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
         training = await response.parse()
-        assert training is None
+        assert_matches_type(TrainingCancelResponse, training, path=["response"])
 
     @pytest.mark.skip()
     @parametrize
@@ -231,7 +234,7 @@ class TestAsyncTrainings:
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
             training = await response.parse()
-            assert training is None
+            assert_matches_type(TrainingCancelResponse, training, path=["response"])
 
         assert cast(Any, response.is_closed) is True
 
