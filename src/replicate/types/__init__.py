@@ -5,6 +5,7 @@ from __future__ import annotations
 from .prediction import Prediction as Prediction
 from .prediction_output import PredictionOutput as PredictionOutput
 from .model_create_params import ModelCreateParams as ModelCreateParams
+from .model_list_response import ModelListResponse as ModelListResponse
 from .account_list_response import AccountListResponse as AccountListResponse
 from .hardware_list_response import HardwareListResponse as HardwareListResponse
 from .prediction_list_params import PredictionListParams as PredictionListParams
