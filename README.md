@@ -28,9 +28,7 @@ import os
 from replicate import ReplicateClient
 
 client = ReplicateClient(
-    bearer_token=os.environ.get(
-        "REPLICATE_CLIENT_BEARER_TOKEN"
-    ),  # This is the default and can be omitted
+    bearer_token=os.environ.get("REPLICATE_API_TOKEN"),  # This is the default and can be omitted
 )
 
 accounts = client.accounts.list()
@@ -39,7 +37,7 @@ print(accounts.type)
 
 While you can provide a `bearer_token` keyword argument,
 we recommend using [python-dotenv](https://pypi.org/project/python-dotenv/)
-to add `REPLICATE_CLIENT_BEARER_TOKEN="My Bearer Token"` to your `.env` file
+to add `REPLICATE_API_TOKEN="My Bearer Token"` to your `.env` file
 so that your Bearer Token is not stored in source control.
 
 ## Async usage
@@ -52,9 +50,7 @@ import asyncio
 from replicate import AsyncReplicateClient
 
 client = AsyncReplicateClient(
-    bearer_token=os.environ.get(
-        "REPLICATE_CLIENT_BEARER_TOKEN"
-    ),  # This is the default and can be omitted
+    bearer_token=os.environ.get("REPLICATE_API_TOKEN"),  # This is the default and can be omitted
 )
 
 
