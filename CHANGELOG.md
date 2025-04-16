@@ -1,5 +1,18 @@
 # Changelog
 
+## 0.1.0-alpha.2 (2025-04-16)
+
+Full Changelog: [v0.1.0-alpha.1...v0.1.0-alpha.2](https://github.com/replicate/replicate-python-stainless/compare/v0.1.0-alpha.1...v0.1.0-alpha.2)
+
+### Features
+
+* **api:** api update ([79f022a](https://github.com/replicate/replicate-python-stainless/commit/79f022aa879e6c0688197557795e04ffecd93f52))
+
+
+### Chores
+
+* update SDK settings ([ee5fd8b](https://github.com/replicate/replicate-python-stainless/commit/ee5fd8b119cb4a53467e71a5c52dac4fc1779385))
+
 ## 0.1.0-alpha.1 (2025-04-15)
 
 Full Changelog: [v0.0.1-alpha.0...v0.1.0-alpha.1](https://github.com/replicate/replicate-python-stainless/compare/v0.0.1-alpha.0...v0.1.0-alpha.1)
