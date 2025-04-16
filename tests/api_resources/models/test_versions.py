@@ -8,6 +8,8 @@ from typing import Any, cast
 import pytest
 
 from replicate import ReplicateClient, AsyncReplicateClient
+from tests.utils import assert_matches_type
+from replicate.types.models import VersionCreateTrainingResponse
 
 base_url = os.environ.get("TEST_API_BASE_URL", "http://127.0.0.1:4010")
 
@@ -205,7 +207,7 @@ class TestVersions:
             destination="destination",
             input={},
         )
-        assert version is None
+        assert_matches_type(VersionCreateTrainingResponse, version, path=["response"])
 
     @pytest.mark.skip()
     @parametrize
@@ -219,7 +221,7 @@ class TestVersions:
             webhook="webhook",
             webhook_events_filter=["start"],
         )
-        assert version is None
+        assert_matches_type(VersionCreateTrainingResponse, version, path=["response"])
 
     @pytest.mark.skip()
     @parametrize
@@ -235,7 +237,7 @@ class TestVersions:
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
         version = response.parse()
-        assert version is None
+        assert_matches_type(VersionCreateTrainingResponse, version, path=["response"])
 
     @pytest.mark.skip()
     @parametrize
@@ -251,7 +253,7 @@ class TestVersions:
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
             version = response.parse()
-            assert version is None
+            assert_matches_type(VersionCreateTrainingResponse, version, path=["response"])
 
         assert cast(Any, response.is_closed) is True
 
@@ -479,7 +481,7 @@ class TestAsyncVersions:
             destination="destination",
             input={},
         )
-        assert version is None
+        assert_matches_type(VersionCreateTrainingResponse, version, path=["response"])
 
     @pytest.mark.skip()
     @parametrize
@@ -493,7 +495,7 @@ class TestAsyncVersions:
             webhook="webhook",
             webhook_events_filter=["start"],
         )
-        assert version is None
+        assert_matches_type(VersionCreateTrainingResponse, version, path=["response"])
 
     @pytest.mark.skip()
     @parametrize
@@ -509,7 +511,7 @@ class TestAsyncVersions:
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
         version = await response.parse()
-        assert version is None
+        assert_matches_type(VersionCreateTrainingResponse, version, path=["response"])
 
     @pytest.mark.skip()
     @parametrize
@@ -525,7 +527,7 @@ class TestAsyncVersions:
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
             version = await response.parse()
-            assert version is None
+            assert_matches_type(VersionCreateTrainingResponse, version, path=["response"])
 
         assert cast(Any, response.is_closed) is True
 

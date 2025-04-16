@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import httpx
 
-from .._types import NOT_GIVEN, Body, Query, Headers, NoneType, NotGiven
+from .._types import NOT_GIVEN, Body, Query, Headers, NotGiven
 from .._compat import cached_property
 from .._resource import SyncAPIResource, AsyncAPIResource
 from .._response import (
@@ -13,7 +13,11 @@ from .._response import (
     async_to_raw_response_wrapper,
     async_to_streamed_response_wrapper,
 )
-from .._base_client import make_request_options
+from ..pagination import SyncCursorURLPage, AsyncCursorURLPage
+from .._base_client import AsyncPaginator, make_request_options
+from ..types.training_list_response import TrainingListResponse
+from ..types.training_cancel_response import TrainingCancelResponse
+from ..types.training_retrieve_response import TrainingRetrieveResponse
 
 __all__ = ["TrainingsResource", "AsyncTrainingsResource"]
 
@@ -48,7 +52,7 @@ class TrainingsResource(SyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> None:
+    ) -> TrainingRetrieveResponse:
         """
         Get the current state of a training.
 
@@ -123,13 +127,12 @@ class TrainingsResource(SyncAPIResource):
         """
         if not training_id:
             raise ValueError(f"Expected a non-empty value for `training_id` but received {training_id!r}")
-        extra_headers = {"Accept": "*/*", **(extra_headers or {})}
         return self._get(
             f"/trainings/{training_id}",
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=NoneType,
+            cast_to=TrainingRetrieveResponse,
         )
 
     def list(
@@ -141,7 +144,7 @@ class TrainingsResource(SyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> None:
+    ) -> SyncCursorURLPage[TrainingListResponse]:
         """
         Get a paginated list of all trainings created by the user or organization
         associated with the provided API token.
@@ -207,13 +210,13 @@ class TrainingsResource(SyncAPIResource):
 
         `version` will be the unique ID of model version used to create the training.
         """
-        extra_headers = {"Accept": "*/*", **(extra_headers or {})}
-        return self._get(
+        return self._get_api_list(
             "/trainings",
+            page=SyncCursorURLPage[TrainingListResponse],
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=NoneType,
+            model=TrainingListResponse,
         )
 
     def cancel(
@@ -226,7 +229,7 @@ class TrainingsResource(SyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> None:
+    ) -> TrainingCancelResponse:
         """
         Cancel a training
 
@@ -241,13 +244,12 @@ class TrainingsResource(SyncAPIResource):
         """
         if not training_id:
             raise ValueError(f"Expected a non-empty value for `training_id` but received {training_id!r}")
-        extra_headers = {"Accept": "*/*", **(extra_headers or {})}
         return self._post(
             f"/trainings/{training_id}/cancel",
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=NoneType,
+            cast_to=TrainingCancelResponse,
         )
 
 
@@ -281,7 +283,7 @@ class AsyncTrainingsResource(AsyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> None:
+    ) -> TrainingRetrieveResponse:
         """
         Get the current state of a training.
 
@@ -356,16 +358,15 @@ class AsyncTrainingsResource(AsyncAPIResource):
         """
         if not training_id:
             raise ValueError(f"Expected a non-empty value for `training_id` but received {training_id!r}")
-        extra_headers = {"Accept": "*/*", **(extra_headers or {})}
         return await self._get(
             f"/trainings/{training_id}",
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=NoneType,
+            cast_to=TrainingRetrieveResponse,
         )
 
-    async def list(
+    def list(
         self,
         *,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
@@ -374,7 +375,7 @@ class AsyncTrainingsResource(AsyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> None:
+    ) -> AsyncPaginator[TrainingListResponse, AsyncCursorURLPage[TrainingListResponse]]:
         """
         Get a paginated list of all trainings created by the user or organization
         associated with the provided API token.
@@ -440,13 +441,13 @@ class AsyncTrainingsResource(AsyncAPIResource):
 
         `version` will be the unique ID of model version used to create the training.
         """
-        extra_headers = {"Accept": "*/*", **(extra_headers or {})}
-        return await self._get(
+        return self._get_api_list(
             "/trainings",
+            page=AsyncCursorURLPage[TrainingListResponse],
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=NoneType,
+            model=TrainingListResponse,
         )
 
     async def cancel(
@@ -459,7 +460,7 @@ class AsyncTrainingsResource(AsyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> None:
+    ) -> TrainingCancelResponse:
         """
         Cancel a training
 
@@ -474,13 +475,12 @@ class AsyncTrainingsResource(AsyncAPIResource):
         """
         if not training_id:
             raise ValueError(f"Expected a non-empty value for `training_id` but received {training_id!r}")
-        extra_headers = {"Accept": "*/*", **(extra_headers or {})}
         return await self._post(
             f"/trainings/{training_id}/cancel",
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=NoneType,
+            cast_to=TrainingCancelResponse,
         )
 
 
