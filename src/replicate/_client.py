@@ -88,13 +88,13 @@ class ReplicateClient(SyncAPIClient):
     ) -> None:
         """Construct a new synchronous ReplicateClient client instance.
 
-        This automatically infers the `bearer_token` argument from the `REPLICATE_CLIENT_BEARER_TOKEN` environment variable if it is not provided.
+        This automatically infers the `bearer_token` argument from the `REPLICATE_API_TOKEN` environment variable if it is not provided.
         """
         if bearer_token is None:
-            bearer_token = os.environ.get("REPLICATE_CLIENT_BEARER_TOKEN")
+            bearer_token = os.environ.get("REPLICATE_API_TOKEN")
         if bearer_token is None:
             raise ReplicateClientError(
-                "The bearer_token client option must be set either by passing bearer_token to the client or by setting the REPLICATE_CLIENT_BEARER_TOKEN environment variable"
+                "The bearer_token client option must be set either by passing bearer_token to the client or by setting the REPLICATE_API_TOKEN environment variable"
             )
         self.bearer_token = bearer_token
 
@@ -270,13 +270,13 @@ class AsyncReplicateClient(AsyncAPIClient):
     ) -> None:
         """Construct a new async AsyncReplicateClient client instance.
 
-        This automatically infers the `bearer_token` argument from the `REPLICATE_CLIENT_BEARER_TOKEN` environment variable if it is not provided.
+        This automatically infers the `bearer_token` argument from the `REPLICATE_API_TOKEN` environment variable if it is not provided.
         """
         if bearer_token is None:
-            bearer_token = os.environ.get("REPLICATE_CLIENT_BEARER_TOKEN")
+            bearer_token = os.environ.get("REPLICATE_API_TOKEN")
         if bearer_token is None:
             raise ReplicateClientError(
-                "The bearer_token client option must be set either by passing bearer_token to the client or by setting the REPLICATE_CLIENT_BEARER_TOKEN environment variable"
+                "The bearer_token client option must be set either by passing bearer_token to the client or by setting the REPLICATE_API_TOKEN environment variable"
             )
         self.bearer_token = bearer_token
 
