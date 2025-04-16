@@ -9,7 +9,8 @@ import pytest
 
 from replicate import ReplicateClient, AsyncReplicateClient
 from tests.utils import assert_matches_type
-from replicate.types import Prediction
+from replicate.types import Prediction, ModelListResponse
+from replicate.pagination import SyncCursorURLPage, AsyncCursorURLPage
 
 base_url = os.environ.get("TEST_API_BASE_URL", "http://127.0.0.1:4010")
 
@@ -132,7 +133,7 @@ class TestModels:
     @parametrize
     def test_method_list(self, client: ReplicateClient) -> None:
         model = client.models.list()
-        assert model is None
+        assert_matches_type(SyncCursorURLPage[ModelListResponse], model, path=["response"])
 
     @pytest.mark.skip()
     @parametrize
@@ -142,7 +143,7 @@ class TestModels:
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
         model = response.parse()
-        assert model is None
+        assert_matches_type(SyncCursorURLPage[ModelListResponse], model, path=["response"])
 
     @pytest.mark.skip()
     @parametrize
@@ -152,7 +153,7 @@ class TestModels:
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
             model = response.parse()
-            assert model is None
+            assert_matches_type(SyncCursorURLPage[ModelListResponse], model, path=["response"])
 
         assert cast(Any, response.is_closed) is True
 
@@ -398,7 +399,7 @@ class TestAsyncModels:
     @parametrize
     async def test_method_list(self, async_client: AsyncReplicateClient) -> None:
         model = await async_client.models.list()
-        assert model is None
+        assert_matches_type(AsyncCursorURLPage[ModelListResponse], model, path=["response"])
 
     @pytest.mark.skip()
     @parametrize
@@ -408,7 +409,7 @@ class TestAsyncModels:
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
         model = await response.parse()
-        assert model is None
+        assert_matches_type(AsyncCursorURLPage[ModelListResponse], model, path=["response"])
 
     @pytest.mark.skip()
     @parametrize
@@ -418,7 +419,7 @@ class TestAsyncModels:
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
             model = await response.parse()
-            assert model is None
+            assert_matches_type(AsyncCursorURLPage[ModelListResponse], model, path=["response"])
 
         assert cast(Any, response.is_closed) is True
 
