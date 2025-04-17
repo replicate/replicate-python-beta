@@ -8,6 +8,8 @@ from typing_extensions import Self, Unpack, override
 
 import httpx
 
+from replicate.types.prediction_create_params import PredictionCreateParamsWithoutVersion
+
 from . import _exceptions
 from ._qs import Querystring
 from .types import PredictionOutput, PredictionCreateParams
@@ -132,7 +134,7 @@ class ReplicateClient(SyncAPIClient):
         ref: str,
         *,
         wait: Union[int, bool, NotGiven] = NOT_GIVEN,
-        **params: Unpack[PredictionCreateParams],
+        **params: Unpack[PredictionCreateParamsWithoutVersion],
     ) -> PredictionOutput | FileOutput | Iterable[FileOutput] | Dict[str, FileOutput]:
         """Run a model and wait for its output."""
         from .lib._predictions import run

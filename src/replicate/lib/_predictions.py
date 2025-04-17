@@ -3,6 +3,8 @@ from __future__ import annotations
 from typing import TYPE_CHECKING, Dict, Union, Iterable
 from typing_extensions import Unpack
 
+from replicate.types.prediction_create_params import PredictionCreateParamsWithoutVersion
+
 from ..types import PredictionOutput, PredictionCreateParams
 from .._types import NOT_GIVEN, NotGiven
 from .._utils import is_given
@@ -21,7 +23,7 @@ def run(
     *,
     wait: Union[int, bool, NotGiven] = NOT_GIVEN,
     # use_file_output: Optional[bool] = True,
-    **params: Unpack[PredictionCreateParams],
+    **params: Unpack[PredictionCreateParamsWithoutVersion],
 ) -> PredictionOutput | FileOutput | Iterable[FileOutput] | Dict[str, FileOutput]:
     from ._files import transform_output
 
@@ -40,7 +42,8 @@ def run(
             params.setdefault("prefer", f"wait={wait}")
 
     # TODO: support more ref types
-    prediction = client.predictions.create(version=ref, **params)
+    params_with_version: PredictionCreateParams = {**params, "version": ref}
+    prediction = client.predictions.create(**params_with_version)
 
     # Currently the "Prefer: wait" interface will return a prediction with a status
     # of "processing" rather than a terminal state because it returns before the
@@ -91,7 +94,8 @@ async def async_run(
             params.setdefault("prefer", f"wait={wait}")
 
     # TODO: support more ref types
-    prediction = await client.predictions.create(version=ref, **params)
+    params_with_version: PredictionCreateParams = {**params, "version": ref}
+    prediction = await client.predictions.create(**params_with_version)
 
     # Currently the "Prefer: wait" interface will return a prediction with a status
     # of "processing" rather than a terminal state because it returns before the
