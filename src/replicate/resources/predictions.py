@@ -189,108 +189,6 @@ class PredictionsResource(SyncAPIResource):
             cast_to=Prediction,
         )
 
-    def retrieve(
-        self,
-        prediction_id: str,
-        *,
-        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
-        # The extra values given here take precedence over values defined on the client or passed to this method.
-        extra_headers: Headers | None = None,
-        extra_query: Query | None = None,
-        extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> Prediction:
-        """
-        Get the current state of a prediction.
-
-        Example cURL request:
-
-        ```console
-        curl -s \\
-          -H "Authorization: Bearer $REPLICATE_API_TOKEN" \\
-          https://api.replicate.com/v1/predictions/gm3qorzdhgbfurvjtvhg6dckhu
-        ```
-
-        The response will be the prediction object:
-
-        ```json
-        {
-          "id": "gm3qorzdhgbfurvjtvhg6dckhu",
-          "model": "replicate/hello-world",
-          "version": "5c7d5dc6dd8bf75c1acaa8565735e7986bc5b66206b55cca93cb72c9bf15ccaa",
-          "input": {
-            "text": "Alice"
-          },
-          "logs": "",
-          "output": "hello Alice",
-          "error": null,
-          "status": "succeeded",
-          "created_at": "2023-09-08T16:19:34.765994Z",
-          "data_removed": false,
-          "started_at": "2023-09-08T16:19:34.779176Z",
-          "completed_at": "2023-09-08T16:19:34.791859Z",
-          "metrics": {
-            "predict_time": 0.012683
-          },
-          "urls": {
-            "cancel": "https://api.replicate.com/v1/predictions/gm3qorzdhgbfurvjtvhg6dckhu/cancel",
-            "get": "https://api.replicate.com/v1/predictions/gm3qorzdhgbfurvjtvhg6dckhu"
-          }
-        }
-        ```
-
-        `status` will be one of:
-
-        - `starting`: the prediction is starting up. If this status lasts longer than a
-          few seconds, then it's typically because a new worker is being started to run
-          the prediction.
-        - `processing`: the `predict()` method of the model is currently running.
-        - `succeeded`: the prediction completed successfully.
-        - `failed`: the prediction encountered an error during processing.
-        - `canceled`: the prediction was canceled by its creator.
-
-        In the case of success, `output` will be an object containing the output of the
-        model. Any files will be represented as HTTPS URLs. You'll need to pass the
-        `Authorization` header to request them.
-
-        In the case of failure, `error` will contain the error encountered during the
-        prediction.
-
-        Terminated predictions (with a status of `succeeded`, `failed`, or `canceled`)
-        will include a `metrics` object with a `predict_time` property showing the
-        amount of CPU or GPU time, in seconds, that the prediction used while running.
-        It won't include time waiting for the prediction to start.
-
-        All input parameters, output values, and logs are automatically removed after an
-        hour, by default, for predictions created through the API.
-
-        You must save a copy of any data or files in the output if you'd like to
-        continue using them. The `output` key will still be present, but it's value will
-        be `null` after the output has been removed.
-
-        Output files are served by `replicate.delivery` and its subdomains. If you use
-        an allow list of external domains for your assets, add `replicate.delivery` and
-        `*.replicate.delivery` to it.
-
-        Args:
-          extra_headers: Send extra headers
-
-          extra_query: Add additional query parameters to the request
-
-          extra_body: Add additional JSON properties to the request
-
-          timeout: Override the client-level default timeout for this request, in seconds
-        """
-        if not prediction_id:
-            raise ValueError(f"Expected a non-empty value for `prediction_id` but received {prediction_id!r}")
-        return self._get(
-            f"/predictions/{prediction_id}",
-            options=make_request_options(
-                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
-            ),
-            cast_to=Prediction,
-        )
-
     def list(
         self,
         *,
@@ -438,6 +336,108 @@ class PredictionsResource(SyncAPIResource):
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
             cast_to=NoneType,
+        )
+
+    def get(
+        self,
+        prediction_id: str,
+        *,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+    ) -> Prediction:
+        """
+        Get the current state of a prediction.
+
+        Example cURL request:
+
+        ```console
+        curl -s \\
+          -H "Authorization: Bearer $REPLICATE_API_TOKEN" \\
+          https://api.replicate.com/v1/predictions/gm3qorzdhgbfurvjtvhg6dckhu
+        ```
+
+        The response will be the prediction object:
+
+        ```json
+        {
+          "id": "gm3qorzdhgbfurvjtvhg6dckhu",
+          "model": "replicate/hello-world",
+          "version": "5c7d5dc6dd8bf75c1acaa8565735e7986bc5b66206b55cca93cb72c9bf15ccaa",
+          "input": {
+            "text": "Alice"
+          },
+          "logs": "",
+          "output": "hello Alice",
+          "error": null,
+          "status": "succeeded",
+          "created_at": "2023-09-08T16:19:34.765994Z",
+          "data_removed": false,
+          "started_at": "2023-09-08T16:19:34.779176Z",
+          "completed_at": "2023-09-08T16:19:34.791859Z",
+          "metrics": {
+            "predict_time": 0.012683
+          },
+          "urls": {
+            "cancel": "https://api.replicate.com/v1/predictions/gm3qorzdhgbfurvjtvhg6dckhu/cancel",
+            "get": "https://api.replicate.com/v1/predictions/gm3qorzdhgbfurvjtvhg6dckhu"
+          }
+        }
+        ```
+
+        `status` will be one of:
+
+        - `starting`: the prediction is starting up. If this status lasts longer than a
+          few seconds, then it's typically because a new worker is being started to run
+          the prediction.
+        - `processing`: the `predict()` method of the model is currently running.
+        - `succeeded`: the prediction completed successfully.
+        - `failed`: the prediction encountered an error during processing.
+        - `canceled`: the prediction was canceled by its creator.
+
+        In the case of success, `output` will be an object containing the output of the
+        model. Any files will be represented as HTTPS URLs. You'll need to pass the
+        `Authorization` header to request them.
+
+        In the case of failure, `error` will contain the error encountered during the
+        prediction.
+
+        Terminated predictions (with a status of `succeeded`, `failed`, or `canceled`)
+        will include a `metrics` object with a `predict_time` property showing the
+        amount of CPU or GPU time, in seconds, that the prediction used while running.
+        It won't include time waiting for the prediction to start.
+
+        All input parameters, output values, and logs are automatically removed after an
+        hour, by default, for predictions created through the API.
+
+        You must save a copy of any data or files in the output if you'd like to
+        continue using them. The `output` key will still be present, but it's value will
+        be `null` after the output has been removed.
+
+        Output files are served by `replicate.delivery` and its subdomains. If you use
+        an allow list of external domains for your assets, add `replicate.delivery` and
+        `*.replicate.delivery` to it.
+
+        Args:
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        if not prediction_id:
+            raise ValueError(f"Expected a non-empty value for `prediction_id` but received {prediction_id!r}")
+        return self._get(
+            f"/predictions/{prediction_id}",
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=Prediction,
         )
 
 
@@ -600,108 +600,6 @@ class AsyncPredictionsResource(AsyncAPIResource):
             cast_to=Prediction,
         )
 
-    async def retrieve(
-        self,
-        prediction_id: str,
-        *,
-        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
-        # The extra values given here take precedence over values defined on the client or passed to this method.
-        extra_headers: Headers | None = None,
-        extra_query: Query | None = None,
-        extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> Prediction:
-        """
-        Get the current state of a prediction.
-
-        Example cURL request:
-
-        ```console
-        curl -s \\
-          -H "Authorization: Bearer $REPLICATE_API_TOKEN" \\
-          https://api.replicate.com/v1/predictions/gm3qorzdhgbfurvjtvhg6dckhu
-        ```
-
-        The response will be the prediction object:
-
-        ```json
-        {
-          "id": "gm3qorzdhgbfurvjtvhg6dckhu",
-          "model": "replicate/hello-world",
-          "version": "5c7d5dc6dd8bf75c1acaa8565735e7986bc5b66206b55cca93cb72c9bf15ccaa",
-          "input": {
-            "text": "Alice"
-          },
-          "logs": "",
-          "output": "hello Alice",
-          "error": null,
-          "status": "succeeded",
-          "created_at": "2023-09-08T16:19:34.765994Z",
-          "data_removed": false,
-          "started_at": "2023-09-08T16:19:34.779176Z",
-          "completed_at": "2023-09-08T16:19:34.791859Z",
-          "metrics": {
-            "predict_time": 0.012683
-          },
-          "urls": {
-            "cancel": "https://api.replicate.com/v1/predictions/gm3qorzdhgbfurvjtvhg6dckhu/cancel",
-            "get": "https://api.replicate.com/v1/predictions/gm3qorzdhgbfurvjtvhg6dckhu"
-          }
-        }
-        ```
-
-        `status` will be one of:
-
-        - `starting`: the prediction is starting up. If this status lasts longer than a
-          few seconds, then it's typically because a new worker is being started to run
-          the prediction.
-        - `processing`: the `predict()` method of the model is currently running.
-        - `succeeded`: the prediction completed successfully.
-        - `failed`: the prediction encountered an error during processing.
-        - `canceled`: the prediction was canceled by its creator.
-
-        In the case of success, `output` will be an object containing the output of the
-        model. Any files will be represented as HTTPS URLs. You'll need to pass the
-        `Authorization` header to request them.
-
-        In the case of failure, `error` will contain the error encountered during the
-        prediction.
-
-        Terminated predictions (with a status of `succeeded`, `failed`, or `canceled`)
-        will include a `metrics` object with a `predict_time` property showing the
-        amount of CPU or GPU time, in seconds, that the prediction used while running.
-        It won't include time waiting for the prediction to start.
-
-        All input parameters, output values, and logs are automatically removed after an
-        hour, by default, for predictions created through the API.
-
-        You must save a copy of any data or files in the output if you'd like to
-        continue using them. The `output` key will still be present, but it's value will
-        be `null` after the output has been removed.
-
-        Output files are served by `replicate.delivery` and its subdomains. If you use
-        an allow list of external domains for your assets, add `replicate.delivery` and
-        `*.replicate.delivery` to it.
-
-        Args:
-          extra_headers: Send extra headers
-
-          extra_query: Add additional query parameters to the request
-
-          extra_body: Add additional JSON properties to the request
-
-          timeout: Override the client-level default timeout for this request, in seconds
-        """
-        if not prediction_id:
-            raise ValueError(f"Expected a non-empty value for `prediction_id` but received {prediction_id!r}")
-        return await self._get(
-            f"/predictions/{prediction_id}",
-            options=make_request_options(
-                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
-            ),
-            cast_to=Prediction,
-        )
-
     def list(
         self,
         *,
@@ -851,6 +749,108 @@ class AsyncPredictionsResource(AsyncAPIResource):
             cast_to=NoneType,
         )
 
+    async def get(
+        self,
+        prediction_id: str,
+        *,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+    ) -> Prediction:
+        """
+        Get the current state of a prediction.
+
+        Example cURL request:
+
+        ```console
+        curl -s \\
+          -H "Authorization: Bearer $REPLICATE_API_TOKEN" \\
+          https://api.replicate.com/v1/predictions/gm3qorzdhgbfurvjtvhg6dckhu
+        ```
+
+        The response will be the prediction object:
+
+        ```json
+        {
+          "id": "gm3qorzdhgbfurvjtvhg6dckhu",
+          "model": "replicate/hello-world",
+          "version": "5c7d5dc6dd8bf75c1acaa8565735e7986bc5b66206b55cca93cb72c9bf15ccaa",
+          "input": {
+            "text": "Alice"
+          },
+          "logs": "",
+          "output": "hello Alice",
+          "error": null,
+          "status": "succeeded",
+          "created_at": "2023-09-08T16:19:34.765994Z",
+          "data_removed": false,
+          "started_at": "2023-09-08T16:19:34.779176Z",
+          "completed_at": "2023-09-08T16:19:34.791859Z",
+          "metrics": {
+            "predict_time": 0.012683
+          },
+          "urls": {
+            "cancel": "https://api.replicate.com/v1/predictions/gm3qorzdhgbfurvjtvhg6dckhu/cancel",
+            "get": "https://api.replicate.com/v1/predictions/gm3qorzdhgbfurvjtvhg6dckhu"
+          }
+        }
+        ```
+
+        `status` will be one of:
+
+        - `starting`: the prediction is starting up. If this status lasts longer than a
+          few seconds, then it's typically because a new worker is being started to run
+          the prediction.
+        - `processing`: the `predict()` method of the model is currently running.
+        - `succeeded`: the prediction completed successfully.
+        - `failed`: the prediction encountered an error during processing.
+        - `canceled`: the prediction was canceled by its creator.
+
+        In the case of success, `output` will be an object containing the output of the
+        model. Any files will be represented as HTTPS URLs. You'll need to pass the
+        `Authorization` header to request them.
+
+        In the case of failure, `error` will contain the error encountered during the
+        prediction.
+
+        Terminated predictions (with a status of `succeeded`, `failed`, or `canceled`)
+        will include a `metrics` object with a `predict_time` property showing the
+        amount of CPU or GPU time, in seconds, that the prediction used while running.
+        It won't include time waiting for the prediction to start.
+
+        All input parameters, output values, and logs are automatically removed after an
+        hour, by default, for predictions created through the API.
+
+        You must save a copy of any data or files in the output if you'd like to
+        continue using them. The `output` key will still be present, but it's value will
+        be `null` after the output has been removed.
+
+        Output files are served by `replicate.delivery` and its subdomains. If you use
+        an allow list of external domains for your assets, add `replicate.delivery` and
+        `*.replicate.delivery` to it.
+
+        Args:
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        if not prediction_id:
+            raise ValueError(f"Expected a non-empty value for `prediction_id` but received {prediction_id!r}")
+        return await self._get(
+            f"/predictions/{prediction_id}",
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=Prediction,
+        )
+
 
 class PredictionsResourceWithRawResponse:
     def __init__(self, predictions: PredictionsResource) -> None:
@@ -859,14 +859,14 @@ class PredictionsResourceWithRawResponse:
         self.create = to_raw_response_wrapper(
             predictions.create,
         )
-        self.retrieve = to_raw_response_wrapper(
-            predictions.retrieve,
-        )
         self.list = to_raw_response_wrapper(
             predictions.list,
         )
         self.cancel = to_raw_response_wrapper(
             predictions.cancel,
+        )
+        self.get = to_raw_response_wrapper(
+            predictions.get,
         )
 
 
@@ -877,14 +877,14 @@ class AsyncPredictionsResourceWithRawResponse:
         self.create = async_to_raw_response_wrapper(
             predictions.create,
         )
-        self.retrieve = async_to_raw_response_wrapper(
-            predictions.retrieve,
-        )
         self.list = async_to_raw_response_wrapper(
             predictions.list,
         )
         self.cancel = async_to_raw_response_wrapper(
             predictions.cancel,
+        )
+        self.get = async_to_raw_response_wrapper(
+            predictions.get,
         )
 
 
@@ -895,14 +895,14 @@ class PredictionsResourceWithStreamingResponse:
         self.create = to_streamed_response_wrapper(
             predictions.create,
         )
-        self.retrieve = to_streamed_response_wrapper(
-            predictions.retrieve,
-        )
         self.list = to_streamed_response_wrapper(
             predictions.list,
         )
         self.cancel = to_streamed_response_wrapper(
             predictions.cancel,
+        )
+        self.get = to_streamed_response_wrapper(
+            predictions.get,
         )
 
 
@@ -913,12 +913,12 @@ class AsyncPredictionsResourceWithStreamingResponse:
         self.create = async_to_streamed_response_wrapper(
             predictions.create,
         )
-        self.retrieve = async_to_streamed_response_wrapper(
-            predictions.retrieve,
-        )
         self.list = async_to_streamed_response_wrapper(
             predictions.list,
         )
         self.cancel = async_to_streamed_response_wrapper(
             predictions.cancel,
+        )
+        self.get = async_to_streamed_response_wrapper(
+            predictions.get,
         )

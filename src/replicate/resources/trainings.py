@@ -15,9 +15,9 @@ from .._response import (
 )
 from ..pagination import SyncCursorURLPage, AsyncCursorURLPage
 from .._base_client import AsyncPaginator, make_request_options
+from ..types.training_get_response import TrainingGetResponse
 from ..types.training_list_response import TrainingListResponse
 from ..types.training_cancel_response import TrainingCancelResponse
-from ..types.training_retrieve_response import TrainingRetrieveResponse
 
 __all__ = ["TrainingsResource", "AsyncTrainingsResource"]
 
@@ -41,99 +41,6 @@ class TrainingsResource(SyncAPIResource):
         For more information, see https://www.github.com/replicate/replicate-python-stainless#with_streaming_response
         """
         return TrainingsResourceWithStreamingResponse(self)
-
-    def retrieve(
-        self,
-        training_id: str,
-        *,
-        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
-        # The extra values given here take precedence over values defined on the client or passed to this method.
-        extra_headers: Headers | None = None,
-        extra_query: Query | None = None,
-        extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> TrainingRetrieveResponse:
-        """
-        Get the current state of a training.
-
-        Example cURL request:
-
-        ```console
-        curl -s \\
-          -H "Authorization: Bearer $REPLICATE_API_TOKEN" \\
-          https://api.replicate.com/v1/trainings/zz4ibbonubfz7carwiefibzgga
-        ```
-
-        The response will be the training object:
-
-        ```json
-        {
-          "completed_at": "2023-09-08T16:41:19.826523Z",
-          "created_at": "2023-09-08T16:32:57.018467Z",
-          "error": null,
-          "id": "zz4ibbonubfz7carwiefibzgga",
-          "input": {
-            "input_images": "https://example.com/my-input-images.zip"
-          },
-          "logs": "...",
-          "metrics": {
-            "predict_time": 502.713876
-          },
-          "output": {
-            "version": "...",
-            "weights": "..."
-          },
-          "started_at": "2023-09-08T16:32:57.112647Z",
-          "status": "succeeded",
-          "urls": {
-            "get": "https://api.replicate.com/v1/trainings/zz4ibbonubfz7carwiefibzgga",
-            "cancel": "https://api.replicate.com/v1/trainings/zz4ibbonubfz7carwiefibzgga/cancel"
-          },
-          "model": "stability-ai/sdxl",
-          "version": "da77bc59ee60423279fd632efb4795ab731d9e3ca9705ef3341091fb989b7eaf"
-        }
-        ```
-
-        `status` will be one of:
-
-        - `starting`: the training is starting up. If this status lasts longer than a
-          few seconds, then it's typically because a new worker is being started to run
-          the training.
-        - `processing`: the `train()` method of the model is currently running.
-        - `succeeded`: the training completed successfully.
-        - `failed`: the training encountered an error during processing.
-        - `canceled`: the training was canceled by its creator.
-
-        In the case of success, `output` will be an object containing the output of the
-        model. Any files will be represented as HTTPS URLs. You'll need to pass the
-        `Authorization` header to request them.
-
-        In the case of failure, `error` will contain the error encountered during the
-        training.
-
-        Terminated trainings (with a status of `succeeded`, `failed`, or `canceled`)
-        will include a `metrics` object with a `predict_time` property showing the
-        amount of CPU or GPU time, in seconds, that the training used while running. It
-        won't include time waiting for the training to start.
-
-        Args:
-          extra_headers: Send extra headers
-
-          extra_query: Add additional query parameters to the request
-
-          extra_body: Add additional JSON properties to the request
-
-          timeout: Override the client-level default timeout for this request, in seconds
-        """
-        if not training_id:
-            raise ValueError(f"Expected a non-empty value for `training_id` but received {training_id!r}")
-        return self._get(
-            f"/trainings/{training_id}",
-            options=make_request_options(
-                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
-            ),
-            cast_to=TrainingRetrieveResponse,
-        )
 
     def list(
         self,
@@ -252,28 +159,7 @@ class TrainingsResource(SyncAPIResource):
             cast_to=TrainingCancelResponse,
         )
 
-
-class AsyncTrainingsResource(AsyncAPIResource):
-    @cached_property
-    def with_raw_response(self) -> AsyncTrainingsResourceWithRawResponse:
-        """
-        This property can be used as a prefix for any HTTP method call to return
-        the raw response object instead of the parsed content.
-
-        For more information, see https://www.github.com/replicate/replicate-python-stainless#accessing-raw-response-data-eg-headers
-        """
-        return AsyncTrainingsResourceWithRawResponse(self)
-
-    @cached_property
-    def with_streaming_response(self) -> AsyncTrainingsResourceWithStreamingResponse:
-        """
-        An alternative to `.with_raw_response` that doesn't eagerly read the response body.
-
-        For more information, see https://www.github.com/replicate/replicate-python-stainless#with_streaming_response
-        """
-        return AsyncTrainingsResourceWithStreamingResponse(self)
-
-    async def retrieve(
+    def get(
         self,
         training_id: str,
         *,
@@ -283,7 +169,7 @@ class AsyncTrainingsResource(AsyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> TrainingRetrieveResponse:
+    ) -> TrainingGetResponse:
         """
         Get the current state of a training.
 
@@ -358,13 +244,34 @@ class AsyncTrainingsResource(AsyncAPIResource):
         """
         if not training_id:
             raise ValueError(f"Expected a non-empty value for `training_id` but received {training_id!r}")
-        return await self._get(
+        return self._get(
             f"/trainings/{training_id}",
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=TrainingRetrieveResponse,
+            cast_to=TrainingGetResponse,
         )
+
+
+class AsyncTrainingsResource(AsyncAPIResource):
+    @cached_property
+    def with_raw_response(self) -> AsyncTrainingsResourceWithRawResponse:
+        """
+        This property can be used as a prefix for any HTTP method call to return
+        the raw response object instead of the parsed content.
+
+        For more information, see https://www.github.com/replicate/replicate-python-stainless#accessing-raw-response-data-eg-headers
+        """
+        return AsyncTrainingsResourceWithRawResponse(self)
+
+    @cached_property
+    def with_streaming_response(self) -> AsyncTrainingsResourceWithStreamingResponse:
+        """
+        An alternative to `.with_raw_response` that doesn't eagerly read the response body.
+
+        For more information, see https://www.github.com/replicate/replicate-python-stainless#with_streaming_response
+        """
+        return AsyncTrainingsResourceWithStreamingResponse(self)
 
     def list(
         self,
@@ -483,19 +390,112 @@ class AsyncTrainingsResource(AsyncAPIResource):
             cast_to=TrainingCancelResponse,
         )
 
+    async def get(
+        self,
+        training_id: str,
+        *,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+    ) -> TrainingGetResponse:
+        """
+        Get the current state of a training.
+
+        Example cURL request:
+
+        ```console
+        curl -s \\
+          -H "Authorization: Bearer $REPLICATE_API_TOKEN" \\
+          https://api.replicate.com/v1/trainings/zz4ibbonubfz7carwiefibzgga
+        ```
+
+        The response will be the training object:
+
+        ```json
+        {
+          "completed_at": "2023-09-08T16:41:19.826523Z",
+          "created_at": "2023-09-08T16:32:57.018467Z",
+          "error": null,
+          "id": "zz4ibbonubfz7carwiefibzgga",
+          "input": {
+            "input_images": "https://example.com/my-input-images.zip"
+          },
+          "logs": "...",
+          "metrics": {
+            "predict_time": 502.713876
+          },
+          "output": {
+            "version": "...",
+            "weights": "..."
+          },
+          "started_at": "2023-09-08T16:32:57.112647Z",
+          "status": "succeeded",
+          "urls": {
+            "get": "https://api.replicate.com/v1/trainings/zz4ibbonubfz7carwiefibzgga",
+            "cancel": "https://api.replicate.com/v1/trainings/zz4ibbonubfz7carwiefibzgga/cancel"
+          },
+          "model": "stability-ai/sdxl",
+          "version": "da77bc59ee60423279fd632efb4795ab731d9e3ca9705ef3341091fb989b7eaf"
+        }
+        ```
+
+        `status` will be one of:
+
+        - `starting`: the training is starting up. If this status lasts longer than a
+          few seconds, then it's typically because a new worker is being started to run
+          the training.
+        - `processing`: the `train()` method of the model is currently running.
+        - `succeeded`: the training completed successfully.
+        - `failed`: the training encountered an error during processing.
+        - `canceled`: the training was canceled by its creator.
+
+        In the case of success, `output` will be an object containing the output of the
+        model. Any files will be represented as HTTPS URLs. You'll need to pass the
+        `Authorization` header to request them.
+
+        In the case of failure, `error` will contain the error encountered during the
+        training.
+
+        Terminated trainings (with a status of `succeeded`, `failed`, or `canceled`)
+        will include a `metrics` object with a `predict_time` property showing the
+        amount of CPU or GPU time, in seconds, that the training used while running. It
+        won't include time waiting for the training to start.
+
+        Args:
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        if not training_id:
+            raise ValueError(f"Expected a non-empty value for `training_id` but received {training_id!r}")
+        return await self._get(
+            f"/trainings/{training_id}",
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=TrainingGetResponse,
+        )
+
 
 class TrainingsResourceWithRawResponse:
     def __init__(self, trainings: TrainingsResource) -> None:
         self._trainings = trainings
 
-        self.retrieve = to_raw_response_wrapper(
-            trainings.retrieve,
-        )
         self.list = to_raw_response_wrapper(
             trainings.list,
         )
         self.cancel = to_raw_response_wrapper(
             trainings.cancel,
+        )
+        self.get = to_raw_response_wrapper(
+            trainings.get,
         )
 
 
@@ -503,14 +503,14 @@ class AsyncTrainingsResourceWithRawResponse:
     def __init__(self, trainings: AsyncTrainingsResource) -> None:
         self._trainings = trainings
 
-        self.retrieve = async_to_raw_response_wrapper(
-            trainings.retrieve,
-        )
         self.list = async_to_raw_response_wrapper(
             trainings.list,
         )
         self.cancel = async_to_raw_response_wrapper(
             trainings.cancel,
+        )
+        self.get = async_to_raw_response_wrapper(
+            trainings.get,
         )
 
 
@@ -518,14 +518,14 @@ class TrainingsResourceWithStreamingResponse:
     def __init__(self, trainings: TrainingsResource) -> None:
         self._trainings = trainings
 
-        self.retrieve = to_streamed_response_wrapper(
-            trainings.retrieve,
-        )
         self.list = to_streamed_response_wrapper(
             trainings.list,
         )
         self.cancel = to_streamed_response_wrapper(
             trainings.cancel,
+        )
+        self.get = to_streamed_response_wrapper(
+            trainings.get,
         )
 
 
@@ -533,12 +533,12 @@ class AsyncTrainingsResourceWithStreamingResponse:
     def __init__(self, trainings: AsyncTrainingsResource) -> None:
         self._trainings = trainings
 
-        self.retrieve = async_to_streamed_response_wrapper(
-            trainings.retrieve,
-        )
         self.list = async_to_streamed_response_wrapper(
             trainings.list,
         )
         self.cancel = async_to_streamed_response_wrapper(
             trainings.cancel,
+        )
+        self.get = async_to_streamed_response_wrapper(
+            trainings.get,
         )

@@ -174,115 +174,6 @@ class ModelsResource(SyncAPIResource):
             cast_to=NoneType,
         )
 
-    def retrieve(
-        self,
-        model_name: str,
-        *,
-        model_owner: str,
-        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
-        # The extra values given here take precedence over values defined on the client or passed to this method.
-        extra_headers: Headers | None = None,
-        extra_query: Query | None = None,
-        extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> None:
-        """
-        Example cURL request:
-
-        ```console
-        curl -s \\
-          -H "Authorization: Bearer $REPLICATE_API_TOKEN" \\
-          https://api.replicate.com/v1/models/replicate/hello-world
-        ```
-
-        The response will be a model object in the following format:
-
-        ```json
-        {
-          "url": "https://replicate.com/replicate/hello-world",
-          "owner": "replicate",
-          "name": "hello-world",
-          "description": "A tiny model that says hello",
-          "visibility": "public",
-          "github_url": "https://github.com/replicate/cog-examples",
-          "paper_url": null,
-          "license_url": null,
-          "run_count": 5681081,
-          "cover_image_url": "...",
-          "default_example": {...},
-          "latest_version": {...},
-        }
-        ```
-
-        The model object includes the
-        [input and output schema](https://replicate.com/docs/reference/openapi#model-schemas)
-        for the latest version of the model.
-
-        Here's an example showing how to fetch the model with cURL and display its input
-        schema with [jq](https://stedolan.github.io/jq/):
-
-        ```console
-        curl -s \\
-            -H "Authorization: Bearer $REPLICATE_API_TOKEN" \\
-            https://api.replicate.com/v1/models/replicate/hello-world \\
-            | jq ".latest_version.openapi_schema.components.schemas.Input"
-        ```
-
-        This will return the following JSON object:
-
-        ```json
-        {
-          "type": "object",
-          "title": "Input",
-          "required": ["text"],
-          "properties": {
-            "text": {
-              "type": "string",
-              "title": "Text",
-              "x-order": 0,
-              "description": "Text to prefix with 'hello '"
-            }
-          }
-        }
-        ```
-
-        The `cover_image_url` string is an HTTPS URL for an image file. This can be:
-
-        - An image uploaded by the model author.
-        - The output file of the example prediction, if the model author has not set a
-          cover image.
-        - The input file of the example prediction, if the model author has not set a
-          cover image and the example prediction has no output file.
-        - A generic fallback image.
-
-        The `default_example` object is a [prediction](#predictions.get) created with
-        this model.
-
-        The `latest_version` object is the model's most recently pushed
-        [version](#models.versions.get).
-
-        Args:
-          extra_headers: Send extra headers
-
-          extra_query: Add additional query parameters to the request
-
-          extra_body: Add additional JSON properties to the request
-
-          timeout: Override the client-level default timeout for this request, in seconds
-        """
-        if not model_owner:
-            raise ValueError(f"Expected a non-empty value for `model_owner` but received {model_owner!r}")
-        if not model_name:
-            raise ValueError(f"Expected a non-empty value for `model_name` but received {model_name!r}")
-        extra_headers = {"Accept": "*/*", **(extra_headers or {})}
-        return self._get(
-            f"/models/{model_owner}/{model_name}",
-            options=make_request_options(
-                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
-            ),
-            cast_to=NoneType,
-        )
-
     def list(
         self,
         *,
@@ -514,6 +405,115 @@ class ModelsResource(SyncAPIResource):
             cast_to=Prediction,
         )
 
+    def get(
+        self,
+        model_name: str,
+        *,
+        model_owner: str,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+    ) -> None:
+        """
+        Example cURL request:
+
+        ```console
+        curl -s \\
+          -H "Authorization: Bearer $REPLICATE_API_TOKEN" \\
+          https://api.replicate.com/v1/models/replicate/hello-world
+        ```
+
+        The response will be a model object in the following format:
+
+        ```json
+        {
+          "url": "https://replicate.com/replicate/hello-world",
+          "owner": "replicate",
+          "name": "hello-world",
+          "description": "A tiny model that says hello",
+          "visibility": "public",
+          "github_url": "https://github.com/replicate/cog-examples",
+          "paper_url": null,
+          "license_url": null,
+          "run_count": 5681081,
+          "cover_image_url": "...",
+          "default_example": {...},
+          "latest_version": {...},
+        }
+        ```
+
+        The model object includes the
+        [input and output schema](https://replicate.com/docs/reference/openapi#model-schemas)
+        for the latest version of the model.
+
+        Here's an example showing how to fetch the model with cURL and display its input
+        schema with [jq](https://stedolan.github.io/jq/):
+
+        ```console
+        curl -s \\
+            -H "Authorization: Bearer $REPLICATE_API_TOKEN" \\
+            https://api.replicate.com/v1/models/replicate/hello-world \\
+            | jq ".latest_version.openapi_schema.components.schemas.Input"
+        ```
+
+        This will return the following JSON object:
+
+        ```json
+        {
+          "type": "object",
+          "title": "Input",
+          "required": ["text"],
+          "properties": {
+            "text": {
+              "type": "string",
+              "title": "Text",
+              "x-order": 0,
+              "description": "Text to prefix with 'hello '"
+            }
+          }
+        }
+        ```
+
+        The `cover_image_url` string is an HTTPS URL for an image file. This can be:
+
+        - An image uploaded by the model author.
+        - The output file of the example prediction, if the model author has not set a
+          cover image.
+        - The input file of the example prediction, if the model author has not set a
+          cover image and the example prediction has no output file.
+        - A generic fallback image.
+
+        The `default_example` object is a [prediction](#predictions.get) created with
+        this model.
+
+        The `latest_version` object is the model's most recently pushed
+        [version](#models.versions.get).
+
+        Args:
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        if not model_owner:
+            raise ValueError(f"Expected a non-empty value for `model_owner` but received {model_owner!r}")
+        if not model_name:
+            raise ValueError(f"Expected a non-empty value for `model_name` but received {model_name!r}")
+        extra_headers = {"Accept": "*/*", **(extra_headers or {})}
+        return self._get(
+            f"/models/{model_owner}/{model_name}",
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=NoneType,
+        )
+
 
 class AsyncModelsResource(AsyncAPIResource):
     @cached_property
@@ -645,115 +645,6 @@ class AsyncModelsResource(AsyncAPIResource):
                 },
                 model_create_params.ModelCreateParams,
             ),
-            options=make_request_options(
-                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
-            ),
-            cast_to=NoneType,
-        )
-
-    async def retrieve(
-        self,
-        model_name: str,
-        *,
-        model_owner: str,
-        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
-        # The extra values given here take precedence over values defined on the client or passed to this method.
-        extra_headers: Headers | None = None,
-        extra_query: Query | None = None,
-        extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> None:
-        """
-        Example cURL request:
-
-        ```console
-        curl -s \\
-          -H "Authorization: Bearer $REPLICATE_API_TOKEN" \\
-          https://api.replicate.com/v1/models/replicate/hello-world
-        ```
-
-        The response will be a model object in the following format:
-
-        ```json
-        {
-          "url": "https://replicate.com/replicate/hello-world",
-          "owner": "replicate",
-          "name": "hello-world",
-          "description": "A tiny model that says hello",
-          "visibility": "public",
-          "github_url": "https://github.com/replicate/cog-examples",
-          "paper_url": null,
-          "license_url": null,
-          "run_count": 5681081,
-          "cover_image_url": "...",
-          "default_example": {...},
-          "latest_version": {...},
-        }
-        ```
-
-        The model object includes the
-        [input and output schema](https://replicate.com/docs/reference/openapi#model-schemas)
-        for the latest version of the model.
-
-        Here's an example showing how to fetch the model with cURL and display its input
-        schema with [jq](https://stedolan.github.io/jq/):
-
-        ```console
-        curl -s \\
-            -H "Authorization: Bearer $REPLICATE_API_TOKEN" \\
-            https://api.replicate.com/v1/models/replicate/hello-world \\
-            | jq ".latest_version.openapi_schema.components.schemas.Input"
-        ```
-
-        This will return the following JSON object:
-
-        ```json
-        {
-          "type": "object",
-          "title": "Input",
-          "required": ["text"],
-          "properties": {
-            "text": {
-              "type": "string",
-              "title": "Text",
-              "x-order": 0,
-              "description": "Text to prefix with 'hello '"
-            }
-          }
-        }
-        ```
-
-        The `cover_image_url` string is an HTTPS URL for an image file. This can be:
-
-        - An image uploaded by the model author.
-        - The output file of the example prediction, if the model author has not set a
-          cover image.
-        - The input file of the example prediction, if the model author has not set a
-          cover image and the example prediction has no output file.
-        - A generic fallback image.
-
-        The `default_example` object is a [prediction](#predictions.get) created with
-        this model.
-
-        The `latest_version` object is the model's most recently pushed
-        [version](#models.versions.get).
-
-        Args:
-          extra_headers: Send extra headers
-
-          extra_query: Add additional query parameters to the request
-
-          extra_body: Add additional JSON properties to the request
-
-          timeout: Override the client-level default timeout for this request, in seconds
-        """
-        if not model_owner:
-            raise ValueError(f"Expected a non-empty value for `model_owner` but received {model_owner!r}")
-        if not model_name:
-            raise ValueError(f"Expected a non-empty value for `model_name` but received {model_name!r}")
-        extra_headers = {"Accept": "*/*", **(extra_headers or {})}
-        return await self._get(
-            f"/models/{model_owner}/{model_name}",
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
@@ -991,6 +882,115 @@ class AsyncModelsResource(AsyncAPIResource):
             cast_to=Prediction,
         )
 
+    async def get(
+        self,
+        model_name: str,
+        *,
+        model_owner: str,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+    ) -> None:
+        """
+        Example cURL request:
+
+        ```console
+        curl -s \\
+          -H "Authorization: Bearer $REPLICATE_API_TOKEN" \\
+          https://api.replicate.com/v1/models/replicate/hello-world
+        ```
+
+        The response will be a model object in the following format:
+
+        ```json
+        {
+          "url": "https://replicate.com/replicate/hello-world",
+          "owner": "replicate",
+          "name": "hello-world",
+          "description": "A tiny model that says hello",
+          "visibility": "public",
+          "github_url": "https://github.com/replicate/cog-examples",
+          "paper_url": null,
+          "license_url": null,
+          "run_count": 5681081,
+          "cover_image_url": "...",
+          "default_example": {...},
+          "latest_version": {...},
+        }
+        ```
+
+        The model object includes the
+        [input and output schema](https://replicate.com/docs/reference/openapi#model-schemas)
+        for the latest version of the model.
+
+        Here's an example showing how to fetch the model with cURL and display its input
+        schema with [jq](https://stedolan.github.io/jq/):
+
+        ```console
+        curl -s \\
+            -H "Authorization: Bearer $REPLICATE_API_TOKEN" \\
+            https://api.replicate.com/v1/models/replicate/hello-world \\
+            | jq ".latest_version.openapi_schema.components.schemas.Input"
+        ```
+
+        This will return the following JSON object:
+
+        ```json
+        {
+          "type": "object",
+          "title": "Input",
+          "required": ["text"],
+          "properties": {
+            "text": {
+              "type": "string",
+              "title": "Text",
+              "x-order": 0,
+              "description": "Text to prefix with 'hello '"
+            }
+          }
+        }
+        ```
+
+        The `cover_image_url` string is an HTTPS URL for an image file. This can be:
+
+        - An image uploaded by the model author.
+        - The output file of the example prediction, if the model author has not set a
+          cover image.
+        - The input file of the example prediction, if the model author has not set a
+          cover image and the example prediction has no output file.
+        - A generic fallback image.
+
+        The `default_example` object is a [prediction](#predictions.get) created with
+        this model.
+
+        The `latest_version` object is the model's most recently pushed
+        [version](#models.versions.get).
+
+        Args:
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        if not model_owner:
+            raise ValueError(f"Expected a non-empty value for `model_owner` but received {model_owner!r}")
+        if not model_name:
+            raise ValueError(f"Expected a non-empty value for `model_name` but received {model_name!r}")
+        extra_headers = {"Accept": "*/*", **(extra_headers or {})}
+        return await self._get(
+            f"/models/{model_owner}/{model_name}",
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=NoneType,
+        )
+
 
 class ModelsResourceWithRawResponse:
     def __init__(self, models: ModelsResource) -> None:
@@ -998,9 +998,6 @@ class ModelsResourceWithRawResponse:
 
         self.create = to_raw_response_wrapper(
             models.create,
-        )
-        self.retrieve = to_raw_response_wrapper(
-            models.retrieve,
         )
         self.list = to_raw_response_wrapper(
             models.list,
@@ -1010,6 +1007,9 @@ class ModelsResourceWithRawResponse:
         )
         self.create_prediction = to_raw_response_wrapper(
             models.create_prediction,
+        )
+        self.get = to_raw_response_wrapper(
+            models.get,
         )
 
     @cached_property
@@ -1024,9 +1024,6 @@ class AsyncModelsResourceWithRawResponse:
         self.create = async_to_raw_response_wrapper(
             models.create,
         )
-        self.retrieve = async_to_raw_response_wrapper(
-            models.retrieve,
-        )
         self.list = async_to_raw_response_wrapper(
             models.list,
         )
@@ -1035,6 +1032,9 @@ class AsyncModelsResourceWithRawResponse:
         )
         self.create_prediction = async_to_raw_response_wrapper(
             models.create_prediction,
+        )
+        self.get = async_to_raw_response_wrapper(
+            models.get,
         )
 
     @cached_property
@@ -1049,9 +1049,6 @@ class ModelsResourceWithStreamingResponse:
         self.create = to_streamed_response_wrapper(
             models.create,
         )
-        self.retrieve = to_streamed_response_wrapper(
-            models.retrieve,
-        )
         self.list = to_streamed_response_wrapper(
             models.list,
         )
@@ -1060,6 +1057,9 @@ class ModelsResourceWithStreamingResponse:
         )
         self.create_prediction = to_streamed_response_wrapper(
             models.create_prediction,
+        )
+        self.get = to_streamed_response_wrapper(
+            models.get,
         )
 
     @cached_property
@@ -1074,9 +1074,6 @@ class AsyncModelsResourceWithStreamingResponse:
         self.create = async_to_streamed_response_wrapper(
             models.create,
         )
-        self.retrieve = async_to_streamed_response_wrapper(
-            models.retrieve,
-        )
         self.list = async_to_streamed_response_wrapper(
             models.list,
         )
@@ -1085,6 +1082,9 @@ class AsyncModelsResourceWithStreamingResponse:
         )
         self.create_prediction = async_to_streamed_response_wrapper(
             models.create_prediction,
+        )
+        self.get = async_to_streamed_response_wrapper(
+            models.get,
         )
 
     @cached_property

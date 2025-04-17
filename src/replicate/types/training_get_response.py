@@ -6,7 +6,7 @@ from typing_extensions import Literal
 
 from .._models import BaseModel
 
-__all__ = ["TrainingRetrieveResponse", "Metrics", "Output", "URLs"]
+__all__ = ["TrainingGetResponse", "Metrics", "Output", "URLs"]
 
 
 class Metrics(BaseModel):
@@ -30,7 +30,7 @@ class URLs(BaseModel):
     """URL to get the training details"""
 
 
-class TrainingRetrieveResponse(BaseModel):
+class TrainingGetResponse(BaseModel):
     id: Optional[str] = None
     """The unique ID of the training"""
 
