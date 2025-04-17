@@ -6,7 +6,7 @@ from typing_extensions import Literal
 
 from .._models import BaseModel
 
-__all__ = ["DeploymentRetrieveResponse", "CurrentRelease", "CurrentReleaseConfiguration", "CurrentReleaseCreatedBy"]
+__all__ = ["DeploymentGetResponse", "CurrentRelease", "CurrentReleaseConfiguration", "CurrentReleaseCreatedBy"]
 
 
 class CurrentReleaseConfiguration(BaseModel):
@@ -55,7 +55,7 @@ class CurrentRelease(BaseModel):
     """The ID of the model version used in the release."""
 
 
-class DeploymentRetrieveResponse(BaseModel):
+class DeploymentGetResponse(BaseModel):
     current_release: Optional[CurrentRelease] = None
 
     name: Optional[str] = None
