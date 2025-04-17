@@ -6,6 +6,8 @@ from typing_extensions import Literal
 
 import httpx
 
+from replicate.types.prediction import Prediction
+
 __all__ = [
     "BadRequestError",
     "AuthenticationError",
@@ -15,6 +17,7 @@ __all__ = [
     "UnprocessableEntityError",
     "RateLimitError",
     "InternalServerError",
+    "ModelError",
 ]
 
 
@@ -106,3 +109,13 @@ class RateLimitError(APIStatusError):
 
 class InternalServerError(APIStatusError):
     pass
+
+
+class ModelError(ReplicateClientError):
+    """An error from user's code in a model."""
+
+    prediction: Prediction
+
+    def __init__(self, prediction: Prediction) -> None:
+        self.prediction = prediction
+        super().__init__(prediction.error)

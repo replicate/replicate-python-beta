@@ -3,13 +3,14 @@
 from __future__ import annotations
 
 import os
-from typing import Any, Union, Mapping
-from typing_extensions import Self, override
+from typing import TYPE_CHECKING, Any, Dict, Union, Mapping, Iterable
+from typing_extensions import Self, Unpack, override
 
 import httpx
 
 from . import _exceptions
 from ._qs import Querystring
+from .types import PredictionOutput, PredictionCreateParams
 from ._types import (
     NOT_GIVEN,
     Omit,
@@ -32,6 +33,9 @@ from ._base_client import (
 from .resources.models import models
 from .resources.webhooks import webhooks
 from .resources.deployments import deployments
+
+if TYPE_CHECKING:
+    from .lib._files import FileOutput
 
 __all__ = [
     "Timeout",
@@ -121,6 +125,19 @@ class ReplicateClient(SyncAPIClient):
         self.webhooks = webhooks.WebhooksResource(self)
         self.with_raw_response = ReplicateClientWithRawResponse(self)
         self.with_streaming_response = ReplicateClientWithStreamedResponse(self)
+        self.poll_interval = float(os.environ.get("REPLICATE_POLL_INTERVAL", "0.5"))
+
+    def run(
+        self,
+        ref: str,
+        *,
+        wait: Union[int, bool, NotGiven] = NOT_GIVEN,
+        **params: Unpack[PredictionCreateParams],
+    ) -> PredictionOutput | FileOutput | Iterable[FileOutput] | Dict[str, FileOutput]:
+        """Run a model and wait for its output."""
+        from .lib._predictions import run
+
+        return run(self, ref, wait=wait, **params)
 
     @property
     @override
@@ -303,6 +320,19 @@ class AsyncReplicateClient(AsyncAPIClient):
         self.webhooks = webhooks.AsyncWebhooksResource(self)
         self.with_raw_response = AsyncReplicateClientWithRawResponse(self)
         self.with_streaming_response = AsyncReplicateClientWithStreamedResponse(self)
+        self.poll_interval = float(os.environ.get("REPLICATE_POLL_INTERVAL", "0.5"))
+
+    async def run(
+        self,
+        ref: str,
+        *,
+        wait: Union[int, bool, NotGiven] = NOT_GIVEN,
+        **params: Unpack[PredictionCreateParams],
+    ) -> PredictionOutput | FileOutput | Iterable[FileOutput] | Dict[str, FileOutput]:
+        """Run a model and wait for its output."""
+        from .lib._predictions import async_run
+
+        return await async_run(self, ref, wait=wait, **params)
 
     @property
     @override

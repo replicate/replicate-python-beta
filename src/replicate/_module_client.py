@@ -1,6 +1,7 @@
 # File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-from typing_extensions import override
+from typing import TYPE_CHECKING
+from typing_extensions import cast, override
 
 from . import resources, _load_client
 from ._utils import LazyProxy
@@ -62,3 +63,17 @@ trainings: resources.TrainingsResource = TrainingsResourceProxy().__as_proxied__
 collections: resources.CollectionsResource = CollectionsResourceProxy().__as_proxied__()
 deployments: resources.DeploymentsResource = DeploymentsResourceProxy().__as_proxied__()
 predictions: resources.PredictionsResource = PredictionsResourceProxy().__as_proxied__()
+
+if TYPE_CHECKING:
+    from ._client import ReplicateClient
+
+    # get the type checker to infer the run symbol to the same type
+    # as the method on the client so we don't have to define it twice
+    __client: ReplicateClient = cast(ReplicateClient, {})
+    run = __client.run
+else:
+
+    def _run(*args, **kwargs):
+        return _load_client().run(*args, **kwargs)
+
+    run = _run

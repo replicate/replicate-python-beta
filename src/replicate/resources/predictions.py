@@ -25,6 +25,8 @@ from ..types.prediction import Prediction
 
 __all__ = ["PredictionsResource", "AsyncPredictionsResource"]
 
+PREDICTION_TERMINAL_STATES = {"succeeded", "failed", "canceled"}
+
 
 class PredictionsResource(SyncAPIResource):
     @cached_property
@@ -45,6 +47,14 @@ class PredictionsResource(SyncAPIResource):
         For more information, see https://www.github.com/replicate/replicate-python-stainless#with_streaming_response
         """
         return PredictionsResourceWithStreamingResponse(self)
+
+    def wait(self, prediction_id: str) -> Prediction:
+        """Wait for prediction to finish."""
+        prediction = self.retrieve(prediction_id)
+        while prediction.status not in PREDICTION_TERMINAL_STATES:
+            self._sleep(self._client.poll_interval)
+            prediction = self.retrieve(prediction.id)
+        return prediction
 
     def create(
         self,
@@ -456,6 +466,14 @@ class AsyncPredictionsResource(AsyncAPIResource):
         For more information, see https://www.github.com/replicate/replicate-python-stainless#with_streaming_response
         """
         return AsyncPredictionsResourceWithStreamingResponse(self)
+
+    async def wait(self, prediction_id: str) -> Prediction:
+        """Wait for prediction to finish."""
+        prediction = await self.retrieve(prediction_id)
+        while prediction.status not in PREDICTION_TERMINAL_STATES:
+            await self._sleep(self._client.poll_interval)
+            prediction = await self.retrieve(prediction.id)
+        return prediction
 
     async def create(
         self,
