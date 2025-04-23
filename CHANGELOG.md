@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.1.0-alpha.4 (2025-04-23)
+
+Full Changelog: [v0.1.0-alpha.3...v0.1.0-alpha.4](https://github.com/replicate/replicate-python-stainless/compare/v0.1.0-alpha.3...v0.1.0-alpha.4)
+
+### Features
+
+* **api:** add `models.readme.get` and `models.examples.list` operations ([bcac9e5](https://github.com/replicate/replicate-python-stainless/commit/bcac9e51671f466b76f5eed7f4336189c6967326))
+
 ## 0.1.0-alpha.3 (2025-04-23)
 
 Full Changelog: [v0.1.0-alpha.2...v0.1.0-alpha.3](https://github.com/replicate/replicate-python-stainless/compare/v0.1.0-alpha.2...v0.1.0-alpha.3)
