@@ -12,7 +12,6 @@ from replicate.types.prediction_create_params import PredictionCreateParamsWitho
 
 from . import _exceptions
 from ._qs import Querystring
-from .types import PredictionCreateParams
 from ._types import (
     NOT_GIVEN,
     Omit,
