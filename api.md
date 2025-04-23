@@ -73,6 +73,24 @@ Methods:
 - <code title="post /models/{model_owner}/{model_name}/predictions">client.models.<a href="./src/replicate/resources/models/models.py">create_prediction</a>(model_name, \*, model_owner, \*\*<a href="src/replicate/types/model_create_prediction_params.py">params</a>) -> <a href="./src/replicate/types/prediction.py">Prediction</a></code>
 - <code title="get /models/{model_owner}/{model_name}">client.models.<a href="./src/replicate/resources/models/models.py">get</a>(model_name, \*, model_owner) -> None</code>
 
+## Examples
+
+Methods:
+
+- <code title="get /models/{model_owner}/{model_name}/examples">client.models.examples.<a href="./src/replicate/resources/models/examples.py">list</a>(model_name, \*, model_owner) -> None</code>
+
+## Readme
+
+Types:
+
+```python
+from replicate.types.models import ReadmeGetResponse
+```
+
+Methods:
+
+- <code title="get /models/{model_owner}/{model_name}/readme">client.models.readme.<a href="./src/replicate/resources/models/readme.py">get</a>(model_name, \*, model_owner) -> str</code>
+
 ## Versions
 
 Types:

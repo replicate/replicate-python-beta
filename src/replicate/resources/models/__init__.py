@@ -8,6 +8,22 @@ from .models import (
     ModelsResourceWithStreamingResponse,
     AsyncModelsResourceWithStreamingResponse,
 )
+from .readme import (
+    ReadmeResource,
+    AsyncReadmeResource,
+    ReadmeResourceWithRawResponse,
+    AsyncReadmeResourceWithRawResponse,
+    ReadmeResourceWithStreamingResponse,
+    AsyncReadmeResourceWithStreamingResponse,
+)
+from .examples import (
+    ExamplesResource,
+    AsyncExamplesResource,
+    ExamplesResourceWithRawResponse,
+    AsyncExamplesResourceWithRawResponse,
+    ExamplesResourceWithStreamingResponse,
+    AsyncExamplesResourceWithStreamingResponse,
+)
 from .versions import (
     VersionsResource,
     AsyncVersionsResource,
@@ -18,6 +34,18 @@ from .versions import (
 )
 
 __all__ = [
+    "ExamplesResource",
+    "AsyncExamplesResource",
+    "ExamplesResourceWithRawResponse",
+    "AsyncExamplesResourceWithRawResponse",
+    "ExamplesResourceWithStreamingResponse",
+    "AsyncExamplesResourceWithStreamingResponse",
+    "ReadmeResource",
+    "AsyncReadmeResource",
+    "ReadmeResourceWithRawResponse",
+    "AsyncReadmeResourceWithRawResponse",
+    "ReadmeResourceWithStreamingResponse",
+    "AsyncReadmeResourceWithStreamingResponse",
     "VersionsResource",
     "AsyncVersionsResource",
     "VersionsResourceWithRawResponse",
