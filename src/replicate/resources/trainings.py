@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import httpx
 
-from .._types import NOT_GIVEN, Body, Query, Headers, NoneType, NotGiven
+from .._types import NOT_GIVEN, Body, Query, Headers, NotGiven
 from .._compat import cached_property
 from .._resource import SyncAPIResource, AsyncAPIResource
 from .._response import (
@@ -13,7 +13,11 @@ from .._response import (
     async_to_raw_response_wrapper,
     async_to_streamed_response_wrapper,
 )
-from .._base_client import make_request_options
+from ..pagination import SyncCursorURLPage, AsyncCursorURLPage
+from .._base_client import AsyncPaginator, make_request_options
+from ..types.training_get_response import TrainingGetResponse
+from ..types.training_list_response import TrainingListResponse
+from ..types.training_cancel_response import TrainingCancelResponse
 
 __all__ = ["TrainingsResource", "AsyncTrainingsResource"]
 
@@ -38,7 +42,91 @@ class TrainingsResource(SyncAPIResource):
         """
         return TrainingsResourceWithStreamingResponse(self)
 
-    def retrieve(
+    def list(
+        self,
+        *,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+    ) -> SyncCursorURLPage[TrainingListResponse]:
+        """
+        Get a paginated list of all trainings created by the user or organization
+        associated with the provided API token.
+
+        This will include trainings created from the API and the website. It will return
+        100 records per page.
+
+        Example cURL request:
+
+        ```console
+        curl -s \\
+          -H "Authorization: Bearer $REPLICATE_API_TOKEN" \\
+          https://api.replicate.com/v1/trainings
+        ```
+
+        The response will be a paginated JSON array of training objects, sorted with the
+        most recent training first:
+
+        ```json
+        {
+          "next": null,
+          "previous": null,
+          "results": [
+            {
+              "completed_at": "2023-09-08T16:41:19.826523Z",
+              "created_at": "2023-09-08T16:32:57.018467Z",
+              "error": null,
+              "id": "zz4ibbonubfz7carwiefibzgga",
+              "input": {
+                "input_images": "https://example.com/my-input-images.zip"
+              },
+              "metrics": {
+                "predict_time": 502.713876
+              },
+              "output": {
+                "version": "...",
+                "weights": "..."
+              },
+              "started_at": "2023-09-08T16:32:57.112647Z",
+              "source": "api",
+              "status": "succeeded",
+              "urls": {
+                "get": "https://api.replicate.com/v1/trainings/zz4ibbonubfz7carwiefibzgga",
+                "cancel": "https://api.replicate.com/v1/trainings/zz4ibbonubfz7carwiefibzgga/cancel"
+              },
+              "model": "stability-ai/sdxl",
+              "version": "da77bc59ee60423279fd632efb4795ab731d9e3ca9705ef3341091fb989b7eaf"
+            }
+          ]
+        }
+        ```
+
+        `id` will be the unique ID of the training.
+
+        `source` will indicate how the training was created. Possible values are `web`
+        or `api`.
+
+        `status` will be the status of the training. Refer to
+        [get a single training](#trainings.get) for possible values.
+
+        `urls` will be a convenience object that can be used to construct new API
+        requests for the given training.
+
+        `version` will be the unique ID of model version used to create the training.
+        """
+        return self._get_api_list(
+            "/trainings",
+            page=SyncCursorURLPage[TrainingListResponse],
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            model=TrainingListResponse,
+        )
+
+    def cancel(
         self,
         training_id: str,
         *,
@@ -48,7 +136,40 @@ class TrainingsResource(SyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> None:
+    ) -> TrainingCancelResponse:
+        """
+        Cancel a training
+
+        Args:
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        if not training_id:
+            raise ValueError(f"Expected a non-empty value for `training_id` but received {training_id!r}")
+        return self._post(
+            f"/trainings/{training_id}/cancel",
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=TrainingCancelResponse,
+        )
+
+    def get(
+        self,
+        training_id: str,
+        *,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+    ) -> TrainingGetResponse:
         """
         Get the current state of a training.
 
@@ -123,131 +244,12 @@ class TrainingsResource(SyncAPIResource):
         """
         if not training_id:
             raise ValueError(f"Expected a non-empty value for `training_id` but received {training_id!r}")
-        extra_headers = {"Accept": "*/*", **(extra_headers or {})}
         return self._get(
             f"/trainings/{training_id}",
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=NoneType,
-        )
-
-    def list(
-        self,
-        *,
-        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
-        # The extra values given here take precedence over values defined on the client or passed to this method.
-        extra_headers: Headers | None = None,
-        extra_query: Query | None = None,
-        extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> None:
-        """
-        Get a paginated list of all trainings created by the user or organization
-        associated with the provided API token.
-
-        This will include trainings created from the API and the website. It will return
-        100 records per page.
-
-        Example cURL request:
-
-        ```console
-        curl -s \\
-          -H "Authorization: Bearer $REPLICATE_API_TOKEN" \\
-          https://api.replicate.com/v1/trainings
-        ```
-
-        The response will be a paginated JSON array of training objects, sorted with the
-        most recent training first:
-
-        ```json
-        {
-          "next": null,
-          "previous": null,
-          "results": [
-            {
-              "completed_at": "2023-09-08T16:41:19.826523Z",
-              "created_at": "2023-09-08T16:32:57.018467Z",
-              "error": null,
-              "id": "zz4ibbonubfz7carwiefibzgga",
-              "input": {
-                "input_images": "https://example.com/my-input-images.zip"
-              },
-              "metrics": {
-                "predict_time": 502.713876
-              },
-              "output": {
-                "version": "...",
-                "weights": "..."
-              },
-              "started_at": "2023-09-08T16:32:57.112647Z",
-              "source": "api",
-              "status": "succeeded",
-              "urls": {
-                "get": "https://api.replicate.com/v1/trainings/zz4ibbonubfz7carwiefibzgga",
-                "cancel": "https://api.replicate.com/v1/trainings/zz4ibbonubfz7carwiefibzgga/cancel"
-              },
-              "model": "stability-ai/sdxl",
-              "version": "da77bc59ee60423279fd632efb4795ab731d9e3ca9705ef3341091fb989b7eaf"
-            }
-          ]
-        }
-        ```
-
-        `id` will be the unique ID of the training.
-
-        `source` will indicate how the training was created. Possible values are `web`
-        or `api`.
-
-        `status` will be the status of the training. Refer to
-        [get a single training](#trainings.get) for possible values.
-
-        `urls` will be a convenience object that can be used to construct new API
-        requests for the given training.
-
-        `version` will be the unique ID of model version used to create the training.
-        """
-        extra_headers = {"Accept": "*/*", **(extra_headers or {})}
-        return self._get(
-            "/trainings",
-            options=make_request_options(
-                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
-            ),
-            cast_to=NoneType,
-        )
-
-    def cancel(
-        self,
-        training_id: str,
-        *,
-        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
-        # The extra values given here take precedence over values defined on the client or passed to this method.
-        extra_headers: Headers | None = None,
-        extra_query: Query | None = None,
-        extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> None:
-        """
-        Cancel a training
-
-        Args:
-          extra_headers: Send extra headers
-
-          extra_query: Add additional query parameters to the request
-
-          extra_body: Add additional JSON properties to the request
-
-          timeout: Override the client-level default timeout for this request, in seconds
-        """
-        if not training_id:
-            raise ValueError(f"Expected a non-empty value for `training_id` but received {training_id!r}")
-        extra_headers = {"Accept": "*/*", **(extra_headers or {})}
-        return self._post(
-            f"/trainings/{training_id}/cancel",
-            options=make_request_options(
-                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
-            ),
-            cast_to=NoneType,
+            cast_to=TrainingGetResponse,
         )
 
 
@@ -271,7 +273,91 @@ class AsyncTrainingsResource(AsyncAPIResource):
         """
         return AsyncTrainingsResourceWithStreamingResponse(self)
 
-    async def retrieve(
+    def list(
+        self,
+        *,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+    ) -> AsyncPaginator[TrainingListResponse, AsyncCursorURLPage[TrainingListResponse]]:
+        """
+        Get a paginated list of all trainings created by the user or organization
+        associated with the provided API token.
+
+        This will include trainings created from the API and the website. It will return
+        100 records per page.
+
+        Example cURL request:
+
+        ```console
+        curl -s \\
+          -H "Authorization: Bearer $REPLICATE_API_TOKEN" \\
+          https://api.replicate.com/v1/trainings
+        ```
+
+        The response will be a paginated JSON array of training objects, sorted with the
+        most recent training first:
+
+        ```json
+        {
+          "next": null,
+          "previous": null,
+          "results": [
+            {
+              "completed_at": "2023-09-08T16:41:19.826523Z",
+              "created_at": "2023-09-08T16:32:57.018467Z",
+              "error": null,
+              "id": "zz4ibbonubfz7carwiefibzgga",
+              "input": {
+                "input_images": "https://example.com/my-input-images.zip"
+              },
+              "metrics": {
+                "predict_time": 502.713876
+              },
+              "output": {
+                "version": "...",
+                "weights": "..."
+              },
+              "started_at": "2023-09-08T16:32:57.112647Z",
+              "source": "api",
+              "status": "succeeded",
+              "urls": {
+                "get": "https://api.replicate.com/v1/trainings/zz4ibbonubfz7carwiefibzgga",
+                "cancel": "https://api.replicate.com/v1/trainings/zz4ibbonubfz7carwiefibzgga/cancel"
+              },
+              "model": "stability-ai/sdxl",
+              "version": "da77bc59ee60423279fd632efb4795ab731d9e3ca9705ef3341091fb989b7eaf"
+            }
+          ]
+        }
+        ```
+
+        `id` will be the unique ID of the training.
+
+        `source` will indicate how the training was created. Possible values are `web`
+        or `api`.
+
+        `status` will be the status of the training. Refer to
+        [get a single training](#trainings.get) for possible values.
+
+        `urls` will be a convenience object that can be used to construct new API
+        requests for the given training.
+
+        `version` will be the unique ID of model version used to create the training.
+        """
+        return self._get_api_list(
+            "/trainings",
+            page=AsyncCursorURLPage[TrainingListResponse],
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            model=TrainingListResponse,
+        )
+
+    async def cancel(
         self,
         training_id: str,
         *,
@@ -281,7 +367,40 @@ class AsyncTrainingsResource(AsyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> None:
+    ) -> TrainingCancelResponse:
+        """
+        Cancel a training
+
+        Args:
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        if not training_id:
+            raise ValueError(f"Expected a non-empty value for `training_id` but received {training_id!r}")
+        return await self._post(
+            f"/trainings/{training_id}/cancel",
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=TrainingCancelResponse,
+        )
+
+    async def get(
+        self,
+        training_id: str,
+        *,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+    ) -> TrainingGetResponse:
         """
         Get the current state of a training.
 
@@ -356,131 +475,12 @@ class AsyncTrainingsResource(AsyncAPIResource):
         """
         if not training_id:
             raise ValueError(f"Expected a non-empty value for `training_id` but received {training_id!r}")
-        extra_headers = {"Accept": "*/*", **(extra_headers or {})}
         return await self._get(
             f"/trainings/{training_id}",
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=NoneType,
-        )
-
-    async def list(
-        self,
-        *,
-        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
-        # The extra values given here take precedence over values defined on the client or passed to this method.
-        extra_headers: Headers | None = None,
-        extra_query: Query | None = None,
-        extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> None:
-        """
-        Get a paginated list of all trainings created by the user or organization
-        associated with the provided API token.
-
-        This will include trainings created from the API and the website. It will return
-        100 records per page.
-
-        Example cURL request:
-
-        ```console
-        curl -s \\
-          -H "Authorization: Bearer $REPLICATE_API_TOKEN" \\
-          https://api.replicate.com/v1/trainings
-        ```
-
-        The response will be a paginated JSON array of training objects, sorted with the
-        most recent training first:
-
-        ```json
-        {
-          "next": null,
-          "previous": null,
-          "results": [
-            {
-              "completed_at": "2023-09-08T16:41:19.826523Z",
-              "created_at": "2023-09-08T16:32:57.018467Z",
-              "error": null,
-              "id": "zz4ibbonubfz7carwiefibzgga",
-              "input": {
-                "input_images": "https://example.com/my-input-images.zip"
-              },
-              "metrics": {
-                "predict_time": 502.713876
-              },
-              "output": {
-                "version": "...",
-                "weights": "..."
-              },
-              "started_at": "2023-09-08T16:32:57.112647Z",
-              "source": "api",
-              "status": "succeeded",
-              "urls": {
-                "get": "https://api.replicate.com/v1/trainings/zz4ibbonubfz7carwiefibzgga",
-                "cancel": "https://api.replicate.com/v1/trainings/zz4ibbonubfz7carwiefibzgga/cancel"
-              },
-              "model": "stability-ai/sdxl",
-              "version": "da77bc59ee60423279fd632efb4795ab731d9e3ca9705ef3341091fb989b7eaf"
-            }
-          ]
-        }
-        ```
-
-        `id` will be the unique ID of the training.
-
-        `source` will indicate how the training was created. Possible values are `web`
-        or `api`.
-
-        `status` will be the status of the training. Refer to
-        [get a single training](#trainings.get) for possible values.
-
-        `urls` will be a convenience object that can be used to construct new API
-        requests for the given training.
-
-        `version` will be the unique ID of model version used to create the training.
-        """
-        extra_headers = {"Accept": "*/*", **(extra_headers or {})}
-        return await self._get(
-            "/trainings",
-            options=make_request_options(
-                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
-            ),
-            cast_to=NoneType,
-        )
-
-    async def cancel(
-        self,
-        training_id: str,
-        *,
-        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
-        # The extra values given here take precedence over values defined on the client or passed to this method.
-        extra_headers: Headers | None = None,
-        extra_query: Query | None = None,
-        extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> None:
-        """
-        Cancel a training
-
-        Args:
-          extra_headers: Send extra headers
-
-          extra_query: Add additional query parameters to the request
-
-          extra_body: Add additional JSON properties to the request
-
-          timeout: Override the client-level default timeout for this request, in seconds
-        """
-        if not training_id:
-            raise ValueError(f"Expected a non-empty value for `training_id` but received {training_id!r}")
-        extra_headers = {"Accept": "*/*", **(extra_headers or {})}
-        return await self._post(
-            f"/trainings/{training_id}/cancel",
-            options=make_request_options(
-                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
-            ),
-            cast_to=NoneType,
+            cast_to=TrainingGetResponse,
         )
 
 
@@ -488,14 +488,14 @@ class TrainingsResourceWithRawResponse:
     def __init__(self, trainings: TrainingsResource) -> None:
         self._trainings = trainings
 
-        self.retrieve = to_raw_response_wrapper(
-            trainings.retrieve,
-        )
         self.list = to_raw_response_wrapper(
             trainings.list,
         )
         self.cancel = to_raw_response_wrapper(
             trainings.cancel,
+        )
+        self.get = to_raw_response_wrapper(
+            trainings.get,
         )
 
 
@@ -503,14 +503,14 @@ class AsyncTrainingsResourceWithRawResponse:
     def __init__(self, trainings: AsyncTrainingsResource) -> None:
         self._trainings = trainings
 
-        self.retrieve = async_to_raw_response_wrapper(
-            trainings.retrieve,
-        )
         self.list = async_to_raw_response_wrapper(
             trainings.list,
         )
         self.cancel = async_to_raw_response_wrapper(
             trainings.cancel,
+        )
+        self.get = async_to_raw_response_wrapper(
+            trainings.get,
         )
 
 
@@ -518,14 +518,14 @@ class TrainingsResourceWithStreamingResponse:
     def __init__(self, trainings: TrainingsResource) -> None:
         self._trainings = trainings
 
-        self.retrieve = to_streamed_response_wrapper(
-            trainings.retrieve,
-        )
         self.list = to_streamed_response_wrapper(
             trainings.list,
         )
         self.cancel = to_streamed_response_wrapper(
             trainings.cancel,
+        )
+        self.get = to_streamed_response_wrapper(
+            trainings.get,
         )
 
 
@@ -533,12 +533,12 @@ class AsyncTrainingsResourceWithStreamingResponse:
     def __init__(self, trainings: AsyncTrainingsResource) -> None:
         self._trainings = trainings
 
-        self.retrieve = async_to_streamed_response_wrapper(
-            trainings.retrieve,
-        )
         self.list = async_to_streamed_response_wrapper(
             trainings.list,
         )
         self.cancel = async_to_streamed_response_wrapper(
             trainings.cancel,
+        )
+        self.get = async_to_streamed_response_wrapper(
+            trainings.get,
         )

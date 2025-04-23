@@ -346,7 +346,7 @@ class TestReplicateClient:
         assert request.headers.get("Authorization") == f"Bearer {bearer_token}"
 
         with pytest.raises(ReplicateClientError):
-            with update_env(**{"REPLICATE_CLIENT_BEARER_TOKEN": Omit()}):
+            with update_env(**{"REPLICATE_API_TOKEN": Omit()}):
                 client2 = ReplicateClient(base_url=base_url, bearer_token=None, _strict_response_validation=True)
             _ = client2
 
@@ -1126,7 +1126,7 @@ class TestAsyncReplicateClient:
         assert request.headers.get("Authorization") == f"Bearer {bearer_token}"
 
         with pytest.raises(ReplicateClientError):
-            with update_env(**{"REPLICATE_CLIENT_BEARER_TOKEN": Omit()}):
+            with update_env(**{"REPLICATE_API_TOKEN": Omit()}):
                 client2 = AsyncReplicateClient(base_url=base_url, bearer_token=None, _strict_response_validation=True)
             _ = client2
 

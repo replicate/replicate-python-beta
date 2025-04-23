@@ -6,10 +6,7 @@ import httpx
 
 from ...types import deployment_create_params, deployment_update_params
 from ..._types import NOT_GIVEN, Body, Query, Headers, NoneType, NotGiven
-from ..._utils import (
-    maybe_transform,
-    async_maybe_transform,
-)
+from ..._utils import maybe_transform, async_maybe_transform
 from ..._compat import cached_property
 from ..._resource import SyncAPIResource, AsyncAPIResource
 from ..._response import (
@@ -28,10 +25,10 @@ from .predictions import (
 )
 from ...pagination import SyncCursorURLPage, AsyncCursorURLPage
 from ..._base_client import AsyncPaginator, make_request_options
+from ...types.deployment_get_response import DeploymentGetResponse
 from ...types.deployment_list_response import DeploymentListResponse
 from ...types.deployment_create_response import DeploymentCreateResponse
 from ...types.deployment_update_response import DeploymentUpdateResponse
-from ...types.deployment_retrieve_response import DeploymentRetrieveResponse
 
 __all__ = ["DeploymentsResource", "AsyncDeploymentsResource"]
 
@@ -163,77 +160,6 @@ class DeploymentsResource(SyncAPIResource):
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
             cast_to=DeploymentCreateResponse,
-        )
-
-    def retrieve(
-        self,
-        deployment_name: str,
-        *,
-        deployment_owner: str,
-        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
-        # The extra values given here take precedence over values defined on the client or passed to this method.
-        extra_headers: Headers | None = None,
-        extra_query: Query | None = None,
-        extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> DeploymentRetrieveResponse:
-        """
-        Get information about a deployment by name including the current release.
-
-        Example cURL request:
-
-        ```console
-        curl -s \\
-          -H "Authorization: Bearer $REPLICATE_API_TOKEN" \\
-          https://api.replicate.com/v1/deployments/replicate/my-app-image-generator
-        ```
-
-        The response will be a JSON object describing the deployment:
-
-        ```json
-        {
-          "owner": "acme",
-          "name": "my-app-image-generator",
-          "current_release": {
-            "number": 1,
-            "model": "stability-ai/sdxl",
-            "version": "da77bc59ee60423279fd632efb4795ab731d9e3ca9705ef3341091fb989b7eaf",
-            "created_at": "2024-02-15T16:32:57.018467Z",
-            "created_by": {
-              "type": "organization",
-              "username": "acme",
-              "name": "Acme Corp, Inc.",
-              "avatar_url": "https://cdn.replicate.com/avatars/acme.png",
-              "github_url": "https://github.com/acme"
-            },
-            "configuration": {
-              "hardware": "gpu-t4",
-              "min_instances": 1,
-              "max_instances": 5
-            }
-          }
-        }
-        ```
-
-        Args:
-          extra_headers: Send extra headers
-
-          extra_query: Add additional query parameters to the request
-
-          extra_body: Add additional JSON properties to the request
-
-          timeout: Override the client-level default timeout for this request, in seconds
-        """
-        if not deployment_owner:
-            raise ValueError(f"Expected a non-empty value for `deployment_owner` but received {deployment_owner!r}")
-        if not deployment_name:
-            raise ValueError(f"Expected a non-empty value for `deployment_name` but received {deployment_name!r}")
-        return self._get(
-            f"/deployments/{deployment_owner}/{deployment_name}",
-            options=make_request_options(
-                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
-            ),
-            cast_to=DeploymentRetrieveResponse,
         )
 
     def update(
@@ -454,6 +380,77 @@ class DeploymentsResource(SyncAPIResource):
             cast_to=NoneType,
         )
 
+    def get(
+        self,
+        deployment_name: str,
+        *,
+        deployment_owner: str,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+    ) -> DeploymentGetResponse:
+        """
+        Get information about a deployment by name including the current release.
+
+        Example cURL request:
+
+        ```console
+        curl -s \\
+          -H "Authorization: Bearer $REPLICATE_API_TOKEN" \\
+          https://api.replicate.com/v1/deployments/replicate/my-app-image-generator
+        ```
+
+        The response will be a JSON object describing the deployment:
+
+        ```json
+        {
+          "owner": "acme",
+          "name": "my-app-image-generator",
+          "current_release": {
+            "number": 1,
+            "model": "stability-ai/sdxl",
+            "version": "da77bc59ee60423279fd632efb4795ab731d9e3ca9705ef3341091fb989b7eaf",
+            "created_at": "2024-02-15T16:32:57.018467Z",
+            "created_by": {
+              "type": "organization",
+              "username": "acme",
+              "name": "Acme Corp, Inc.",
+              "avatar_url": "https://cdn.replicate.com/avatars/acme.png",
+              "github_url": "https://github.com/acme"
+            },
+            "configuration": {
+              "hardware": "gpu-t4",
+              "min_instances": 1,
+              "max_instances": 5
+            }
+          }
+        }
+        ```
+
+        Args:
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        if not deployment_owner:
+            raise ValueError(f"Expected a non-empty value for `deployment_owner` but received {deployment_owner!r}")
+        if not deployment_name:
+            raise ValueError(f"Expected a non-empty value for `deployment_name` but received {deployment_name!r}")
+        return self._get(
+            f"/deployments/{deployment_owner}/{deployment_name}",
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=DeploymentGetResponse,
+        )
+
     def list_em_all(
         self,
         *,
@@ -626,77 +623,6 @@ class AsyncDeploymentsResource(AsyncAPIResource):
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
             cast_to=DeploymentCreateResponse,
-        )
-
-    async def retrieve(
-        self,
-        deployment_name: str,
-        *,
-        deployment_owner: str,
-        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
-        # The extra values given here take precedence over values defined on the client or passed to this method.
-        extra_headers: Headers | None = None,
-        extra_query: Query | None = None,
-        extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> DeploymentRetrieveResponse:
-        """
-        Get information about a deployment by name including the current release.
-
-        Example cURL request:
-
-        ```console
-        curl -s \\
-          -H "Authorization: Bearer $REPLICATE_API_TOKEN" \\
-          https://api.replicate.com/v1/deployments/replicate/my-app-image-generator
-        ```
-
-        The response will be a JSON object describing the deployment:
-
-        ```json
-        {
-          "owner": "acme",
-          "name": "my-app-image-generator",
-          "current_release": {
-            "number": 1,
-            "model": "stability-ai/sdxl",
-            "version": "da77bc59ee60423279fd632efb4795ab731d9e3ca9705ef3341091fb989b7eaf",
-            "created_at": "2024-02-15T16:32:57.018467Z",
-            "created_by": {
-              "type": "organization",
-              "username": "acme",
-              "name": "Acme Corp, Inc.",
-              "avatar_url": "https://cdn.replicate.com/avatars/acme.png",
-              "github_url": "https://github.com/acme"
-            },
-            "configuration": {
-              "hardware": "gpu-t4",
-              "min_instances": 1,
-              "max_instances": 5
-            }
-          }
-        }
-        ```
-
-        Args:
-          extra_headers: Send extra headers
-
-          extra_query: Add additional query parameters to the request
-
-          extra_body: Add additional JSON properties to the request
-
-          timeout: Override the client-level default timeout for this request, in seconds
-        """
-        if not deployment_owner:
-            raise ValueError(f"Expected a non-empty value for `deployment_owner` but received {deployment_owner!r}")
-        if not deployment_name:
-            raise ValueError(f"Expected a non-empty value for `deployment_name` but received {deployment_name!r}")
-        return await self._get(
-            f"/deployments/{deployment_owner}/{deployment_name}",
-            options=make_request_options(
-                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
-            ),
-            cast_to=DeploymentRetrieveResponse,
         )
 
     async def update(
@@ -917,6 +843,77 @@ class AsyncDeploymentsResource(AsyncAPIResource):
             cast_to=NoneType,
         )
 
+    async def get(
+        self,
+        deployment_name: str,
+        *,
+        deployment_owner: str,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+    ) -> DeploymentGetResponse:
+        """
+        Get information about a deployment by name including the current release.
+
+        Example cURL request:
+
+        ```console
+        curl -s \\
+          -H "Authorization: Bearer $REPLICATE_API_TOKEN" \\
+          https://api.replicate.com/v1/deployments/replicate/my-app-image-generator
+        ```
+
+        The response will be a JSON object describing the deployment:
+
+        ```json
+        {
+          "owner": "acme",
+          "name": "my-app-image-generator",
+          "current_release": {
+            "number": 1,
+            "model": "stability-ai/sdxl",
+            "version": "da77bc59ee60423279fd632efb4795ab731d9e3ca9705ef3341091fb989b7eaf",
+            "created_at": "2024-02-15T16:32:57.018467Z",
+            "created_by": {
+              "type": "organization",
+              "username": "acme",
+              "name": "Acme Corp, Inc.",
+              "avatar_url": "https://cdn.replicate.com/avatars/acme.png",
+              "github_url": "https://github.com/acme"
+            },
+            "configuration": {
+              "hardware": "gpu-t4",
+              "min_instances": 1,
+              "max_instances": 5
+            }
+          }
+        }
+        ```
+
+        Args:
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        if not deployment_owner:
+            raise ValueError(f"Expected a non-empty value for `deployment_owner` but received {deployment_owner!r}")
+        if not deployment_name:
+            raise ValueError(f"Expected a non-empty value for `deployment_name` but received {deployment_name!r}")
+        return await self._get(
+            f"/deployments/{deployment_owner}/{deployment_name}",
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=DeploymentGetResponse,
+        )
+
     async def list_em_all(
         self,
         *,
@@ -969,9 +966,6 @@ class DeploymentsResourceWithRawResponse:
         self.create = to_raw_response_wrapper(
             deployments.create,
         )
-        self.retrieve = to_raw_response_wrapper(
-            deployments.retrieve,
-        )
         self.update = to_raw_response_wrapper(
             deployments.update,
         )
@@ -980,6 +974,9 @@ class DeploymentsResourceWithRawResponse:
         )
         self.delete = to_raw_response_wrapper(
             deployments.delete,
+        )
+        self.get = to_raw_response_wrapper(
+            deployments.get,
         )
         self.list_em_all = to_raw_response_wrapper(
             deployments.list_em_all,
@@ -997,9 +994,6 @@ class AsyncDeploymentsResourceWithRawResponse:
         self.create = async_to_raw_response_wrapper(
             deployments.create,
         )
-        self.retrieve = async_to_raw_response_wrapper(
-            deployments.retrieve,
-        )
         self.update = async_to_raw_response_wrapper(
             deployments.update,
         )
@@ -1008,6 +1002,9 @@ class AsyncDeploymentsResourceWithRawResponse:
         )
         self.delete = async_to_raw_response_wrapper(
             deployments.delete,
+        )
+        self.get = async_to_raw_response_wrapper(
+            deployments.get,
         )
         self.list_em_all = async_to_raw_response_wrapper(
             deployments.list_em_all,
@@ -1025,9 +1022,6 @@ class DeploymentsResourceWithStreamingResponse:
         self.create = to_streamed_response_wrapper(
             deployments.create,
         )
-        self.retrieve = to_streamed_response_wrapper(
-            deployments.retrieve,
-        )
         self.update = to_streamed_response_wrapper(
             deployments.update,
         )
@@ -1036,6 +1030,9 @@ class DeploymentsResourceWithStreamingResponse:
         )
         self.delete = to_streamed_response_wrapper(
             deployments.delete,
+        )
+        self.get = to_streamed_response_wrapper(
+            deployments.get,
         )
         self.list_em_all = to_streamed_response_wrapper(
             deployments.list_em_all,
@@ -1053,9 +1050,6 @@ class AsyncDeploymentsResourceWithStreamingResponse:
         self.create = async_to_streamed_response_wrapper(
             deployments.create,
         )
-        self.retrieve = async_to_streamed_response_wrapper(
-            deployments.retrieve,
-        )
         self.update = async_to_streamed_response_wrapper(
             deployments.update,
         )
@@ -1064,6 +1058,9 @@ class AsyncDeploymentsResourceWithStreamingResponse:
         )
         self.delete = async_to_streamed_response_wrapper(
             deployments.delete,
+        )
+        self.get = async_to_streamed_response_wrapper(
+            deployments.get,
         )
         self.list_em_all = async_to_streamed_response_wrapper(
             deployments.list_em_all,
