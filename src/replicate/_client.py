@@ -326,7 +326,7 @@ class AsyncReplicateClient(AsyncAPIClient):
         ref: str,
         *,
         wait: Union[int, bool, NotGiven] = NOT_GIVEN,
-        **params: Unpack[PredictionCreateParams],
+        **params: Unpack[PredictionCreateParamsWithoutVersion],
     ) -> Any:
         """Run a model and wait for its output."""
         from .lib._predictions import async_run

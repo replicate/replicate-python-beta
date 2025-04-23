@@ -75,7 +75,7 @@ async def async_run(
     *,
     wait: Union[int, bool, NotGiven] = NOT_GIVEN,
     # use_file_output: Optional[bool] = True,
-    **params: Unpack[PredictionCreateParams],
+    **params: Unpack[PredictionCreateParamsWithoutVersion],
 ) -> PredictionOutput | FileOutput | Iterable[FileOutput] | Dict[str, FileOutput]:
     from ._files import transform_output
 
