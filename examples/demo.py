@@ -1,8 +1,6 @@
-from typing import Iterable, cast
-
 import rich
 
-from replicate import FileOutput, ReplicateClient
+from replicate import ReplicateClient
 
 client = ReplicateClient()
 
@@ -11,6 +9,6 @@ outputs = client.run(
     input={"prompt": "astronaut riding a rocket like a horse"},
 )
 rich.print(outputs)
-for index, output in enumerate(cast(Iterable[FileOutput], outputs)):
+for index, output in enumerate(outputs):
     with open(f"output_{index}.webp", "wb") as file:
         file.write(output.read())

@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import os
-from typing import TYPE_CHECKING, Any, Dict, Union, Mapping, Iterable
+from typing import TYPE_CHECKING, Any, Union, Mapping
 from typing_extensions import Self, Unpack, override
 
 import httpx
@@ -12,7 +12,7 @@ from replicate.types.prediction_create_params import PredictionCreateParamsWitho
 
 from . import _exceptions
 from ._qs import Querystring
-from .types import PredictionOutput, PredictionCreateParams
+from .types import PredictionCreateParams
 from ._types import (
     NOT_GIVEN,
     Omit,
@@ -35,9 +35,6 @@ from ._base_client import (
 from .resources.models import models
 from .resources.webhooks import webhooks
 from .resources.deployments import deployments
-
-if TYPE_CHECKING:
-    from .lib._files import FileOutput
 
 __all__ = [
     "Timeout",
@@ -135,7 +132,7 @@ class ReplicateClient(SyncAPIClient):
         *,
         wait: Union[int, bool, NotGiven] = NOT_GIVEN,
         **params: Unpack[PredictionCreateParamsWithoutVersion],
-    ) -> PredictionOutput | FileOutput | Iterable[FileOutput] | Dict[str, FileOutput]:
+    ) -> Any:
         """Run a model and wait for its output."""
         from .lib._predictions import run
 
@@ -330,7 +327,7 @@ class AsyncReplicateClient(AsyncAPIClient):
         *,
         wait: Union[int, bool, NotGiven] = NOT_GIVEN,
         **params: Unpack[PredictionCreateParams],
-    ) -> PredictionOutput | FileOutput | Iterable[FileOutput] | Dict[str, FileOutput]:
+    ) -> Any:
         """Run a model and wait for its output."""
         from .lib._predictions import async_run
 
