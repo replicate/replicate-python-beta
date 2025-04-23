@@ -7,9 +7,25 @@ from typing_extensions import Literal
 
 import httpx
 
+from .readme import (
+    ReadmeResource,
+    AsyncReadmeResource,
+    ReadmeResourceWithRawResponse,
+    AsyncReadmeResourceWithRawResponse,
+    ReadmeResourceWithStreamingResponse,
+    AsyncReadmeResourceWithStreamingResponse,
+)
 from ...types import model_create_params, model_create_prediction_params
 from ..._types import NOT_GIVEN, Body, Query, Headers, NoneType, NotGiven
 from ..._utils import maybe_transform, strip_not_given, async_maybe_transform
+from .examples import (
+    ExamplesResource,
+    AsyncExamplesResource,
+    ExamplesResourceWithRawResponse,
+    AsyncExamplesResourceWithRawResponse,
+    ExamplesResourceWithStreamingResponse,
+    AsyncExamplesResourceWithStreamingResponse,
+)
 from .versions import (
     VersionsResource,
     AsyncVersionsResource,
@@ -35,6 +51,14 @@ __all__ = ["ModelsResource", "AsyncModelsResource"]
 
 
 class ModelsResource(SyncAPIResource):
+    @cached_property
+    def examples(self) -> ExamplesResource:
+        return ExamplesResource(self._client)
+
+    @cached_property
+    def readme(self) -> ReadmeResource:
+        return ReadmeResource(self._client)
+
     @cached_property
     def versions(self) -> VersionsResource:
         return VersionsResource(self._client)
@@ -512,6 +536,14 @@ class ModelsResource(SyncAPIResource):
 
 
 class AsyncModelsResource(AsyncAPIResource):
+    @cached_property
+    def examples(self) -> AsyncExamplesResource:
+        return AsyncExamplesResource(self._client)
+
+    @cached_property
+    def readme(self) -> AsyncReadmeResource:
+        return AsyncReadmeResource(self._client)
+
     @cached_property
     def versions(self) -> AsyncVersionsResource:
         return AsyncVersionsResource(self._client)
@@ -1009,6 +1041,14 @@ class ModelsResourceWithRawResponse:
         )
 
     @cached_property
+    def examples(self) -> ExamplesResourceWithRawResponse:
+        return ExamplesResourceWithRawResponse(self._models.examples)
+
+    @cached_property
+    def readme(self) -> ReadmeResourceWithRawResponse:
+        return ReadmeResourceWithRawResponse(self._models.readme)
+
+    @cached_property
     def versions(self) -> VersionsResourceWithRawResponse:
         return VersionsResourceWithRawResponse(self._models.versions)
 
@@ -1032,6 +1072,14 @@ class AsyncModelsResourceWithRawResponse:
         self.get = async_to_raw_response_wrapper(
             models.get,
         )
+
+    @cached_property
+    def examples(self) -> AsyncExamplesResourceWithRawResponse:
+        return AsyncExamplesResourceWithRawResponse(self._models.examples)
+
+    @cached_property
+    def readme(self) -> AsyncReadmeResourceWithRawResponse:
+        return AsyncReadmeResourceWithRawResponse(self._models.readme)
 
     @cached_property
     def versions(self) -> AsyncVersionsResourceWithRawResponse:
@@ -1059,6 +1107,14 @@ class ModelsResourceWithStreamingResponse:
         )
 
     @cached_property
+    def examples(self) -> ExamplesResourceWithStreamingResponse:
+        return ExamplesResourceWithStreamingResponse(self._models.examples)
+
+    @cached_property
+    def readme(self) -> ReadmeResourceWithStreamingResponse:
+        return ReadmeResourceWithStreamingResponse(self._models.readme)
+
+    @cached_property
     def versions(self) -> VersionsResourceWithStreamingResponse:
         return VersionsResourceWithStreamingResponse(self._models.versions)
 
@@ -1082,6 +1138,14 @@ class AsyncModelsResourceWithStreamingResponse:
         self.get = async_to_streamed_response_wrapper(
             models.get,
         )
+
+    @cached_property
+    def examples(self) -> AsyncExamplesResourceWithStreamingResponse:
+        return AsyncExamplesResourceWithStreamingResponse(self._models.examples)
+
+    @cached_property
+    def readme(self) -> AsyncReadmeResourceWithStreamingResponse:
+        return AsyncReadmeResourceWithStreamingResponse(self._models.readme)
 
     @cached_property
     def versions(self) -> AsyncVersionsResourceWithStreamingResponse:
