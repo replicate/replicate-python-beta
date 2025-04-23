@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import os
-from typing import TYPE_CHECKING, Any, Union, Mapping
+from typing import Any, Union, Mapping
 from typing_extensions import Self, Unpack, override
 
 import httpx
