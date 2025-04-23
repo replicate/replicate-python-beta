@@ -9,11 +9,7 @@ import httpx
 
 from ...types import model_create_params, model_create_prediction_params
 from ..._types import NOT_GIVEN, Body, Query, Headers, NoneType, NotGiven
-from ..._utils import (
-    maybe_transform,
-    strip_not_given,
-    async_maybe_transform,
-)
+from ..._utils import maybe_transform, strip_not_given, async_maybe_transform
 from .versions import (
     VersionsResource,
     AsyncVersionsResource,
