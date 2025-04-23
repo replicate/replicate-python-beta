@@ -10,7 +10,7 @@ from respx import MockRouter
 
 from replicate import ReplicateClient, AsyncReplicateClient
 from replicate.lib._files import FileOutput, AsyncFileOutput
-from replicate._exceptions import ModelError
+from replicate._exceptions import ModelError, NotFoundError, BadRequestError
 
 base_url = os.environ.get("TEST_API_BASE_URL", "http://127.0.0.1:4010")
 bearer_token = "My Bearer Token"
@@ -18,8 +18,18 @@ bearer_token = "My Bearer Token"
 
 # Mock prediction data for testing
 def create_mock_prediction(
-    status: str = "succeeded", output: Any = "test output", error: Optional[str] = None
+    status: str = "succeeded",
+    output: Any = "test output",
+    error: Optional[str] = None,
+    logs: Optional[str] = None,
+    urls: Optional[Dict[str, str]] = None,
 ) -> Dict[str, Any]:
+    if urls is None:
+        urls = {
+            "get": "https://api.replicate.com/v1/predictions/test_prediction_id",
+            "cancel": "https://api.replicate.com/v1/predictions/test_prediction_id/cancel",
+        }
+
     return {
         "id": "test_prediction_id",
         "version": "test_version",
@@ -27,13 +37,11 @@ def create_mock_prediction(
         "input": {"prompt": "test prompt"},
         "output": output,
         "error": error,
+        "logs": logs,
         "created_at": "2023-01-01T00:00:00Z",
         "started_at": "2023-01-01T00:00:01Z",
         "completed_at": "2023-01-01T00:00:02Z" if status in ["succeeded", "failed"] else None,
-        "urls": {
-            "get": "https://api.replicate.com/v1/predictions/test_prediction_id",
-            "cancel": "https://api.replicate.com/v1/predictions/test_prediction_id/cancel",
-        },
+        "urls": urls,
         "model": "test-model",
         "data_removed": False,
     }
@@ -45,7 +53,6 @@ class TestRun:
     @pytest.mark.respx(base_url=base_url)
     def test_run_basic(self, respx_mock: MockRouter) -> None:
         """Test basic model run functionality."""
-        # Mock the prediction creation
         respx_mock.post("/predictions").mock(return_value=httpx.Response(201, json=create_mock_prediction()))
 
         output: Any = self.client.run("some-model-ref", input={"prompt": "test prompt"})
@@ -55,7 +62,6 @@ class TestRun:
     @pytest.mark.respx(base_url=base_url)
     def test_run_with_wait_true(self, respx_mock: MockRouter) -> None:
         """Test run with wait=True parameter."""
-        # Mock the prediction creation
         respx_mock.post("/predictions").mock(return_value=httpx.Response(201, json=create_mock_prediction()))
 
         output: Any = self.client.run("some-model-ref", wait=True, input={"prompt": "test prompt"})
@@ -65,7 +71,6 @@ class TestRun:
     @pytest.mark.respx(base_url=base_url)
     def test_run_with_wait_int(self, respx_mock: MockRouter) -> None:
         """Test run with wait as an integer value."""
-        # Mock the prediction creation
         respx_mock.post("/predictions").mock(return_value=httpx.Response(201, json=create_mock_prediction()))
 
         output: Any = self.client.run("some-model-ref", wait=10, input={"prompt": "test prompt"})
@@ -167,6 +172,71 @@ class TestRun:
         with pytest.raises(TypeError, match="cannot mix and match prefer and wait"):
             self.client.run("some-model-ref", wait=True, prefer="nowait", input={"prompt": "test"})
 
+    @pytest.mark.respx(base_url=base_url)
+    def test_run_with_iterator(self, respx_mock: MockRouter) -> None:
+        """Test run with an iterator output."""
+        # Create a mock prediction with an iterator output
+        output_iterator = ["chunk1", "chunk2", "chunk3"]
+        respx_mock.post("/predictions").mock(
+            return_value=httpx.Response(201, json=create_mock_prediction(output=output_iterator))
+        )
+
+        output = self.client.run("some-model-ref", input={"prompt": "generate iterator"})
+
+        assert isinstance(output, list)
+        assert len(output) == 3
+        assert output == output_iterator
+
+    @pytest.mark.respx(base_url=base_url)
+    def test_run_with_invalid_identifier(self, respx_mock: MockRouter) -> None:
+        """Test run with an invalid model identifier."""
+        # Mock a 404 response for an invalid model identifier
+        respx_mock.post("/predictions").mock(return_value=httpx.Response(404, json={"detail": "Model not found"}))
+
+        with pytest.raises(NotFoundError):
+            self.client.run("invalid-model-ref", input={"prompt": "test prompt"})
+
+    @pytest.mark.respx(base_url=base_url)
+    def test_run_with_invalid_cog_version(self, respx_mock: MockRouter) -> None:
+        """Test run with an invalid Cog version."""
+        # Mock an error response for an invalid Cog version
+        respx_mock.post("/predictions").mock(return_value=httpx.Response(400, json={"detail": "Invalid Cog version"}))
+
+        with pytest.raises(BadRequestError):
+            self.client.run("model-with-invalid-cog", input={"prompt": "test prompt"})
+
+    @pytest.mark.respx(base_url=base_url)
+    def test_run_with_file_output_iterator(self, respx_mock: MockRouter) -> None:
+        """Test run with file output iterator."""
+        # Mock URLs for file outputs
+        file_urls = [
+            "https://replicate.delivery/output1.png",
+            "https://replicate.delivery/output2.png",
+            "https://replicate.delivery/output3.png",
+        ]
+
+        # Initial response with processing status and no output
+        respx_mock.post("/predictions").mock(
+            return_value=httpx.Response(201, json=create_mock_prediction(status="processing", output=None))
+        )
+
+        # First poll returns still processing
+        respx_mock.get("/predictions/test_prediction_id").mock(
+            return_value=httpx.Response(200, json=create_mock_prediction(status="processing", output=None))
+        )
+
+        # Second poll returns success with file URLs
+        respx_mock.get("/predictions/test_prediction_id").mock(
+            return_value=httpx.Response(200, json=create_mock_prediction(output=file_urls))
+        )
+
+        output = self.client.run("some-model-ref", input={"prompt": "generate file iterator"})
+
+        assert isinstance(output, list)
+        assert len(output) == 3
+        assert all(isinstance(item, FileOutput) for item in output)
+        assert [item.url for item in output] == file_urls
+
 
 class TestAsyncRun:
     client = AsyncReplicateClient(base_url=base_url, bearer_token=bearer_token, _strict_response_validation=True)
@@ -174,7 +244,6 @@ class TestAsyncRun:
     @pytest.mark.respx(base_url=base_url)
     async def test_async_run_basic(self, respx_mock: MockRouter) -> None:
         """Test basic async model run functionality."""
-        # Mock the prediction creation
         respx_mock.post("/predictions").mock(return_value=httpx.Response(201, json=create_mock_prediction()))
 
         output: Any = await self.client.run("some-model-ref", input={"prompt": "test prompt"})
@@ -184,7 +253,6 @@ class TestAsyncRun:
     @pytest.mark.respx(base_url=base_url)
     async def test_async_run_with_wait_true(self, respx_mock: MockRouter) -> None:
         """Test async run with wait=True parameter."""
-        # Mock the prediction creation
         respx_mock.post("/predictions").mock(return_value=httpx.Response(201, json=create_mock_prediction()))
 
         output: Any = await self.client.run("some-model-ref", wait=True, input={"prompt": "test prompt"})
@@ -194,7 +262,6 @@ class TestAsyncRun:
     @pytest.mark.respx(base_url=base_url)
     async def test_async_run_with_wait_int(self, respx_mock: MockRouter) -> None:
         """Test async run with wait as an integer value."""
-        # Mock the prediction creation
         respx_mock.post("/predictions").mock(return_value=httpx.Response(201, json=create_mock_prediction()))
 
         output: Any = await self.client.run("some-model-ref", wait=10, input={"prompt": "test prompt"})
@@ -299,3 +366,68 @@ class TestAsyncRun:
         """Test async run with conflicting wait and prefer parameters."""
         with pytest.raises(TypeError, match="cannot mix and match prefer and wait"):
             await self.client.run("some-model-ref", wait=True, prefer="nowait", input={"prompt": "test"})
+
+    @pytest.mark.respx(base_url=base_url)
+    async def test_async_run_with_iterator(self, respx_mock: MockRouter) -> None:
+        """Test async run with an iterator output."""
+        # Create a mock prediction with an iterator output
+        output_iterator = ["chunk1", "chunk2", "chunk3"]
+        respx_mock.post("/predictions").mock(
+            return_value=httpx.Response(201, json=create_mock_prediction(output=output_iterator))
+        )
+
+        output = await self.client.run("some-model-ref", input={"prompt": "generate iterator"})
+
+        assert isinstance(output, list)
+        assert len(output) == 3
+        assert output == output_iterator
+
+    @pytest.mark.respx(base_url=base_url)
+    async def test_async_run_with_invalid_identifier(self, respx_mock: MockRouter) -> None:
+        """Test async run with an invalid model identifier."""
+        # Mock a 404 response for an invalid model identifier
+        respx_mock.post("/predictions").mock(return_value=httpx.Response(404, json={"detail": "Model not found"}))
+
+        with pytest.raises(NotFoundError):
+            await self.client.run("invalid-model-ref", input={"prompt": "test prompt"})
+
+    @pytest.mark.respx(base_url=base_url)
+    async def test_async_run_with_invalid_cog_version(self, respx_mock: MockRouter) -> None:
+        """Test async run with an invalid Cog version."""
+        # Mock an error response for an invalid Cog version
+        respx_mock.post("/predictions").mock(return_value=httpx.Response(400, json={"detail": "Invalid Cog version"}))
+
+        with pytest.raises(BadRequestError):
+            await self.client.run("model-with-invalid-cog", input={"prompt": "test prompt"})
+
+    @pytest.mark.respx(base_url=base_url)
+    async def test_async_run_with_file_output_iterator(self, respx_mock: MockRouter) -> None:
+        """Test async run with file output iterator."""
+        # Mock URLs for file outputs
+        file_urls = [
+            "https://replicate.delivery/output1.png",
+            "https://replicate.delivery/output2.png",
+            "https://replicate.delivery/output3.png",
+        ]
+
+        # Initial response with processing status and no output
+        respx_mock.post("/predictions").mock(
+            return_value=httpx.Response(201, json=create_mock_prediction(status="processing", output=None))
+        )
+
+        # First poll returns still processing
+        respx_mock.get("/predictions/test_prediction_id").mock(
+            return_value=httpx.Response(200, json=create_mock_prediction(status="processing", output=None))
+        )
+
+        # Second poll returns success with file URLs
+        respx_mock.get("/predictions/test_prediction_id").mock(
+            return_value=httpx.Response(200, json=create_mock_prediction(output=file_urls))
+        )
+
+        output = await self.client.run("some-model-ref", input={"prompt": "generate file iterator"})
+
+        assert isinstance(output, list)
+        assert len(output) == 3
+        assert all(isinstance(item, AsyncFileOutput) for item in output)
+        assert [item.url for item in output] == file_urls
