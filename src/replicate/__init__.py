@@ -231,7 +231,7 @@ def _reset_client() -> None:  # type: ignore[reportUnusedFunction]
 
 from ._module_client import (
     models as models,
-    accounts as accounts,
+    account as account,
     hardware as hardware,
     webhooks as webhooks,
     trainings as trainings,

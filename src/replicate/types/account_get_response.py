@@ -5,10 +5,10 @@ from typing_extensions import Literal
 
 from .._models import BaseModel
 
-__all__ = ["AccountListResponse"]
+__all__ = ["AccountGetResponse"]
 
 
-class AccountListResponse(BaseModel):
+class AccountGetResponse(BaseModel):
     type: Literal["organization", "user"]
     """The account type. Can be a user or an organization."""
 

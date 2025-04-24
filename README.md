@@ -31,8 +31,8 @@ client = ReplicateClient(
     bearer_token=os.environ.get("REPLICATE_API_TOKEN"),  # This is the default and can be omitted
 )
 
-accounts = client.accounts.list()
-print(accounts.type)
+account = client.account.get()
+print(account.type)
 ```
 
 While you can provide a `bearer_token` keyword argument,
@@ -55,8 +55,8 @@ client = AsyncReplicateClient(
 
 
 async def main() -> None:
-    accounts = await client.accounts.list()
-    print(accounts.type)
+    account = await client.account.get()
+    print(account.type)
 
 
 asyncio.run(main())
@@ -152,7 +152,7 @@ from replicate import ReplicateClient
 client = ReplicateClient()
 
 try:
-    client.accounts.list()
+    client.account.get()
 except replicate.APIConnectionError as e:
     print("The server could not be reached")
     print(e.__cause__)  # an underlying Exception, likely raised within httpx.
@@ -195,7 +195,7 @@ client = ReplicateClient(
 )
 
 # Or, configure per-request:
-client.with_options(max_retries=5).accounts.list()
+client.with_options(max_retries=5).account.get()
 ```
 
 ### Timeouts
@@ -218,7 +218,7 @@ client = ReplicateClient(
 )
 
 # Override per-request:
-client.with_options(timeout=5.0).accounts.list()
+client.with_options(timeout=5.0).account.get()
 ```
 
 On timeout, an `APITimeoutError` is thrown.
@@ -259,10 +259,10 @@ The "raw" Response object can be accessed by prefixing `.with_raw_response.` to 
 from replicate import ReplicateClient
 
 client = ReplicateClient()
-response = client.accounts.with_raw_response.list()
+response = client.account.with_raw_response.get()
 print(response.headers.get('X-My-Header'))
 
-account = response.parse()  # get the object that `accounts.list()` would have returned
+account = response.parse()  # get the object that `account.get()` would have returned
 print(account.type)
 ```
 
@@ -277,7 +277,7 @@ The above interface eagerly reads the full response body when you make the reque
 To stream the response body, use `.with_streaming_response` instead, which requires a context manager and only reads the response body once you call `.read()`, `.text()`, `.json()`, `.iter_bytes()`, `.iter_text()`, `.iter_lines()` or `.parse()`. In the async client, these are async methods.
 
 ```python
-with client.accounts.with_streaming_response.list() as response:
+with client.account.with_streaming_response.get() as response:
     print(response.headers.get("X-My-Header"))
 
     for line in response.iter_lines():
