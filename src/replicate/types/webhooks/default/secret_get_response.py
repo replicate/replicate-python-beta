@@ -2,11 +2,11 @@
 
 from typing import Optional
 
-from ..._models import BaseModel
+from ...._models import BaseModel
 
-__all__ = ["DefaultRetrieveSecretResponse"]
+__all__ = ["SecretGetResponse"]
 
 
-class DefaultRetrieveSecretResponse(BaseModel):
+class SecretGetResponse(BaseModel):
     key: Optional[str] = None
     """The signing secret."""

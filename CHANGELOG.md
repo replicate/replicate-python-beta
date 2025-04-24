@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.1.0-alpha.5 (2025-04-24)
+
+Full Changelog: [v0.1.0-alpha.4...v0.1.0-alpha.5](https://github.com/replicate/replicate-python-stainless/compare/v0.1.0-alpha.4...v0.1.0-alpha.5)
+
+### Features
+
+* add missing resources ([8bbddc7](https://github.com/replicate/replicate-python-stainless/commit/8bbddc7a788f4488311b8ed408d4b020db8e006b))
+* enable `openapi.code_samples` ([85810f5](https://github.com/replicate/replicate-python-stainless/commit/85810f5f4c0caf680a90fca80f1bfcd639e76894))
+
 ## 0.1.0-alpha.4 (2025-04-23)
 
 Full Changelog: [v0.1.0-alpha.3...v0.1.0-alpha.4](https://github.com/replicate/replicate-python-stainless/compare/v0.1.0-alpha.3...v0.1.0-alpha.4)

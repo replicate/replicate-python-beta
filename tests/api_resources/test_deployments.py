@@ -269,34 +269,6 @@ class TestDeployments:
                 deployment_owner="deployment_owner",
             )
 
-    @pytest.mark.skip()
-    @parametrize
-    def test_method_list_em_all(self, client: ReplicateClient) -> None:
-        deployment = client.deployments.list_em_all()
-        assert deployment is None
-
-    @pytest.mark.skip()
-    @parametrize
-    def test_raw_response_list_em_all(self, client: ReplicateClient) -> None:
-        response = client.deployments.with_raw_response.list_em_all()
-
-        assert response.is_closed is True
-        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
-        deployment = response.parse()
-        assert deployment is None
-
-    @pytest.mark.skip()
-    @parametrize
-    def test_streaming_response_list_em_all(self, client: ReplicateClient) -> None:
-        with client.deployments.with_streaming_response.list_em_all() as response:
-            assert not response.is_closed
-            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
-
-            deployment = response.parse()
-            assert deployment is None
-
-        assert cast(Any, response.is_closed) is True
-
 
 class TestAsyncDeployments:
     parametrize = pytest.mark.parametrize("async_client", [False, True], indirect=True, ids=["loose", "strict"])
@@ -546,31 +518,3 @@ class TestAsyncDeployments:
                 deployment_name="",
                 deployment_owner="deployment_owner",
             )
-
-    @pytest.mark.skip()
-    @parametrize
-    async def test_method_list_em_all(self, async_client: AsyncReplicateClient) -> None:
-        deployment = await async_client.deployments.list_em_all()
-        assert deployment is None
-
-    @pytest.mark.skip()
-    @parametrize
-    async def test_raw_response_list_em_all(self, async_client: AsyncReplicateClient) -> None:
-        response = await async_client.deployments.with_raw_response.list_em_all()
-
-        assert response.is_closed is True
-        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
-        deployment = await response.parse()
-        assert deployment is None
-
-    @pytest.mark.skip()
-    @parametrize
-    async def test_streaming_response_list_em_all(self, async_client: AsyncReplicateClient) -> None:
-        async with async_client.deployments.with_streaming_response.list_em_all() as response:
-            assert not response.is_closed
-            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
-
-            deployment = await response.parse()
-            assert deployment is None
-
-        assert cast(Any, response.is_closed) is True
