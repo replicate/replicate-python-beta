@@ -82,6 +82,58 @@ class CollectionsResource(SyncAPIResource):
             cast_to=NoneType,
         )
 
+    def get(
+        self,
+        collection_slug: str,
+        *,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+    ) -> None:
+        """
+        Example cURL request:
+
+        ```console
+        curl -s \\
+          -H "Authorization: Bearer $REPLICATE_API_TOKEN" \\
+          https://api.replicate.com/v1/collections/super-resolution
+        ```
+
+        The response will be a collection object with a nested list of the models in
+        that collection:
+
+        ```json
+        {
+          "name": "Super resolution",
+          "slug": "super-resolution",
+          "description": "Upscaling models that create high-quality images from low-quality images.",
+          "models": [...]
+        }
+        ```
+
+        Args:
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        if not collection_slug:
+            raise ValueError(f"Expected a non-empty value for `collection_slug` but received {collection_slug!r}")
+        extra_headers = {"Accept": "*/*", **(extra_headers or {})}
+        return self._get(
+            f"/collections/{collection_slug}",
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=NoneType,
+        )
+
 
 class AsyncCollectionsResource(AsyncAPIResource):
     @cached_property
@@ -147,6 +199,58 @@ class AsyncCollectionsResource(AsyncAPIResource):
             cast_to=NoneType,
         )
 
+    async def get(
+        self,
+        collection_slug: str,
+        *,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+    ) -> None:
+        """
+        Example cURL request:
+
+        ```console
+        curl -s \\
+          -H "Authorization: Bearer $REPLICATE_API_TOKEN" \\
+          https://api.replicate.com/v1/collections/super-resolution
+        ```
+
+        The response will be a collection object with a nested list of the models in
+        that collection:
+
+        ```json
+        {
+          "name": "Super resolution",
+          "slug": "super-resolution",
+          "description": "Upscaling models that create high-quality images from low-quality images.",
+          "models": [...]
+        }
+        ```
+
+        Args:
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        if not collection_slug:
+            raise ValueError(f"Expected a non-empty value for `collection_slug` but received {collection_slug!r}")
+        extra_headers = {"Accept": "*/*", **(extra_headers or {})}
+        return await self._get(
+            f"/collections/{collection_slug}",
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=NoneType,
+        )
+
 
 class CollectionsResourceWithRawResponse:
     def __init__(self, collections: CollectionsResource) -> None:
@@ -154,6 +258,9 @@ class CollectionsResourceWithRawResponse:
 
         self.list = to_raw_response_wrapper(
             collections.list,
+        )
+        self.get = to_raw_response_wrapper(
+            collections.get,
         )
 
 
@@ -164,6 +271,9 @@ class AsyncCollectionsResourceWithRawResponse:
         self.list = async_to_raw_response_wrapper(
             collections.list,
         )
+        self.get = async_to_raw_response_wrapper(
+            collections.get,
+        )
 
 
 class CollectionsResourceWithStreamingResponse:
@@ -173,6 +283,9 @@ class CollectionsResourceWithStreamingResponse:
         self.list = to_streamed_response_wrapper(
             collections.list,
         )
+        self.get = to_streamed_response_wrapper(
+            collections.get,
+        )
 
 
 class AsyncCollectionsResourceWithStreamingResponse:
@@ -181,4 +294,7 @@ class AsyncCollectionsResourceWithStreamingResponse:
 
         self.list = async_to_streamed_response_wrapper(
             collections.list,
+        )
+        self.get = async_to_streamed_response_wrapper(
+            collections.get,
         )

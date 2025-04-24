@@ -2,9 +2,14 @@
 
 from __future__ import annotations
 
+from typing import List
+from typing_extensions import Literal
+
 import httpx
 
+from ..types import training_create_params
 from .._types import NOT_GIVEN, Body, Query, Headers, NotGiven
+from .._utils import maybe_transform, async_maybe_transform
 from .._compat import cached_property
 from .._resource import SyncAPIResource, AsyncAPIResource
 from .._response import (
@@ -18,6 +23,7 @@ from .._base_client import AsyncPaginator, make_request_options
 from ..types.training_get_response import TrainingGetResponse
 from ..types.training_list_response import TrainingListResponse
 from ..types.training_cancel_response import TrainingCancelResponse
+from ..types.training_create_response import TrainingCreateResponse
 
 __all__ = ["TrainingsResource", "AsyncTrainingsResource"]
 
@@ -41,6 +47,156 @@ class TrainingsResource(SyncAPIResource):
         For more information, see https://www.github.com/replicate/replicate-python-stainless#with_streaming_response
         """
         return TrainingsResourceWithStreamingResponse(self)
+
+    def create(
+        self,
+        version_id: str,
+        *,
+        model_owner: str,
+        model_name: str,
+        destination: str,
+        input: object,
+        webhook: str | NotGiven = NOT_GIVEN,
+        webhook_events_filter: List[Literal["start", "output", "logs", "completed"]] | NotGiven = NOT_GIVEN,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+    ) -> TrainingCreateResponse:
+        """
+        Start a new training of the model version you specify.
+
+        Example request body:
+
+        ```json
+        {
+          "destination": "{new_owner}/{new_name}",
+          "input": {
+            "train_data": "https://example.com/my-input-images.zip"
+          },
+          "webhook": "https://example.com/my-webhook"
+        }
+        ```
+
+        Example cURL request:
+
+        ```console
+        curl -s -X POST \\
+          -d '{"destination": "{new_owner}/{new_name}", "input": {"input_images": "https://example.com/my-input-images.zip"}}' \\
+          -H "Authorization: Bearer $REPLICATE_API_TOKEN" \\
+          -H 'Content-Type: application/json' \\
+          https://api.replicate.com/v1/models/stability-ai/sdxl/versions/da77bc59ee60423279fd632efb4795ab731d9e3ca9705ef3341091fb989b7eaf/trainings
+        ```
+
+        The response will be the training object:
+
+        ```json
+        {
+          "id": "zz4ibbonubfz7carwiefibzgga",
+          "model": "stability-ai/sdxl",
+          "version": "da77bc59ee60423279fd632efb4795ab731d9e3ca9705ef3341091fb989b7eaf",
+          "input": {
+            "input_images": "https://example.com/my-input-images.zip"
+          },
+          "logs": "",
+          "error": null,
+          "status": "starting",
+          "created_at": "2023-09-08T16:32:56.990893084Z",
+          "urls": {
+            "cancel": "https://api.replicate.com/v1/predictions/zz4ibbonubfz7carwiefibzgga/cancel",
+            "get": "https://api.replicate.com/v1/predictions/zz4ibbonubfz7carwiefibzgga"
+          }
+        }
+        ```
+
+        As models can take several minutes or more to train, the result will not be
+        available immediately. To get the final result of the training you should either
+        provide a `webhook` HTTPS URL for us to call when the results are ready, or poll
+        the [get a training](#trainings.get) endpoint until it has finished.
+
+        When a training completes, it creates a new
+        [version](https://replicate.com/docs/how-does-replicate-work#terminology) of the
+        model at the specified destination.
+
+        To find some models to train on, check out the
+        [trainable language models collection](https://replicate.com/collections/trainable-language-models).
+
+        Args:
+          destination: A string representing the desired model to push to in the format
+              `{destination_model_owner}/{destination_model_name}`. This should be an existing
+              model owned by the user or organization making the API request. If the
+              destination is invalid, the server will return an appropriate 4XX response.
+
+          input: An object containing inputs to the Cog model's `train()` function.
+
+          webhook: An HTTPS URL for receiving a webhook when the training completes. The webhook
+              will be a POST request where the request body is the same as the response body
+              of the [get training](#trainings.get) operation. If there are network problems,
+              we will retry the webhook a few times, so make sure it can be safely called more
+              than once. Replicate will not follow redirects when sending webhook requests to
+              your service, so be sure to specify a URL that will resolve without redirecting.
+
+          webhook_events_filter: By default, we will send requests to your webhook URL whenever there are new
+              outputs or the training has finished. You can change which events trigger
+              webhook requests by specifying `webhook_events_filter` in the training request:
+
+              - `start`: immediately on training start
+              - `output`: each time a training generates an output (note that trainings can
+                generate multiple outputs)
+              - `logs`: each time log output is generated by a training
+              - `completed`: when the training reaches a terminal state
+                (succeeded/canceled/failed)
+
+              For example, if you only wanted requests to be sent at the start and end of the
+              training, you would provide:
+
+              ```json
+              {
+                "destination": "my-organization/my-model",
+                "input": {
+                  "text": "Alice"
+                },
+                "webhook": "https://example.com/my-webhook",
+                "webhook_events_filter": ["start", "completed"]
+              }
+              ```
+
+              Requests for event types `output` and `logs` will be sent at most once every
+              500ms. If you request `start` and `completed` webhooks, then they'll always be
+              sent regardless of throttling.
+
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        if not model_owner:
+            raise ValueError(f"Expected a non-empty value for `model_owner` but received {model_owner!r}")
+        if not model_name:
+            raise ValueError(f"Expected a non-empty value for `model_name` but received {model_name!r}")
+        if not version_id:
+            raise ValueError(f"Expected a non-empty value for `version_id` but received {version_id!r}")
+        return self._post(
+            f"/models/{model_owner}/{model_name}/versions/{version_id}/trainings",
+            body=maybe_transform(
+                {
+                    "destination": destination,
+                    "input": input,
+                    "webhook": webhook,
+                    "webhook_events_filter": webhook_events_filter,
+                },
+                training_create_params.TrainingCreateParams,
+            ),
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=TrainingCreateResponse,
+        )
 
     def list(
         self,
@@ -273,6 +429,156 @@ class AsyncTrainingsResource(AsyncAPIResource):
         """
         return AsyncTrainingsResourceWithStreamingResponse(self)
 
+    async def create(
+        self,
+        version_id: str,
+        *,
+        model_owner: str,
+        model_name: str,
+        destination: str,
+        input: object,
+        webhook: str | NotGiven = NOT_GIVEN,
+        webhook_events_filter: List[Literal["start", "output", "logs", "completed"]] | NotGiven = NOT_GIVEN,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+    ) -> TrainingCreateResponse:
+        """
+        Start a new training of the model version you specify.
+
+        Example request body:
+
+        ```json
+        {
+          "destination": "{new_owner}/{new_name}",
+          "input": {
+            "train_data": "https://example.com/my-input-images.zip"
+          },
+          "webhook": "https://example.com/my-webhook"
+        }
+        ```
+
+        Example cURL request:
+
+        ```console
+        curl -s -X POST \\
+          -d '{"destination": "{new_owner}/{new_name}", "input": {"input_images": "https://example.com/my-input-images.zip"}}' \\
+          -H "Authorization: Bearer $REPLICATE_API_TOKEN" \\
+          -H 'Content-Type: application/json' \\
+          https://api.replicate.com/v1/models/stability-ai/sdxl/versions/da77bc59ee60423279fd632efb4795ab731d9e3ca9705ef3341091fb989b7eaf/trainings
+        ```
+
+        The response will be the training object:
+
+        ```json
+        {
+          "id": "zz4ibbonubfz7carwiefibzgga",
+          "model": "stability-ai/sdxl",
+          "version": "da77bc59ee60423279fd632efb4795ab731d9e3ca9705ef3341091fb989b7eaf",
+          "input": {
+            "input_images": "https://example.com/my-input-images.zip"
+          },
+          "logs": "",
+          "error": null,
+          "status": "starting",
+          "created_at": "2023-09-08T16:32:56.990893084Z",
+          "urls": {
+            "cancel": "https://api.replicate.com/v1/predictions/zz4ibbonubfz7carwiefibzgga/cancel",
+            "get": "https://api.replicate.com/v1/predictions/zz4ibbonubfz7carwiefibzgga"
+          }
+        }
+        ```
+
+        As models can take several minutes or more to train, the result will not be
+        available immediately. To get the final result of the training you should either
+        provide a `webhook` HTTPS URL for us to call when the results are ready, or poll
+        the [get a training](#trainings.get) endpoint until it has finished.
+
+        When a training completes, it creates a new
+        [version](https://replicate.com/docs/how-does-replicate-work#terminology) of the
+        model at the specified destination.
+
+        To find some models to train on, check out the
+        [trainable language models collection](https://replicate.com/collections/trainable-language-models).
+
+        Args:
+          destination: A string representing the desired model to push to in the format
+              `{destination_model_owner}/{destination_model_name}`. This should be an existing
+              model owned by the user or organization making the API request. If the
+              destination is invalid, the server will return an appropriate 4XX response.
+
+          input: An object containing inputs to the Cog model's `train()` function.
+
+          webhook: An HTTPS URL for receiving a webhook when the training completes. The webhook
+              will be a POST request where the request body is the same as the response body
+              of the [get training](#trainings.get) operation. If there are network problems,
+              we will retry the webhook a few times, so make sure it can be safely called more
+              than once. Replicate will not follow redirects when sending webhook requests to
+              your service, so be sure to specify a URL that will resolve without redirecting.
+
+          webhook_events_filter: By default, we will send requests to your webhook URL whenever there are new
+              outputs or the training has finished. You can change which events trigger
+              webhook requests by specifying `webhook_events_filter` in the training request:
+
+              - `start`: immediately on training start
+              - `output`: each time a training generates an output (note that trainings can
+                generate multiple outputs)
+              - `logs`: each time log output is generated by a training
+              - `completed`: when the training reaches a terminal state
+                (succeeded/canceled/failed)
+
+              For example, if you only wanted requests to be sent at the start and end of the
+              training, you would provide:
+
+              ```json
+              {
+                "destination": "my-organization/my-model",
+                "input": {
+                  "text": "Alice"
+                },
+                "webhook": "https://example.com/my-webhook",
+                "webhook_events_filter": ["start", "completed"]
+              }
+              ```
+
+              Requests for event types `output` and `logs` will be sent at most once every
+              500ms. If you request `start` and `completed` webhooks, then they'll always be
+              sent regardless of throttling.
+
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        if not model_owner:
+            raise ValueError(f"Expected a non-empty value for `model_owner` but received {model_owner!r}")
+        if not model_name:
+            raise ValueError(f"Expected a non-empty value for `model_name` but received {model_name!r}")
+        if not version_id:
+            raise ValueError(f"Expected a non-empty value for `version_id` but received {version_id!r}")
+        return await self._post(
+            f"/models/{model_owner}/{model_name}/versions/{version_id}/trainings",
+            body=await async_maybe_transform(
+                {
+                    "destination": destination,
+                    "input": input,
+                    "webhook": webhook,
+                    "webhook_events_filter": webhook_events_filter,
+                },
+                training_create_params.TrainingCreateParams,
+            ),
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=TrainingCreateResponse,
+        )
+
     def list(
         self,
         *,
@@ -488,6 +794,9 @@ class TrainingsResourceWithRawResponse:
     def __init__(self, trainings: TrainingsResource) -> None:
         self._trainings = trainings
 
+        self.create = to_raw_response_wrapper(
+            trainings.create,
+        )
         self.list = to_raw_response_wrapper(
             trainings.list,
         )
@@ -503,6 +812,9 @@ class AsyncTrainingsResourceWithRawResponse:
     def __init__(self, trainings: AsyncTrainingsResource) -> None:
         self._trainings = trainings
 
+        self.create = async_to_raw_response_wrapper(
+            trainings.create,
+        )
         self.list = async_to_raw_response_wrapper(
             trainings.list,
         )
@@ -518,6 +830,9 @@ class TrainingsResourceWithStreamingResponse:
     def __init__(self, trainings: TrainingsResource) -> None:
         self._trainings = trainings
 
+        self.create = to_streamed_response_wrapper(
+            trainings.create,
+        )
         self.list = to_streamed_response_wrapper(
             trainings.list,
         )
@@ -533,6 +848,9 @@ class AsyncTrainingsResourceWithStreamingResponse:
     def __init__(self, trainings: AsyncTrainingsResource) -> None:
         self._trainings = trainings
 
+        self.create = async_to_streamed_response_wrapper(
+            trainings.create,
+        )
         self.list = async_to_streamed_response_wrapper(
             trainings.list,
         )

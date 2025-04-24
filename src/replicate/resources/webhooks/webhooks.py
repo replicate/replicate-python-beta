@@ -2,7 +2,9 @@
 
 from __future__ import annotations
 
-from .default import (
+from ..._compat import cached_property
+from ..._resource import SyncAPIResource, AsyncAPIResource
+from .default.default import (
     DefaultResource,
     AsyncDefaultResource,
     DefaultResourceWithRawResponse,
@@ -10,8 +12,6 @@ from .default import (
     DefaultResourceWithStreamingResponse,
     AsyncDefaultResourceWithStreamingResponse,
 )
-from ..._compat import cached_property
-from ..._resource import SyncAPIResource, AsyncAPIResource
 
 __all__ = ["WebhooksResource", "AsyncWebhooksResource"]
 
