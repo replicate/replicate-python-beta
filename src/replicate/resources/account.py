@@ -14,32 +14,32 @@ from .._response import (
     async_to_streamed_response_wrapper,
 )
 from .._base_client import make_request_options
-from ..types.account_list_response import AccountListResponse
+from ..types.account_get_response import AccountGetResponse
 
-__all__ = ["AccountsResource", "AsyncAccountsResource"]
+__all__ = ["AccountResource", "AsyncAccountResource"]
 
 
-class AccountsResource(SyncAPIResource):
+class AccountResource(SyncAPIResource):
     @cached_property
-    def with_raw_response(self) -> AccountsResourceWithRawResponse:
+    def with_raw_response(self) -> AccountResourceWithRawResponse:
         """
         This property can be used as a prefix for any HTTP method call to return
         the raw response object instead of the parsed content.
 
         For more information, see https://www.github.com/replicate/replicate-python-stainless#accessing-raw-response-data-eg-headers
         """
-        return AccountsResourceWithRawResponse(self)
+        return AccountResourceWithRawResponse(self)
 
     @cached_property
-    def with_streaming_response(self) -> AccountsResourceWithStreamingResponse:
+    def with_streaming_response(self) -> AccountResourceWithStreamingResponse:
         """
         An alternative to `.with_raw_response` that doesn't eagerly read the response body.
 
         For more information, see https://www.github.com/replicate/replicate-python-stainless#with_streaming_response
         """
-        return AccountsResourceWithStreamingResponse(self)
+        return AccountResourceWithStreamingResponse(self)
 
-    def list(
+    def get(
         self,
         *,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
@@ -48,7 +48,7 @@ class AccountsResource(SyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> AccountListResponse:
+    ) -> AccountGetResponse:
         """
         Returns information about the user or organization associated with the provided
         API token.
@@ -77,31 +77,31 @@ class AccountsResource(SyncAPIResource):
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=AccountListResponse,
+            cast_to=AccountGetResponse,
         )
 
 
-class AsyncAccountsResource(AsyncAPIResource):
+class AsyncAccountResource(AsyncAPIResource):
     @cached_property
-    def with_raw_response(self) -> AsyncAccountsResourceWithRawResponse:
+    def with_raw_response(self) -> AsyncAccountResourceWithRawResponse:
         """
         This property can be used as a prefix for any HTTP method call to return
         the raw response object instead of the parsed content.
 
         For more information, see https://www.github.com/replicate/replicate-python-stainless#accessing-raw-response-data-eg-headers
         """
-        return AsyncAccountsResourceWithRawResponse(self)
+        return AsyncAccountResourceWithRawResponse(self)
 
     @cached_property
-    def with_streaming_response(self) -> AsyncAccountsResourceWithStreamingResponse:
+    def with_streaming_response(self) -> AsyncAccountResourceWithStreamingResponse:
         """
         An alternative to `.with_raw_response` that doesn't eagerly read the response body.
 
         For more information, see https://www.github.com/replicate/replicate-python-stainless#with_streaming_response
         """
-        return AsyncAccountsResourceWithStreamingResponse(self)
+        return AsyncAccountResourceWithStreamingResponse(self)
 
-    async def list(
+    async def get(
         self,
         *,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
@@ -110,7 +110,7 @@ class AsyncAccountsResource(AsyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> AccountListResponse:
+    ) -> AccountGetResponse:
         """
         Returns information about the user or organization associated with the provided
         API token.
@@ -139,41 +139,41 @@ class AsyncAccountsResource(AsyncAPIResource):
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=AccountListResponse,
+            cast_to=AccountGetResponse,
         )
 
 
-class AccountsResourceWithRawResponse:
-    def __init__(self, accounts: AccountsResource) -> None:
-        self._accounts = accounts
+class AccountResourceWithRawResponse:
+    def __init__(self, account: AccountResource) -> None:
+        self._account = account
 
-        self.list = to_raw_response_wrapper(
-            accounts.list,
+        self.get = to_raw_response_wrapper(
+            account.get,
         )
 
 
-class AsyncAccountsResourceWithRawResponse:
-    def __init__(self, accounts: AsyncAccountsResource) -> None:
-        self._accounts = accounts
+class AsyncAccountResourceWithRawResponse:
+    def __init__(self, account: AsyncAccountResource) -> None:
+        self._account = account
 
-        self.list = async_to_raw_response_wrapper(
-            accounts.list,
+        self.get = async_to_raw_response_wrapper(
+            account.get,
         )
 
 
-class AccountsResourceWithStreamingResponse:
-    def __init__(self, accounts: AccountsResource) -> None:
-        self._accounts = accounts
+class AccountResourceWithStreamingResponse:
+    def __init__(self, account: AccountResource) -> None:
+        self._account = account
 
-        self.list = to_streamed_response_wrapper(
-            accounts.list,
+        self.get = to_streamed_response_wrapper(
+            account.get,
         )
 
 
-class AsyncAccountsResourceWithStreamingResponse:
-    def __init__(self, accounts: AsyncAccountsResource) -> None:
-        self._accounts = accounts
+class AsyncAccountResourceWithStreamingResponse:
+    def __init__(self, account: AsyncAccountResource) -> None:
+        self._account = account
 
-        self.list = async_to_streamed_response_wrapper(
-            accounts.list,
+        self.get = async_to_streamed_response_wrapper(
+            account.get,
         )

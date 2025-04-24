@@ -9,70 +9,70 @@ import pytest
 
 from replicate import ReplicateClient, AsyncReplicateClient
 from tests.utils import assert_matches_type
-from replicate.types import AccountListResponse
+from replicate.types import AccountGetResponse
 
 base_url = os.environ.get("TEST_API_BASE_URL", "http://127.0.0.1:4010")
 
 
-class TestAccounts:
+class TestAccount:
     parametrize = pytest.mark.parametrize("client", [False, True], indirect=True, ids=["loose", "strict"])
 
     @pytest.mark.skip()
     @parametrize
-    def test_method_list(self, client: ReplicateClient) -> None:
-        account = client.accounts.list()
-        assert_matches_type(AccountListResponse, account, path=["response"])
+    def test_method_get(self, client: ReplicateClient) -> None:
+        account = client.account.get()
+        assert_matches_type(AccountGetResponse, account, path=["response"])
 
     @pytest.mark.skip()
     @parametrize
-    def test_raw_response_list(self, client: ReplicateClient) -> None:
-        response = client.accounts.with_raw_response.list()
+    def test_raw_response_get(self, client: ReplicateClient) -> None:
+        response = client.account.with_raw_response.get()
 
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
         account = response.parse()
-        assert_matches_type(AccountListResponse, account, path=["response"])
+        assert_matches_type(AccountGetResponse, account, path=["response"])
 
     @pytest.mark.skip()
     @parametrize
-    def test_streaming_response_list(self, client: ReplicateClient) -> None:
-        with client.accounts.with_streaming_response.list() as response:
+    def test_streaming_response_get(self, client: ReplicateClient) -> None:
+        with client.account.with_streaming_response.get() as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
             account = response.parse()
-            assert_matches_type(AccountListResponse, account, path=["response"])
+            assert_matches_type(AccountGetResponse, account, path=["response"])
 
         assert cast(Any, response.is_closed) is True
 
 
-class TestAsyncAccounts:
+class TestAsyncAccount:
     parametrize = pytest.mark.parametrize("async_client", [False, True], indirect=True, ids=["loose", "strict"])
 
     @pytest.mark.skip()
     @parametrize
-    async def test_method_list(self, async_client: AsyncReplicateClient) -> None:
-        account = await async_client.accounts.list()
-        assert_matches_type(AccountListResponse, account, path=["response"])
+    async def test_method_get(self, async_client: AsyncReplicateClient) -> None:
+        account = await async_client.account.get()
+        assert_matches_type(AccountGetResponse, account, path=["response"])
 
     @pytest.mark.skip()
     @parametrize
-    async def test_raw_response_list(self, async_client: AsyncReplicateClient) -> None:
-        response = await async_client.accounts.with_raw_response.list()
+    async def test_raw_response_get(self, async_client: AsyncReplicateClient) -> None:
+        response = await async_client.account.with_raw_response.get()
 
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
         account = await response.parse()
-        assert_matches_type(AccountListResponse, account, path=["response"])
+        assert_matches_type(AccountGetResponse, account, path=["response"])
 
     @pytest.mark.skip()
     @parametrize
-    async def test_streaming_response_list(self, async_client: AsyncReplicateClient) -> None:
-        async with async_client.accounts.with_streaming_response.list() as response:
+    async def test_streaming_response_get(self, async_client: AsyncReplicateClient) -> None:
+        async with async_client.account.with_streaming_response.get() as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
             account = await response.parse()
-            assert_matches_type(AccountListResponse, account, path=["response"])
+            assert_matches_type(AccountGetResponse, account, path=["response"])
 
         assert cast(Any, response.is_closed) is True
