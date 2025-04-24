@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.1.0-alpha.7 (2025-04-24)
+
+Full Changelog: [v0.1.0-alpha.6...v0.1.0-alpha.7](https://github.com/replicate/replicate-python-stainless/compare/v0.1.0-alpha.6...v0.1.0-alpha.7)
+
+### Features
+
+* enable mcp package publishing ([f116fbb](https://github.com/replicate/replicate-python-stainless/commit/f116fbbb59329b66a998e43c850bcfab05e7398b))
+
 ## 0.1.0-alpha.6 (2025-04-24)
 
 Full Changelog: [v0.1.0-alpha.5...v0.1.0-alpha.6](https://github.com/replicate/replicate-python-stainless/compare/v0.1.0-alpha.5...v0.1.0-alpha.6)
