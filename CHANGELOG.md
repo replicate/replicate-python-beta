@@ -1,5 +1,20 @@
 # Changelog
 
+## 0.1.0-alpha.6 (2025-04-24)
+
+Full Changelog: [v0.1.0-alpha.5...v0.1.0-alpha.6](https://github.com/replicate/replicate-python-stainless/compare/v0.1.0-alpha.5...v0.1.0-alpha.6)
+
+### Bug Fixes
+
+* correct mapping for account.get ([e501778](https://github.com/replicate/replicate-python-stainless/commit/e501778a22c481147fbe419803a3f52ac9ba8243))
+
+
+### Chores
+
+* broadly detect json family of content-type headers ([eeaa507](https://github.com/replicate/replicate-python-stainless/commit/eeaa5071ed47e31264a268d9445fe8c0b8d059b1))
+* **ci:** only use depot for staging repos ([f7ec0b8](https://github.com/replicate/replicate-python-stainless/commit/f7ec0b8e11782aa89eee5f4af962158b665eee13))
+* **internal:** codegen related update ([fd43800](https://github.com/replicate/replicate-python-stainless/commit/fd43800c1da9a5c6ff06309a6c4a6a3808decff9))
+
 ## 0.1.0-alpha.5 (2025-04-24)
 
 Full Changelog: [v0.1.0-alpha.4...v0.1.0-alpha.5](https://github.com/replicate/replicate-python-stainless/compare/v0.1.0-alpha.4...v0.1.0-alpha.5)

@@ -12,16 +12,16 @@ class ModelsResourceProxy(LazyProxy[resources.ModelsResource]):
         return _load_client().models
 
 
+class AccountResourceProxy(LazyProxy[resources.AccountResource]):
+    @override
+    def __load__(self) -> resources.AccountResource:
+        return _load_client().account
+
+
 class HardwareResourceProxy(LazyProxy[resources.HardwareResource]):
     @override
     def __load__(self) -> resources.HardwareResource:
         return _load_client().hardware
-
-
-class AccountsResourceProxy(LazyProxy[resources.AccountsResource]):
-    @override
-    def __load__(self) -> resources.AccountsResource:
-        return _load_client().accounts
 
 
 class WebhooksResourceProxy(LazyProxy[resources.WebhooksResource]):
@@ -55,8 +55,8 @@ class PredictionsResourceProxy(LazyProxy[resources.PredictionsResource]):
 
 
 models: resources.ModelsResource = ModelsResourceProxy().__as_proxied__()
+account: resources.AccountResource = AccountResourceProxy().__as_proxied__()
 hardware: resources.HardwareResource = HardwareResourceProxy().__as_proxied__()
-accounts: resources.AccountsResource = AccountsResourceProxy().__as_proxied__()
 webhooks: resources.WebhooksResource = WebhooksResourceProxy().__as_proxied__()
 trainings: resources.TrainingsResource = TrainingsResourceProxy().__as_proxied__()
 collections: resources.CollectionsResource = CollectionsResourceProxy().__as_proxied__()

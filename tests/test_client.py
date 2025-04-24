@@ -783,7 +783,7 @@ class TestReplicateClient:
 
         respx_mock.get("/account").mock(side_effect=retry_handler)
 
-        response = client.accounts.with_raw_response.list()
+        response = client.account.with_raw_response.get()
 
         assert response.retries_taken == failures_before_success
         assert int(response.http_request.headers.get("x-stainless-retry-count")) == failures_before_success
@@ -807,7 +807,7 @@ class TestReplicateClient:
 
         respx_mock.get("/account").mock(side_effect=retry_handler)
 
-        response = client.accounts.with_raw_response.list(extra_headers={"x-stainless-retry-count": Omit()})
+        response = client.account.with_raw_response.get(extra_headers={"x-stainless-retry-count": Omit()})
 
         assert len(response.http_request.headers.get_list("x-stainless-retry-count")) == 0
 
@@ -830,7 +830,7 @@ class TestReplicateClient:
 
         respx_mock.get("/account").mock(side_effect=retry_handler)
 
-        response = client.accounts.with_raw_response.list(extra_headers={"x-stainless-retry-count": "42"})
+        response = client.account.with_raw_response.get(extra_headers={"x-stainless-retry-count": "42"})
 
         assert response.http_request.headers.get("x-stainless-retry-count") == "42"
 
@@ -1574,7 +1574,7 @@ class TestAsyncReplicateClient:
 
         respx_mock.get("/account").mock(side_effect=retry_handler)
 
-        response = await client.accounts.with_raw_response.list()
+        response = await client.account.with_raw_response.get()
 
         assert response.retries_taken == failures_before_success
         assert int(response.http_request.headers.get("x-stainless-retry-count")) == failures_before_success
@@ -1599,7 +1599,7 @@ class TestAsyncReplicateClient:
 
         respx_mock.get("/account").mock(side_effect=retry_handler)
 
-        response = await client.accounts.with_raw_response.list(extra_headers={"x-stainless-retry-count": Omit()})
+        response = await client.account.with_raw_response.get(extra_headers={"x-stainless-retry-count": Omit()})
 
         assert len(response.http_request.headers.get_list("x-stainless-retry-count")) == 0
 
@@ -1623,7 +1623,7 @@ class TestAsyncReplicateClient:
 
         respx_mock.get("/account").mock(side_effect=retry_handler)
 
-        response = await client.accounts.with_raw_response.list(extra_headers={"x-stainless-retry-count": "42"})
+        response = await client.account.with_raw_response.get(extra_headers={"x-stainless-retry-count": "42"})
 
         assert response.http_request.headers.get("x-stainless-retry-count") == "42"
 
