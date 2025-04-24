@@ -4,42 +4,42 @@ from __future__ import annotations
 
 import httpx
 
-from ..._types import NOT_GIVEN, Body, Query, Headers, NotGiven
-from ..._compat import cached_property
-from ..._resource import SyncAPIResource, AsyncAPIResource
-from ..._response import (
+from ...._types import NOT_GIVEN, Body, Query, Headers, NotGiven
+from ...._compat import cached_property
+from ...._resource import SyncAPIResource, AsyncAPIResource
+from ...._response import (
     to_raw_response_wrapper,
     to_streamed_response_wrapper,
     async_to_raw_response_wrapper,
     async_to_streamed_response_wrapper,
 )
-from ..._base_client import make_request_options
-from ...types.webhooks.default_retrieve_secret_response import DefaultRetrieveSecretResponse
+from ...._base_client import make_request_options
+from ....types.webhooks.default.secret_get_response import SecretGetResponse
 
-__all__ = ["DefaultResource", "AsyncDefaultResource"]
+__all__ = ["SecretResource", "AsyncSecretResource"]
 
 
-class DefaultResource(SyncAPIResource):
+class SecretResource(SyncAPIResource):
     @cached_property
-    def with_raw_response(self) -> DefaultResourceWithRawResponse:
+    def with_raw_response(self) -> SecretResourceWithRawResponse:
         """
         This property can be used as a prefix for any HTTP method call to return
         the raw response object instead of the parsed content.
 
         For more information, see https://www.github.com/replicate/replicate-python-stainless#accessing-raw-response-data-eg-headers
         """
-        return DefaultResourceWithRawResponse(self)
+        return SecretResourceWithRawResponse(self)
 
     @cached_property
-    def with_streaming_response(self) -> DefaultResourceWithStreamingResponse:
+    def with_streaming_response(self) -> SecretResourceWithStreamingResponse:
         """
         An alternative to `.with_raw_response` that doesn't eagerly read the response body.
 
         For more information, see https://www.github.com/replicate/replicate-python-stainless#with_streaming_response
         """
-        return DefaultResourceWithStreamingResponse(self)
+        return SecretResourceWithStreamingResponse(self)
 
-    def retrieve_secret(
+    def get(
         self,
         *,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
@@ -48,7 +48,7 @@ class DefaultResource(SyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> DefaultRetrieveSecretResponse:
+    ) -> SecretGetResponse:
         """Get the signing secret for the default webhook endpoint.
 
         This is used to verify
@@ -75,31 +75,31 @@ class DefaultResource(SyncAPIResource):
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=DefaultRetrieveSecretResponse,
+            cast_to=SecretGetResponse,
         )
 
 
-class AsyncDefaultResource(AsyncAPIResource):
+class AsyncSecretResource(AsyncAPIResource):
     @cached_property
-    def with_raw_response(self) -> AsyncDefaultResourceWithRawResponse:
+    def with_raw_response(self) -> AsyncSecretResourceWithRawResponse:
         """
         This property can be used as a prefix for any HTTP method call to return
         the raw response object instead of the parsed content.
 
         For more information, see https://www.github.com/replicate/replicate-python-stainless#accessing-raw-response-data-eg-headers
         """
-        return AsyncDefaultResourceWithRawResponse(self)
+        return AsyncSecretResourceWithRawResponse(self)
 
     @cached_property
-    def with_streaming_response(self) -> AsyncDefaultResourceWithStreamingResponse:
+    def with_streaming_response(self) -> AsyncSecretResourceWithStreamingResponse:
         """
         An alternative to `.with_raw_response` that doesn't eagerly read the response body.
 
         For more information, see https://www.github.com/replicate/replicate-python-stainless#with_streaming_response
         """
-        return AsyncDefaultResourceWithStreamingResponse(self)
+        return AsyncSecretResourceWithStreamingResponse(self)
 
-    async def retrieve_secret(
+    async def get(
         self,
         *,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
@@ -108,7 +108,7 @@ class AsyncDefaultResource(AsyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> DefaultRetrieveSecretResponse:
+    ) -> SecretGetResponse:
         """Get the signing secret for the default webhook endpoint.
 
         This is used to verify
@@ -135,41 +135,41 @@ class AsyncDefaultResource(AsyncAPIResource):
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=DefaultRetrieveSecretResponse,
+            cast_to=SecretGetResponse,
         )
 
 
-class DefaultResourceWithRawResponse:
-    def __init__(self, default: DefaultResource) -> None:
-        self._default = default
+class SecretResourceWithRawResponse:
+    def __init__(self, secret: SecretResource) -> None:
+        self._secret = secret
 
-        self.retrieve_secret = to_raw_response_wrapper(
-            default.retrieve_secret,
+        self.get = to_raw_response_wrapper(
+            secret.get,
         )
 
 
-class AsyncDefaultResourceWithRawResponse:
-    def __init__(self, default: AsyncDefaultResource) -> None:
-        self._default = default
+class AsyncSecretResourceWithRawResponse:
+    def __init__(self, secret: AsyncSecretResource) -> None:
+        self._secret = secret
 
-        self.retrieve_secret = async_to_raw_response_wrapper(
-            default.retrieve_secret,
+        self.get = async_to_raw_response_wrapper(
+            secret.get,
         )
 
 
-class DefaultResourceWithStreamingResponse:
-    def __init__(self, default: DefaultResource) -> None:
-        self._default = default
+class SecretResourceWithStreamingResponse:
+    def __init__(self, secret: SecretResource) -> None:
+        self._secret = secret
 
-        self.retrieve_secret = to_streamed_response_wrapper(
-            default.retrieve_secret,
+        self.get = to_streamed_response_wrapper(
+            secret.get,
         )
 
 
-class AsyncDefaultResourceWithStreamingResponse:
-    def __init__(self, default: AsyncDefaultResource) -> None:
-        self._default = default
+class AsyncSecretResourceWithStreamingResponse:
+    def __init__(self, secret: AsyncSecretResource) -> None:
+        self._secret = secret
 
-        self.retrieve_secret = async_to_streamed_response_wrapper(
-            default.retrieve_secret,
+        self.get = async_to_streamed_response_wrapper(
+            secret.get,
         )

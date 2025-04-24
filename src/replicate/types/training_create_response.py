@@ -4,9 +4,9 @@ from typing import Dict, Optional
 from datetime import datetime
 from typing_extensions import Literal
 
-from ..._models import BaseModel
+from .._models import BaseModel
 
-__all__ = ["VersionCreateTrainingResponse", "Metrics", "Output", "URLs"]
+__all__ = ["TrainingCreateResponse", "Metrics", "Output", "URLs"]
 
 
 class Metrics(BaseModel):
@@ -30,7 +30,7 @@ class URLs(BaseModel):
     """URL to get the training details"""
 
 
-class VersionCreateTrainingResponse(BaseModel):
+class TrainingCreateResponse(BaseModel):
     id: Optional[str] = None
     """The unique ID of the training"""
 

@@ -5,12 +5,12 @@ from __future__ import annotations
 from typing import List
 from typing_extensions import Literal, Required, Annotated, TypedDict
 
-from .._utils import PropertyInfo
+from ..._utils import PropertyInfo
 
-__all__ = ["ModelCreatePredictionParams"]
+__all__ = ["PredictionCreateParams"]
 
 
-class ModelCreatePredictionParams(TypedDict, total=False):
+class PredictionCreateParams(TypedDict, total=False):
     model_owner: Required[str]
 
     input: Required[object]
