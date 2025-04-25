@@ -209,6 +209,40 @@ class TestModels:
                 model_owner="model_owner",
             )
 
+    @pytest.mark.skip(reason="Prism doesn't support query methods yet")
+    @parametrize
+    def test_method_search(self, client: ReplicateClient) -> None:
+        model = client.models.search(
+            body="body",
+        )
+        assert model is None
+
+    @pytest.mark.skip(reason="Prism doesn't support query methods yet")
+    @parametrize
+    def test_raw_response_search(self, client: ReplicateClient) -> None:
+        response = client.models.with_raw_response.search(
+            body="body",
+        )
+
+        assert response.is_closed is True
+        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+        model = response.parse()
+        assert model is None
+
+    @pytest.mark.skip(reason="Prism doesn't support query methods yet")
+    @parametrize
+    def test_streaming_response_search(self, client: ReplicateClient) -> None:
+        with client.models.with_streaming_response.search(
+            body="body",
+        ) as response:
+            assert not response.is_closed
+            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+
+            model = response.parse()
+            assert model is None
+
+        assert cast(Any, response.is_closed) is True
+
 
 class TestAsyncModels:
     parametrize = pytest.mark.parametrize("async_client", [False, True], indirect=True, ids=["loose", "strict"])
@@ -403,3 +437,37 @@ class TestAsyncModels:
                 model_name="",
                 model_owner="model_owner",
             )
+
+    @pytest.mark.skip(reason="Prism doesn't support query methods yet")
+    @parametrize
+    async def test_method_search(self, async_client: AsyncReplicateClient) -> None:
+        model = await async_client.models.search(
+            body="body",
+        )
+        assert model is None
+
+    @pytest.mark.skip(reason="Prism doesn't support query methods yet")
+    @parametrize
+    async def test_raw_response_search(self, async_client: AsyncReplicateClient) -> None:
+        response = await async_client.models.with_raw_response.search(
+            body="body",
+        )
+
+        assert response.is_closed is True
+        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+        model = await response.parse()
+        assert model is None
+
+    @pytest.mark.skip(reason="Prism doesn't support query methods yet")
+    @parametrize
+    async def test_streaming_response_search(self, async_client: AsyncReplicateClient) -> None:
+        async with async_client.models.with_streaming_response.search(
+            body="body",
+        ) as response:
+            assert not response.is_closed
+            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+
+            model = await response.parse()
+            assert model is None
+
+        assert cast(Any, response.is_closed) is True

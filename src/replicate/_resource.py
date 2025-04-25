@@ -22,6 +22,7 @@ class SyncAPIResource:
         self._put = client.put
         self._delete = client.delete
         self._get_api_list = client.get_api_list
+        self._query = client.query
 
     def _sleep(self, seconds: float) -> None:
         time.sleep(seconds)
@@ -38,6 +39,7 @@ class AsyncAPIResource:
         self._put = client.put
         self._delete = client.delete
         self._get_api_list = client.get_api_list
+        self._query = client.query
 
     async def _sleep(self, seconds: float) -> None:
         await anyio.sleep(seconds)

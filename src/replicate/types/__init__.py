@@ -6,6 +6,7 @@ from .prediction import Prediction as Prediction
 from .prediction_output import PredictionOutput as PredictionOutput
 from .model_create_params import ModelCreateParams as ModelCreateParams
 from .model_list_response import ModelListResponse as ModelListResponse
+from .model_search_params import ModelSearchParams as ModelSearchParams
 from .account_get_response import AccountGetResponse as AccountGetResponse
 from .training_get_response import TrainingGetResponse as TrainingGetResponse
 from .hardware_list_response import HardwareListResponse as HardwareListResponse
