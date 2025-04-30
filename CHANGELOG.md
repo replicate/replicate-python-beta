@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.1.0-alpha.8 (2025-04-30)
+
+Full Changelog: [v0.1.0-alpha.7...v0.1.0-alpha.8](https://github.com/replicate/replicate-python-stainless/compare/v0.1.0-alpha.7...v0.1.0-alpha.8)
+
+### Features
+
+* **api:** api update ([a5aa64a](https://github.com/replicate/replicate-python-stainless/commit/a5aa64a71517fdf74e61e4debe68fba458f2e380))
+* **client:** add support for model queries ([6df1fd6](https://github.com/replicate/replicate-python-stainless/commit/6df1fd6b994373a49b602258a8064998c88a0eca))
+
 ## 0.1.0-alpha.7 (2025-04-24)
 
 Full Changelog: [v0.1.0-alpha.6...v0.1.0-alpha.7](https://github.com/replicate/replicate-python-stainless/compare/v0.1.0-alpha.6...v0.1.0-alpha.7)
