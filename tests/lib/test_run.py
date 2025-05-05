@@ -119,7 +119,7 @@ class TestRun:
         # Mock the endpoint
         respx_mock.post("/predictions").mock(return_value=httpx.Response(201, json=mock_prediction))
 
-        output: list[FileOutput] = self.client.run("some-model-ref", input={"prompt": "generate multiple images"})  # type: ignore
+        output: list[FileOutput] = self.client.run("some-model-ref", input={"prompt": "generate multiple images"})
 
         assert isinstance(output, list)
         assert len(output) == 2
@@ -137,7 +137,7 @@ class TestRun:
             return_value=httpx.Response(201, json=create_mock_prediction(output=file_urls))
         )
 
-        output: Dict[str, FileOutput] = self.client.run("some-model-ref", input={"prompt": "structured output"})  # type: ignore
+        output: Dict[str, FileOutput] = self.client.run("some-model-ref", input={"prompt": "structured output"})
 
         assert isinstance(output, dict)
         assert len(output) == 2
@@ -181,7 +181,7 @@ class TestRun:
             return_value=httpx.Response(201, json=create_mock_prediction(output=output_iterator))
         )
 
-        output = self.client.run("some-model-ref", input={"prompt": "generate iterator"})
+        output: list[str] = self.client.run("some-model-ref", input={"prompt": "generate iterator"})
 
         assert isinstance(output, list)
         assert len(output) == 3
@@ -230,7 +230,7 @@ class TestRun:
             return_value=httpx.Response(200, json=create_mock_prediction(output=file_urls))
         )
 
-        output = self.client.run("some-model-ref", input={"prompt": "generate file iterator"})
+        output: list[FileOutput] = self.client.run("some-model-ref", input={"prompt": "generate file iterator"})
 
         assert isinstance(output, list)
         assert len(output) == 3
@@ -312,7 +312,7 @@ class TestAsyncRun:
 
         output: list[AsyncFileOutput] = await self.client.run(
             "some-model-ref", input={"prompt": "generate multiple images"}
-        )  # type: ignore
+        )
 
         assert isinstance(output, list)
         assert len(output) == 2
@@ -332,7 +332,7 @@ class TestAsyncRun:
 
         output: Dict[str, AsyncFileOutput] = await self.client.run(
             "some-model-ref", input={"prompt": "structured output"}
-        )  # type: ignore
+        )
 
         assert isinstance(output, dict)
         assert len(output) == 2
@@ -376,7 +376,7 @@ class TestAsyncRun:
             return_value=httpx.Response(201, json=create_mock_prediction(output=output_iterator))
         )
 
-        output = await self.client.run("some-model-ref", input={"prompt": "generate iterator"})
+        output: list[str] = await self.client.run("some-model-ref", input={"prompt": "generate iterator"})
 
         assert isinstance(output, list)
         assert len(output) == 3
@@ -425,7 +425,9 @@ class TestAsyncRun:
             return_value=httpx.Response(200, json=create_mock_prediction(output=file_urls))
         )
 
-        output = await self.client.run("some-model-ref", input={"prompt": "generate file iterator"})
+        output: list[AsyncFileOutput] = await self.client.run(
+            "some-model-ref", input={"prompt": "generate file iterator"}
+        )
 
         assert isinstance(output, list)
         assert len(output) == 3
