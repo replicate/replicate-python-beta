@@ -130,13 +130,14 @@ class ReplicateClient(SyncAPIClient):
         self,
         ref: Union[Model, Version, ModelVersionIdentifier, str],
         *,
+        use_file_output: bool = True,
         wait: Union[int, bool, NotGiven] = NOT_GIVEN,
         **params: Unpack[PredictionCreateParamsWithoutVersion],
     ) -> Any:
         """Run a model and wait for its output."""
         from .lib._predictions import run
 
-        return run(self, ref, wait=wait, **params)
+        return run(self, ref, wait=wait, use_file_output=use_file_output, **params)
 
     @property
     @override
@@ -325,13 +326,14 @@ class AsyncReplicateClient(AsyncAPIClient):
         self,
         ref: Union[Model, Version, ModelVersionIdentifier, str],
         *,
+        use_file_output: bool = True,
         wait: Union[int, bool, NotGiven] = NOT_GIVEN,
         **params: Unpack[PredictionCreateParamsWithoutVersion],
     ) -> Any:
         """Run a model and wait for its output."""
         from .lib._predictions import async_run
 
-        return await async_run(self, ref, wait=wait, **params)
+        return await async_run(self, ref, wait=wait, use_file_output=use_file_output, **params)
 
     @property
     @override

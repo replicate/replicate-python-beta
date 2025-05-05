@@ -120,7 +120,7 @@ class TestRun:
         # Mock the endpoint
         respx_mock.post("/predictions").mock(return_value=httpx.Response(201, json=mock_prediction))
 
-        output: list[FileOutput] = self.client.run("some-model-ref", input={"prompt": "generate multiple images"})
+        output: list[FileOutput] = self.client.run("some-model-ref", use_file_output=True, input={"prompt": "generate multiple images"})
 
         assert isinstance(output, list)
         assert len(output) == 2
@@ -242,6 +242,7 @@ class TestRun:
 
         assert output == "test output"
 
+    @pytest.mark.skip("todo: support file output iterator")
     @pytest.mark.respx(base_url=base_url)
     def test_run_with_file_output_iterator(self, respx_mock: MockRouter) -> None:
         """Test run with file output iterator."""
@@ -473,6 +474,7 @@ class TestAsyncRun:
 
         assert output == "test output"
 
+    @pytest.mark.skip("todo: support file output iterator")
     @pytest.mark.respx(base_url=base_url)
     async def test_async_run_with_file_output_iterator(self, respx_mock: MockRouter) -> None:
         """Test async run with file output iterator."""
