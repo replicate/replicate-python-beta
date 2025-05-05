@@ -3,11 +3,12 @@
 from __future__ import annotations
 
 import os
-from typing import Any, Union, Mapping
+from typing import Any, Union, Mapping, Optional
 from typing_extensions import Self, Unpack, override
 
 import httpx
 
+from replicate.lib._files import FileEncodingStrategy
 from replicate.lib._predictions import Model, Version, ModelVersionIdentifier
 from replicate.types.prediction_create_params import PredictionCreateParamsWithoutVersion
 
@@ -130,6 +131,7 @@ class ReplicateClient(SyncAPIClient):
         self,
         ref: Union[Model, Version, ModelVersionIdentifier, str],
         *,
+        file_encoding_strategy: Optional["FileEncodingStrategy"] = None,
         use_file_output: bool = True,
         wait: Union[int, bool, NotGiven] = NOT_GIVEN,
         **params: Unpack[PredictionCreateParamsWithoutVersion],
@@ -137,7 +139,14 @@ class ReplicateClient(SyncAPIClient):
         """Run a model and wait for its output."""
         from .lib._predictions import run
 
-        return run(self, ref, wait=wait, use_file_output=use_file_output, **params)
+        return run(
+            self,
+            ref,
+            wait=wait,
+            use_file_output=use_file_output,
+            file_encoding_strategy=file_encoding_strategy,
+            **params,
+        )
 
     @property
     @override
@@ -327,13 +336,21 @@ class AsyncReplicateClient(AsyncAPIClient):
         ref: Union[Model, Version, ModelVersionIdentifier, str],
         *,
         use_file_output: bool = True,
+        file_encoding_strategy: Optional["FileEncodingStrategy"] = None,
         wait: Union[int, bool, NotGiven] = NOT_GIVEN,
         **params: Unpack[PredictionCreateParamsWithoutVersion],
     ) -> Any:
         """Run a model and wait for its output."""
         from .lib._predictions import async_run
 
-        return await async_run(self, ref, wait=wait, use_file_output=use_file_output, **params)
+        return await async_run(
+            self,
+            ref,
+            wait=wait,
+            use_file_output=use_file_output,
+            file_encoding_strategy=file_encoding_strategy,
+            **params,
+        )
 
     @property
     @override

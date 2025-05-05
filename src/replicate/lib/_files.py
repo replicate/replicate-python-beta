@@ -3,7 +3,9 @@ from __future__ import annotations
 import io
 import base64
 import mimetypes
-from typing import Any, Iterator, AsyncIterator
+from types import GeneratorType
+from typing import TYPE_CHECKING, Any, Literal, Iterator, Optional, AsyncIterator
+from pathlib import Path
 from typing_extensions import override
 
 import httpx
@@ -11,7 +13,97 @@ import httpx
 from replicate.types.prediction_output import PredictionOutput
 
 from .._utils import is_mapping, is_sequence
-from .._client import ReplicateClient, AsyncReplicateClient
+
+# Use TYPE_CHECKING to avoid circular imports
+if TYPE_CHECKING:
+    from .._client import ReplicateClient, AsyncReplicateClient
+
+FileEncodingStrategy = Literal["base64", "url"]
+
+
+try:
+    import numpy as np  # type: ignore
+
+    HAS_NUMPY = True
+except ImportError:
+    HAS_NUMPY = False  # type: ignore
+
+
+# pylint: disable=too-many-return-statements
+def encode_json(
+    obj: Any,  # noqa: ANN401
+    client: ReplicateClient,
+    file_encoding_strategy: Optional["FileEncodingStrategy"] = None,
+) -> Any:  # noqa: ANN401
+    """
+    Return a JSON-compatible version of the object.
+    """
+
+    if isinstance(obj, dict):
+        return {
+            key: encode_json(value, client, file_encoding_strategy)
+            for key, value in obj.items()  # type: ignore
+        }  # type: ignore
+    if isinstance(obj, (list, set, frozenset, GeneratorType, tuple)):
+        return [encode_json(value, client, file_encoding_strategy) for value in obj]  # type: ignore
+    if isinstance(obj, Path):
+        with obj.open("rb") as file:
+            return encode_json(file, client, file_encoding_strategy)
+    if isinstance(obj, io.IOBase):
+        if file_encoding_strategy == "base64":
+            return base64_encode_file(obj)
+        else:
+            # todo: support files endpoint
+            # return client.files.create(obj).urls["get"]
+            raise NotImplementedError("File upload is not supported yet")
+    if HAS_NUMPY:
+        if isinstance(obj, np.integer):  # type: ignore
+            return int(obj)
+        if isinstance(obj, np.floating):  # type: ignore
+            return float(obj)
+        if isinstance(obj, np.ndarray):  # type: ignore
+            return obj.tolist()
+    return obj
+
+
+async def async_encode_json(
+    obj: Any,  # noqa: ANN401
+    client: AsyncReplicateClient,
+    file_encoding_strategy: Optional["FileEncodingStrategy"] = None,
+) -> Any:  # noqa: ANN401
+    """
+    Asynchronously return a JSON-compatible version of the object.
+    """
+
+    if isinstance(obj, dict):
+        return {
+            key: (await async_encode_json(value, client, file_encoding_strategy))
+            for key, value in obj.items()  # type: ignore
+        }  # type: ignore
+    if isinstance(obj, (list, set, frozenset, GeneratorType, tuple)):
+        return [
+            (await async_encode_json(value, client, file_encoding_strategy))
+            for value in obj  # type: ignore
+        ]
+    if isinstance(obj, Path):
+        with obj.open("rb") as file:
+            return await async_encode_json(file, client, file_encoding_strategy)
+    if isinstance(obj, io.IOBase):
+        if file_encoding_strategy == "base64":
+            # TODO: This should ideally use an async based file reader path.
+            return base64_encode_file(obj)
+        else:
+            # todo: support files endpoint
+            # return (await client.files.async_create(obj)).urls["get"]
+            raise NotImplementedError("File upload is not supported yet")
+    if HAS_NUMPY:
+        if isinstance(obj, np.integer):  # type: ignore
+            return int(obj)
+        if isinstance(obj, np.floating):  # type: ignore
+            return float(obj)
+        if isinstance(obj, np.ndarray):  # type: ignore
+            return obj.tolist()
+    return obj
 
 
 def base64_encode_file(file: io.IOBase) -> str:
@@ -126,7 +218,7 @@ class AsyncFileOutput(httpx.AsyncByteStream):
         return f'{self.__class__.__name__}("{self.url}")'
 
 
-def transform_output(value: PredictionOutput, client: ReplicateClient | AsyncReplicateClient) -> Any:
+def transform_output(value: PredictionOutput, client: "ReplicateClient | AsyncReplicateClient") -> Any:
     """
     Transform the output of a prediction to a `FileOutput` object if it's a URL.
     """
@@ -137,9 +229,11 @@ def transform_output(value: PredictionOutput, client: ReplicateClient | AsyncRep
         elif is_sequence(obj) and not isinstance(obj, str):
             return [transform(item) for item in obj]
         elif isinstance(obj, str) and (obj.startswith("https:") or obj.startswith("data:")):
-            if isinstance(client, AsyncReplicateClient):
-                return AsyncFileOutput(obj, client)
-            return FileOutput(obj, client)
+            # Check if the client is async by looking for async in the class name
+            # we're doing this to avoid circular imports
+            if "Async" in client.__class__.__name__:
+                return AsyncFileOutput(obj, client)  # type: ignore
+            return FileOutput(obj, client)  # type: ignore
         return obj
 
     return transform(value)

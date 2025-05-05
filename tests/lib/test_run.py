@@ -120,7 +120,9 @@ class TestRun:
         # Mock the endpoint
         respx_mock.post("/predictions").mock(return_value=httpx.Response(201, json=mock_prediction))
 
-        output: list[FileOutput] = self.client.run("some-model-ref", use_file_output=True, input={"prompt": "generate multiple images"})
+        output: list[FileOutput] = self.client.run(
+            "some-model-ref", use_file_output=True, input={"prompt": "generate multiple images"}
+        )
 
         assert isinstance(output, list)
         assert len(output) == 2
@@ -155,7 +157,6 @@ class TestRun:
         with pytest.raises(ModelError):
             self.client.run("error-model-ref", input={"prompt": "trigger error"})
 
-    @pytest.mark.skip("todo: support BytesIO conversion")
     @pytest.mark.respx(base_url=base_url)
     def test_run_with_base64_file(self, respx_mock: MockRouter) -> None:
         """Test run with base64 encoded file input."""
@@ -165,7 +166,7 @@ class TestRun:
         # Mock the prediction response
         respx_mock.post("/predictions").mock(return_value=httpx.Response(201, json=create_mock_prediction()))
 
-        output: Any = self.client.run("some-model-ref", input={"file": file_obj})
+        output: Any = self.client.run("some-model-ref", input={"file": file_obj}, file_encoding_strategy="base64")
 
         assert output == "test output"
 
@@ -268,7 +269,9 @@ class TestRun:
             return_value=httpx.Response(200, json=create_mock_prediction(output=file_urls))
         )
 
-        output: list[FileOutput] = self.client.run("some-model-ref", use_file_output=True, input={"prompt": "generate file iterator"})
+        output: list[FileOutput] = self.client.run(
+            "some-model-ref", use_file_output=True, input={"prompt": "generate file iterator"}
+        )
 
         assert isinstance(output, list)
         assert len(output) == 3
@@ -387,7 +390,6 @@ class TestAsyncRun:
         with pytest.raises(ModelError):
             await self.client.run("error-model-ref", input={"prompt": "trigger error"})
 
-    @pytest.mark.skip("todo: support BytesIO conversion")
     @pytest.mark.respx(base_url=base_url)
     async def test_async_run_with_base64_file(self, respx_mock: MockRouter) -> None:
         """Test async run with base64 encoded file input."""
@@ -397,7 +399,7 @@ class TestAsyncRun:
         # Mock the prediction response
         respx_mock.post("/predictions").mock(return_value=httpx.Response(201, json=create_mock_prediction()))
 
-        output: Any = await self.client.run("some-model-ref", input={"file": file_obj})
+        output: Any = await self.client.run("some-model-ref", input={"file": file_obj}, file_encoding_strategy="base64")
 
         assert output == "test output"
 

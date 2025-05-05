@@ -3,6 +3,7 @@ from __future__ import annotations
 from typing import TYPE_CHECKING, Dict, Union, Iterable, Optional
 from typing_extensions import Unpack
 
+from replicate.lib._files import FileEncodingStrategy
 from replicate.types.prediction_create_params import PredictionCreateParamsWithoutVersion
 
 from ..types import PredictionOutput, PredictionCreateParams
@@ -22,6 +23,7 @@ def run(
     *,
     wait: Union[int, bool, NotGiven] = NOT_GIVEN,
     use_file_output: Optional[bool] = True,
+    file_encoding_strategy: Optional["FileEncodingStrategy"] = None,
     **params: Unpack[PredictionCreateParamsWithoutVersion],
 ) -> PredictionOutput | FileOutput | Iterable[FileOutput] | Dict[str, FileOutput]:
     """
@@ -75,15 +77,17 @@ def run(
     if version_id is not None:
         # Create prediction with the specific version ID
         params_with_version: PredictionCreateParams = {**params, "version": version_id}
-        prediction = client.predictions.create(**params_with_version)
+        prediction = client.predictions.create(file_encoding_strategy=file_encoding_strategy, **params_with_version)
     elif owner and name:
         # Create prediction via models resource with owner/name
-        prediction = client.models.predictions.create(model_owner=owner, model_name=name, **params)
+        prediction = client.models.predictions.create(
+            file_encoding_strategy=file_encoding_strategy, model_owner=owner, model_name=name, **params
+        )
     else:
         # If ref is a string but doesn't match expected patterns
         if isinstance(ref, str):
             params_with_version = {**params, "version": ref}
-            prediction = client.predictions.create(**params_with_version)
+            prediction = client.predictions.create(file_encoding_strategy=file_encoding_strategy, **params_with_version)
         else:
             raise ValueError(
                 f"Invalid reference format: {ref}. Expected a model name ('owner/name'), "
@@ -110,7 +114,7 @@ def run(
     # TODO: Return an iterator for completed output if the model has an output iterator array type.
 
     if use_file_output:
-        return transform_output(prediction.output, client) # type: ignore[no-any-return]
+        return transform_output(prediction.output, client)  # type: ignore[no-any-return]
 
     return prediction.output
 
@@ -119,6 +123,7 @@ async def async_run(
     client: "AsyncReplicateClient",
     ref: Union[Model, Version, ModelVersionIdentifier, str],
     *,
+    file_encoding_strategy: Optional["FileEncodingStrategy"] = None,
     wait: Union[int, bool, NotGiven] = NOT_GIVEN,
     use_file_output: Optional[bool] = True,
     **params: Unpack[PredictionCreateParamsWithoutVersion],
@@ -174,15 +179,21 @@ async def async_run(
     if version_id is not None:
         # Create prediction with the specific version ID
         params_with_version: PredictionCreateParams = {**params, "version": version_id}
-        prediction = await client.predictions.create(**params_with_version)
+        prediction = await client.predictions.create(
+            file_encoding_strategy=file_encoding_strategy, **params_with_version
+        )
     elif owner and name:
         # Create prediction via models resource with owner/name
-        prediction = await client.models.predictions.create(model_owner=owner, model_name=name, **params)
+        prediction = await client.models.predictions.create(
+            model_owner=owner, model_name=name, file_encoding_strategy=file_encoding_strategy, **params
+        )
     else:
         # If ref is a string but doesn't match expected patterns
         if isinstance(ref, str):
             params_with_version = {**params, "version": ref}
-            prediction = await client.predictions.create(**params_with_version)
+            prediction = await client.predictions.create(
+                file_encoding_strategy=file_encoding_strategy, **params_with_version
+            )
         else:
             raise ValueError(
                 f"Invalid reference format: {ref}. Expected a model name ('owner/name'), "
@@ -209,6 +220,6 @@ async def async_run(
     # TODO: Return an iterator for completed output if the model has an output iterator array type.
 
     if use_file_output:
-        return transform_output(prediction.output, client) # type: ignore[no-any-return]
+        return transform_output(prediction.output, client)  # type: ignore[no-any-return]
 
     return prediction.output
