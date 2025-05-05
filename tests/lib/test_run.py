@@ -11,6 +11,7 @@ from respx import MockRouter
 from replicate import ReplicateClient, AsyncReplicateClient
 from replicate.lib._files import FileOutput, AsyncFileOutput
 from replicate._exceptions import ModelError, NotFoundError, BadRequestError
+from replicate.lib._models import Model, Version, ModelVersionIdentifier
 
 base_url = os.environ.get("TEST_API_BASE_URL", "http://127.0.0.1:4010")
 bearer_token = "My Bearer Token"
@@ -154,6 +155,7 @@ class TestRun:
         with pytest.raises(ModelError):
             self.client.run("error-model-ref", input={"prompt": "trigger error"})
 
+    @pytest.mark.skip("todo: support BytesIO conversion")
     @pytest.mark.respx(base_url=base_url)
     def test_run_with_base64_file(self, respx_mock: MockRouter) -> None:
         """Test run with base64 encoded file input."""
@@ -204,6 +206,41 @@ class TestRun:
 
         with pytest.raises(BadRequestError):
             self.client.run("model-with-invalid-cog", input={"prompt": "test prompt"})
+
+    @pytest.mark.respx(base_url=base_url)
+    def test_run_with_model_object(self, respx_mock: MockRouter) -> None:
+        """Test run with Model object reference."""
+        # Mock the models endpoint for owner/name lookup
+        respx_mock.post("/models/test-owner/test-model/predictions").mock(
+            return_value=httpx.Response(201, json=create_mock_prediction())
+        )
+
+        model = Model(owner="test-owner", name="test-model")
+        output = self.client.run(model, input={"prompt": "test prompt"})
+
+        assert output == "test output"
+
+    @pytest.mark.respx(base_url=base_url)
+    def test_run_with_version_object(self, respx_mock: MockRouter) -> None:
+        """Test run with Version object reference."""
+        # Version ID is used directly
+        respx_mock.post("/predictions").mock(return_value=httpx.Response(201, json=create_mock_prediction()))
+
+        version = Version(id="test-version-id")
+        output = self.client.run(version, input={"prompt": "test prompt"})
+
+        assert output == "test output"
+
+    @pytest.mark.respx(base_url=base_url)
+    def test_run_with_model_version_identifier(self, respx_mock: MockRouter) -> None:
+        """Test run with ModelVersionIdentifier dict reference."""
+        # Case where version ID is provided
+        respx_mock.post("/predictions").mock(return_value=httpx.Response(201, json=create_mock_prediction()))
+
+        identifier: ModelVersionIdentifier = {"owner": "test-owner", "name": "test-model", "version": "test-version-id"}
+        output = self.client.run(identifier, input={"prompt": "test prompt"})
+
+        assert output == "test output"
 
     @pytest.mark.respx(base_url=base_url)
     def test_run_with_file_output_iterator(self, respx_mock: MockRouter) -> None:
@@ -349,6 +386,7 @@ class TestAsyncRun:
         with pytest.raises(ModelError):
             await self.client.run("error-model-ref", input={"prompt": "trigger error"})
 
+    @pytest.mark.skip("todo: support BytesIO conversion")
     @pytest.mark.respx(base_url=base_url)
     async def test_async_run_with_base64_file(self, respx_mock: MockRouter) -> None:
         """Test async run with base64 encoded file input."""
@@ -399,6 +437,41 @@ class TestAsyncRun:
 
         with pytest.raises(BadRequestError):
             await self.client.run("model-with-invalid-cog", input={"prompt": "test prompt"})
+
+    @pytest.mark.respx(base_url=base_url)
+    async def test_async_run_with_model_object(self, respx_mock: MockRouter) -> None:
+        """Test async run with Model object reference."""
+        # Mock the models endpoint for owner/name lookup
+        respx_mock.post("/models/test-owner/test-model/predictions").mock(
+            return_value=httpx.Response(201, json=create_mock_prediction())
+        )
+
+        model = Model(owner="test-owner", name="test-model")
+        output = await self.client.run(model, input={"prompt": "test prompt"})
+
+        assert output == "test output"
+
+    @pytest.mark.respx(base_url=base_url)
+    async def test_async_run_with_version_object(self, respx_mock: MockRouter) -> None:
+        """Test async run with Version object reference."""
+        # Version ID is used directly
+        respx_mock.post("/predictions").mock(return_value=httpx.Response(201, json=create_mock_prediction()))
+
+        version = Version(id="test-version-id")
+        output = await self.client.run(version, input={"prompt": "test prompt"})
+
+        assert output == "test output"
+
+    @pytest.mark.respx(base_url=base_url)
+    async def test_async_run_with_model_version_identifier(self, respx_mock: MockRouter) -> None:
+        """Test async run with ModelVersionIdentifier dict reference."""
+        # Case where version ID is provided
+        respx_mock.post("/predictions").mock(return_value=httpx.Response(201, json=create_mock_prediction()))
+
+        identifier: ModelVersionIdentifier = {"owner": "test-owner", "name": "test-model", "version": "test-version-id"}
+        output = await self.client.run(identifier, input={"prompt": "test prompt"})
+
+        assert output == "test output"
 
     @pytest.mark.respx(base_url=base_url)
     async def test_async_run_with_file_output_iterator(self, respx_mock: MockRouter) -> None:

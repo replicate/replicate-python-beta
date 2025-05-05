@@ -8,6 +8,7 @@ from typing_extensions import Self, Unpack, override
 
 import httpx
 
+from replicate.lib._predictions import Model, Version, ModelVersionIdentifier
 from replicate.types.prediction_create_params import PredictionCreateParamsWithoutVersion
 
 from . import _exceptions
@@ -127,7 +128,7 @@ class ReplicateClient(SyncAPIClient):
 
     def run(
         self,
-        ref: str,
+        ref: Union[Model, Version, ModelVersionIdentifier, str],
         *,
         wait: Union[int, bool, NotGiven] = NOT_GIVEN,
         **params: Unpack[PredictionCreateParamsWithoutVersion],
@@ -322,7 +323,7 @@ class AsyncReplicateClient(AsyncAPIClient):
 
     async def run(
         self,
-        ref: str,
+        ref: Union[Model, Version, ModelVersionIdentifier, str],
         *,
         wait: Union[int, bool, NotGiven] = NOT_GIVEN,
         **params: Unpack[PredictionCreateParamsWithoutVersion],

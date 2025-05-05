@@ -39,6 +39,7 @@ from ._exceptions import (
     UnprocessableEntityError,
     APIResponseValidationError,
 )
+from .lib._models import Model as Model, Version as Version, ModelVersionIdentifier as ModelVersionIdentifier
 from ._base_client import DefaultHttpxClient, DefaultAsyncHttpxClient
 from ._utils._logs import setup_logging as _setup_logging
 
@@ -83,6 +84,9 @@ __all__ = [
     "DefaultAsyncHttpxClient",
     "FileOutput",
     "AsyncFileOutput",
+    "Model",
+    "Version",
+    "ModelVersionIdentifier",
 ]
 
 _setup_logging()
