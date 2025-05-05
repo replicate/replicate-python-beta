@@ -3,6 +3,7 @@
 Methods:
 
 - <code title="get /collections">client.collections.<a href="./src/replicate/resources/collections.py">list</a>() -> None</code>
+- <code title="get /collections/{collection_slug}">client.collections.<a href="./src/replicate/resources/collections.py">get</a>(collection_slug) -> None</code>
 
 # Deployments
 
@@ -24,7 +25,6 @@ Methods:
 - <code title="get /deployments">client.deployments.<a href="./src/replicate/resources/deployments/deployments.py">list</a>() -> <a href="./src/replicate/types/deployment_list_response.py">SyncCursorURLPage[DeploymentListResponse]</a></code>
 - <code title="delete /deployments/{deployment_owner}/{deployment_name}">client.deployments.<a href="./src/replicate/resources/deployments/deployments.py">delete</a>(deployment_name, \*, deployment_owner) -> None</code>
 - <code title="get /deployments/{deployment_owner}/{deployment_name}">client.deployments.<a href="./src/replicate/resources/deployments/deployments.py">get</a>(deployment_name, \*, deployment_owner) -> <a href="./src/replicate/types/deployment_get_response.py">DeploymentGetResponse</a></code>
-- <code title="get /collections">client.deployments.<a href="./src/replicate/resources/deployments/deployments.py">list_em_all</a>() -> None</code>
 
 ## Predictions
 
@@ -43,19 +43,18 @@ from replicate.types import HardwareListResponse
 Methods:
 
 - <code title="get /hardware">client.hardware.<a href="./src/replicate/resources/hardware.py">list</a>() -> <a href="./src/replicate/types/hardware_list_response.py">HardwareListResponse</a></code>
-- <code title="get /collections/{collection_slug}">client.hardware.<a href="./src/replicate/resources/hardware.py">retrieve_collections</a>(collection_slug) -> None</code>
 
-# Accounts
+# Account
 
 Types:
 
 ```python
-from replicate.types import AccountListResponse
+from replicate.types import AccountGetResponse
 ```
 
 Methods:
 
-- <code title="get /account">client.accounts.<a href="./src/replicate/resources/accounts.py">list</a>() -> <a href="./src/replicate/types/account_list_response.py">AccountListResponse</a></code>
+- <code title="get /account">client.account.<a href="./src/replicate/resources/account.py">get</a>() -> <a href="./src/replicate/types/account_get_response.py">AccountGetResponse</a></code>
 
 # Models
 
@@ -70,14 +69,20 @@ Methods:
 - <code title="post /models">client.models.<a href="./src/replicate/resources/models/models.py">create</a>(\*\*<a href="src/replicate/types/model_create_params.py">params</a>) -> None</code>
 - <code title="get /models">client.models.<a href="./src/replicate/resources/models/models.py">list</a>() -> <a href="./src/replicate/types/model_list_response.py">SyncCursorURLPage[ModelListResponse]</a></code>
 - <code title="delete /models/{model_owner}/{model_name}">client.models.<a href="./src/replicate/resources/models/models.py">delete</a>(model_name, \*, model_owner) -> None</code>
-- <code title="post /models/{model_owner}/{model_name}/predictions">client.models.<a href="./src/replicate/resources/models/models.py">create_prediction</a>(model_name, \*, model_owner, \*\*<a href="src/replicate/types/model_create_prediction_params.py">params</a>) -> <a href="./src/replicate/types/prediction.py">Prediction</a></code>
 - <code title="get /models/{model_owner}/{model_name}">client.models.<a href="./src/replicate/resources/models/models.py">get</a>(model_name, \*, model_owner) -> None</code>
+- <code title="query /models">client.models.<a href="./src/replicate/resources/models/models.py">search</a>(\*\*<a href="src/replicate/types/model_search_params.py">params</a>) -> None</code>
 
 ## Examples
 
 Methods:
 
 - <code title="get /models/{model_owner}/{model_name}/examples">client.models.examples.<a href="./src/replicate/resources/models/examples.py">list</a>(model_name, \*, model_owner) -> None</code>
+
+## Predictions
+
+Methods:
+
+- <code title="post /models/{model_owner}/{model_name}/predictions">client.models.predictions.<a href="./src/replicate/resources/models/predictions.py">create</a>(model_name, \*, model_owner, \*\*<a href="src/replicate/types/models/prediction_create_params.py">params</a>) -> <a href="./src/replicate/types/prediction.py">Prediction</a></code>
 
 ## Readme
 
@@ -93,17 +98,10 @@ Methods:
 
 ## Versions
 
-Types:
-
-```python
-from replicate.types.models import VersionCreateTrainingResponse
-```
-
 Methods:
 
 - <code title="get /models/{model_owner}/{model_name}/versions">client.models.versions.<a href="./src/replicate/resources/models/versions.py">list</a>(model_name, \*, model_owner) -> None</code>
 - <code title="delete /models/{model_owner}/{model_name}/versions/{version_id}">client.models.versions.<a href="./src/replicate/resources/models/versions.py">delete</a>(version_id, \*, model_owner, model_name) -> None</code>
-- <code title="post /models/{model_owner}/{model_name}/versions/{version_id}/trainings">client.models.versions.<a href="./src/replicate/resources/models/versions.py">create_training</a>(version_id, \*, model_owner, model_name, \*\*<a href="src/replicate/types/models/version_create_training_params.py">params</a>) -> <a href="./src/replicate/types/models/version_create_training_response.py">VersionCreateTrainingResponse</a></code>
 - <code title="get /models/{model_owner}/{model_name}/versions/{version_id}">client.models.versions.<a href="./src/replicate/resources/models/versions.py">get</a>(version_id, \*, model_owner, model_name) -> None</code>
 
 # Predictions
@@ -126,11 +124,17 @@ Methods:
 Types:
 
 ```python
-from replicate.types import TrainingListResponse, TrainingCancelResponse, TrainingGetResponse
+from replicate.types import (
+    TrainingCreateResponse,
+    TrainingListResponse,
+    TrainingCancelResponse,
+    TrainingGetResponse,
+)
 ```
 
 Methods:
 
+- <code title="post /models/{model_owner}/{model_name}/versions/{version_id}/trainings">client.trainings.<a href="./src/replicate/resources/trainings.py">create</a>(version_id, \*, model_owner, model_name, \*\*<a href="src/replicate/types/training_create_params.py">params</a>) -> <a href="./src/replicate/types/training_create_response.py">TrainingCreateResponse</a></code>
 - <code title="get /trainings">client.trainings.<a href="./src/replicate/resources/trainings.py">list</a>() -> <a href="./src/replicate/types/training_list_response.py">SyncCursorURLPage[TrainingListResponse]</a></code>
 - <code title="post /trainings/{training_id}/cancel">client.trainings.<a href="./src/replicate/resources/trainings.py">cancel</a>(training_id) -> <a href="./src/replicate/types/training_cancel_response.py">TrainingCancelResponse</a></code>
 - <code title="get /trainings/{training_id}">client.trainings.<a href="./src/replicate/resources/trainings.py">get</a>(training_id) -> <a href="./src/replicate/types/training_get_response.py">TrainingGetResponse</a></code>
@@ -139,12 +143,14 @@ Methods:
 
 ## Default
 
+### Secret
+
 Types:
 
 ```python
-from replicate.types.webhooks import DefaultRetrieveSecretResponse
+from replicate.types.webhooks.default import SecretGetResponse
 ```
 
 Methods:
 
-- <code title="get /webhooks/default/secret">client.webhooks.default.<a href="./src/replicate/resources/webhooks/default.py">retrieve_secret</a>() -> <a href="./src/replicate/types/webhooks/default_retrieve_secret_response.py">DefaultRetrieveSecretResponse</a></code>
+- <code title="get /webhooks/default/secret">client.webhooks.default.secret.<a href="./src/replicate/resources/webhooks/default/secret.py">get</a>() -> <a href="./src/replicate/types/webhooks/default/secret_get_response.py">SecretGetResponse</a></code>

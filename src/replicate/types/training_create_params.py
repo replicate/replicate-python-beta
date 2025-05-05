@@ -5,10 +5,10 @@ from __future__ import annotations
 from typing import List
 from typing_extensions import Literal, Required, TypedDict
 
-__all__ = ["VersionCreateTrainingParams"]
+__all__ = ["TrainingCreateParams"]
 
 
-class VersionCreateTrainingParams(TypedDict, total=False):
+class TrainingCreateParams(TypedDict, total=False):
     model_owner: Required[str]
 
     model_name: Required[str]

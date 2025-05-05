@@ -32,6 +32,14 @@ from .versions import (
     VersionsResourceWithStreamingResponse,
     AsyncVersionsResourceWithStreamingResponse,
 )
+from .predictions import (
+    PredictionsResource,
+    AsyncPredictionsResource,
+    PredictionsResourceWithRawResponse,
+    AsyncPredictionsResourceWithRawResponse,
+    PredictionsResourceWithStreamingResponse,
+    AsyncPredictionsResourceWithStreamingResponse,
+)
 
 __all__ = [
     "ExamplesResource",
@@ -40,6 +48,12 @@ __all__ = [
     "AsyncExamplesResourceWithRawResponse",
     "ExamplesResourceWithStreamingResponse",
     "AsyncExamplesResourceWithStreamingResponse",
+    "PredictionsResource",
+    "AsyncPredictionsResource",
+    "PredictionsResourceWithRawResponse",
+    "AsyncPredictionsResourceWithRawResponse",
+    "PredictionsResourceWithStreamingResponse",
+    "AsyncPredictionsResourceWithStreamingResponse",
     "ReadmeResource",
     "AsyncReadmeResource",
     "ReadmeResourceWithRawResponse",

@@ -8,8 +8,6 @@ from typing import Any, cast
 import pytest
 
 from replicate import ReplicateClient, AsyncReplicateClient
-from tests.utils import assert_matches_type
-from replicate.types.models import VersionCreateTrainingResponse
 
 base_url = os.environ.get("TEST_API_BASE_URL", "http://127.0.0.1:4010")
 
@@ -131,96 +129,6 @@ class TestVersions:
                 version_id="",
                 model_owner="model_owner",
                 model_name="model_name",
-            )
-
-    @pytest.mark.skip()
-    @parametrize
-    def test_method_create_training(self, client: ReplicateClient) -> None:
-        version = client.models.versions.create_training(
-            version_id="version_id",
-            model_owner="model_owner",
-            model_name="model_name",
-            destination="destination",
-            input={},
-        )
-        assert_matches_type(VersionCreateTrainingResponse, version, path=["response"])
-
-    @pytest.mark.skip()
-    @parametrize
-    def test_method_create_training_with_all_params(self, client: ReplicateClient) -> None:
-        version = client.models.versions.create_training(
-            version_id="version_id",
-            model_owner="model_owner",
-            model_name="model_name",
-            destination="destination",
-            input={},
-            webhook="webhook",
-            webhook_events_filter=["start"],
-        )
-        assert_matches_type(VersionCreateTrainingResponse, version, path=["response"])
-
-    @pytest.mark.skip()
-    @parametrize
-    def test_raw_response_create_training(self, client: ReplicateClient) -> None:
-        response = client.models.versions.with_raw_response.create_training(
-            version_id="version_id",
-            model_owner="model_owner",
-            model_name="model_name",
-            destination="destination",
-            input={},
-        )
-
-        assert response.is_closed is True
-        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
-        version = response.parse()
-        assert_matches_type(VersionCreateTrainingResponse, version, path=["response"])
-
-    @pytest.mark.skip()
-    @parametrize
-    def test_streaming_response_create_training(self, client: ReplicateClient) -> None:
-        with client.models.versions.with_streaming_response.create_training(
-            version_id="version_id",
-            model_owner="model_owner",
-            model_name="model_name",
-            destination="destination",
-            input={},
-        ) as response:
-            assert not response.is_closed
-            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
-
-            version = response.parse()
-            assert_matches_type(VersionCreateTrainingResponse, version, path=["response"])
-
-        assert cast(Any, response.is_closed) is True
-
-    @pytest.mark.skip()
-    @parametrize
-    def test_path_params_create_training(self, client: ReplicateClient) -> None:
-        with pytest.raises(ValueError, match=r"Expected a non-empty value for `model_owner` but received ''"):
-            client.models.versions.with_raw_response.create_training(
-                version_id="version_id",
-                model_owner="",
-                model_name="model_name",
-                destination="destination",
-                input={},
-            )
-
-        with pytest.raises(ValueError, match=r"Expected a non-empty value for `model_name` but received ''"):
-            client.models.versions.with_raw_response.create_training(
-                version_id="version_id",
-                model_owner="model_owner",
-                model_name="",
-                destination="destination",
-                input={},
-            )
-
-        with pytest.raises(ValueError, match=r"Expected a non-empty value for `version_id` but received ''"):
-            client.models.versions.with_raw_response.create_training(
-                version_id="",
-                model_owner="model_owner",
-                model_name="model_name",
-                destination="destination",
-                input={},
             )
 
     @pytest.mark.skip()
@@ -405,96 +313,6 @@ class TestAsyncVersions:
                 version_id="",
                 model_owner="model_owner",
                 model_name="model_name",
-            )
-
-    @pytest.mark.skip()
-    @parametrize
-    async def test_method_create_training(self, async_client: AsyncReplicateClient) -> None:
-        version = await async_client.models.versions.create_training(
-            version_id="version_id",
-            model_owner="model_owner",
-            model_name="model_name",
-            destination="destination",
-            input={},
-        )
-        assert_matches_type(VersionCreateTrainingResponse, version, path=["response"])
-
-    @pytest.mark.skip()
-    @parametrize
-    async def test_method_create_training_with_all_params(self, async_client: AsyncReplicateClient) -> None:
-        version = await async_client.models.versions.create_training(
-            version_id="version_id",
-            model_owner="model_owner",
-            model_name="model_name",
-            destination="destination",
-            input={},
-            webhook="webhook",
-            webhook_events_filter=["start"],
-        )
-        assert_matches_type(VersionCreateTrainingResponse, version, path=["response"])
-
-    @pytest.mark.skip()
-    @parametrize
-    async def test_raw_response_create_training(self, async_client: AsyncReplicateClient) -> None:
-        response = await async_client.models.versions.with_raw_response.create_training(
-            version_id="version_id",
-            model_owner="model_owner",
-            model_name="model_name",
-            destination="destination",
-            input={},
-        )
-
-        assert response.is_closed is True
-        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
-        version = await response.parse()
-        assert_matches_type(VersionCreateTrainingResponse, version, path=["response"])
-
-    @pytest.mark.skip()
-    @parametrize
-    async def test_streaming_response_create_training(self, async_client: AsyncReplicateClient) -> None:
-        async with async_client.models.versions.with_streaming_response.create_training(
-            version_id="version_id",
-            model_owner="model_owner",
-            model_name="model_name",
-            destination="destination",
-            input={},
-        ) as response:
-            assert not response.is_closed
-            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
-
-            version = await response.parse()
-            assert_matches_type(VersionCreateTrainingResponse, version, path=["response"])
-
-        assert cast(Any, response.is_closed) is True
-
-    @pytest.mark.skip()
-    @parametrize
-    async def test_path_params_create_training(self, async_client: AsyncReplicateClient) -> None:
-        with pytest.raises(ValueError, match=r"Expected a non-empty value for `model_owner` but received ''"):
-            await async_client.models.versions.with_raw_response.create_training(
-                version_id="version_id",
-                model_owner="",
-                model_name="model_name",
-                destination="destination",
-                input={},
-            )
-
-        with pytest.raises(ValueError, match=r"Expected a non-empty value for `model_name` but received ''"):
-            await async_client.models.versions.with_raw_response.create_training(
-                version_id="version_id",
-                model_owner="model_owner",
-                model_name="",
-                destination="destination",
-                input={},
-            )
-
-        with pytest.raises(ValueError, match=r"Expected a non-empty value for `version_id` but received ''"):
-            await async_client.models.versions.with_raw_response.create_training(
-                version_id="",
-                model_owner="model_owner",
-                model_name="model_name",
-                destination="destination",
-                input={},
             )
 
     @pytest.mark.skip()

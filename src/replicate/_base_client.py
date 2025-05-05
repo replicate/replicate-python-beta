@@ -1221,6 +1221,20 @@ class SyncAPIClient(BaseClient[httpx.Client, Stream[Any]]):
         )
         return cast(ResponseT, self.request(cast_to, opts, stream=stream, stream_cls=stream_cls))
 
+    def query(
+        self,
+        path: str,
+        *,
+        cast_to: Type[ResponseT],
+        body: Body | None = None,
+        options: RequestOptions = {},
+        files: RequestFiles | None = None,
+    ) -> ResponseT:
+        opts = FinalRequestOptions.construct(
+            method="query", url=path, json_data=body, files=to_httpx_files(files), **options
+        )
+        return self.request(cast_to, opts)
+
     def patch(
         self,
         path: str,
@@ -1708,6 +1722,20 @@ class AsyncAPIClient(BaseClient[httpx.AsyncClient, AsyncStream[Any]]):
             method="post", url=path, json_data=body, files=await async_to_httpx_files(files), **options
         )
         return await self.request(cast_to, opts, stream=stream, stream_cls=stream_cls)
+
+    async def query(
+        self,
+        path: str,
+        *,
+        cast_to: Type[ResponseT],
+        body: Body | None = None,
+        options: RequestOptions = {},
+        files: RequestFiles | None = None,
+    ) -> ResponseT:
+        opts = FinalRequestOptions.construct(
+            method="query", url=path, json_data=body, files=await async_to_httpx_files(files), **options
+        )
+        return await self.request(cast_to, opts)
 
     async def patch(
         self,

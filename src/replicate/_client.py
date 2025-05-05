@@ -23,7 +23,7 @@ from ._types import (
 )
 from ._utils import is_given, get_async_library
 from ._version import __version__
-from .resources import accounts, hardware, trainings, collections, predictions
+from .resources import account, hardware, trainings, collections, predictions
 from ._streaming import Stream as Stream, AsyncStream as AsyncStream
 from ._exceptions import APIStatusError, ReplicateClientError
 from ._base_client import (
@@ -51,7 +51,7 @@ class ReplicateClient(SyncAPIClient):
     collections: collections.CollectionsResource
     deployments: deployments.DeploymentsResource
     hardware: hardware.HardwareResource
-    accounts: accounts.AccountsResource
+    account: account.AccountResource
     models: models.ModelsResource
     predictions: predictions.PredictionsResource
     trainings: trainings.TrainingsResource
@@ -116,7 +116,7 @@ class ReplicateClient(SyncAPIClient):
         self.collections = collections.CollectionsResource(self)
         self.deployments = deployments.DeploymentsResource(self)
         self.hardware = hardware.HardwareResource(self)
-        self.accounts = accounts.AccountsResource(self)
+        self.account = account.AccountResource(self)
         self.models = models.ModelsResource(self)
         self.predictions = predictions.PredictionsResource(self)
         self.trainings = trainings.TrainingsResource(self)
@@ -246,7 +246,7 @@ class AsyncReplicateClient(AsyncAPIClient):
     collections: collections.AsyncCollectionsResource
     deployments: deployments.AsyncDeploymentsResource
     hardware: hardware.AsyncHardwareResource
-    accounts: accounts.AsyncAccountsResource
+    account: account.AsyncAccountResource
     models: models.AsyncModelsResource
     predictions: predictions.AsyncPredictionsResource
     trainings: trainings.AsyncTrainingsResource
@@ -311,7 +311,7 @@ class AsyncReplicateClient(AsyncAPIClient):
         self.collections = collections.AsyncCollectionsResource(self)
         self.deployments = deployments.AsyncDeploymentsResource(self)
         self.hardware = hardware.AsyncHardwareResource(self)
-        self.accounts = accounts.AsyncAccountsResource(self)
+        self.account = account.AsyncAccountResource(self)
         self.models = models.AsyncModelsResource(self)
         self.predictions = predictions.AsyncPredictionsResource(self)
         self.trainings = trainings.AsyncTrainingsResource(self)
@@ -442,7 +442,7 @@ class ReplicateClientWithRawResponse:
         self.collections = collections.CollectionsResourceWithRawResponse(client.collections)
         self.deployments = deployments.DeploymentsResourceWithRawResponse(client.deployments)
         self.hardware = hardware.HardwareResourceWithRawResponse(client.hardware)
-        self.accounts = accounts.AccountsResourceWithRawResponse(client.accounts)
+        self.account = account.AccountResourceWithRawResponse(client.account)
         self.models = models.ModelsResourceWithRawResponse(client.models)
         self.predictions = predictions.PredictionsResourceWithRawResponse(client.predictions)
         self.trainings = trainings.TrainingsResourceWithRawResponse(client.trainings)
@@ -454,7 +454,7 @@ class AsyncReplicateClientWithRawResponse:
         self.collections = collections.AsyncCollectionsResourceWithRawResponse(client.collections)
         self.deployments = deployments.AsyncDeploymentsResourceWithRawResponse(client.deployments)
         self.hardware = hardware.AsyncHardwareResourceWithRawResponse(client.hardware)
-        self.accounts = accounts.AsyncAccountsResourceWithRawResponse(client.accounts)
+        self.account = account.AsyncAccountResourceWithRawResponse(client.account)
         self.models = models.AsyncModelsResourceWithRawResponse(client.models)
         self.predictions = predictions.AsyncPredictionsResourceWithRawResponse(client.predictions)
         self.trainings = trainings.AsyncTrainingsResourceWithRawResponse(client.trainings)
@@ -466,7 +466,7 @@ class ReplicateClientWithStreamedResponse:
         self.collections = collections.CollectionsResourceWithStreamingResponse(client.collections)
         self.deployments = deployments.DeploymentsResourceWithStreamingResponse(client.deployments)
         self.hardware = hardware.HardwareResourceWithStreamingResponse(client.hardware)
-        self.accounts = accounts.AccountsResourceWithStreamingResponse(client.accounts)
+        self.account = account.AccountResourceWithStreamingResponse(client.account)
         self.models = models.ModelsResourceWithStreamingResponse(client.models)
         self.predictions = predictions.PredictionsResourceWithStreamingResponse(client.predictions)
         self.trainings = trainings.TrainingsResourceWithStreamingResponse(client.trainings)
@@ -478,7 +478,7 @@ class AsyncReplicateClientWithStreamedResponse:
         self.collections = collections.AsyncCollectionsResourceWithStreamingResponse(client.collections)
         self.deployments = deployments.AsyncDeploymentsResourceWithStreamingResponse(client.deployments)
         self.hardware = hardware.AsyncHardwareResourceWithStreamingResponse(client.hardware)
-        self.accounts = accounts.AsyncAccountsResourceWithStreamingResponse(client.accounts)
+        self.account = account.AsyncAccountResourceWithStreamingResponse(client.account)
         self.models = models.AsyncModelsResourceWithStreamingResponse(client.models)
         self.predictions = predictions.AsyncPredictionsResourceWithStreamingResponse(client.predictions)
         self.trainings = trainings.AsyncTrainingsResourceWithStreamingResponse(client.trainings)

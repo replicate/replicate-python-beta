@@ -1,5 +1,46 @@
 # Changelog
 
+## 0.1.0-alpha.8 (2025-04-30)
+
+Full Changelog: [v0.1.0-alpha.7...v0.1.0-alpha.8](https://github.com/replicate/replicate-python-stainless/compare/v0.1.0-alpha.7...v0.1.0-alpha.8)
+
+### Features
+
+* **api:** api update ([a5aa64a](https://github.com/replicate/replicate-python-stainless/commit/a5aa64a71517fdf74e61e4debe68fba458f2e380))
+* **client:** add support for model queries ([6df1fd6](https://github.com/replicate/replicate-python-stainless/commit/6df1fd6b994373a49b602258a8064998c88a0eca))
+
+## 0.1.0-alpha.7 (2025-04-24)
+
+Full Changelog: [v0.1.0-alpha.6...v0.1.0-alpha.7](https://github.com/replicate/replicate-python-stainless/compare/v0.1.0-alpha.6...v0.1.0-alpha.7)
+
+### Features
+
+* enable mcp package publishing ([f116fbb](https://github.com/replicate/replicate-python-stainless/commit/f116fbbb59329b66a998e43c850bcfab05e7398b))
+
+## 0.1.0-alpha.6 (2025-04-24)
+
+Full Changelog: [v0.1.0-alpha.5...v0.1.0-alpha.6](https://github.com/replicate/replicate-python-stainless/compare/v0.1.0-alpha.5...v0.1.0-alpha.6)
+
+### Bug Fixes
+
+* correct mapping for account.get ([e501778](https://github.com/replicate/replicate-python-stainless/commit/e501778a22c481147fbe419803a3f52ac9ba8243))
+
+
+### Chores
+
+* broadly detect json family of content-type headers ([eeaa507](https://github.com/replicate/replicate-python-stainless/commit/eeaa5071ed47e31264a268d9445fe8c0b8d059b1))
+* **ci:** only use depot for staging repos ([f7ec0b8](https://github.com/replicate/replicate-python-stainless/commit/f7ec0b8e11782aa89eee5f4af962158b665eee13))
+* **internal:** codegen related update ([fd43800](https://github.com/replicate/replicate-python-stainless/commit/fd43800c1da9a5c6ff06309a6c4a6a3808decff9))
+
+## 0.1.0-alpha.5 (2025-04-24)
+
+Full Changelog: [v0.1.0-alpha.4...v0.1.0-alpha.5](https://github.com/replicate/replicate-python-stainless/compare/v0.1.0-alpha.4...v0.1.0-alpha.5)
+
+### Features
+
+* add missing resources ([8bbddc7](https://github.com/replicate/replicate-python-stainless/commit/8bbddc7a788f4488311b8ed408d4b020db8e006b))
+* enable `openapi.code_samples` ([85810f5](https://github.com/replicate/replicate-python-stainless/commit/85810f5f4c0caf680a90fca80f1bfcd639e76894))
+
 ## 0.1.0-alpha.4 (2025-04-23)
 
 Full Changelog: [v0.1.0-alpha.3...v0.1.0-alpha.4](https://github.com/replicate/replicate-python-stainless/compare/v0.1.0-alpha.3...v0.1.0-alpha.4)

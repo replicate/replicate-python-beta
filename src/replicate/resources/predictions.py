@@ -83,7 +83,7 @@ class PredictionsResource(SyncAPIResource):
 
         ```console
         curl -s -X POST -H 'Prefer: wait' \\
-          -d '{"version": "5c7d5dc6dd8bf75c1acaa8565735e7986bc5b66206b55cca93cb72c9bf15ccaa", "input": {"text": "Alice"}}' \\
+          -d '{"version": "replicate/hello-world:5c7d5dc6dd8bf75c1acaa8565735e7986bc5b66206b55cca93cb72c9bf15ccaa", "input": {"text": "Alice"}}' \\
           -H "Authorization: Bearer $REPLICATE_API_TOKEN" \\
           -H 'Content-Type: application/json' \\
           https://api.replicate.com/v1/predictions
@@ -120,7 +120,14 @@ class PredictionsResource(SyncAPIResource):
               - you don't want to upload and host the file somewhere
               - you don't need to use the file again (Replicate will not store it)
 
-          version: The ID of the model version that you want to run.
+          version: The ID of the model version that you want to run. This can be specified in two
+              formats:
+
+              1. Just the 64-character version ID:
+                 `9dcd6d78e7c6560c340d916fe32e9f24aabfa331e5cce95fe31f77fb03121426`
+              2. Full model identifier with version ID in the format `{owner}/{model}:{id}`.
+                 For example,
+                 `replicate/hello-world:9dcd6d78e7c6560c340d916fe32e9f24aabfa331e5cce95fe31f77fb03121426`
 
           stream: **This field is deprecated.**
 
@@ -502,7 +509,7 @@ class AsyncPredictionsResource(AsyncAPIResource):
 
         ```console
         curl -s -X POST -H 'Prefer: wait' \\
-          -d '{"version": "5c7d5dc6dd8bf75c1acaa8565735e7986bc5b66206b55cca93cb72c9bf15ccaa", "input": {"text": "Alice"}}' \\
+          -d '{"version": "replicate/hello-world:5c7d5dc6dd8bf75c1acaa8565735e7986bc5b66206b55cca93cb72c9bf15ccaa", "input": {"text": "Alice"}}' \\
           -H "Authorization: Bearer $REPLICATE_API_TOKEN" \\
           -H 'Content-Type: application/json' \\
           https://api.replicate.com/v1/predictions
@@ -539,7 +546,14 @@ class AsyncPredictionsResource(AsyncAPIResource):
               - you don't want to upload and host the file somewhere
               - you don't need to use the file again (Replicate will not store it)
 
-          version: The ID of the model version that you want to run.
+          version: The ID of the model version that you want to run. This can be specified in two
+              formats:
+
+              1. Just the 64-character version ID:
+                 `9dcd6d78e7c6560c340d916fe32e9f24aabfa331e5cce95fe31f77fb03121426`
+              2. Full model identifier with version ID in the format `{owner}/{model}:{id}`.
+                 For example,
+                 `replicate/hello-world:9dcd6d78e7c6560c340d916fe32e9f24aabfa331e5cce95fe31f77fb03121426`
 
           stream: **This field is deprecated.**
 

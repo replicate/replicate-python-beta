@@ -451,50 +451,6 @@ class DeploymentsResource(SyncAPIResource):
             cast_to=DeploymentGetResponse,
         )
 
-    def list_em_all(
-        self,
-        *,
-        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
-        # The extra values given here take precedence over values defined on the client or passed to this method.
-        extra_headers: Headers | None = None,
-        extra_query: Query | None = None,
-        extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> None:
-        """
-        Example cURL request:
-
-        ```console
-        curl -s \\
-          -H "Authorization: Bearer $REPLICATE_API_TOKEN" \\
-          https://api.replicate.com/v1/collections
-        ```
-
-        The response will be a paginated JSON list of collection objects:
-
-        ```json
-        {
-          "next": "null",
-          "previous": null,
-          "results": [
-            {
-              "name": "Super resolution",
-              "slug": "super-resolution",
-              "description": "Upscaling models that create high-quality images from low-quality images."
-            }
-          ]
-        }
-        ```
-        """
-        extra_headers = {"Accept": "*/*", **(extra_headers or {})}
-        return self._get(
-            "/collections",
-            options=make_request_options(
-                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
-            ),
-            cast_to=NoneType,
-        )
-
 
 class AsyncDeploymentsResource(AsyncAPIResource):
     @cached_property
@@ -914,50 +870,6 @@ class AsyncDeploymentsResource(AsyncAPIResource):
             cast_to=DeploymentGetResponse,
         )
 
-    async def list_em_all(
-        self,
-        *,
-        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
-        # The extra values given here take precedence over values defined on the client or passed to this method.
-        extra_headers: Headers | None = None,
-        extra_query: Query | None = None,
-        extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> None:
-        """
-        Example cURL request:
-
-        ```console
-        curl -s \\
-          -H "Authorization: Bearer $REPLICATE_API_TOKEN" \\
-          https://api.replicate.com/v1/collections
-        ```
-
-        The response will be a paginated JSON list of collection objects:
-
-        ```json
-        {
-          "next": "null",
-          "previous": null,
-          "results": [
-            {
-              "name": "Super resolution",
-              "slug": "super-resolution",
-              "description": "Upscaling models that create high-quality images from low-quality images."
-            }
-          ]
-        }
-        ```
-        """
-        extra_headers = {"Accept": "*/*", **(extra_headers or {})}
-        return await self._get(
-            "/collections",
-            options=make_request_options(
-                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
-            ),
-            cast_to=NoneType,
-        )
-
 
 class DeploymentsResourceWithRawResponse:
     def __init__(self, deployments: DeploymentsResource) -> None:
@@ -977,9 +889,6 @@ class DeploymentsResourceWithRawResponse:
         )
         self.get = to_raw_response_wrapper(
             deployments.get,
-        )
-        self.list_em_all = to_raw_response_wrapper(
-            deployments.list_em_all,
         )
 
     @cached_property
@@ -1006,9 +915,6 @@ class AsyncDeploymentsResourceWithRawResponse:
         self.get = async_to_raw_response_wrapper(
             deployments.get,
         )
-        self.list_em_all = async_to_raw_response_wrapper(
-            deployments.list_em_all,
-        )
 
     @cached_property
     def predictions(self) -> AsyncPredictionsResourceWithRawResponse:
@@ -1034,9 +940,6 @@ class DeploymentsResourceWithStreamingResponse:
         self.get = to_streamed_response_wrapper(
             deployments.get,
         )
-        self.list_em_all = to_streamed_response_wrapper(
-            deployments.list_em_all,
-        )
 
     @cached_property
     def predictions(self) -> PredictionsResourceWithStreamingResponse:
@@ -1061,9 +964,6 @@ class AsyncDeploymentsResourceWithStreamingResponse:
         )
         self.get = async_to_streamed_response_wrapper(
             deployments.get,
-        )
-        self.list_em_all = async_to_streamed_response_wrapper(
-            deployments.list_em_all,
         )
 
     @cached_property
