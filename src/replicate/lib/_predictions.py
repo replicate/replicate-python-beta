@@ -21,7 +21,7 @@ def run(
     ref: Union[Model, Version, ModelVersionIdentifier, str],
     *,
     wait: Union[int, bool, NotGiven] = NOT_GIVEN,
-    _use_file_output: Optional[bool] = True,
+    use_file_output: Optional[bool] = True,
     **params: Unpack[PredictionCreateParamsWithoutVersion],
 ) -> PredictionOutput | FileOutput | Iterable[FileOutput] | Dict[str, FileOutput]:
     """
@@ -109,7 +109,10 @@ def run(
 
     # TODO: Return an iterator for completed output if the model has an output iterator array type.
 
-    return transform_output(prediction.output, client)  # type: ignore[no-any-return]
+    if use_file_output:
+        return transform_output(prediction.output, client) # type: ignore[no-any-return]
+
+    return prediction.output
 
 
 async def async_run(
@@ -117,7 +120,7 @@ async def async_run(
     ref: Union[Model, Version, ModelVersionIdentifier, str],
     *,
     wait: Union[int, bool, NotGiven] = NOT_GIVEN,
-    _use_file_output: Optional[bool] = True,
+    use_file_output: Optional[bool] = True,
     **params: Unpack[PredictionCreateParamsWithoutVersion],
 ) -> PredictionOutput | FileOutput | Iterable[FileOutput] | Dict[str, FileOutput]:
     """
@@ -205,4 +208,7 @@ async def async_run(
 
     # TODO: Return an iterator for completed output if the model has an output iterator array type.
 
-    return transform_output(prediction.output, client)  # type: ignore[no-any-return]
+    if use_file_output:
+        return transform_output(prediction.output, client) # type: ignore[no-any-return]
+
+    return prediction.output
