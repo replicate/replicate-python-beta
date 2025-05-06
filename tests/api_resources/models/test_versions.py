@@ -19,8 +19,8 @@ class TestVersions:
     @parametrize
     def test_method_list(self, client: Replicate) -> None:
         version = client.models.versions.list(
-            model_name="model_name",
             model_owner="model_owner",
+            model_name="model_name",
         )
         assert version is None
 
@@ -28,8 +28,8 @@ class TestVersions:
     @parametrize
     def test_raw_response_list(self, client: Replicate) -> None:
         response = client.models.versions.with_raw_response.list(
-            model_name="model_name",
             model_owner="model_owner",
+            model_name="model_name",
         )
 
         assert response.is_closed is True
@@ -41,8 +41,8 @@ class TestVersions:
     @parametrize
     def test_streaming_response_list(self, client: Replicate) -> None:
         with client.models.versions.with_streaming_response.list(
-            model_name="model_name",
             model_owner="model_owner",
+            model_name="model_name",
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -57,23 +57,23 @@ class TestVersions:
     def test_path_params_list(self, client: Replicate) -> None:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `model_owner` but received ''"):
             client.models.versions.with_raw_response.list(
-                model_name="model_name",
                 model_owner="",
+                model_name="model_name",
             )
 
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `model_name` but received ''"):
             client.models.versions.with_raw_response.list(
-                model_name="",
                 model_owner="model_owner",
+                model_name="",
             )
 
     @pytest.mark.skip()
     @parametrize
     def test_method_delete(self, client: Replicate) -> None:
         version = client.models.versions.delete(
-            version_id="version_id",
             model_owner="model_owner",
             model_name="model_name",
+            version_id="version_id",
         )
         assert version is None
 
@@ -81,9 +81,9 @@ class TestVersions:
     @parametrize
     def test_raw_response_delete(self, client: Replicate) -> None:
         response = client.models.versions.with_raw_response.delete(
-            version_id="version_id",
             model_owner="model_owner",
             model_name="model_name",
+            version_id="version_id",
         )
 
         assert response.is_closed is True
@@ -95,9 +95,9 @@ class TestVersions:
     @parametrize
     def test_streaming_response_delete(self, client: Replicate) -> None:
         with client.models.versions.with_streaming_response.delete(
-            version_id="version_id",
             model_owner="model_owner",
             model_name="model_name",
+            version_id="version_id",
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -112,32 +112,32 @@ class TestVersions:
     def test_path_params_delete(self, client: Replicate) -> None:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `model_owner` but received ''"):
             client.models.versions.with_raw_response.delete(
-                version_id="version_id",
                 model_owner="",
                 model_name="model_name",
+                version_id="version_id",
             )
 
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `model_name` but received ''"):
             client.models.versions.with_raw_response.delete(
-                version_id="version_id",
                 model_owner="model_owner",
                 model_name="",
+                version_id="version_id",
             )
 
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `version_id` but received ''"):
             client.models.versions.with_raw_response.delete(
-                version_id="",
                 model_owner="model_owner",
                 model_name="model_name",
+                version_id="",
             )
 
     @pytest.mark.skip()
     @parametrize
     def test_method_get(self, client: Replicate) -> None:
         version = client.models.versions.get(
-            version_id="version_id",
             model_owner="model_owner",
             model_name="model_name",
+            version_id="version_id",
         )
         assert version is None
 
@@ -145,9 +145,9 @@ class TestVersions:
     @parametrize
     def test_raw_response_get(self, client: Replicate) -> None:
         response = client.models.versions.with_raw_response.get(
-            version_id="version_id",
             model_owner="model_owner",
             model_name="model_name",
+            version_id="version_id",
         )
 
         assert response.is_closed is True
@@ -159,9 +159,9 @@ class TestVersions:
     @parametrize
     def test_streaming_response_get(self, client: Replicate) -> None:
         with client.models.versions.with_streaming_response.get(
-            version_id="version_id",
             model_owner="model_owner",
             model_name="model_name",
+            version_id="version_id",
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -176,23 +176,23 @@ class TestVersions:
     def test_path_params_get(self, client: Replicate) -> None:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `model_owner` but received ''"):
             client.models.versions.with_raw_response.get(
-                version_id="version_id",
                 model_owner="",
                 model_name="model_name",
+                version_id="version_id",
             )
 
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `model_name` but received ''"):
             client.models.versions.with_raw_response.get(
-                version_id="version_id",
                 model_owner="model_owner",
                 model_name="",
+                version_id="version_id",
             )
 
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `version_id` but received ''"):
             client.models.versions.with_raw_response.get(
-                version_id="",
                 model_owner="model_owner",
                 model_name="model_name",
+                version_id="",
             )
 
 
@@ -203,8 +203,8 @@ class TestAsyncVersions:
     @parametrize
     async def test_method_list(self, async_client: AsyncReplicate) -> None:
         version = await async_client.models.versions.list(
-            model_name="model_name",
             model_owner="model_owner",
+            model_name="model_name",
         )
         assert version is None
 
@@ -212,8 +212,8 @@ class TestAsyncVersions:
     @parametrize
     async def test_raw_response_list(self, async_client: AsyncReplicate) -> None:
         response = await async_client.models.versions.with_raw_response.list(
-            model_name="model_name",
             model_owner="model_owner",
+            model_name="model_name",
         )
 
         assert response.is_closed is True
@@ -225,8 +225,8 @@ class TestAsyncVersions:
     @parametrize
     async def test_streaming_response_list(self, async_client: AsyncReplicate) -> None:
         async with async_client.models.versions.with_streaming_response.list(
-            model_name="model_name",
             model_owner="model_owner",
+            model_name="model_name",
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -241,23 +241,23 @@ class TestAsyncVersions:
     async def test_path_params_list(self, async_client: AsyncReplicate) -> None:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `model_owner` but received ''"):
             await async_client.models.versions.with_raw_response.list(
-                model_name="model_name",
                 model_owner="",
+                model_name="model_name",
             )
 
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `model_name` but received ''"):
             await async_client.models.versions.with_raw_response.list(
-                model_name="",
                 model_owner="model_owner",
+                model_name="",
             )
 
     @pytest.mark.skip()
     @parametrize
     async def test_method_delete(self, async_client: AsyncReplicate) -> None:
         version = await async_client.models.versions.delete(
-            version_id="version_id",
             model_owner="model_owner",
             model_name="model_name",
+            version_id="version_id",
         )
         assert version is None
 
@@ -265,9 +265,9 @@ class TestAsyncVersions:
     @parametrize
     async def test_raw_response_delete(self, async_client: AsyncReplicate) -> None:
         response = await async_client.models.versions.with_raw_response.delete(
-            version_id="version_id",
             model_owner="model_owner",
             model_name="model_name",
+            version_id="version_id",
         )
 
         assert response.is_closed is True
@@ -279,9 +279,9 @@ class TestAsyncVersions:
     @parametrize
     async def test_streaming_response_delete(self, async_client: AsyncReplicate) -> None:
         async with async_client.models.versions.with_streaming_response.delete(
-            version_id="version_id",
             model_owner="model_owner",
             model_name="model_name",
+            version_id="version_id",
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -296,32 +296,32 @@ class TestAsyncVersions:
     async def test_path_params_delete(self, async_client: AsyncReplicate) -> None:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `model_owner` but received ''"):
             await async_client.models.versions.with_raw_response.delete(
-                version_id="version_id",
                 model_owner="",
                 model_name="model_name",
+                version_id="version_id",
             )
 
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `model_name` but received ''"):
             await async_client.models.versions.with_raw_response.delete(
-                version_id="version_id",
                 model_owner="model_owner",
                 model_name="",
+                version_id="version_id",
             )
 
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `version_id` but received ''"):
             await async_client.models.versions.with_raw_response.delete(
-                version_id="",
                 model_owner="model_owner",
                 model_name="model_name",
+                version_id="",
             )
 
     @pytest.mark.skip()
     @parametrize
     async def test_method_get(self, async_client: AsyncReplicate) -> None:
         version = await async_client.models.versions.get(
-            version_id="version_id",
             model_owner="model_owner",
             model_name="model_name",
+            version_id="version_id",
         )
         assert version is None
 
@@ -329,9 +329,9 @@ class TestAsyncVersions:
     @parametrize
     async def test_raw_response_get(self, async_client: AsyncReplicate) -> None:
         response = await async_client.models.versions.with_raw_response.get(
-            version_id="version_id",
             model_owner="model_owner",
             model_name="model_name",
+            version_id="version_id",
         )
 
         assert response.is_closed is True
@@ -343,9 +343,9 @@ class TestAsyncVersions:
     @parametrize
     async def test_streaming_response_get(self, async_client: AsyncReplicate) -> None:
         async with async_client.models.versions.with_streaming_response.get(
-            version_id="version_id",
             model_owner="model_owner",
             model_name="model_name",
+            version_id="version_id",
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -360,21 +360,21 @@ class TestAsyncVersions:
     async def test_path_params_get(self, async_client: AsyncReplicate) -> None:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `model_owner` but received ''"):
             await async_client.models.versions.with_raw_response.get(
-                version_id="version_id",
                 model_owner="",
                 model_name="model_name",
+                version_id="version_id",
             )
 
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `model_name` but received ''"):
             await async_client.models.versions.with_raw_response.get(
-                version_id="version_id",
                 model_owner="model_owner",
                 model_name="",
+                version_id="version_id",
             )
 
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `version_id` but received ''"):
             await async_client.models.versions.with_raw_response.get(
-                version_id="",
                 model_owner="model_owner",
                 model_name="model_name",
+                version_id="",
             )

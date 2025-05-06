@@ -76,8 +76,8 @@ class TestDeployments:
     @parametrize
     def test_method_update(self, client: Replicate) -> None:
         deployment = client.deployments.update(
-            deployment_name="deployment_name",
             deployment_owner="deployment_owner",
+            deployment_name="deployment_name",
         )
         assert_matches_type(DeploymentUpdateResponse, deployment, path=["response"])
 
@@ -85,8 +85,8 @@ class TestDeployments:
     @parametrize
     def test_method_update_with_all_params(self, client: Replicate) -> None:
         deployment = client.deployments.update(
-            deployment_name="deployment_name",
             deployment_owner="deployment_owner",
+            deployment_name="deployment_name",
             hardware="hardware",
             max_instances=0,
             min_instances=0,
@@ -98,8 +98,8 @@ class TestDeployments:
     @parametrize
     def test_raw_response_update(self, client: Replicate) -> None:
         response = client.deployments.with_raw_response.update(
-            deployment_name="deployment_name",
             deployment_owner="deployment_owner",
+            deployment_name="deployment_name",
         )
 
         assert response.is_closed is True
@@ -111,8 +111,8 @@ class TestDeployments:
     @parametrize
     def test_streaming_response_update(self, client: Replicate) -> None:
         with client.deployments.with_streaming_response.update(
-            deployment_name="deployment_name",
             deployment_owner="deployment_owner",
+            deployment_name="deployment_name",
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -127,14 +127,14 @@ class TestDeployments:
     def test_path_params_update(self, client: Replicate) -> None:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `deployment_owner` but received ''"):
             client.deployments.with_raw_response.update(
-                deployment_name="deployment_name",
                 deployment_owner="",
+                deployment_name="deployment_name",
             )
 
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `deployment_name` but received ''"):
             client.deployments.with_raw_response.update(
-                deployment_name="",
                 deployment_owner="deployment_owner",
+                deployment_name="",
             )
 
     @pytest.mark.skip()
@@ -169,8 +169,8 @@ class TestDeployments:
     @parametrize
     def test_method_delete(self, client: Replicate) -> None:
         deployment = client.deployments.delete(
-            deployment_name="deployment_name",
             deployment_owner="deployment_owner",
+            deployment_name="deployment_name",
         )
         assert deployment is None
 
@@ -178,8 +178,8 @@ class TestDeployments:
     @parametrize
     def test_raw_response_delete(self, client: Replicate) -> None:
         response = client.deployments.with_raw_response.delete(
-            deployment_name="deployment_name",
             deployment_owner="deployment_owner",
+            deployment_name="deployment_name",
         )
 
         assert response.is_closed is True
@@ -191,8 +191,8 @@ class TestDeployments:
     @parametrize
     def test_streaming_response_delete(self, client: Replicate) -> None:
         with client.deployments.with_streaming_response.delete(
-            deployment_name="deployment_name",
             deployment_owner="deployment_owner",
+            deployment_name="deployment_name",
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -207,22 +207,22 @@ class TestDeployments:
     def test_path_params_delete(self, client: Replicate) -> None:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `deployment_owner` but received ''"):
             client.deployments.with_raw_response.delete(
-                deployment_name="deployment_name",
                 deployment_owner="",
+                deployment_name="deployment_name",
             )
 
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `deployment_name` but received ''"):
             client.deployments.with_raw_response.delete(
-                deployment_name="",
                 deployment_owner="deployment_owner",
+                deployment_name="",
             )
 
     @pytest.mark.skip()
     @parametrize
     def test_method_get(self, client: Replicate) -> None:
         deployment = client.deployments.get(
-            deployment_name="deployment_name",
             deployment_owner="deployment_owner",
+            deployment_name="deployment_name",
         )
         assert_matches_type(DeploymentGetResponse, deployment, path=["response"])
 
@@ -230,8 +230,8 @@ class TestDeployments:
     @parametrize
     def test_raw_response_get(self, client: Replicate) -> None:
         response = client.deployments.with_raw_response.get(
-            deployment_name="deployment_name",
             deployment_owner="deployment_owner",
+            deployment_name="deployment_name",
         )
 
         assert response.is_closed is True
@@ -243,8 +243,8 @@ class TestDeployments:
     @parametrize
     def test_streaming_response_get(self, client: Replicate) -> None:
         with client.deployments.with_streaming_response.get(
-            deployment_name="deployment_name",
             deployment_owner="deployment_owner",
+            deployment_name="deployment_name",
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -259,14 +259,14 @@ class TestDeployments:
     def test_path_params_get(self, client: Replicate) -> None:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `deployment_owner` but received ''"):
             client.deployments.with_raw_response.get(
-                deployment_name="deployment_name",
                 deployment_owner="",
+                deployment_name="deployment_name",
             )
 
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `deployment_name` but received ''"):
             client.deployments.with_raw_response.get(
-                deployment_name="",
                 deployment_owner="deployment_owner",
+                deployment_name="",
             )
 
 
@@ -326,8 +326,8 @@ class TestAsyncDeployments:
     @parametrize
     async def test_method_update(self, async_client: AsyncReplicate) -> None:
         deployment = await async_client.deployments.update(
-            deployment_name="deployment_name",
             deployment_owner="deployment_owner",
+            deployment_name="deployment_name",
         )
         assert_matches_type(DeploymentUpdateResponse, deployment, path=["response"])
 
@@ -335,8 +335,8 @@ class TestAsyncDeployments:
     @parametrize
     async def test_method_update_with_all_params(self, async_client: AsyncReplicate) -> None:
         deployment = await async_client.deployments.update(
-            deployment_name="deployment_name",
             deployment_owner="deployment_owner",
+            deployment_name="deployment_name",
             hardware="hardware",
             max_instances=0,
             min_instances=0,
@@ -348,8 +348,8 @@ class TestAsyncDeployments:
     @parametrize
     async def test_raw_response_update(self, async_client: AsyncReplicate) -> None:
         response = await async_client.deployments.with_raw_response.update(
-            deployment_name="deployment_name",
             deployment_owner="deployment_owner",
+            deployment_name="deployment_name",
         )
 
         assert response.is_closed is True
@@ -361,8 +361,8 @@ class TestAsyncDeployments:
     @parametrize
     async def test_streaming_response_update(self, async_client: AsyncReplicate) -> None:
         async with async_client.deployments.with_streaming_response.update(
-            deployment_name="deployment_name",
             deployment_owner="deployment_owner",
+            deployment_name="deployment_name",
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -377,14 +377,14 @@ class TestAsyncDeployments:
     async def test_path_params_update(self, async_client: AsyncReplicate) -> None:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `deployment_owner` but received ''"):
             await async_client.deployments.with_raw_response.update(
-                deployment_name="deployment_name",
                 deployment_owner="",
+                deployment_name="deployment_name",
             )
 
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `deployment_name` but received ''"):
             await async_client.deployments.with_raw_response.update(
-                deployment_name="",
                 deployment_owner="deployment_owner",
+                deployment_name="",
             )
 
     @pytest.mark.skip()
@@ -419,8 +419,8 @@ class TestAsyncDeployments:
     @parametrize
     async def test_method_delete(self, async_client: AsyncReplicate) -> None:
         deployment = await async_client.deployments.delete(
-            deployment_name="deployment_name",
             deployment_owner="deployment_owner",
+            deployment_name="deployment_name",
         )
         assert deployment is None
 
@@ -428,8 +428,8 @@ class TestAsyncDeployments:
     @parametrize
     async def test_raw_response_delete(self, async_client: AsyncReplicate) -> None:
         response = await async_client.deployments.with_raw_response.delete(
-            deployment_name="deployment_name",
             deployment_owner="deployment_owner",
+            deployment_name="deployment_name",
         )
 
         assert response.is_closed is True
@@ -441,8 +441,8 @@ class TestAsyncDeployments:
     @parametrize
     async def test_streaming_response_delete(self, async_client: AsyncReplicate) -> None:
         async with async_client.deployments.with_streaming_response.delete(
-            deployment_name="deployment_name",
             deployment_owner="deployment_owner",
+            deployment_name="deployment_name",
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -457,22 +457,22 @@ class TestAsyncDeployments:
     async def test_path_params_delete(self, async_client: AsyncReplicate) -> None:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `deployment_owner` but received ''"):
             await async_client.deployments.with_raw_response.delete(
-                deployment_name="deployment_name",
                 deployment_owner="",
+                deployment_name="deployment_name",
             )
 
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `deployment_name` but received ''"):
             await async_client.deployments.with_raw_response.delete(
-                deployment_name="",
                 deployment_owner="deployment_owner",
+                deployment_name="",
             )
 
     @pytest.mark.skip()
     @parametrize
     async def test_method_get(self, async_client: AsyncReplicate) -> None:
         deployment = await async_client.deployments.get(
-            deployment_name="deployment_name",
             deployment_owner="deployment_owner",
+            deployment_name="deployment_name",
         )
         assert_matches_type(DeploymentGetResponse, deployment, path=["response"])
 
@@ -480,8 +480,8 @@ class TestAsyncDeployments:
     @parametrize
     async def test_raw_response_get(self, async_client: AsyncReplicate) -> None:
         response = await async_client.deployments.with_raw_response.get(
-            deployment_name="deployment_name",
             deployment_owner="deployment_owner",
+            deployment_name="deployment_name",
         )
 
         assert response.is_closed is True
@@ -493,8 +493,8 @@ class TestAsyncDeployments:
     @parametrize
     async def test_streaming_response_get(self, async_client: AsyncReplicate) -> None:
         async with async_client.deployments.with_streaming_response.get(
-            deployment_name="deployment_name",
             deployment_owner="deployment_owner",
+            deployment_name="deployment_name",
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -509,12 +509,12 @@ class TestAsyncDeployments:
     async def test_path_params_get(self, async_client: AsyncReplicate) -> None:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `deployment_owner` but received ''"):
             await async_client.deployments.with_raw_response.get(
-                deployment_name="deployment_name",
                 deployment_owner="",
+                deployment_name="deployment_name",
             )
 
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `deployment_name` but received ''"):
             await async_client.deployments.with_raw_response.get(
-                deployment_name="",
                 deployment_owner="deployment_owner",
+                deployment_name="",
             )
