@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import os
-from typing import Any, Union, Mapping
+from typing import TYPE_CHECKING, Any, Union, Mapping
 from typing_extensions import Self, override
 
 import httpx
@@ -20,8 +20,8 @@ from ._types import (
     RequestOptions,
 )
 from ._utils import is_given, get_async_library
+from ._compat import cached_property
 from ._version import __version__
-from .resources import account, hardware, trainings, collections, predictions
 from ._streaming import Stream as Stream, AsyncStream as AsyncStream
 from ._exceptions import APIStatusError, ReplicateClientError
 from ._base_client import (
@@ -29,9 +29,17 @@ from ._base_client import (
     SyncAPIClient,
     AsyncAPIClient,
 )
-from .resources.models import models
-from .resources.webhooks import webhooks
-from .resources.deployments import deployments
+
+if TYPE_CHECKING:
+    from .resources import models, account, hardware, webhooks, trainings, collections, deployments, predictions
+    from .resources.account import AccountResource, AsyncAccountResource
+    from .resources.hardware import HardwareResource, AsyncHardwareResource
+    from .resources.trainings import TrainingsResource, AsyncTrainingsResource
+    from .resources.collections import CollectionsResource, AsyncCollectionsResource
+    from .resources.predictions import PredictionsResource, AsyncPredictionsResource
+    from .resources.models.models import ModelsResource, AsyncModelsResource
+    from .resources.webhooks.webhooks import WebhooksResource, AsyncWebhooksResource
+    from .resources.deployments.deployments import DeploymentsResource, AsyncDeploymentsResource
 
 __all__ = [
     "Timeout",
@@ -46,17 +54,6 @@ __all__ = [
 
 
 class ReplicateClient(SyncAPIClient):
-    collections: collections.CollectionsResource
-    deployments: deployments.DeploymentsResource
-    hardware: hardware.HardwareResource
-    account: account.AccountResource
-    models: models.ModelsResource
-    predictions: predictions.PredictionsResource
-    trainings: trainings.TrainingsResource
-    webhooks: webhooks.WebhooksResource
-    with_raw_response: ReplicateClientWithRawResponse
-    with_streaming_response: ReplicateClientWithStreamedResponse
-
     # client options
     bearer_token: str
 
@@ -111,16 +108,61 @@ class ReplicateClient(SyncAPIClient):
             _strict_response_validation=_strict_response_validation,
         )
 
-        self.collections = collections.CollectionsResource(self)
-        self.deployments = deployments.DeploymentsResource(self)
-        self.hardware = hardware.HardwareResource(self)
-        self.account = account.AccountResource(self)
-        self.models = models.ModelsResource(self)
-        self.predictions = predictions.PredictionsResource(self)
-        self.trainings = trainings.TrainingsResource(self)
-        self.webhooks = webhooks.WebhooksResource(self)
-        self.with_raw_response = ReplicateClientWithRawResponse(self)
-        self.with_streaming_response = ReplicateClientWithStreamedResponse(self)
+    @cached_property
+    def collections(self) -> CollectionsResource:
+        from .resources.collections import CollectionsResource
+
+        return CollectionsResource(self)
+
+    @cached_property
+    def deployments(self) -> DeploymentsResource:
+        from .resources.deployments import DeploymentsResource
+
+        return DeploymentsResource(self)
+
+    @cached_property
+    def hardware(self) -> HardwareResource:
+        from .resources.hardware import HardwareResource
+
+        return HardwareResource(self)
+
+    @cached_property
+    def account(self) -> AccountResource:
+        from .resources.account import AccountResource
+
+        return AccountResource(self)
+
+    @cached_property
+    def models(self) -> ModelsResource:
+        from .resources.models import ModelsResource
+
+        return ModelsResource(self)
+
+    @cached_property
+    def predictions(self) -> PredictionsResource:
+        from .resources.predictions import PredictionsResource
+
+        return PredictionsResource(self)
+
+    @cached_property
+    def trainings(self) -> TrainingsResource:
+        from .resources.trainings import TrainingsResource
+
+        return TrainingsResource(self)
+
+    @cached_property
+    def webhooks(self) -> WebhooksResource:
+        from .resources.webhooks import WebhooksResource
+
+        return WebhooksResource(self)
+
+    @cached_property
+    def with_raw_response(self) -> ReplicateClientWithRawResponse:
+        return ReplicateClientWithRawResponse(self)
+
+    @cached_property
+    def with_streaming_response(self) -> ReplicateClientWithStreamedResponse:
+        return ReplicateClientWithStreamedResponse(self)
 
     @property
     @override
@@ -228,17 +270,6 @@ class ReplicateClient(SyncAPIClient):
 
 
 class AsyncReplicateClient(AsyncAPIClient):
-    collections: collections.AsyncCollectionsResource
-    deployments: deployments.AsyncDeploymentsResource
-    hardware: hardware.AsyncHardwareResource
-    account: account.AsyncAccountResource
-    models: models.AsyncModelsResource
-    predictions: predictions.AsyncPredictionsResource
-    trainings: trainings.AsyncTrainingsResource
-    webhooks: webhooks.AsyncWebhooksResource
-    with_raw_response: AsyncReplicateClientWithRawResponse
-    with_streaming_response: AsyncReplicateClientWithStreamedResponse
-
     # client options
     bearer_token: str
 
@@ -293,16 +324,61 @@ class AsyncReplicateClient(AsyncAPIClient):
             _strict_response_validation=_strict_response_validation,
         )
 
-        self.collections = collections.AsyncCollectionsResource(self)
-        self.deployments = deployments.AsyncDeploymentsResource(self)
-        self.hardware = hardware.AsyncHardwareResource(self)
-        self.account = account.AsyncAccountResource(self)
-        self.models = models.AsyncModelsResource(self)
-        self.predictions = predictions.AsyncPredictionsResource(self)
-        self.trainings = trainings.AsyncTrainingsResource(self)
-        self.webhooks = webhooks.AsyncWebhooksResource(self)
-        self.with_raw_response = AsyncReplicateClientWithRawResponse(self)
-        self.with_streaming_response = AsyncReplicateClientWithStreamedResponse(self)
+    @cached_property
+    def collections(self) -> AsyncCollectionsResource:
+        from .resources.collections import AsyncCollectionsResource
+
+        return AsyncCollectionsResource(self)
+
+    @cached_property
+    def deployments(self) -> AsyncDeploymentsResource:
+        from .resources.deployments import AsyncDeploymentsResource
+
+        return AsyncDeploymentsResource(self)
+
+    @cached_property
+    def hardware(self) -> AsyncHardwareResource:
+        from .resources.hardware import AsyncHardwareResource
+
+        return AsyncHardwareResource(self)
+
+    @cached_property
+    def account(self) -> AsyncAccountResource:
+        from .resources.account import AsyncAccountResource
+
+        return AsyncAccountResource(self)
+
+    @cached_property
+    def models(self) -> AsyncModelsResource:
+        from .resources.models import AsyncModelsResource
+
+        return AsyncModelsResource(self)
+
+    @cached_property
+    def predictions(self) -> AsyncPredictionsResource:
+        from .resources.predictions import AsyncPredictionsResource
+
+        return AsyncPredictionsResource(self)
+
+    @cached_property
+    def trainings(self) -> AsyncTrainingsResource:
+        from .resources.trainings import AsyncTrainingsResource
+
+        return AsyncTrainingsResource(self)
+
+    @cached_property
+    def webhooks(self) -> AsyncWebhooksResource:
+        from .resources.webhooks import AsyncWebhooksResource
+
+        return AsyncWebhooksResource(self)
+
+    @cached_property
+    def with_raw_response(self) -> AsyncReplicateClientWithRawResponse:
+        return AsyncReplicateClientWithRawResponse(self)
+
+    @cached_property
+    def with_streaming_response(self) -> AsyncReplicateClientWithStreamedResponse:
+        return AsyncReplicateClientWithStreamedResponse(self)
 
     @property
     @override
@@ -410,51 +486,223 @@ class AsyncReplicateClient(AsyncAPIClient):
 
 
 class ReplicateClientWithRawResponse:
+    _client: ReplicateClient
+
     def __init__(self, client: ReplicateClient) -> None:
-        self.collections = collections.CollectionsResourceWithRawResponse(client.collections)
-        self.deployments = deployments.DeploymentsResourceWithRawResponse(client.deployments)
-        self.hardware = hardware.HardwareResourceWithRawResponse(client.hardware)
-        self.account = account.AccountResourceWithRawResponse(client.account)
-        self.models = models.ModelsResourceWithRawResponse(client.models)
-        self.predictions = predictions.PredictionsResourceWithRawResponse(client.predictions)
-        self.trainings = trainings.TrainingsResourceWithRawResponse(client.trainings)
-        self.webhooks = webhooks.WebhooksResourceWithRawResponse(client.webhooks)
+        self._client = client
+
+    @cached_property
+    def collections(self) -> collections.CollectionsResourceWithRawResponse:
+        from .resources.collections import CollectionsResourceWithRawResponse
+
+        return CollectionsResourceWithRawResponse(self._client.collections)
+
+    @cached_property
+    def deployments(self) -> deployments.DeploymentsResourceWithRawResponse:
+        from .resources.deployments import DeploymentsResourceWithRawResponse
+
+        return DeploymentsResourceWithRawResponse(self._client.deployments)
+
+    @cached_property
+    def hardware(self) -> hardware.HardwareResourceWithRawResponse:
+        from .resources.hardware import HardwareResourceWithRawResponse
+
+        return HardwareResourceWithRawResponse(self._client.hardware)
+
+    @cached_property
+    def account(self) -> account.AccountResourceWithRawResponse:
+        from .resources.account import AccountResourceWithRawResponse
+
+        return AccountResourceWithRawResponse(self._client.account)
+
+    @cached_property
+    def models(self) -> models.ModelsResourceWithRawResponse:
+        from .resources.models import ModelsResourceWithRawResponse
+
+        return ModelsResourceWithRawResponse(self._client.models)
+
+    @cached_property
+    def predictions(self) -> predictions.PredictionsResourceWithRawResponse:
+        from .resources.predictions import PredictionsResourceWithRawResponse
+
+        return PredictionsResourceWithRawResponse(self._client.predictions)
+
+    @cached_property
+    def trainings(self) -> trainings.TrainingsResourceWithRawResponse:
+        from .resources.trainings import TrainingsResourceWithRawResponse
+
+        return TrainingsResourceWithRawResponse(self._client.trainings)
+
+    @cached_property
+    def webhooks(self) -> webhooks.WebhooksResourceWithRawResponse:
+        from .resources.webhooks import WebhooksResourceWithRawResponse
+
+        return WebhooksResourceWithRawResponse(self._client.webhooks)
 
 
 class AsyncReplicateClientWithRawResponse:
+    _client: AsyncReplicateClient
+
     def __init__(self, client: AsyncReplicateClient) -> None:
-        self.collections = collections.AsyncCollectionsResourceWithRawResponse(client.collections)
-        self.deployments = deployments.AsyncDeploymentsResourceWithRawResponse(client.deployments)
-        self.hardware = hardware.AsyncHardwareResourceWithRawResponse(client.hardware)
-        self.account = account.AsyncAccountResourceWithRawResponse(client.account)
-        self.models = models.AsyncModelsResourceWithRawResponse(client.models)
-        self.predictions = predictions.AsyncPredictionsResourceWithRawResponse(client.predictions)
-        self.trainings = trainings.AsyncTrainingsResourceWithRawResponse(client.trainings)
-        self.webhooks = webhooks.AsyncWebhooksResourceWithRawResponse(client.webhooks)
+        self._client = client
+
+    @cached_property
+    def collections(self) -> collections.AsyncCollectionsResourceWithRawResponse:
+        from .resources.collections import AsyncCollectionsResourceWithRawResponse
+
+        return AsyncCollectionsResourceWithRawResponse(self._client.collections)
+
+    @cached_property
+    def deployments(self) -> deployments.AsyncDeploymentsResourceWithRawResponse:
+        from .resources.deployments import AsyncDeploymentsResourceWithRawResponse
+
+        return AsyncDeploymentsResourceWithRawResponse(self._client.deployments)
+
+    @cached_property
+    def hardware(self) -> hardware.AsyncHardwareResourceWithRawResponse:
+        from .resources.hardware import AsyncHardwareResourceWithRawResponse
+
+        return AsyncHardwareResourceWithRawResponse(self._client.hardware)
+
+    @cached_property
+    def account(self) -> account.AsyncAccountResourceWithRawResponse:
+        from .resources.account import AsyncAccountResourceWithRawResponse
+
+        return AsyncAccountResourceWithRawResponse(self._client.account)
+
+    @cached_property
+    def models(self) -> models.AsyncModelsResourceWithRawResponse:
+        from .resources.models import AsyncModelsResourceWithRawResponse
+
+        return AsyncModelsResourceWithRawResponse(self._client.models)
+
+    @cached_property
+    def predictions(self) -> predictions.AsyncPredictionsResourceWithRawResponse:
+        from .resources.predictions import AsyncPredictionsResourceWithRawResponse
+
+        return AsyncPredictionsResourceWithRawResponse(self._client.predictions)
+
+    @cached_property
+    def trainings(self) -> trainings.AsyncTrainingsResourceWithRawResponse:
+        from .resources.trainings import AsyncTrainingsResourceWithRawResponse
+
+        return AsyncTrainingsResourceWithRawResponse(self._client.trainings)
+
+    @cached_property
+    def webhooks(self) -> webhooks.AsyncWebhooksResourceWithRawResponse:
+        from .resources.webhooks import AsyncWebhooksResourceWithRawResponse
+
+        return AsyncWebhooksResourceWithRawResponse(self._client.webhooks)
 
 
 class ReplicateClientWithStreamedResponse:
+    _client: ReplicateClient
+
     def __init__(self, client: ReplicateClient) -> None:
-        self.collections = collections.CollectionsResourceWithStreamingResponse(client.collections)
-        self.deployments = deployments.DeploymentsResourceWithStreamingResponse(client.deployments)
-        self.hardware = hardware.HardwareResourceWithStreamingResponse(client.hardware)
-        self.account = account.AccountResourceWithStreamingResponse(client.account)
-        self.models = models.ModelsResourceWithStreamingResponse(client.models)
-        self.predictions = predictions.PredictionsResourceWithStreamingResponse(client.predictions)
-        self.trainings = trainings.TrainingsResourceWithStreamingResponse(client.trainings)
-        self.webhooks = webhooks.WebhooksResourceWithStreamingResponse(client.webhooks)
+        self._client = client
+
+    @cached_property
+    def collections(self) -> collections.CollectionsResourceWithStreamingResponse:
+        from .resources.collections import CollectionsResourceWithStreamingResponse
+
+        return CollectionsResourceWithStreamingResponse(self._client.collections)
+
+    @cached_property
+    def deployments(self) -> deployments.DeploymentsResourceWithStreamingResponse:
+        from .resources.deployments import DeploymentsResourceWithStreamingResponse
+
+        return DeploymentsResourceWithStreamingResponse(self._client.deployments)
+
+    @cached_property
+    def hardware(self) -> hardware.HardwareResourceWithStreamingResponse:
+        from .resources.hardware import HardwareResourceWithStreamingResponse
+
+        return HardwareResourceWithStreamingResponse(self._client.hardware)
+
+    @cached_property
+    def account(self) -> account.AccountResourceWithStreamingResponse:
+        from .resources.account import AccountResourceWithStreamingResponse
+
+        return AccountResourceWithStreamingResponse(self._client.account)
+
+    @cached_property
+    def models(self) -> models.ModelsResourceWithStreamingResponse:
+        from .resources.models import ModelsResourceWithStreamingResponse
+
+        return ModelsResourceWithStreamingResponse(self._client.models)
+
+    @cached_property
+    def predictions(self) -> predictions.PredictionsResourceWithStreamingResponse:
+        from .resources.predictions import PredictionsResourceWithStreamingResponse
+
+        return PredictionsResourceWithStreamingResponse(self._client.predictions)
+
+    @cached_property
+    def trainings(self) -> trainings.TrainingsResourceWithStreamingResponse:
+        from .resources.trainings import TrainingsResourceWithStreamingResponse
+
+        return TrainingsResourceWithStreamingResponse(self._client.trainings)
+
+    @cached_property
+    def webhooks(self) -> webhooks.WebhooksResourceWithStreamingResponse:
+        from .resources.webhooks import WebhooksResourceWithStreamingResponse
+
+        return WebhooksResourceWithStreamingResponse(self._client.webhooks)
 
 
 class AsyncReplicateClientWithStreamedResponse:
+    _client: AsyncReplicateClient
+
     def __init__(self, client: AsyncReplicateClient) -> None:
-        self.collections = collections.AsyncCollectionsResourceWithStreamingResponse(client.collections)
-        self.deployments = deployments.AsyncDeploymentsResourceWithStreamingResponse(client.deployments)
-        self.hardware = hardware.AsyncHardwareResourceWithStreamingResponse(client.hardware)
-        self.account = account.AsyncAccountResourceWithStreamingResponse(client.account)
-        self.models = models.AsyncModelsResourceWithStreamingResponse(client.models)
-        self.predictions = predictions.AsyncPredictionsResourceWithStreamingResponse(client.predictions)
-        self.trainings = trainings.AsyncTrainingsResourceWithStreamingResponse(client.trainings)
-        self.webhooks = webhooks.AsyncWebhooksResourceWithStreamingResponse(client.webhooks)
+        self._client = client
+
+    @cached_property
+    def collections(self) -> collections.AsyncCollectionsResourceWithStreamingResponse:
+        from .resources.collections import AsyncCollectionsResourceWithStreamingResponse
+
+        return AsyncCollectionsResourceWithStreamingResponse(self._client.collections)
+
+    @cached_property
+    def deployments(self) -> deployments.AsyncDeploymentsResourceWithStreamingResponse:
+        from .resources.deployments import AsyncDeploymentsResourceWithStreamingResponse
+
+        return AsyncDeploymentsResourceWithStreamingResponse(self._client.deployments)
+
+    @cached_property
+    def hardware(self) -> hardware.AsyncHardwareResourceWithStreamingResponse:
+        from .resources.hardware import AsyncHardwareResourceWithStreamingResponse
+
+        return AsyncHardwareResourceWithStreamingResponse(self._client.hardware)
+
+    @cached_property
+    def account(self) -> account.AsyncAccountResourceWithStreamingResponse:
+        from .resources.account import AsyncAccountResourceWithStreamingResponse
+
+        return AsyncAccountResourceWithStreamingResponse(self._client.account)
+
+    @cached_property
+    def models(self) -> models.AsyncModelsResourceWithStreamingResponse:
+        from .resources.models import AsyncModelsResourceWithStreamingResponse
+
+        return AsyncModelsResourceWithStreamingResponse(self._client.models)
+
+    @cached_property
+    def predictions(self) -> predictions.AsyncPredictionsResourceWithStreamingResponse:
+        from .resources.predictions import AsyncPredictionsResourceWithStreamingResponse
+
+        return AsyncPredictionsResourceWithStreamingResponse(self._client.predictions)
+
+    @cached_property
+    def trainings(self) -> trainings.AsyncTrainingsResourceWithStreamingResponse:
+        from .resources.trainings import AsyncTrainingsResourceWithStreamingResponse
+
+        return AsyncTrainingsResourceWithStreamingResponse(self._client.trainings)
+
+    @cached_property
+    def webhooks(self) -> webhooks.AsyncWebhooksResourceWithStreamingResponse:
+        from .resources.webhooks import AsyncWebhooksResourceWithStreamingResponse
+
+        return AsyncWebhooksResourceWithStreamingResponse(self._client.webhooks)
 
 
 Client = ReplicateClient
