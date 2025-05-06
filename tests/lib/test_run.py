@@ -3,7 +3,7 @@ from __future__ import annotations
 import io
 import os
 import datetime
-from typing import Any, Dict, Optional
+from typing import Any, Dict, List, Optional
 
 import httpx
 import pytest
@@ -87,12 +87,15 @@ def _version_with_schema(id: str = "v1", output_schema: Optional[object] = None)
 class TestRun:
     client = Replicate(base_url=base_url, bearer_token=bearer_token, _strict_response_validation=True)
 
+    # Common model reference format that will work with the new SDK
+    model_ref = "owner/name:version"
+
     @pytest.mark.respx(base_url=base_url)
     def test_run_basic(self, respx_mock: MockRouter) -> None:
         """Test basic model run functionality."""
         respx_mock.post("/predictions").mock(return_value=httpx.Response(201, json=create_mock_prediction()))
 
-        output: Any = self.client.run("some-model-ref", input={"prompt": "test prompt"})
+        output: Any = self.client.run(self.model_ref, input={"prompt": "test prompt"})
 
         assert output == "test output"
 
@@ -101,7 +104,7 @@ class TestRun:
         """Test run with wait=True parameter."""
         respx_mock.post("/predictions").mock(return_value=httpx.Response(201, json=create_mock_prediction()))
 
-        output: Any = self.client.run("some-model-ref", wait=True, input={"prompt": "test prompt"})
+        output: Any = self.client.run(self.model_ref, wait=True, input={"prompt": "test prompt"})
 
         assert output == "test output"
 
@@ -110,7 +113,7 @@ class TestRun:
         """Test run with wait as an integer value."""
         respx_mock.post("/predictions").mock(return_value=httpx.Response(201, json=create_mock_prediction()))
 
-        output: Any = self.client.run("some-model-ref", wait=10, input={"prompt": "test prompt"})
+        output: Any = self.client.run(self.model_ref, wait=10, input={"prompt": "test prompt"})
 
         assert output == "test output"
 
@@ -127,7 +130,7 @@ class TestRun:
             return_value=httpx.Response(200, json=create_mock_prediction(status="succeeded"))
         )
 
-        output: Any = self.client.run("some-model-ref", wait=False, input={"prompt": "test prompt"})
+        output: Any = self.client.run(self.model_ref, wait=False, input={"prompt": "test prompt"})
 
         assert output == "test output"
 
@@ -140,10 +143,37 @@ class TestRun:
             return_value=httpx.Response(201, json=create_mock_prediction(output=file_url))
         )
 
-        output: Any = self.client.run("some-model-ref", input={"prompt": "generate image"})
+        output: Any = self.client.run(self.model_ref, input={"prompt": "generate image"})
 
         assert isinstance(output, FileOutput)
         assert output.url == file_url
+
+    @pytest.mark.respx(base_url=base_url)
+    def test_run_with_data_uri_output(self, respx_mock: MockRouter) -> None:
+        """Test run with data URI output."""
+        # Create a data URI for a small PNG image (1x1 transparent pixel)
+        data_uri = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII="
+
+        # Mock prediction with data URI output
+        respx_mock.post("/predictions").mock(
+            return_value=httpx.Response(201, json=create_mock_prediction(output=data_uri))
+        )
+
+        # Use a valid model version ID format
+        output: Any = self.client.run("owner/name:version", input={"prompt": "generate small image"})
+
+        assert isinstance(output, FileOutput)
+        assert output.url == data_uri
+
+        # Test that we can read the data
+        image_data = output.read()
+        assert isinstance(image_data, bytes)
+        assert len(image_data) > 0
+
+        # Test that we can iterate over the data
+        chunks = list(output)
+        assert len(chunks) == 1
+        assert chunks[0] == image_data
 
     @pytest.mark.respx(base_url=base_url)
     def test_run_with_file_list_output(self, respx_mock: MockRouter) -> None:
@@ -157,7 +187,7 @@ class TestRun:
         respx_mock.post("/predictions").mock(return_value=httpx.Response(201, json=mock_prediction))
 
         output: list[FileOutput] = self.client.run(
-            "some-model-ref", use_file_output=True, input={"prompt": "generate multiple images"}
+            self.model_ref, use_file_output=True, input={"prompt": "generate multiple images"}
         )
 
         assert isinstance(output, list)
@@ -176,7 +206,7 @@ class TestRun:
             return_value=httpx.Response(201, json=create_mock_prediction(output=file_urls))
         )
 
-        output: Dict[str, FileOutput] = self.client.run("some-model-ref", input={"prompt": "structured output"})
+        output: Dict[str, FileOutput] = self.client.run(self.model_ref, input={"prompt": "structured output"})
 
         assert isinstance(output, dict)
         assert len(output) == 2
@@ -191,7 +221,7 @@ class TestRun:
         )
 
         with pytest.raises(ModelError):
-            self.client.run("error-model-ref", input={"prompt": "trigger error"})
+            self.client.run(self.model_ref, input={"prompt": "trigger error"})
 
     @pytest.mark.respx(base_url=base_url)
     def test_run_with_base64_file(self, respx_mock: MockRouter) -> None:
@@ -202,14 +232,14 @@ class TestRun:
         # Mock the prediction response
         respx_mock.post("/predictions").mock(return_value=httpx.Response(201, json=create_mock_prediction()))
 
-        output: Any = self.client.run("some-model-ref", input={"file": file_obj}, file_encoding_strategy="base64")
+        output: Any = self.client.run(self.model_ref, input={"file": file_obj}, file_encoding_strategy="base64")
 
         assert output == "test output"
 
     def test_run_with_prefer_conflict(self) -> None:
         """Test run with conflicting wait and prefer parameters."""
         with pytest.raises(TypeError, match="cannot mix and match prefer and wait"):
-            self.client.run("some-model-ref", wait=True, prefer="nowait", input={"prompt": "test"})
+            self.client.run(self.model_ref, wait=True, prefer="nowait", input={"prompt": "test"})
 
     @pytest.mark.respx(base_url=base_url)
     def test_run_with_iterator(self, respx_mock: MockRouter) -> None:
@@ -220,7 +250,7 @@ class TestRun:
             return_value=httpx.Response(201, json=create_mock_prediction(output=output_iterator))
         )
 
-        output: list[str] = self.client.run("some-model-ref", input={"prompt": "generate iterator"})
+        output: list[str] = self.client.run(self.model_ref, input={"prompt": "generate iterator"})
 
         assert isinstance(output, list)
         assert len(output) == 3
@@ -233,7 +263,7 @@ class TestRun:
         respx_mock.post("/predictions").mock(return_value=httpx.Response(404, json={"detail": "Model not found"}))
 
         with pytest.raises(NotFoundError):
-            self.client.run("invalid-model-ref", input={"prompt": "test prompt"})
+            self.client.run("invalid/model:ref", input={"prompt": "test prompt"})
 
     @pytest.mark.respx(base_url=base_url)
     def test_run_with_invalid_cog_version(self, respx_mock: MockRouter) -> None:
@@ -242,7 +272,7 @@ class TestRun:
         respx_mock.post("/predictions").mock(return_value=httpx.Response(400, json={"detail": "Invalid Cog version"}))
 
         with pytest.raises(BadRequestError):
-            self.client.run("model-with-invalid-cog", input={"prompt": "test prompt"})
+            self.client.run("invalid/cog:model", input={"prompt": "test prompt"})
 
     @pytest.mark.respx(base_url=base_url)
     def test_run_with_model_object(self, respx_mock: MockRouter) -> None:
@@ -274,9 +304,7 @@ class TestRun:
         # Case where version ID is provided
         respx_mock.post("/predictions").mock(return_value=httpx.Response(201, json=create_mock_prediction()))
 
-        identifier = ModelVersionIdentifier(
-            owner="test-owner", name="test-model", version="test-version-id"
-        )
+        identifier = ModelVersionIdentifier(owner="test-owner", name="test-model", version="test-version-id")
         output = self.client.run(identifier, input={"prompt": "test prompt"})
 
         assert output == "test output"
@@ -307,7 +335,7 @@ class TestRun:
         )
 
         output: list[FileOutput] = self.client.run(
-            "some-model-ref", use_file_output=True, wait=False, input={"prompt": "generate file iterator"}
+            self.model_ref, use_file_output=True, wait=False, input={"prompt": "generate file iterator"}
         )
 
         assert isinstance(output, list)
@@ -319,12 +347,15 @@ class TestRun:
 class TestAsyncRun:
     client = AsyncReplicate(base_url=base_url, bearer_token=bearer_token, _strict_response_validation=True)
 
+    # Common model reference format that will work with the new SDK
+    model_ref = "owner/name:version"
+
     @pytest.mark.respx(base_url=base_url)
     async def test_async_run_basic(self, respx_mock: MockRouter) -> None:
         """Test basic async model run functionality."""
         respx_mock.post("/predictions").mock(return_value=httpx.Response(201, json=create_mock_prediction()))
 
-        output: Any = await self.client.run("some-model-ref", input={"prompt": "test prompt"})
+        output: Any = await self.client.run(self.model_ref, input={"prompt": "test prompt"})
 
         assert output == "test output"
 
@@ -333,7 +364,7 @@ class TestAsyncRun:
         """Test async run with wait=True parameter."""
         respx_mock.post("/predictions").mock(return_value=httpx.Response(201, json=create_mock_prediction()))
 
-        output: Any = await self.client.run("some-model-ref", wait=True, input={"prompt": "test prompt"})
+        output: Any = await self.client.run(self.model_ref, wait=True, input={"prompt": "test prompt"})
 
         assert output == "test output"
 
@@ -342,7 +373,7 @@ class TestAsyncRun:
         """Test async run with wait as an integer value."""
         respx_mock.post("/predictions").mock(return_value=httpx.Response(201, json=create_mock_prediction()))
 
-        output: Any = await self.client.run("some-model-ref", wait=10, input={"prompt": "test prompt"})
+        output: Any = await self.client.run(self.model_ref, wait=10, input={"prompt": "test prompt"})
 
         assert output == "test output"
 
@@ -359,7 +390,7 @@ class TestAsyncRun:
             return_value=httpx.Response(200, json=create_mock_prediction(status="succeeded"))
         )
 
-        output: Any = await self.client.run("some-model-ref", wait=False, input={"prompt": "test prompt"})
+        output: Any = await self.client.run(self.model_ref, wait=False, input={"prompt": "test prompt"})
 
         assert output == "test output"
 
@@ -372,10 +403,40 @@ class TestAsyncRun:
             return_value=httpx.Response(201, json=create_mock_prediction(output=file_url))
         )
 
-        output: Any = await self.client.run("some-model-ref", input={"prompt": "generate image"})
+        output: Any = await self.client.run(self.model_ref, input={"prompt": "generate image"})
 
         assert isinstance(output, AsyncFileOutput)
         assert output.url == file_url
+
+    @pytest.mark.respx(base_url=base_url)
+    async def test_async_run_with_data_uri_output(self, respx_mock: MockRouter) -> None:
+        """Test async run with data URI output."""
+        # Create a data URI for a small PNG image (1x1 transparent pixel)
+        data_uri = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII="
+
+        # Mock prediction with data URI output
+        respx_mock.post("/predictions").mock(
+            return_value=httpx.Response(201, json=create_mock_prediction(output=data_uri))
+        )
+
+        # Use a valid model version ID format
+        output: Any = await self.client.run("owner/name:version", input={"prompt": "generate small image"})
+
+        assert isinstance(output, AsyncFileOutput)
+        assert output.url == data_uri
+
+        # Test that we can read the data asynchronously
+        image_data = await output.read()
+        assert isinstance(image_data, bytes)
+        assert len(image_data) > 0
+
+        # Test that we can iterate over the data asynchronously
+        chunks: List[Any] = []
+        async for chunk in output:
+            chunks.append(chunk)
+
+        assert len(chunks) == 1
+        assert chunks[0] == image_data
 
     @pytest.mark.respx(base_url=base_url)
     async def test_async_run_with_file_list_output(self, respx_mock: MockRouter) -> None:
@@ -389,7 +450,7 @@ class TestAsyncRun:
         respx_mock.post("/predictions").mock(return_value=httpx.Response(201, json=mock_prediction))
 
         output: list[AsyncFileOutput] = await self.client.run(
-            "some-model-ref", input={"prompt": "generate multiple images"}
+            self.model_ref, input={"prompt": "generate multiple images"}
         )
 
         assert isinstance(output, list)
@@ -409,7 +470,7 @@ class TestAsyncRun:
         )
 
         output: Dict[str, AsyncFileOutput] = await self.client.run(
-            "some-model-ref", input={"prompt": "structured output"}
+            self.model_ref, input={"prompt": "structured output"}
         )
 
         assert isinstance(output, dict)
@@ -425,7 +486,7 @@ class TestAsyncRun:
         )
 
         with pytest.raises(ModelError):
-            await self.client.run("error-model-ref", input={"prompt": "trigger error"})
+            await self.client.run(self.model_ref, input={"prompt": "trigger error"})
 
     @pytest.mark.respx(base_url=base_url)
     async def test_async_run_with_base64_file(self, respx_mock: MockRouter) -> None:
@@ -436,14 +497,14 @@ class TestAsyncRun:
         # Mock the prediction response
         respx_mock.post("/predictions").mock(return_value=httpx.Response(201, json=create_mock_prediction()))
 
-        output: Any = await self.client.run("some-model-ref", input={"file": file_obj}, file_encoding_strategy="base64")
+        output: Any = await self.client.run(self.model_ref, input={"file": file_obj}, file_encoding_strategy="base64")
 
         assert output == "test output"
 
     async def test_async_run_with_prefer_conflict(self) -> None:
         """Test async run with conflicting wait and prefer parameters."""
         with pytest.raises(TypeError, match="cannot mix and match prefer and wait"):
-            await self.client.run("some-model-ref", wait=True, prefer="nowait", input={"prompt": "test"})
+            await self.client.run(self.model_ref, wait=True, prefer="nowait", input={"prompt": "test"})
 
     @pytest.mark.respx(base_url=base_url)
     async def test_async_run_with_iterator(self, respx_mock: MockRouter) -> None:
@@ -454,7 +515,7 @@ class TestAsyncRun:
             return_value=httpx.Response(201, json=create_mock_prediction(output=output_iterator))
         )
 
-        output: list[str] = await self.client.run("some-model-ref", input={"prompt": "generate iterator"})
+        output: list[str] = await self.client.run(self.model_ref, input={"prompt": "generate iterator"})
 
         assert isinstance(output, list)
         assert len(output) == 3
@@ -467,7 +528,7 @@ class TestAsyncRun:
         respx_mock.post("/predictions").mock(return_value=httpx.Response(404, json={"detail": "Model not found"}))
 
         with pytest.raises(NotFoundError):
-            await self.client.run("invalid-model-ref", input={"prompt": "test prompt"})
+            await self.client.run("invalid/model:ref", input={"prompt": "test prompt"})
 
     @pytest.mark.respx(base_url=base_url)
     async def test_async_run_with_invalid_cog_version(self, respx_mock: MockRouter) -> None:
@@ -476,7 +537,7 @@ class TestAsyncRun:
         respx_mock.post("/predictions").mock(return_value=httpx.Response(400, json={"detail": "Invalid Cog version"}))
 
         with pytest.raises(BadRequestError):
-            await self.client.run("model-with-invalid-cog", input={"prompt": "test prompt"})
+            await self.client.run("invalid/cog:model", input={"prompt": "test prompt"})
 
     @pytest.mark.respx(base_url=base_url)
     async def test_async_run_with_model_object(self, respx_mock: MockRouter) -> None:
@@ -508,9 +569,7 @@ class TestAsyncRun:
         # Case where version ID is provided
         respx_mock.post("/predictions").mock(return_value=httpx.Response(201, json=create_mock_prediction()))
 
-        identifier = ModelVersionIdentifier(
-            owner="test-owner", name="test-model", version="test-version-id"
-        )
+        identifier = ModelVersionIdentifier(owner="test-owner", name="test-model", version="test-version-id")
         output = await self.client.run(identifier, input={"prompt": "test prompt"})
 
         assert output == "test output"
@@ -541,10 +600,34 @@ class TestAsyncRun:
         )
 
         output: list[AsyncFileOutput] = await self.client.run(
-            "some-model-ref", use_file_output=True, wait=False, input={"prompt": "generate file iterator"}
+            self.model_ref, use_file_output=True, wait=False, input={"prompt": "generate file iterator"}
         )
 
         assert isinstance(output, list)
         assert len(output) == 3
         assert all(isinstance(item, AsyncFileOutput) for item in output)
         assert [item.url for item in output] == file_urls
+
+    @pytest.mark.respx(base_url=base_url)
+    async def test_async_run_concurrently(self, respx_mock: MockRouter) -> None:
+        """Test running multiple models concurrently with asyncio."""
+        import asyncio
+
+        # Mock three different prediction responses
+        mock_outputs = ["output1", "output2", "output3"]
+        prompts = ["prompt1", "prompt2", "prompt3"]
+
+        # Set up mocks for each request (using side_effect to allow multiple matches)
+        # Note: This will match any POST to /predictions but return different responses
+        route = respx_mock.post("/predictions")
+        route.side_effect = [httpx.Response(201, json=create_mock_prediction(output=output)) for output in mock_outputs]
+
+        # Run three predictions concurrently
+        tasks = [self.client.run("owner/name:version", input={"prompt": prompt}) for prompt in prompts]
+
+        results = await asyncio.gather(*tasks)
+
+        # Verify each result matches expected output
+        assert len(results) == 3
+        for i, result in enumerate(results):
+            assert result == mock_outputs[i]
