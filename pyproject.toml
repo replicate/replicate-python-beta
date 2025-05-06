@@ -1,11 +1,11 @@
 [project]
 name = "replicate-stainless"
 version = "0.1.0-alpha.8"
-description = "The official Python library for the replicate-client API"
+description = "The official Python library for the replicate API"
 dynamic = ["readme"]
 license = "Apache-2.0"
 authors = [
-{ name = "Replicate Client", email = "team@replicate.com" },
+{ name = "Replicate", email = "team@replicate.com" },
 ]
 dependencies = [
     "httpx>=0.23.0, <1",

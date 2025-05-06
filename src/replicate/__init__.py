@@ -11,12 +11,12 @@ from ._client import (
     Client,
     Stream,
     Timeout,
+    Replicate,
     Transport,
     AsyncClient,
     AsyncStream,
+    AsyncReplicate,
     RequestOptions,
-    ReplicateClient,
-    AsyncReplicateClient,
 )
 from ._models import BaseModel
 from ._version import __title__, __version__
@@ -28,12 +28,12 @@ from ._exceptions import (
     NotFoundError,
     APIStatusError,
     RateLimitError,
+    ReplicateError,
     APITimeoutError,
     BadRequestError,
     APIConnectionError,
     AuthenticationError,
     InternalServerError,
-    ReplicateClientError,
     PermissionDeniedError,
     UnprocessableEntityError,
     APIResponseValidationError,
@@ -51,7 +51,7 @@ __all__ = [
     "NotGiven",
     "NOT_GIVEN",
     "Omit",
-    "ReplicateClientError",
+    "ReplicateError",
     "APIError",
     "APIStatusError",
     "APITimeoutError",
@@ -71,8 +71,8 @@ __all__ = [
     "AsyncClient",
     "Stream",
     "AsyncStream",
-    "ReplicateClient",
-    "AsyncReplicateClient",
+    "Replicate",
+    "AsyncReplicate",
     "file_from_path",
     "BaseModel",
     "DEFAULT_TIMEOUT",
@@ -119,7 +119,7 @@ default_query: _t.Mapping[str, object] | None = None
 http_client: _httpx.Client | None = None
 
 
-class _ModuleClient(ReplicateClient):
+class _ModuleClient(Replicate):
     # Note: we have to use type: ignores here as overriding class members
     # with properties is technically unsafe but it is fine for our use case
 
@@ -202,10 +202,10 @@ class _ModuleClient(ReplicateClient):
         http_client = value
 
 
-_client: ReplicateClient | None = None
+_client: Replicate | None = None
 
 
-def _load_client() -> ReplicateClient:  # type: ignore[reportUnusedFunction]
+def _load_client() -> Replicate:  # type: ignore[reportUnusedFunction]
     global _client
 
     if _client is None:

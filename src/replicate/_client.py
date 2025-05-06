@@ -23,7 +23,7 @@ from ._utils import is_given, get_async_library
 from ._compat import cached_property
 from ._version import __version__
 from ._streaming import Stream as Stream, AsyncStream as AsyncStream
-from ._exceptions import APIStatusError, ReplicateClientError
+from ._exceptions import APIStatusError, ReplicateError
 from ._base_client import (
     DEFAULT_MAX_RETRIES,
     SyncAPIClient,
@@ -46,14 +46,14 @@ __all__ = [
     "Transport",
     "ProxiesTypes",
     "RequestOptions",
-    "ReplicateClient",
-    "AsyncReplicateClient",
+    "Replicate",
+    "AsyncReplicate",
     "Client",
     "AsyncClient",
 ]
 
 
-class ReplicateClient(SyncAPIClient):
+class Replicate(SyncAPIClient):
     # client options
     bearer_token: str
 
@@ -80,20 +80,20 @@ class ReplicateClient(SyncAPIClient):
         # part of our public interface in the future.
         _strict_response_validation: bool = False,
     ) -> None:
-        """Construct a new synchronous ReplicateClient client instance.
+        """Construct a new synchronous Replicate client instance.
 
         This automatically infers the `bearer_token` argument from the `REPLICATE_API_TOKEN` environment variable if it is not provided.
         """
         if bearer_token is None:
             bearer_token = os.environ.get("REPLICATE_API_TOKEN")
         if bearer_token is None:
-            raise ReplicateClientError(
+            raise ReplicateError(
                 "The bearer_token client option must be set either by passing bearer_token to the client or by setting the REPLICATE_API_TOKEN environment variable"
             )
         self.bearer_token = bearer_token
 
         if base_url is None:
-            base_url = os.environ.get("REPLICATE_CLIENT_BASE_URL")
+            base_url = os.environ.get("REPLICATE_BASE_URL")
         if base_url is None:
             base_url = f"https://api.replicate.com/v1"
 
@@ -157,12 +157,12 @@ class ReplicateClient(SyncAPIClient):
         return WebhooksResource(self)
 
     @cached_property
-    def with_raw_response(self) -> ReplicateClientWithRawResponse:
-        return ReplicateClientWithRawResponse(self)
+    def with_raw_response(self) -> ReplicateWithRawResponse:
+        return ReplicateWithRawResponse(self)
 
     @cached_property
-    def with_streaming_response(self) -> ReplicateClientWithStreamedResponse:
-        return ReplicateClientWithStreamedResponse(self)
+    def with_streaming_response(self) -> ReplicateWithStreamedResponse:
+        return ReplicateWithStreamedResponse(self)
 
     @property
     @override
@@ -269,7 +269,7 @@ class ReplicateClient(SyncAPIClient):
         return APIStatusError(err_msg, response=response, body=body)
 
 
-class AsyncReplicateClient(AsyncAPIClient):
+class AsyncReplicate(AsyncAPIClient):
     # client options
     bearer_token: str
 
@@ -296,20 +296,20 @@ class AsyncReplicateClient(AsyncAPIClient):
         # part of our public interface in the future.
         _strict_response_validation: bool = False,
     ) -> None:
-        """Construct a new async AsyncReplicateClient client instance.
+        """Construct a new async AsyncReplicate client instance.
 
         This automatically infers the `bearer_token` argument from the `REPLICATE_API_TOKEN` environment variable if it is not provided.
         """
         if bearer_token is None:
             bearer_token = os.environ.get("REPLICATE_API_TOKEN")
         if bearer_token is None:
-            raise ReplicateClientError(
+            raise ReplicateError(
                 "The bearer_token client option must be set either by passing bearer_token to the client or by setting the REPLICATE_API_TOKEN environment variable"
             )
         self.bearer_token = bearer_token
 
         if base_url is None:
-            base_url = os.environ.get("REPLICATE_CLIENT_BASE_URL")
+            base_url = os.environ.get("REPLICATE_BASE_URL")
         if base_url is None:
             base_url = f"https://api.replicate.com/v1"
 
@@ -373,12 +373,12 @@ class AsyncReplicateClient(AsyncAPIClient):
         return AsyncWebhooksResource(self)
 
     @cached_property
-    def with_raw_response(self) -> AsyncReplicateClientWithRawResponse:
-        return AsyncReplicateClientWithRawResponse(self)
+    def with_raw_response(self) -> AsyncReplicateWithRawResponse:
+        return AsyncReplicateWithRawResponse(self)
 
     @cached_property
-    def with_streaming_response(self) -> AsyncReplicateClientWithStreamedResponse:
-        return AsyncReplicateClientWithStreamedResponse(self)
+    def with_streaming_response(self) -> AsyncReplicateWithStreamedResponse:
+        return AsyncReplicateWithStreamedResponse(self)
 
     @property
     @override
@@ -485,10 +485,10 @@ class AsyncReplicateClient(AsyncAPIClient):
         return APIStatusError(err_msg, response=response, body=body)
 
 
-class ReplicateClientWithRawResponse:
-    _client: ReplicateClient
+class ReplicateWithRawResponse:
+    _client: Replicate
 
-    def __init__(self, client: ReplicateClient) -> None:
+    def __init__(self, client: Replicate) -> None:
         self._client = client
 
     @cached_property
@@ -540,10 +540,10 @@ class ReplicateClientWithRawResponse:
         return WebhooksResourceWithRawResponse(self._client.webhooks)
 
 
-class AsyncReplicateClientWithRawResponse:
-    _client: AsyncReplicateClient
+class AsyncReplicateWithRawResponse:
+    _client: AsyncReplicate
 
-    def __init__(self, client: AsyncReplicateClient) -> None:
+    def __init__(self, client: AsyncReplicate) -> None:
         self._client = client
 
     @cached_property
@@ -595,10 +595,10 @@ class AsyncReplicateClientWithRawResponse:
         return AsyncWebhooksResourceWithRawResponse(self._client.webhooks)
 
 
-class ReplicateClientWithStreamedResponse:
-    _client: ReplicateClient
+class ReplicateWithStreamedResponse:
+    _client: Replicate
 
-    def __init__(self, client: ReplicateClient) -> None:
+    def __init__(self, client: Replicate) -> None:
         self._client = client
 
     @cached_property
@@ -650,10 +650,10 @@ class ReplicateClientWithStreamedResponse:
         return WebhooksResourceWithStreamingResponse(self._client.webhooks)
 
 
-class AsyncReplicateClientWithStreamedResponse:
-    _client: AsyncReplicateClient
+class AsyncReplicateWithStreamedResponse:
+    _client: AsyncReplicate
 
-    def __init__(self, client: AsyncReplicateClient) -> None:
+    def __init__(self, client: AsyncReplicate) -> None:
         self._client = client
 
     @cached_property
@@ -705,6 +705,6 @@ class AsyncReplicateClientWithStreamedResponse:
         return AsyncWebhooksResourceWithStreamingResponse(self._client.webhooks)
 
 
-Client = ReplicateClient
+Client = Replicate
 
-AsyncClient = AsyncReplicateClient
+AsyncClient = AsyncReplicate

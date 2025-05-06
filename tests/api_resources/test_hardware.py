@@ -7,7 +7,7 @@ from typing import Any, cast
 
 import pytest
 
-from replicate import ReplicateClient, AsyncReplicateClient
+from replicate import Replicate, AsyncReplicate
 from tests.utils import assert_matches_type
 from replicate.types import HardwareListResponse
 
@@ -19,13 +19,13 @@ class TestHardware:
 
     @pytest.mark.skip()
     @parametrize
-    def test_method_list(self, client: ReplicateClient) -> None:
+    def test_method_list(self, client: Replicate) -> None:
         hardware = client.hardware.list()
         assert_matches_type(HardwareListResponse, hardware, path=["response"])
 
     @pytest.mark.skip()
     @parametrize
-    def test_raw_response_list(self, client: ReplicateClient) -> None:
+    def test_raw_response_list(self, client: Replicate) -> None:
         response = client.hardware.with_raw_response.list()
 
         assert response.is_closed is True
@@ -35,7 +35,7 @@ class TestHardware:
 
     @pytest.mark.skip()
     @parametrize
-    def test_streaming_response_list(self, client: ReplicateClient) -> None:
+    def test_streaming_response_list(self, client: Replicate) -> None:
         with client.hardware.with_streaming_response.list() as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -51,13 +51,13 @@ class TestAsyncHardware:
 
     @pytest.mark.skip()
     @parametrize
-    async def test_method_list(self, async_client: AsyncReplicateClient) -> None:
+    async def test_method_list(self, async_client: AsyncReplicate) -> None:
         hardware = await async_client.hardware.list()
         assert_matches_type(HardwareListResponse, hardware, path=["response"])
 
     @pytest.mark.skip()
     @parametrize
-    async def test_raw_response_list(self, async_client: AsyncReplicateClient) -> None:
+    async def test_raw_response_list(self, async_client: AsyncReplicate) -> None:
         response = await async_client.hardware.with_raw_response.list()
 
         assert response.is_closed is True
@@ -67,7 +67,7 @@ class TestAsyncHardware:
 
     @pytest.mark.skip()
     @parametrize
-    async def test_streaming_response_list(self, async_client: AsyncReplicateClient) -> None:
+    async def test_streaming_response_list(self, async_client: AsyncReplicate) -> None:
         async with async_client.hardware.with_streaming_response.list() as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"

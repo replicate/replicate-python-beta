@@ -7,7 +7,7 @@ from typing import Any, cast
 
 import pytest
 
-from replicate import ReplicateClient, AsyncReplicateClient
+from replicate import Replicate, AsyncReplicate
 
 base_url = os.environ.get("TEST_API_BASE_URL", "http://127.0.0.1:4010")
 
@@ -17,13 +17,13 @@ class TestCollections:
 
     @pytest.mark.skip()
     @parametrize
-    def test_method_list(self, client: ReplicateClient) -> None:
+    def test_method_list(self, client: Replicate) -> None:
         collection = client.collections.list()
         assert collection is None
 
     @pytest.mark.skip()
     @parametrize
-    def test_raw_response_list(self, client: ReplicateClient) -> None:
+    def test_raw_response_list(self, client: Replicate) -> None:
         response = client.collections.with_raw_response.list()
 
         assert response.is_closed is True
@@ -33,7 +33,7 @@ class TestCollections:
 
     @pytest.mark.skip()
     @parametrize
-    def test_streaming_response_list(self, client: ReplicateClient) -> None:
+    def test_streaming_response_list(self, client: Replicate) -> None:
         with client.collections.with_streaming_response.list() as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -45,7 +45,7 @@ class TestCollections:
 
     @pytest.mark.skip()
     @parametrize
-    def test_method_get(self, client: ReplicateClient) -> None:
+    def test_method_get(self, client: Replicate) -> None:
         collection = client.collections.get(
             "collection_slug",
         )
@@ -53,7 +53,7 @@ class TestCollections:
 
     @pytest.mark.skip()
     @parametrize
-    def test_raw_response_get(self, client: ReplicateClient) -> None:
+    def test_raw_response_get(self, client: Replicate) -> None:
         response = client.collections.with_raw_response.get(
             "collection_slug",
         )
@@ -65,7 +65,7 @@ class TestCollections:
 
     @pytest.mark.skip()
     @parametrize
-    def test_streaming_response_get(self, client: ReplicateClient) -> None:
+    def test_streaming_response_get(self, client: Replicate) -> None:
         with client.collections.with_streaming_response.get(
             "collection_slug",
         ) as response:
@@ -79,7 +79,7 @@ class TestCollections:
 
     @pytest.mark.skip()
     @parametrize
-    def test_path_params_get(self, client: ReplicateClient) -> None:
+    def test_path_params_get(self, client: Replicate) -> None:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `collection_slug` but received ''"):
             client.collections.with_raw_response.get(
                 "",
@@ -91,13 +91,13 @@ class TestAsyncCollections:
 
     @pytest.mark.skip()
     @parametrize
-    async def test_method_list(self, async_client: AsyncReplicateClient) -> None:
+    async def test_method_list(self, async_client: AsyncReplicate) -> None:
         collection = await async_client.collections.list()
         assert collection is None
 
     @pytest.mark.skip()
     @parametrize
-    async def test_raw_response_list(self, async_client: AsyncReplicateClient) -> None:
+    async def test_raw_response_list(self, async_client: AsyncReplicate) -> None:
         response = await async_client.collections.with_raw_response.list()
 
         assert response.is_closed is True
@@ -107,7 +107,7 @@ class TestAsyncCollections:
 
     @pytest.mark.skip()
     @parametrize
-    async def test_streaming_response_list(self, async_client: AsyncReplicateClient) -> None:
+    async def test_streaming_response_list(self, async_client: AsyncReplicate) -> None:
         async with async_client.collections.with_streaming_response.list() as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -119,7 +119,7 @@ class TestAsyncCollections:
 
     @pytest.mark.skip()
     @parametrize
-    async def test_method_get(self, async_client: AsyncReplicateClient) -> None:
+    async def test_method_get(self, async_client: AsyncReplicate) -> None:
         collection = await async_client.collections.get(
             "collection_slug",
         )
@@ -127,7 +127,7 @@ class TestAsyncCollections:
 
     @pytest.mark.skip()
     @parametrize
-    async def test_raw_response_get(self, async_client: AsyncReplicateClient) -> None:
+    async def test_raw_response_get(self, async_client: AsyncReplicate) -> None:
         response = await async_client.collections.with_raw_response.get(
             "collection_slug",
         )
@@ -139,7 +139,7 @@ class TestAsyncCollections:
 
     @pytest.mark.skip()
     @parametrize
-    async def test_streaming_response_get(self, async_client: AsyncReplicateClient) -> None:
+    async def test_streaming_response_get(self, async_client: AsyncReplicate) -> None:
         async with async_client.collections.with_streaming_response.get(
             "collection_slug",
         ) as response:
@@ -153,7 +153,7 @@ class TestAsyncCollections:
 
     @pytest.mark.skip()
     @parametrize
-    async def test_path_params_get(self, async_client: AsyncReplicateClient) -> None:
+    async def test_path_params_get(self, async_client: AsyncReplicate) -> None:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `collection_slug` but received ''"):
             await async_client.collections.with_raw_response.get(
                 "",
