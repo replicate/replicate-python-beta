@@ -110,7 +110,7 @@ class TestPredictions:
     @parametrize
     def test_method_cancel(self, client: Replicate) -> None:
         prediction = client.predictions.cancel(
-            "prediction_id",
+            prediction_id="prediction_id",
         )
         assert prediction is None
 
@@ -118,7 +118,7 @@ class TestPredictions:
     @parametrize
     def test_raw_response_cancel(self, client: Replicate) -> None:
         response = client.predictions.with_raw_response.cancel(
-            "prediction_id",
+            prediction_id="prediction_id",
         )
 
         assert response.is_closed is True
@@ -130,7 +130,7 @@ class TestPredictions:
     @parametrize
     def test_streaming_response_cancel(self, client: Replicate) -> None:
         with client.predictions.with_streaming_response.cancel(
-            "prediction_id",
+            prediction_id="prediction_id",
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -145,14 +145,14 @@ class TestPredictions:
     def test_path_params_cancel(self, client: Replicate) -> None:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `prediction_id` but received ''"):
             client.predictions.with_raw_response.cancel(
-                "",
+                prediction_id="",
             )
 
     @pytest.mark.skip()
     @parametrize
     def test_method_get(self, client: Replicate) -> None:
         prediction = client.predictions.get(
-            "prediction_id",
+            prediction_id="prediction_id",
         )
         assert_matches_type(Prediction, prediction, path=["response"])
 
@@ -160,7 +160,7 @@ class TestPredictions:
     @parametrize
     def test_raw_response_get(self, client: Replicate) -> None:
         response = client.predictions.with_raw_response.get(
-            "prediction_id",
+            prediction_id="prediction_id",
         )
 
         assert response.is_closed is True
@@ -172,7 +172,7 @@ class TestPredictions:
     @parametrize
     def test_streaming_response_get(self, client: Replicate) -> None:
         with client.predictions.with_streaming_response.get(
-            "prediction_id",
+            prediction_id="prediction_id",
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -187,7 +187,7 @@ class TestPredictions:
     def test_path_params_get(self, client: Replicate) -> None:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `prediction_id` but received ''"):
             client.predictions.with_raw_response.get(
-                "",
+                prediction_id="",
             )
 
 
@@ -285,7 +285,7 @@ class TestAsyncPredictions:
     @parametrize
     async def test_method_cancel(self, async_client: AsyncReplicate) -> None:
         prediction = await async_client.predictions.cancel(
-            "prediction_id",
+            prediction_id="prediction_id",
         )
         assert prediction is None
 
@@ -293,7 +293,7 @@ class TestAsyncPredictions:
     @parametrize
     async def test_raw_response_cancel(self, async_client: AsyncReplicate) -> None:
         response = await async_client.predictions.with_raw_response.cancel(
-            "prediction_id",
+            prediction_id="prediction_id",
         )
 
         assert response.is_closed is True
@@ -305,7 +305,7 @@ class TestAsyncPredictions:
     @parametrize
     async def test_streaming_response_cancel(self, async_client: AsyncReplicate) -> None:
         async with async_client.predictions.with_streaming_response.cancel(
-            "prediction_id",
+            prediction_id="prediction_id",
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -320,14 +320,14 @@ class TestAsyncPredictions:
     async def test_path_params_cancel(self, async_client: AsyncReplicate) -> None:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `prediction_id` but received ''"):
             await async_client.predictions.with_raw_response.cancel(
-                "",
+                prediction_id="",
             )
 
     @pytest.mark.skip()
     @parametrize
     async def test_method_get(self, async_client: AsyncReplicate) -> None:
         prediction = await async_client.predictions.get(
-            "prediction_id",
+            prediction_id="prediction_id",
         )
         assert_matches_type(Prediction, prediction, path=["response"])
 
@@ -335,7 +335,7 @@ class TestAsyncPredictions:
     @parametrize
     async def test_raw_response_get(self, async_client: AsyncReplicate) -> None:
         response = await async_client.predictions.with_raw_response.get(
-            "prediction_id",
+            prediction_id="prediction_id",
         )
 
         assert response.is_closed is True
@@ -347,7 +347,7 @@ class TestAsyncPredictions:
     @parametrize
     async def test_streaming_response_get(self, async_client: AsyncReplicate) -> None:
         async with async_client.predictions.with_streaming_response.get(
-            "prediction_id",
+            prediction_id="prediction_id",
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -362,5 +362,5 @@ class TestAsyncPredictions:
     async def test_path_params_get(self, async_client: AsyncReplicate) -> None:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `prediction_id` but received ''"):
             await async_client.predictions.with_raw_response.get(
-                "",
+                prediction_id="",
             )

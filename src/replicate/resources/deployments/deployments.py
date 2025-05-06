@@ -164,9 +164,9 @@ class DeploymentsResource(SyncAPIResource):
 
     def update(
         self,
-        deployment_name: str,
         *,
         deployment_owner: str,
+        deployment_name: str,
         hardware: str | NotGiven = NOT_GIVEN,
         max_instances: int | NotGiven = NOT_GIVEN,
         min_instances: int | NotGiven = NOT_GIVEN,
@@ -330,9 +330,9 @@ class DeploymentsResource(SyncAPIResource):
 
     def delete(
         self,
-        deployment_name: str,
         *,
         deployment_owner: str,
+        deployment_name: str,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -382,9 +382,9 @@ class DeploymentsResource(SyncAPIResource):
 
     def get(
         self,
-        deployment_name: str,
         *,
         deployment_owner: str,
+        deployment_name: str,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -583,9 +583,9 @@ class AsyncDeploymentsResource(AsyncAPIResource):
 
     async def update(
         self,
-        deployment_name: str,
         *,
         deployment_owner: str,
+        deployment_name: str,
         hardware: str | NotGiven = NOT_GIVEN,
         max_instances: int | NotGiven = NOT_GIVEN,
         min_instances: int | NotGiven = NOT_GIVEN,
@@ -749,9 +749,9 @@ class AsyncDeploymentsResource(AsyncAPIResource):
 
     async def delete(
         self,
-        deployment_name: str,
         *,
         deployment_owner: str,
+        deployment_name: str,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -801,9 +801,9 @@ class AsyncDeploymentsResource(AsyncAPIResource):
 
     async def get(
         self,
-        deployment_name: str,
         *,
         deployment_owner: str,
+        deployment_name: str,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,

@@ -13,6 +13,8 @@ __all__ = ["PredictionCreateParams"]
 class PredictionCreateParams(TypedDict, total=False):
     model_owner: Required[str]
 
+    model_name: Required[str]
+
     input: Required[object]
     """The model's input as a JSON object.
 

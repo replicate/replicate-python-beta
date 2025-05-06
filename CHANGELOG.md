@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.1.0-alpha.10 (2025-05-06)
+
+Full Changelog: [v0.1.0-alpha.9...v0.1.0-alpha.10](https://github.com/replicate/replicate-python-stainless/compare/v0.1.0-alpha.9...v0.1.0-alpha.10)
+
+### Bug Fixes
+
+* disable settings.positional_params ([f018f4b](https://github.com/replicate/replicate-python-stainless/commit/f018f4b81e50ae538d9430aa1cdde7f64100031a))
+
 ## 0.1.0-alpha.9 (2025-05-06)
 
 Full Changelog: [v0.1.0-alpha.8...v0.1.0-alpha.9](https://github.com/replicate/replicate-python-stainless/compare/v0.1.0-alpha.8...v0.1.0-alpha.9)

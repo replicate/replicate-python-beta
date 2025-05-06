@@ -47,7 +47,7 @@ class TestCollections:
     @parametrize
     def test_method_get(self, client: Replicate) -> None:
         collection = client.collections.get(
-            "collection_slug",
+            collection_slug="collection_slug",
         )
         assert collection is None
 
@@ -55,7 +55,7 @@ class TestCollections:
     @parametrize
     def test_raw_response_get(self, client: Replicate) -> None:
         response = client.collections.with_raw_response.get(
-            "collection_slug",
+            collection_slug="collection_slug",
         )
 
         assert response.is_closed is True
@@ -67,7 +67,7 @@ class TestCollections:
     @parametrize
     def test_streaming_response_get(self, client: Replicate) -> None:
         with client.collections.with_streaming_response.get(
-            "collection_slug",
+            collection_slug="collection_slug",
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -82,7 +82,7 @@ class TestCollections:
     def test_path_params_get(self, client: Replicate) -> None:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `collection_slug` but received ''"):
             client.collections.with_raw_response.get(
-                "",
+                collection_slug="",
             )
 
 
@@ -121,7 +121,7 @@ class TestAsyncCollections:
     @parametrize
     async def test_method_get(self, async_client: AsyncReplicate) -> None:
         collection = await async_client.collections.get(
-            "collection_slug",
+            collection_slug="collection_slug",
         )
         assert collection is None
 
@@ -129,7 +129,7 @@ class TestAsyncCollections:
     @parametrize
     async def test_raw_response_get(self, async_client: AsyncReplicate) -> None:
         response = await async_client.collections.with_raw_response.get(
-            "collection_slug",
+            collection_slug="collection_slug",
         )
 
         assert response.is_closed is True
@@ -141,7 +141,7 @@ class TestAsyncCollections:
     @parametrize
     async def test_streaming_response_get(self, async_client: AsyncReplicate) -> None:
         async with async_client.collections.with_streaming_response.get(
-            "collection_slug",
+            collection_slug="collection_slug",
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -156,5 +156,5 @@ class TestAsyncCollections:
     async def test_path_params_get(self, async_client: AsyncReplicate) -> None:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `collection_slug` but received ''"):
             await async_client.collections.with_raw_response.get(
-                "",
+                collection_slug="",
             )

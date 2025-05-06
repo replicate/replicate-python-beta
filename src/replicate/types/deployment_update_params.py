@@ -10,6 +10,8 @@ __all__ = ["DeploymentUpdateParams"]
 class DeploymentUpdateParams(TypedDict, total=False):
     deployment_owner: Required[str]
 
+    deployment_name: Required[str]
+
     hardware: str
     """The SKU for the hardware used to run the model.
 

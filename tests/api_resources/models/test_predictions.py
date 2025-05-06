@@ -21,8 +21,8 @@ class TestPredictions:
     @parametrize
     def test_method_create(self, client: Replicate) -> None:
         prediction = client.models.predictions.create(
-            model_name="model_name",
             model_owner="model_owner",
+            model_name="model_name",
             input={},
         )
         assert_matches_type(Prediction, prediction, path=["response"])
@@ -31,8 +31,8 @@ class TestPredictions:
     @parametrize
     def test_method_create_with_all_params(self, client: Replicate) -> None:
         prediction = client.models.predictions.create(
-            model_name="model_name",
             model_owner="model_owner",
+            model_name="model_name",
             input={},
             stream=True,
             webhook="webhook",
@@ -45,8 +45,8 @@ class TestPredictions:
     @parametrize
     def test_raw_response_create(self, client: Replicate) -> None:
         response = client.models.predictions.with_raw_response.create(
-            model_name="model_name",
             model_owner="model_owner",
+            model_name="model_name",
             input={},
         )
 
@@ -59,8 +59,8 @@ class TestPredictions:
     @parametrize
     def test_streaming_response_create(self, client: Replicate) -> None:
         with client.models.predictions.with_streaming_response.create(
-            model_name="model_name",
             model_owner="model_owner",
+            model_name="model_name",
             input={},
         ) as response:
             assert not response.is_closed
@@ -76,15 +76,15 @@ class TestPredictions:
     def test_path_params_create(self, client: Replicate) -> None:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `model_owner` but received ''"):
             client.models.predictions.with_raw_response.create(
-                model_name="model_name",
                 model_owner="",
+                model_name="model_name",
                 input={},
             )
 
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `model_name` but received ''"):
             client.models.predictions.with_raw_response.create(
-                model_name="",
                 model_owner="model_owner",
+                model_name="",
                 input={},
             )
 
@@ -96,8 +96,8 @@ class TestAsyncPredictions:
     @parametrize
     async def test_method_create(self, async_client: AsyncReplicate) -> None:
         prediction = await async_client.models.predictions.create(
-            model_name="model_name",
             model_owner="model_owner",
+            model_name="model_name",
             input={},
         )
         assert_matches_type(Prediction, prediction, path=["response"])
@@ -106,8 +106,8 @@ class TestAsyncPredictions:
     @parametrize
     async def test_method_create_with_all_params(self, async_client: AsyncReplicate) -> None:
         prediction = await async_client.models.predictions.create(
-            model_name="model_name",
             model_owner="model_owner",
+            model_name="model_name",
             input={},
             stream=True,
             webhook="webhook",
@@ -120,8 +120,8 @@ class TestAsyncPredictions:
     @parametrize
     async def test_raw_response_create(self, async_client: AsyncReplicate) -> None:
         response = await async_client.models.predictions.with_raw_response.create(
-            model_name="model_name",
             model_owner="model_owner",
+            model_name="model_name",
             input={},
         )
 
@@ -134,8 +134,8 @@ class TestAsyncPredictions:
     @parametrize
     async def test_streaming_response_create(self, async_client: AsyncReplicate) -> None:
         async with async_client.models.predictions.with_streaming_response.create(
-            model_name="model_name",
             model_owner="model_owner",
+            model_name="model_name",
             input={},
         ) as response:
             assert not response.is_closed
@@ -151,14 +151,14 @@ class TestAsyncPredictions:
     async def test_path_params_create(self, async_client: AsyncReplicate) -> None:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `model_owner` but received ''"):
             await async_client.models.predictions.with_raw_response.create(
-                model_name="model_name",
                 model_owner="",
+                model_name="model_name",
                 input={},
             )
 
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `model_name` but received ''"):
             await async_client.models.predictions.with_raw_response.create(
-                model_name="",
                 model_owner="model_owner",
+                model_name="",
                 input={},
             )
