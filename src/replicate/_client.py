@@ -167,7 +167,7 @@ class Replicate(SyncAPIClient):
     @cached_property
     def with_streaming_response(self) -> ReplicateWithStreamedResponse:
         return ReplicateWithStreamedResponse(self)
-    
+
     @cached_property
     def poll_interval(self) -> float:
         return float(os.environ.get("REPLICATE_POLL_INTERVAL", "0.5"))
@@ -191,7 +191,7 @@ class Replicate(SyncAPIClient):
             "X-Stainless-Async": "false",
             **self._custom_headers,
         }
-    
+
     def run(
         self,
         ref: Union[Model, Version, ModelVersionIdentifier, str],
@@ -408,7 +408,7 @@ class AsyncReplicate(AsyncAPIClient):
     @cached_property
     def with_streaming_response(self) -> AsyncReplicateWithStreamedResponse:
         return AsyncReplicateWithStreamedResponse(self)
-    
+
     @cached_property
     def poll_interval(self) -> float:
         return float(os.environ.get("REPLICATE_POLL_INTERVAL", "0.5"))
@@ -432,7 +432,7 @@ class AsyncReplicate(AsyncAPIClient):
             "X-Stainless-Async": f"async:{get_async_library()}",
             **self._custom_headers,
         }
-    
+
     async def run(
         self,
         ref: Union[Model, Version, ModelVersionIdentifier, str],

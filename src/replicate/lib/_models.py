@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import Tuple, Union, Optional
+from typing import Any, Dict, Tuple, Union, Optional
 from typing_extensions import TypedDict
 
 
@@ -12,11 +12,27 @@ class Model:
         self.name = name
 
 
-class Version:
-    """A specific version of a Replicate model."""
+import datetime
 
-    def __init__(self, id: str):
-        self.id = id
+from pydantic import BaseModel
+
+
+class Version(BaseModel):
+    """
+    A version of a model.
+    """
+
+    id: str
+    """The unique ID of the version."""
+
+    created_at: datetime.datetime
+    """When the version was created."""
+
+    cog_version: str
+    """The version of the Cog used to create the version."""
+
+    openapi_schema: Dict[str, Any]
+    """An OpenAPI description of the model inputs and outputs."""
 
 
 class ModelVersionIdentifier(TypedDict, total=False):
@@ -29,7 +45,7 @@ class ModelVersionIdentifier(TypedDict, total=False):
 
 def resolve_reference(
     ref: Union[Model, Version, ModelVersionIdentifier, str],
-) -> Tuple[Optional[str], Optional[str], Optional[str], Optional[str]]:
+) -> Tuple[Optional[Version], Optional[str], Optional[str], Optional[str]]:
     """
     Resolve a reference to a model or version to its components.
 

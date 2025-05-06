@@ -1,9 +1,13 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Dict, Union, Iterable, Optional
+import time
+from typing import TYPE_CHECKING, Any, Dict, List, Union, Iterable, Iterator, Optional
+from collections.abc import AsyncIterator
 from typing_extensions import Unpack
 
 from replicate.lib._files import FileEncodingStrategy
+from replicate.lib._schema import make_schema_backwards_compatible
+from replicate.types.prediction import Prediction
 from replicate.types.prediction_create_params import PredictionCreateParamsWithoutVersion
 
 from ..types import PredictionOutput, PredictionCreateParams
@@ -71,7 +75,7 @@ def run(
             params.setdefault("prefer", f"wait={wait}")
 
     # Resolve ref to its components
-    _version, owner, name, version_id = resolve_reference(ref)
+    version, owner, name, version_id = resolve_reference(ref)
 
     prediction = None
     if version_id is not None:
@@ -104,14 +108,18 @@ def run(
     # "processing".
     in_terminal_state = is_blocking and prediction.status != "starting"
     if not in_terminal_state:
-        # TODO: Return a "polling" iterator if the model has an output iterator array type.
+        # Return a "polling" iterator if the model has an output iterator array type.
+        if version and _has_output_iterator_array_type(version):
+            return (transform_output(chunk, client) for chunk in output_iterator(prediction=prediction, client=client))
 
         prediction = client.predictions.wait(prediction.id)
 
     if prediction.status == "failed":
         raise ModelError(prediction)
 
-    # TODO: Return an iterator for completed output if the model has an output iterator array type.
+    # Return an iterator for the completed prediction when needed.
+    if version and _has_output_iterator_array_type(version) and prediction.output is not None:
+        return (transform_output(chunk, client) for chunk in prediction.output)
 
     if use_file_output:
         return transform_output(prediction.output, client)  # type: ignore[no-any-return]
@@ -173,7 +181,7 @@ async def async_run(
             params.setdefault("prefer", f"wait={wait}")
 
     # Resolve ref to its components
-    _version, owner, name, version_id = resolve_reference(ref)
+    version, owner, name, version_id = resolve_reference(ref)
 
     prediction = None
     if version_id is not None:
@@ -210,16 +218,56 @@ async def async_run(
     # "processing".
     in_terminal_state = is_blocking and prediction.status != "starting"
     if not in_terminal_state:
-        # TODO: Return a "polling" iterator if the model has an output iterator array type.
+        # Return a "polling" iterator if the model has an output iterator array type.
+        # if version and _has_output_iterator_array_type(version):
+        #     return (
+        #         transform_output(chunk, client)
+        #         async for chunk in prediction.async_output_iterator()
+        #     )
 
         prediction = await client.predictions.wait(prediction.id)
 
     if prediction.status == "failed":
         raise ModelError(prediction)
 
-    # TODO: Return an iterator for completed output if the model has an output iterator array type.
-
+    # Return an iterator for completed output if the model has an output iterator array type.
+    if version and _has_output_iterator_array_type(version) and prediction.output is not None:
+        return (transform_output(chunk, client) async for chunk in _make_async_iterator(prediction.output))
     if use_file_output:
         return transform_output(prediction.output, client)  # type: ignore[no-any-return]
 
     return prediction.output
+
+
+def _has_output_iterator_array_type(version: Version) -> bool:
+    schema = make_schema_backwards_compatible(version.openapi_schema, version.cog_version)
+    output = schema.get("components", {}).get("schemas", {}).get("Output", {})
+    return output.get("type") == "array" and output.get("x-cog-array-type") == "iterator" # type: ignore[no-any-return]
+
+
+async def _make_async_iterator(list: List[Any]) -> AsyncIterator[Any]:
+    for item in list:
+        yield item
+
+
+def output_iterator(prediction: Prediction, client: Replicate) -> Iterator[Any]:
+    """
+    Return an iterator of the prediction output.
+    """
+
+    # TODO: check output is list
+    previous_output: Any = prediction.output or []
+    while prediction.status not in ["succeeded", "failed", "canceled"]:
+        output: Any = prediction.output or []
+        new_output = output[len(previous_output) :]
+        yield from new_output
+        previous_output = output
+        time.sleep(client.poll_interval)
+        prediction = client.predictions.get(prediction.id)
+
+    if prediction.status == "failed":
+        raise ModelError(prediction=prediction)
+
+    output = prediction.output or []
+    new_output = output[len(previous_output) :]
+    yield from new_output

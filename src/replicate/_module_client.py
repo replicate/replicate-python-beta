@@ -66,6 +66,7 @@ class PredictionsResourceProxy(LazyProxy["PredictionsResource"]):
     def __load__(self) -> PredictionsResource:
         return _load_client().predictions
 
+
 if TYPE_CHECKING:
     from ._client import Replicate
 
@@ -74,6 +75,7 @@ if TYPE_CHECKING:
     __client: Replicate = cast(Replicate, {})
     run = __client.run
 else:
+
     def _run(*args, **kwargs):
         return _load_client().run(*args, **kwargs)
 

@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import io
 import os
+import datetime
 from typing import Any, Dict, Optional
 
 import httpx
@@ -46,6 +47,41 @@ def create_mock_prediction(
         "model": "test-model",
         "data_removed": False,
     }
+
+
+def _version_with_schema(id: str = "v1", output_schema: Optional[object] = None) -> Version:
+    return Version(
+        id=id,
+        created_at=datetime.datetime.fromisoformat("2022-03-16T00:35:56.210272"),
+        cog_version="dev",
+        openapi_schema={
+            "openapi": "3.0.2",
+            "info": {"title": "Cog", "version": "0.1.0"},
+            "paths": {},
+            "components": {
+                "schemas": {
+                    "Input": {
+                        "type": "object",
+                        "title": "Input",
+                        "required": ["text"],
+                        "properties": {
+                            "text": {
+                                "type": "string",
+                                "title": "Text",
+                                "x-order": 0,
+                                "description": "The text input",
+                            },
+                        },
+                    },
+                    "Output": output_schema
+                    or {
+                        "type": "string",
+                        "title": "Output",
+                    },
+                }
+            },
+        },
+    )
 
 
 class TestRun:
@@ -227,7 +263,7 @@ class TestRun:
         # Version ID is used directly
         respx_mock.post("/predictions").mock(return_value=httpx.Response(201, json=create_mock_prediction()))
 
-        version = Version(id="test-version-id")
+        version = _version_with_schema("test-version-id")
         output = self.client.run(version, input={"prompt": "test prompt"})
 
         assert output == "test output"
@@ -243,7 +279,6 @@ class TestRun:
 
         assert output == "test output"
 
-    @pytest.mark.skip("todo: support file output iterator")
     @pytest.mark.respx(base_url=base_url)
     def test_run_with_file_output_iterator(self, respx_mock: MockRouter) -> None:
         """Test run with file output iterator."""
@@ -270,7 +305,7 @@ class TestRun:
         )
 
         output: list[FileOutput] = self.client.run(
-            "some-model-ref", use_file_output=True, input={"prompt": "generate file iterator"}
+            "some-model-ref", use_file_output=True, wait=False, input={"prompt": "generate file iterator"}
         )
 
         assert isinstance(output, list)
@@ -460,7 +495,7 @@ class TestAsyncRun:
         # Version ID is used directly
         respx_mock.post("/predictions").mock(return_value=httpx.Response(201, json=create_mock_prediction()))
 
-        version = Version(id="test-version-id")
+        version = _version_with_schema("test-version-id")
         output = await self.client.run(version, input={"prompt": "test prompt"})
 
         assert output == "test output"
@@ -476,7 +511,6 @@ class TestAsyncRun:
 
         assert output == "test output"
 
-    @pytest.mark.skip("todo: support file output iterator")
     @pytest.mark.respx(base_url=base_url)
     async def test_async_run_with_file_output_iterator(self, respx_mock: MockRouter) -> None:
         """Test async run with file output iterator."""
@@ -503,7 +537,7 @@ class TestAsyncRun:
         )
 
         output: list[AsyncFileOutput] = await self.client.run(
-            "some-model-ref", use_file_output=True, input={"prompt": "generate file iterator"}
+            "some-model-ref", use_file_output=True, wait=False, input={"prompt": "generate file iterator"}
         )
 
         assert isinstance(output, list)
