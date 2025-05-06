@@ -1,8 +1,8 @@
-# Replicate Client Python API library
+# Replicate Python API library
 
 [![PyPI version](https://img.shields.io/pypi/v/replicate-stainless.svg)](https://pypi.org/project/replicate-stainless/)
 
-The Replicate Client Python library provides convenient access to the Replicate Client REST API from any Python 3.8+
+The Replicate Python library provides convenient access to the Replicate REST API from any Python 3.8+
 application. The library includes type definitions for all request params and response fields,
 and offers both synchronous and asynchronous clients powered by [httpx](https://github.com/encode/httpx).
 
@@ -25,9 +25,9 @@ The full API of this library can be found in [api.md](api.md).
 
 ```python
 import os
-from replicate import ReplicateClient
+from replicate import Replicate
 
-client = ReplicateClient(
+client = Replicate(
     bearer_token=os.environ.get("REPLICATE_API_TOKEN"),  # This is the default and can be omitted
 )
 
@@ -42,14 +42,14 @@ so that your Bearer Token is not stored in source control.
 
 ## Async usage
 
-Simply import `AsyncReplicateClient` instead of `ReplicateClient` and use `await` with each API call:
+Simply import `AsyncReplicate` instead of `Replicate` and use `await` with each API call:
 
 ```python
 import os
 import asyncio
-from replicate import AsyncReplicateClient
+from replicate import AsyncReplicate
 
-client = AsyncReplicateClient(
+client = AsyncReplicate(
     bearer_token=os.environ.get("REPLICATE_API_TOKEN"),  # This is the default and can be omitted
 )
 
@@ -75,14 +75,14 @@ Typed requests and responses provide autocomplete and documentation within your 
 
 ## Pagination
 
-List methods in the Replicate Client API are paginated.
+List methods in the Replicate API are paginated.
 
 This library provides auto-paginating iterators with each list response, so you do not have to request successive pages manually:
 
 ```python
-from replicate import ReplicateClient
+from replicate import Replicate
 
-client = ReplicateClient()
+client = Replicate()
 
 all_predictions = []
 # Automatically fetches more pages as needed.
@@ -96,9 +96,9 @@ Or, asynchronously:
 
 ```python
 import asyncio
-from replicate import AsyncReplicateClient
+from replicate import AsyncReplicate
 
-client = AsyncReplicateClient()
+client = AsyncReplicate()
 
 
 async def main() -> None:
@@ -147,9 +147,9 @@ All errors inherit from `replicate.APIError`.
 
 ```python
 import replicate
-from replicate import ReplicateClient
+from replicate import Replicate
 
-client = ReplicateClient()
+client = Replicate()
 
 try:
     client.account.get()
@@ -186,10 +186,10 @@ Connection errors (for example, due to a network connectivity problem), 408 Requ
 You can use the `max_retries` option to configure or disable retry settings:
 
 ```python
-from replicate import ReplicateClient
+from replicate import Replicate
 
 # Configure the default for all requests:
-client = ReplicateClient(
+client = Replicate(
     # default is 2
     max_retries=0,
 )
@@ -204,16 +204,16 @@ By default requests time out after 1 minute. You can configure this with a `time
 which accepts a float or an [`httpx.Timeout`](https://www.python-httpx.org/advanced/#fine-tuning-the-configuration) object:
 
 ```python
-from replicate import ReplicateClient
+from replicate import Replicate
 
 # Configure the default for all requests:
-client = ReplicateClient(
+client = Replicate(
     # 20 seconds (default is 1 minute)
     timeout=20.0,
 )
 
 # More granular control:
-client = ReplicateClient(
+client = Replicate(
     timeout=httpx.Timeout(60.0, read=5.0, write=10.0, connect=2.0),
 )
 
@@ -231,10 +231,10 @@ Note that requests that time out are [retried twice by default](#retries).
 
 We use the standard library [`logging`](https://docs.python.org/3/library/logging.html) module.
 
-You can enable logging by setting the environment variable `REPLICATE_CLIENT_LOG` to `info`.
+You can enable logging by setting the environment variable `REPLICATE_LOG` to `info`.
 
 ```shell
-$ export REPLICATE_CLIENT_LOG=info
+$ export REPLICATE_LOG=info
 ```
 
 Or to `debug` for more verbose logging.
@@ -256,9 +256,9 @@ if response.my_field is None:
 The "raw" Response object can be accessed by prefixing `.with_raw_response.` to any HTTP method call, e.g.,
 
 ```py
-from replicate import ReplicateClient
+from replicate import Replicate
 
-client = ReplicateClient()
+client = Replicate()
 response = client.account.with_raw_response.get()
 print(response.headers.get('X-My-Header'))
 
@@ -330,10 +330,10 @@ You can directly override the [httpx client](https://www.python-httpx.org/api/#c
 
 ```python
 import httpx
-from replicate import ReplicateClient, DefaultHttpxClient
+from replicate import Replicate, DefaultHttpxClient
 
-client = ReplicateClient(
-    # Or use the `REPLICATE_CLIENT_BASE_URL` env var
+client = Replicate(
+    # Or use the `REPLICATE_BASE_URL` env var
     base_url="http://my.test.server.example.com:8083",
     http_client=DefaultHttpxClient(
         proxy="http://my.test.proxy.example.com",
@@ -353,9 +353,9 @@ client.with_options(http_client=DefaultHttpxClient(...))
 By default the library closes underlying HTTP connections whenever the client is [garbage collected](https://docs.python.org/3/reference/datamodel.html#object.__del__). You can manually close the client using the `.close()` method if desired, or with a context manager that closes when exiting.
 
 ```py
-from replicate import ReplicateClient
+from replicate import Replicate
 
-with ReplicateClient() as client:
+with Replicate() as client:
   # make requests here
   ...
 

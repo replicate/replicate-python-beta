@@ -7,7 +7,7 @@ from typing import Any, cast
 
 import pytest
 
-from replicate import ReplicateClient, AsyncReplicateClient
+from replicate import Replicate, AsyncReplicate
 from tests.utils import assert_matches_type
 from replicate.types import ModelListResponse
 from replicate.pagination import SyncCursorURLPage, AsyncCursorURLPage
@@ -20,7 +20,7 @@ class TestModels:
 
     @pytest.mark.skip()
     @parametrize
-    def test_method_create(self, client: ReplicateClient) -> None:
+    def test_method_create(self, client: Replicate) -> None:
         model = client.models.create(
             hardware="hardware",
             name="name",
@@ -31,7 +31,7 @@ class TestModels:
 
     @pytest.mark.skip()
     @parametrize
-    def test_method_create_with_all_params(self, client: ReplicateClient) -> None:
+    def test_method_create_with_all_params(self, client: Replicate) -> None:
         model = client.models.create(
             hardware="hardware",
             name="name",
@@ -47,7 +47,7 @@ class TestModels:
 
     @pytest.mark.skip()
     @parametrize
-    def test_raw_response_create(self, client: ReplicateClient) -> None:
+    def test_raw_response_create(self, client: Replicate) -> None:
         response = client.models.with_raw_response.create(
             hardware="hardware",
             name="name",
@@ -62,7 +62,7 @@ class TestModels:
 
     @pytest.mark.skip()
     @parametrize
-    def test_streaming_response_create(self, client: ReplicateClient) -> None:
+    def test_streaming_response_create(self, client: Replicate) -> None:
         with client.models.with_streaming_response.create(
             hardware="hardware",
             name="name",
@@ -79,13 +79,13 @@ class TestModels:
 
     @pytest.mark.skip()
     @parametrize
-    def test_method_list(self, client: ReplicateClient) -> None:
+    def test_method_list(self, client: Replicate) -> None:
         model = client.models.list()
         assert_matches_type(SyncCursorURLPage[ModelListResponse], model, path=["response"])
 
     @pytest.mark.skip()
     @parametrize
-    def test_raw_response_list(self, client: ReplicateClient) -> None:
+    def test_raw_response_list(self, client: Replicate) -> None:
         response = client.models.with_raw_response.list()
 
         assert response.is_closed is True
@@ -95,7 +95,7 @@ class TestModels:
 
     @pytest.mark.skip()
     @parametrize
-    def test_streaming_response_list(self, client: ReplicateClient) -> None:
+    def test_streaming_response_list(self, client: Replicate) -> None:
         with client.models.with_streaming_response.list() as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -107,7 +107,7 @@ class TestModels:
 
     @pytest.mark.skip()
     @parametrize
-    def test_method_delete(self, client: ReplicateClient) -> None:
+    def test_method_delete(self, client: Replicate) -> None:
         model = client.models.delete(
             model_name="model_name",
             model_owner="model_owner",
@@ -116,7 +116,7 @@ class TestModels:
 
     @pytest.mark.skip()
     @parametrize
-    def test_raw_response_delete(self, client: ReplicateClient) -> None:
+    def test_raw_response_delete(self, client: Replicate) -> None:
         response = client.models.with_raw_response.delete(
             model_name="model_name",
             model_owner="model_owner",
@@ -129,7 +129,7 @@ class TestModels:
 
     @pytest.mark.skip()
     @parametrize
-    def test_streaming_response_delete(self, client: ReplicateClient) -> None:
+    def test_streaming_response_delete(self, client: Replicate) -> None:
         with client.models.with_streaming_response.delete(
             model_name="model_name",
             model_owner="model_owner",
@@ -144,7 +144,7 @@ class TestModels:
 
     @pytest.mark.skip()
     @parametrize
-    def test_path_params_delete(self, client: ReplicateClient) -> None:
+    def test_path_params_delete(self, client: Replicate) -> None:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `model_owner` but received ''"):
             client.models.with_raw_response.delete(
                 model_name="model_name",
@@ -159,7 +159,7 @@ class TestModels:
 
     @pytest.mark.skip()
     @parametrize
-    def test_method_get(self, client: ReplicateClient) -> None:
+    def test_method_get(self, client: Replicate) -> None:
         model = client.models.get(
             model_name="model_name",
             model_owner="model_owner",
@@ -168,7 +168,7 @@ class TestModels:
 
     @pytest.mark.skip()
     @parametrize
-    def test_raw_response_get(self, client: ReplicateClient) -> None:
+    def test_raw_response_get(self, client: Replicate) -> None:
         response = client.models.with_raw_response.get(
             model_name="model_name",
             model_owner="model_owner",
@@ -181,7 +181,7 @@ class TestModels:
 
     @pytest.mark.skip()
     @parametrize
-    def test_streaming_response_get(self, client: ReplicateClient) -> None:
+    def test_streaming_response_get(self, client: Replicate) -> None:
         with client.models.with_streaming_response.get(
             model_name="model_name",
             model_owner="model_owner",
@@ -196,7 +196,7 @@ class TestModels:
 
     @pytest.mark.skip()
     @parametrize
-    def test_path_params_get(self, client: ReplicateClient) -> None:
+    def test_path_params_get(self, client: Replicate) -> None:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `model_owner` but received ''"):
             client.models.with_raw_response.get(
                 model_name="model_name",
@@ -211,7 +211,7 @@ class TestModels:
 
     @pytest.mark.skip(reason="Prism doesn't support query methods yet")
     @parametrize
-    def test_method_search(self, client: ReplicateClient) -> None:
+    def test_method_search(self, client: Replicate) -> None:
         model = client.models.search(
             body="body",
         )
@@ -219,7 +219,7 @@ class TestModels:
 
     @pytest.mark.skip(reason="Prism doesn't support query methods yet")
     @parametrize
-    def test_raw_response_search(self, client: ReplicateClient) -> None:
+    def test_raw_response_search(self, client: Replicate) -> None:
         response = client.models.with_raw_response.search(
             body="body",
         )
@@ -231,7 +231,7 @@ class TestModels:
 
     @pytest.mark.skip(reason="Prism doesn't support query methods yet")
     @parametrize
-    def test_streaming_response_search(self, client: ReplicateClient) -> None:
+    def test_streaming_response_search(self, client: Replicate) -> None:
         with client.models.with_streaming_response.search(
             body="body",
         ) as response:
@@ -249,7 +249,7 @@ class TestAsyncModels:
 
     @pytest.mark.skip()
     @parametrize
-    async def test_method_create(self, async_client: AsyncReplicateClient) -> None:
+    async def test_method_create(self, async_client: AsyncReplicate) -> None:
         model = await async_client.models.create(
             hardware="hardware",
             name="name",
@@ -260,7 +260,7 @@ class TestAsyncModels:
 
     @pytest.mark.skip()
     @parametrize
-    async def test_method_create_with_all_params(self, async_client: AsyncReplicateClient) -> None:
+    async def test_method_create_with_all_params(self, async_client: AsyncReplicate) -> None:
         model = await async_client.models.create(
             hardware="hardware",
             name="name",
@@ -276,7 +276,7 @@ class TestAsyncModels:
 
     @pytest.mark.skip()
     @parametrize
-    async def test_raw_response_create(self, async_client: AsyncReplicateClient) -> None:
+    async def test_raw_response_create(self, async_client: AsyncReplicate) -> None:
         response = await async_client.models.with_raw_response.create(
             hardware="hardware",
             name="name",
@@ -291,7 +291,7 @@ class TestAsyncModels:
 
     @pytest.mark.skip()
     @parametrize
-    async def test_streaming_response_create(self, async_client: AsyncReplicateClient) -> None:
+    async def test_streaming_response_create(self, async_client: AsyncReplicate) -> None:
         async with async_client.models.with_streaming_response.create(
             hardware="hardware",
             name="name",
@@ -308,13 +308,13 @@ class TestAsyncModels:
 
     @pytest.mark.skip()
     @parametrize
-    async def test_method_list(self, async_client: AsyncReplicateClient) -> None:
+    async def test_method_list(self, async_client: AsyncReplicate) -> None:
         model = await async_client.models.list()
         assert_matches_type(AsyncCursorURLPage[ModelListResponse], model, path=["response"])
 
     @pytest.mark.skip()
     @parametrize
-    async def test_raw_response_list(self, async_client: AsyncReplicateClient) -> None:
+    async def test_raw_response_list(self, async_client: AsyncReplicate) -> None:
         response = await async_client.models.with_raw_response.list()
 
         assert response.is_closed is True
@@ -324,7 +324,7 @@ class TestAsyncModels:
 
     @pytest.mark.skip()
     @parametrize
-    async def test_streaming_response_list(self, async_client: AsyncReplicateClient) -> None:
+    async def test_streaming_response_list(self, async_client: AsyncReplicate) -> None:
         async with async_client.models.with_streaming_response.list() as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -336,7 +336,7 @@ class TestAsyncModels:
 
     @pytest.mark.skip()
     @parametrize
-    async def test_method_delete(self, async_client: AsyncReplicateClient) -> None:
+    async def test_method_delete(self, async_client: AsyncReplicate) -> None:
         model = await async_client.models.delete(
             model_name="model_name",
             model_owner="model_owner",
@@ -345,7 +345,7 @@ class TestAsyncModels:
 
     @pytest.mark.skip()
     @parametrize
-    async def test_raw_response_delete(self, async_client: AsyncReplicateClient) -> None:
+    async def test_raw_response_delete(self, async_client: AsyncReplicate) -> None:
         response = await async_client.models.with_raw_response.delete(
             model_name="model_name",
             model_owner="model_owner",
@@ -358,7 +358,7 @@ class TestAsyncModels:
 
     @pytest.mark.skip()
     @parametrize
-    async def test_streaming_response_delete(self, async_client: AsyncReplicateClient) -> None:
+    async def test_streaming_response_delete(self, async_client: AsyncReplicate) -> None:
         async with async_client.models.with_streaming_response.delete(
             model_name="model_name",
             model_owner="model_owner",
@@ -373,7 +373,7 @@ class TestAsyncModels:
 
     @pytest.mark.skip()
     @parametrize
-    async def test_path_params_delete(self, async_client: AsyncReplicateClient) -> None:
+    async def test_path_params_delete(self, async_client: AsyncReplicate) -> None:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `model_owner` but received ''"):
             await async_client.models.with_raw_response.delete(
                 model_name="model_name",
@@ -388,7 +388,7 @@ class TestAsyncModels:
 
     @pytest.mark.skip()
     @parametrize
-    async def test_method_get(self, async_client: AsyncReplicateClient) -> None:
+    async def test_method_get(self, async_client: AsyncReplicate) -> None:
         model = await async_client.models.get(
             model_name="model_name",
             model_owner="model_owner",
@@ -397,7 +397,7 @@ class TestAsyncModels:
 
     @pytest.mark.skip()
     @parametrize
-    async def test_raw_response_get(self, async_client: AsyncReplicateClient) -> None:
+    async def test_raw_response_get(self, async_client: AsyncReplicate) -> None:
         response = await async_client.models.with_raw_response.get(
             model_name="model_name",
             model_owner="model_owner",
@@ -410,7 +410,7 @@ class TestAsyncModels:
 
     @pytest.mark.skip()
     @parametrize
-    async def test_streaming_response_get(self, async_client: AsyncReplicateClient) -> None:
+    async def test_streaming_response_get(self, async_client: AsyncReplicate) -> None:
         async with async_client.models.with_streaming_response.get(
             model_name="model_name",
             model_owner="model_owner",
@@ -425,7 +425,7 @@ class TestAsyncModels:
 
     @pytest.mark.skip()
     @parametrize
-    async def test_path_params_get(self, async_client: AsyncReplicateClient) -> None:
+    async def test_path_params_get(self, async_client: AsyncReplicate) -> None:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `model_owner` but received ''"):
             await async_client.models.with_raw_response.get(
                 model_name="model_name",
@@ -440,7 +440,7 @@ class TestAsyncModels:
 
     @pytest.mark.skip(reason="Prism doesn't support query methods yet")
     @parametrize
-    async def test_method_search(self, async_client: AsyncReplicateClient) -> None:
+    async def test_method_search(self, async_client: AsyncReplicate) -> None:
         model = await async_client.models.search(
             body="body",
         )
@@ -448,7 +448,7 @@ class TestAsyncModels:
 
     @pytest.mark.skip(reason="Prism doesn't support query methods yet")
     @parametrize
-    async def test_raw_response_search(self, async_client: AsyncReplicateClient) -> None:
+    async def test_raw_response_search(self, async_client: AsyncReplicate) -> None:
         response = await async_client.models.with_raw_response.search(
             body="body",
         )
@@ -460,7 +460,7 @@ class TestAsyncModels:
 
     @pytest.mark.skip(reason="Prism doesn't support query methods yet")
     @parametrize
-    async def test_streaming_response_search(self, async_client: AsyncReplicateClient) -> None:
+    async def test_streaming_response_search(self, async_client: AsyncReplicate) -> None:
         async with async_client.models.with_streaming_response.search(
             body="body",
         ) as response:

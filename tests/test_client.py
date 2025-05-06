@@ -21,11 +21,11 @@ import pytest
 from respx import MockRouter
 from pydantic import ValidationError
 
-from replicate import ReplicateClient, AsyncReplicateClient, APIResponseValidationError
+from replicate import Replicate, AsyncReplicate, APIResponseValidationError
 from replicate._types import Omit
 from replicate._models import BaseModel, FinalRequestOptions
 from replicate._constants import RAW_RESPONSE_HEADER
-from replicate._exceptions import APIStatusError, APITimeoutError, ReplicateClientError, APIResponseValidationError
+from replicate._exceptions import APIStatusError, ReplicateError, APITimeoutError, APIResponseValidationError
 from replicate._base_client import (
     DEFAULT_TIMEOUT,
     HTTPX_DEFAULT_TIMEOUT,
@@ -49,7 +49,7 @@ def _low_retry_timeout(*_args: Any, **_kwargs: Any) -> float:
     return 0.1
 
 
-def _get_open_connections(client: ReplicateClient | AsyncReplicateClient) -> int:
+def _get_open_connections(client: Replicate | AsyncReplicate) -> int:
     transport = client._client._transport
     assert isinstance(transport, httpx.HTTPTransport) or isinstance(transport, httpx.AsyncHTTPTransport)
 
@@ -57,8 +57,8 @@ def _get_open_connections(client: ReplicateClient | AsyncReplicateClient) -> int
     return len(pool._requests)
 
 
-class TestReplicateClient:
-    client = ReplicateClient(base_url=base_url, bearer_token=bearer_token, _strict_response_validation=True)
+class TestReplicate:
+    client = Replicate(base_url=base_url, bearer_token=bearer_token, _strict_response_validation=True)
 
     @pytest.mark.respx(base_url=base_url)
     def test_raw_response(self, respx_mock: MockRouter) -> None:
@@ -105,7 +105,7 @@ class TestReplicateClient:
         assert isinstance(self.client.timeout, httpx.Timeout)
 
     def test_copy_default_headers(self) -> None:
-        client = ReplicateClient(
+        client = Replicate(
             base_url=base_url,
             bearer_token=bearer_token,
             _strict_response_validation=True,
@@ -142,7 +142,7 @@ class TestReplicateClient:
             client.copy(set_default_headers={}, default_headers={"X-Foo": "Bar"})
 
     def test_copy_default_query(self) -> None:
-        client = ReplicateClient(
+        client = Replicate(
             base_url=base_url, bearer_token=bearer_token, _strict_response_validation=True, default_query={"foo": "bar"}
         )
         assert _get_params(client)["foo"] == "bar"
@@ -267,7 +267,7 @@ class TestReplicateClient:
         assert timeout == httpx.Timeout(100.0)
 
     def test_client_timeout_option(self) -> None:
-        client = ReplicateClient(
+        client = Replicate(
             base_url=base_url, bearer_token=bearer_token, _strict_response_validation=True, timeout=httpx.Timeout(0)
         )
 
@@ -278,7 +278,7 @@ class TestReplicateClient:
     def test_http_client_timeout_option(self) -> None:
         # custom timeout given to the httpx client should be used
         with httpx.Client(timeout=None) as http_client:
-            client = ReplicateClient(
+            client = Replicate(
                 base_url=base_url, bearer_token=bearer_token, _strict_response_validation=True, http_client=http_client
             )
 
@@ -288,7 +288,7 @@ class TestReplicateClient:
 
         # no timeout given to the httpx client should not use the httpx default
         with httpx.Client() as http_client:
-            client = ReplicateClient(
+            client = Replicate(
                 base_url=base_url, bearer_token=bearer_token, _strict_response_validation=True, http_client=http_client
             )
 
@@ -298,7 +298,7 @@ class TestReplicateClient:
 
         # explicitly passing the default timeout currently results in it being ignored
         with httpx.Client(timeout=HTTPX_DEFAULT_TIMEOUT) as http_client:
-            client = ReplicateClient(
+            client = Replicate(
                 base_url=base_url, bearer_token=bearer_token, _strict_response_validation=True, http_client=http_client
             )
 
@@ -309,7 +309,7 @@ class TestReplicateClient:
     async def test_invalid_http_client(self) -> None:
         with pytest.raises(TypeError, match="Invalid `http_client` arg"):
             async with httpx.AsyncClient() as http_client:
-                ReplicateClient(
+                Replicate(
                     base_url=base_url,
                     bearer_token=bearer_token,
                     _strict_response_validation=True,
@@ -317,7 +317,7 @@ class TestReplicateClient:
                 )
 
     def test_default_headers_option(self) -> None:
-        client = ReplicateClient(
+        client = Replicate(
             base_url=base_url,
             bearer_token=bearer_token,
             _strict_response_validation=True,
@@ -327,7 +327,7 @@ class TestReplicateClient:
         assert request.headers.get("x-foo") == "bar"
         assert request.headers.get("x-stainless-lang") == "python"
 
-        client2 = ReplicateClient(
+        client2 = Replicate(
             base_url=base_url,
             bearer_token=bearer_token,
             _strict_response_validation=True,
@@ -341,17 +341,17 @@ class TestReplicateClient:
         assert request.headers.get("x-stainless-lang") == "my-overriding-header"
 
     def test_validate_headers(self) -> None:
-        client = ReplicateClient(base_url=base_url, bearer_token=bearer_token, _strict_response_validation=True)
+        client = Replicate(base_url=base_url, bearer_token=bearer_token, _strict_response_validation=True)
         request = client._build_request(FinalRequestOptions(method="get", url="/foo"))
         assert request.headers.get("Authorization") == f"Bearer {bearer_token}"
 
-        with pytest.raises(ReplicateClientError):
+        with pytest.raises(ReplicateError):
             with update_env(**{"REPLICATE_API_TOKEN": Omit()}):
-                client2 = ReplicateClient(base_url=base_url, bearer_token=None, _strict_response_validation=True)
+                client2 = Replicate(base_url=base_url, bearer_token=None, _strict_response_validation=True)
             _ = client2
 
     def test_default_query_option(self) -> None:
-        client = ReplicateClient(
+        client = Replicate(
             base_url=base_url,
             bearer_token=bearer_token,
             _strict_response_validation=True,
@@ -468,7 +468,7 @@ class TestReplicateClient:
         params = dict(request.url.params)
         assert params == {"foo": "2"}
 
-    def test_multipart_repeating_array(self, client: ReplicateClient) -> None:
+    def test_multipart_repeating_array(self, client: Replicate) -> None:
         request = client._build_request(
             FinalRequestOptions.construct(
                 method="get",
@@ -555,7 +555,7 @@ class TestReplicateClient:
         assert response.foo == 2
 
     def test_base_url_setter(self) -> None:
-        client = ReplicateClient(
+        client = Replicate(
             base_url="https://example.com/from_init", bearer_token=bearer_token, _strict_response_validation=True
         )
         assert client.base_url == "https://example.com/from_init/"
@@ -565,19 +565,19 @@ class TestReplicateClient:
         assert client.base_url == "https://example.com/from_setter/"
 
     def test_base_url_env(self) -> None:
-        with update_env(REPLICATE_CLIENT_BASE_URL="http://localhost:5000/from/env"):
-            client = ReplicateClient(bearer_token=bearer_token, _strict_response_validation=True)
+        with update_env(REPLICATE_BASE_URL="http://localhost:5000/from/env"):
+            client = Replicate(bearer_token=bearer_token, _strict_response_validation=True)
             assert client.base_url == "http://localhost:5000/from/env/"
 
     @pytest.mark.parametrize(
         "client",
         [
-            ReplicateClient(
+            Replicate(
                 base_url="http://localhost:5000/custom/path/",
                 bearer_token=bearer_token,
                 _strict_response_validation=True,
             ),
-            ReplicateClient(
+            Replicate(
                 base_url="http://localhost:5000/custom/path/",
                 bearer_token=bearer_token,
                 _strict_response_validation=True,
@@ -586,7 +586,7 @@ class TestReplicateClient:
         ],
         ids=["standard", "custom http client"],
     )
-    def test_base_url_trailing_slash(self, client: ReplicateClient) -> None:
+    def test_base_url_trailing_slash(self, client: Replicate) -> None:
         request = client._build_request(
             FinalRequestOptions(
                 method="post",
@@ -599,12 +599,12 @@ class TestReplicateClient:
     @pytest.mark.parametrize(
         "client",
         [
-            ReplicateClient(
+            Replicate(
                 base_url="http://localhost:5000/custom/path/",
                 bearer_token=bearer_token,
                 _strict_response_validation=True,
             ),
-            ReplicateClient(
+            Replicate(
                 base_url="http://localhost:5000/custom/path/",
                 bearer_token=bearer_token,
                 _strict_response_validation=True,
@@ -613,7 +613,7 @@ class TestReplicateClient:
         ],
         ids=["standard", "custom http client"],
     )
-    def test_base_url_no_trailing_slash(self, client: ReplicateClient) -> None:
+    def test_base_url_no_trailing_slash(self, client: Replicate) -> None:
         request = client._build_request(
             FinalRequestOptions(
                 method="post",
@@ -626,12 +626,12 @@ class TestReplicateClient:
     @pytest.mark.parametrize(
         "client",
         [
-            ReplicateClient(
+            Replicate(
                 base_url="http://localhost:5000/custom/path/",
                 bearer_token=bearer_token,
                 _strict_response_validation=True,
             ),
-            ReplicateClient(
+            Replicate(
                 base_url="http://localhost:5000/custom/path/",
                 bearer_token=bearer_token,
                 _strict_response_validation=True,
@@ -640,7 +640,7 @@ class TestReplicateClient:
         ],
         ids=["standard", "custom http client"],
     )
-    def test_absolute_request_url(self, client: ReplicateClient) -> None:
+    def test_absolute_request_url(self, client: Replicate) -> None:
         request = client._build_request(
             FinalRequestOptions(
                 method="post",
@@ -651,7 +651,7 @@ class TestReplicateClient:
         assert request.url == "https://myapi.com/foo"
 
     def test_copied_client_does_not_close_http(self) -> None:
-        client = ReplicateClient(base_url=base_url, bearer_token=bearer_token, _strict_response_validation=True)
+        client = Replicate(base_url=base_url, bearer_token=bearer_token, _strict_response_validation=True)
         assert not client.is_closed()
 
         copied = client.copy()
@@ -662,7 +662,7 @@ class TestReplicateClient:
         assert not client.is_closed()
 
     def test_client_context_manager(self) -> None:
-        client = ReplicateClient(base_url=base_url, bearer_token=bearer_token, _strict_response_validation=True)
+        client = Replicate(base_url=base_url, bearer_token=bearer_token, _strict_response_validation=True)
         with client as c2:
             assert c2 is client
             assert not c2.is_closed()
@@ -683,7 +683,7 @@ class TestReplicateClient:
 
     def test_client_max_retries_validation(self) -> None:
         with pytest.raises(TypeError, match=r"max_retries cannot be None"):
-            ReplicateClient(
+            Replicate(
                 base_url=base_url,
                 bearer_token=bearer_token,
                 _strict_response_validation=True,
@@ -697,12 +697,12 @@ class TestReplicateClient:
 
         respx_mock.get("/foo").mock(return_value=httpx.Response(200, text="my-custom-format"))
 
-        strict_client = ReplicateClient(base_url=base_url, bearer_token=bearer_token, _strict_response_validation=True)
+        strict_client = Replicate(base_url=base_url, bearer_token=bearer_token, _strict_response_validation=True)
 
         with pytest.raises(APIResponseValidationError):
             strict_client.get("/foo", cast_to=Model)
 
-        client = ReplicateClient(base_url=base_url, bearer_token=bearer_token, _strict_response_validation=False)
+        client = Replicate(base_url=base_url, bearer_token=bearer_token, _strict_response_validation=False)
 
         response = client.get("/foo", cast_to=Model)
         assert isinstance(response, str)  # type: ignore[unreachable]
@@ -730,7 +730,7 @@ class TestReplicateClient:
     )
     @mock.patch("time.time", mock.MagicMock(return_value=1696004797))
     def test_parse_retry_after_header(self, remaining_retries: int, retry_after: str, timeout: float) -> None:
-        client = ReplicateClient(base_url=base_url, bearer_token=bearer_token, _strict_response_validation=True)
+        client = Replicate(base_url=base_url, bearer_token=bearer_token, _strict_response_validation=True)
 
         headers = httpx.Headers({"retry-after": retry_after})
         options = FinalRequestOptions(method="get", url="/foo", max_retries=3)
@@ -763,7 +763,7 @@ class TestReplicateClient:
     @pytest.mark.parametrize("failure_mode", ["status", "exception"])
     def test_retries_taken(
         self,
-        client: ReplicateClient,
+        client: Replicate,
         failures_before_success: int,
         failure_mode: Literal["status", "exception"],
         respx_mock: MockRouter,
@@ -792,7 +792,7 @@ class TestReplicateClient:
     @mock.patch("replicate._base_client.BaseClient._calculate_retry_timeout", _low_retry_timeout)
     @pytest.mark.respx(base_url=base_url)
     def test_omit_retry_count_header(
-        self, client: ReplicateClient, failures_before_success: int, respx_mock: MockRouter
+        self, client: Replicate, failures_before_success: int, respx_mock: MockRouter
     ) -> None:
         client = client.with_options(max_retries=4)
 
@@ -815,7 +815,7 @@ class TestReplicateClient:
     @mock.patch("replicate._base_client.BaseClient._calculate_retry_timeout", _low_retry_timeout)
     @pytest.mark.respx(base_url=base_url)
     def test_overwrite_retry_count_header(
-        self, client: ReplicateClient, failures_before_success: int, respx_mock: MockRouter
+        self, client: Replicate, failures_before_success: int, respx_mock: MockRouter
     ) -> None:
         client = client.with_options(max_retries=4)
 
@@ -835,8 +835,8 @@ class TestReplicateClient:
         assert response.http_request.headers.get("x-stainless-retry-count") == "42"
 
 
-class TestAsyncReplicateClient:
-    client = AsyncReplicateClient(base_url=base_url, bearer_token=bearer_token, _strict_response_validation=True)
+class TestAsyncReplicate:
+    client = AsyncReplicate(base_url=base_url, bearer_token=bearer_token, _strict_response_validation=True)
 
     @pytest.mark.respx(base_url=base_url)
     @pytest.mark.asyncio
@@ -885,7 +885,7 @@ class TestAsyncReplicateClient:
         assert isinstance(self.client.timeout, httpx.Timeout)
 
     def test_copy_default_headers(self) -> None:
-        client = AsyncReplicateClient(
+        client = AsyncReplicate(
             base_url=base_url,
             bearer_token=bearer_token,
             _strict_response_validation=True,
@@ -922,7 +922,7 @@ class TestAsyncReplicateClient:
             client.copy(set_default_headers={}, default_headers={"X-Foo": "Bar"})
 
     def test_copy_default_query(self) -> None:
-        client = AsyncReplicateClient(
+        client = AsyncReplicate(
             base_url=base_url, bearer_token=bearer_token, _strict_response_validation=True, default_query={"foo": "bar"}
         )
         assert _get_params(client)["foo"] == "bar"
@@ -1047,7 +1047,7 @@ class TestAsyncReplicateClient:
         assert timeout == httpx.Timeout(100.0)
 
     async def test_client_timeout_option(self) -> None:
-        client = AsyncReplicateClient(
+        client = AsyncReplicate(
             base_url=base_url, bearer_token=bearer_token, _strict_response_validation=True, timeout=httpx.Timeout(0)
         )
 
@@ -1058,7 +1058,7 @@ class TestAsyncReplicateClient:
     async def test_http_client_timeout_option(self) -> None:
         # custom timeout given to the httpx client should be used
         async with httpx.AsyncClient(timeout=None) as http_client:
-            client = AsyncReplicateClient(
+            client = AsyncReplicate(
                 base_url=base_url, bearer_token=bearer_token, _strict_response_validation=True, http_client=http_client
             )
 
@@ -1068,7 +1068,7 @@ class TestAsyncReplicateClient:
 
         # no timeout given to the httpx client should not use the httpx default
         async with httpx.AsyncClient() as http_client:
-            client = AsyncReplicateClient(
+            client = AsyncReplicate(
                 base_url=base_url, bearer_token=bearer_token, _strict_response_validation=True, http_client=http_client
             )
 
@@ -1078,7 +1078,7 @@ class TestAsyncReplicateClient:
 
         # explicitly passing the default timeout currently results in it being ignored
         async with httpx.AsyncClient(timeout=HTTPX_DEFAULT_TIMEOUT) as http_client:
-            client = AsyncReplicateClient(
+            client = AsyncReplicate(
                 base_url=base_url, bearer_token=bearer_token, _strict_response_validation=True, http_client=http_client
             )
 
@@ -1089,7 +1089,7 @@ class TestAsyncReplicateClient:
     def test_invalid_http_client(self) -> None:
         with pytest.raises(TypeError, match="Invalid `http_client` arg"):
             with httpx.Client() as http_client:
-                AsyncReplicateClient(
+                AsyncReplicate(
                     base_url=base_url,
                     bearer_token=bearer_token,
                     _strict_response_validation=True,
@@ -1097,7 +1097,7 @@ class TestAsyncReplicateClient:
                 )
 
     def test_default_headers_option(self) -> None:
-        client = AsyncReplicateClient(
+        client = AsyncReplicate(
             base_url=base_url,
             bearer_token=bearer_token,
             _strict_response_validation=True,
@@ -1107,7 +1107,7 @@ class TestAsyncReplicateClient:
         assert request.headers.get("x-foo") == "bar"
         assert request.headers.get("x-stainless-lang") == "python"
 
-        client2 = AsyncReplicateClient(
+        client2 = AsyncReplicate(
             base_url=base_url,
             bearer_token=bearer_token,
             _strict_response_validation=True,
@@ -1121,17 +1121,17 @@ class TestAsyncReplicateClient:
         assert request.headers.get("x-stainless-lang") == "my-overriding-header"
 
     def test_validate_headers(self) -> None:
-        client = AsyncReplicateClient(base_url=base_url, bearer_token=bearer_token, _strict_response_validation=True)
+        client = AsyncReplicate(base_url=base_url, bearer_token=bearer_token, _strict_response_validation=True)
         request = client._build_request(FinalRequestOptions(method="get", url="/foo"))
         assert request.headers.get("Authorization") == f"Bearer {bearer_token}"
 
-        with pytest.raises(ReplicateClientError):
+        with pytest.raises(ReplicateError):
             with update_env(**{"REPLICATE_API_TOKEN": Omit()}):
-                client2 = AsyncReplicateClient(base_url=base_url, bearer_token=None, _strict_response_validation=True)
+                client2 = AsyncReplicate(base_url=base_url, bearer_token=None, _strict_response_validation=True)
             _ = client2
 
     def test_default_query_option(self) -> None:
-        client = AsyncReplicateClient(
+        client = AsyncReplicate(
             base_url=base_url,
             bearer_token=bearer_token,
             _strict_response_validation=True,
@@ -1248,7 +1248,7 @@ class TestAsyncReplicateClient:
         params = dict(request.url.params)
         assert params == {"foo": "2"}
 
-    def test_multipart_repeating_array(self, async_client: AsyncReplicateClient) -> None:
+    def test_multipart_repeating_array(self, async_client: AsyncReplicate) -> None:
         request = async_client._build_request(
             FinalRequestOptions.construct(
                 method="get",
@@ -1335,7 +1335,7 @@ class TestAsyncReplicateClient:
         assert response.foo == 2
 
     def test_base_url_setter(self) -> None:
-        client = AsyncReplicateClient(
+        client = AsyncReplicate(
             base_url="https://example.com/from_init", bearer_token=bearer_token, _strict_response_validation=True
         )
         assert client.base_url == "https://example.com/from_init/"
@@ -1345,19 +1345,19 @@ class TestAsyncReplicateClient:
         assert client.base_url == "https://example.com/from_setter/"
 
     def test_base_url_env(self) -> None:
-        with update_env(REPLICATE_CLIENT_BASE_URL="http://localhost:5000/from/env"):
-            client = AsyncReplicateClient(bearer_token=bearer_token, _strict_response_validation=True)
+        with update_env(REPLICATE_BASE_URL="http://localhost:5000/from/env"):
+            client = AsyncReplicate(bearer_token=bearer_token, _strict_response_validation=True)
             assert client.base_url == "http://localhost:5000/from/env/"
 
     @pytest.mark.parametrize(
         "client",
         [
-            AsyncReplicateClient(
+            AsyncReplicate(
                 base_url="http://localhost:5000/custom/path/",
                 bearer_token=bearer_token,
                 _strict_response_validation=True,
             ),
-            AsyncReplicateClient(
+            AsyncReplicate(
                 base_url="http://localhost:5000/custom/path/",
                 bearer_token=bearer_token,
                 _strict_response_validation=True,
@@ -1366,7 +1366,7 @@ class TestAsyncReplicateClient:
         ],
         ids=["standard", "custom http client"],
     )
-    def test_base_url_trailing_slash(self, client: AsyncReplicateClient) -> None:
+    def test_base_url_trailing_slash(self, client: AsyncReplicate) -> None:
         request = client._build_request(
             FinalRequestOptions(
                 method="post",
@@ -1379,12 +1379,12 @@ class TestAsyncReplicateClient:
     @pytest.mark.parametrize(
         "client",
         [
-            AsyncReplicateClient(
+            AsyncReplicate(
                 base_url="http://localhost:5000/custom/path/",
                 bearer_token=bearer_token,
                 _strict_response_validation=True,
             ),
-            AsyncReplicateClient(
+            AsyncReplicate(
                 base_url="http://localhost:5000/custom/path/",
                 bearer_token=bearer_token,
                 _strict_response_validation=True,
@@ -1393,7 +1393,7 @@ class TestAsyncReplicateClient:
         ],
         ids=["standard", "custom http client"],
     )
-    def test_base_url_no_trailing_slash(self, client: AsyncReplicateClient) -> None:
+    def test_base_url_no_trailing_slash(self, client: AsyncReplicate) -> None:
         request = client._build_request(
             FinalRequestOptions(
                 method="post",
@@ -1406,12 +1406,12 @@ class TestAsyncReplicateClient:
     @pytest.mark.parametrize(
         "client",
         [
-            AsyncReplicateClient(
+            AsyncReplicate(
                 base_url="http://localhost:5000/custom/path/",
                 bearer_token=bearer_token,
                 _strict_response_validation=True,
             ),
-            AsyncReplicateClient(
+            AsyncReplicate(
                 base_url="http://localhost:5000/custom/path/",
                 bearer_token=bearer_token,
                 _strict_response_validation=True,
@@ -1420,7 +1420,7 @@ class TestAsyncReplicateClient:
         ],
         ids=["standard", "custom http client"],
     )
-    def test_absolute_request_url(self, client: AsyncReplicateClient) -> None:
+    def test_absolute_request_url(self, client: AsyncReplicate) -> None:
         request = client._build_request(
             FinalRequestOptions(
                 method="post",
@@ -1431,7 +1431,7 @@ class TestAsyncReplicateClient:
         assert request.url == "https://myapi.com/foo"
 
     async def test_copied_client_does_not_close_http(self) -> None:
-        client = AsyncReplicateClient(base_url=base_url, bearer_token=bearer_token, _strict_response_validation=True)
+        client = AsyncReplicate(base_url=base_url, bearer_token=bearer_token, _strict_response_validation=True)
         assert not client.is_closed()
 
         copied = client.copy()
@@ -1443,7 +1443,7 @@ class TestAsyncReplicateClient:
         assert not client.is_closed()
 
     async def test_client_context_manager(self) -> None:
-        client = AsyncReplicateClient(base_url=base_url, bearer_token=bearer_token, _strict_response_validation=True)
+        client = AsyncReplicate(base_url=base_url, bearer_token=bearer_token, _strict_response_validation=True)
         async with client as c2:
             assert c2 is client
             assert not c2.is_closed()
@@ -1465,7 +1465,7 @@ class TestAsyncReplicateClient:
 
     async def test_client_max_retries_validation(self) -> None:
         with pytest.raises(TypeError, match=r"max_retries cannot be None"):
-            AsyncReplicateClient(
+            AsyncReplicate(
                 base_url=base_url,
                 bearer_token=bearer_token,
                 _strict_response_validation=True,
@@ -1480,14 +1480,12 @@ class TestAsyncReplicateClient:
 
         respx_mock.get("/foo").mock(return_value=httpx.Response(200, text="my-custom-format"))
 
-        strict_client = AsyncReplicateClient(
-            base_url=base_url, bearer_token=bearer_token, _strict_response_validation=True
-        )
+        strict_client = AsyncReplicate(base_url=base_url, bearer_token=bearer_token, _strict_response_validation=True)
 
         with pytest.raises(APIResponseValidationError):
             await strict_client.get("/foo", cast_to=Model)
 
-        client = AsyncReplicateClient(base_url=base_url, bearer_token=bearer_token, _strict_response_validation=False)
+        client = AsyncReplicate(base_url=base_url, bearer_token=bearer_token, _strict_response_validation=False)
 
         response = await client.get("/foo", cast_to=Model)
         assert isinstance(response, str)  # type: ignore[unreachable]
@@ -1516,7 +1514,7 @@ class TestAsyncReplicateClient:
     @mock.patch("time.time", mock.MagicMock(return_value=1696004797))
     @pytest.mark.asyncio
     async def test_parse_retry_after_header(self, remaining_retries: int, retry_after: str, timeout: float) -> None:
-        client = AsyncReplicateClient(base_url=base_url, bearer_token=bearer_token, _strict_response_validation=True)
+        client = AsyncReplicate(base_url=base_url, bearer_token=bearer_token, _strict_response_validation=True)
 
         headers = httpx.Headers({"retry-after": retry_after})
         options = FinalRequestOptions(method="get", url="/foo", max_retries=3)
@@ -1554,7 +1552,7 @@ class TestAsyncReplicateClient:
     @pytest.mark.parametrize("failure_mode", ["status", "exception"])
     async def test_retries_taken(
         self,
-        async_client: AsyncReplicateClient,
+        async_client: AsyncReplicate,
         failures_before_success: int,
         failure_mode: Literal["status", "exception"],
         respx_mock: MockRouter,
@@ -1584,7 +1582,7 @@ class TestAsyncReplicateClient:
     @pytest.mark.respx(base_url=base_url)
     @pytest.mark.asyncio
     async def test_omit_retry_count_header(
-        self, async_client: AsyncReplicateClient, failures_before_success: int, respx_mock: MockRouter
+        self, async_client: AsyncReplicate, failures_before_success: int, respx_mock: MockRouter
     ) -> None:
         client = async_client.with_options(max_retries=4)
 
@@ -1608,7 +1606,7 @@ class TestAsyncReplicateClient:
     @pytest.mark.respx(base_url=base_url)
     @pytest.mark.asyncio
     async def test_overwrite_retry_count_header(
-        self, async_client: AsyncReplicateClient, failures_before_success: int, respx_mock: MockRouter
+        self, async_client: AsyncReplicate, failures_before_success: int, respx_mock: MockRouter
     ) -> None:
         client = async_client.with_options(max_retries=4)
 
