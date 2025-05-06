@@ -30,34 +30,6 @@ def run(
     file_encoding_strategy: Optional["FileEncodingStrategy"] = None,
     **params: Unpack[PredictionCreateParamsWithoutVersion],
 ) -> PredictionOutput | FileOutput | Iterable[FileOutput] | Dict[str, FileOutput]:
-    """
-    Run a model prediction.
-
-    Args:
-        client: The Replicate instance to use for API calls
-        ref: Reference to the model or version to run. Can be:
-            - A string containing a version ID (e.g. "5c7d5dc6dd8bf75c1acaa8565735e7986bc5b66206b55cca93cb72c9bf15ccaa")
-            - A string with owner/name format (e.g. "replicate/hello-world")
-            - A string with owner/name/version format (e.g. "replicate/hello-world/5c7d5dc6...")
-            - A Model instance with owner and name attributes
-            - A Version instance with id attribute
-            - A ModelVersionIdentifier dictionary with owner, name, and/or version keys
-        input: Dictionary of input parameters for the model
-        wait: If True (default), wait for the prediction to complete. If False, return immediately.
-              If an integer, wait up to that many seconds.
-        use_file_output: If True (default), convert output URLs to FileOutput objects
-        **params: Additional parameters to pass to the prediction creation endpoint
-
-    Returns:
-        The prediction output, which could be a basic type (str, int, etc.), a FileOutput object,
-        a list of FileOutput objects, or a dictionary of FileOutput objects, depending on what
-        the model returns.
-
-    Raises:
-        ModelError: If the model run fails
-        ValueError: If the reference format is invalid
-        TypeError: If both wait and prefer parameters are provided
-    """
     from ._files import transform_output
 
     if is_given(wait) and "prefer" in params:
@@ -136,34 +108,6 @@ async def async_run(
     use_file_output: Optional[bool] = True,
     **params: Unpack[PredictionCreateParamsWithoutVersion],
 ) -> PredictionOutput | FileOutput | Iterable[FileOutput] | Dict[str, FileOutput]:
-    """
-    Run a model prediction asynchronously.
-
-    Args:
-        client: The AsyncReplicate instance to use for API calls
-        ref: Reference to the model or version to run. Can be:
-            - A string containing a version ID (e.g. "5c7d5dc6dd8bf75c1acaa8565735e7986bc5b66206b55cca93cb72c9bf15ccaa")
-            - A string with owner/name format (e.g. "replicate/hello-world")
-            - A string with owner/name/version format (e.g. "replicate/hello-world/5c7d5dc6...")
-            - A Model instance with owner and name attributes
-            - A Version instance with id attribute
-            - A ModelVersionIdentifier dictionary with owner, name, and/or version keys
-        input: Dictionary of input parameters for the model
-        wait: If True (default), wait for the prediction to complete. If False, return immediately.
-              If an integer, wait up to that many seconds.
-        use_file_output: If True (default), convert output URLs to AsyncFileOutput objects
-        **params: Additional parameters to pass to the prediction creation endpoint
-
-    Returns:
-        The prediction output, which could be a basic type (str, int, etc.), an AsyncFileOutput object,
-        a list of AsyncFileOutput objects, or a dictionary of AsyncFileOutput objects, depending on what
-        the model returns.
-
-    Raises:
-        ModelError: If the model run fails
-        ValueError: If the reference format is invalid
-        TypeError: If both wait and prefer parameters are provided
-    """
     from ._files import transform_output
 
     if is_given(wait) and "prefer" in params:

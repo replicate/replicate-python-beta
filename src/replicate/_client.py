@@ -201,7 +201,34 @@ class Replicate(SyncAPIClient):
         wait: Union[int, bool, NotGiven] = NOT_GIVEN,
         **params: Unpack[PredictionCreateParamsWithoutVersion],
     ) -> Any:
-        """Run a model and wait for its output."""
+        """
+        Run a model prediction.
+
+        Args:
+            ref: Reference to the model or version to run. Can be:
+                - A string containing a version ID (e.g. "5c7d5dc6dd8bf75c1acaa8565735e7986bc5b66206b55cca93cb72c9bf15ccaa")
+                - A string with owner/name format (e.g. "replicate/hello-world")
+                - A string with owner/name:version format (e.g. "replicate/hello-world:5c7d5dc6...")
+                - A Model instance with owner and name attributes
+                - A Version instance with id attribute
+                - A ModelVersionIdentifier dictionary with owner, name, and/or version keys
+            file_encoding_strategy: Strategy for encoding file inputs, options are "base64" or "url"
+            use_file_output: If True (default), convert output URLs to FileOutput objects
+            wait: If True (default), wait for the prediction to complete. If False, return immediately.
+                  If an integer, wait up to that many seconds.
+            **params: Additional parameters to pass to the prediction creation endpoint including
+                      the required "input" dictionary with model-specific parameters
+
+        Returns:
+            The prediction output, which could be a basic type (str, int, etc.), a FileOutput object,
+            a list of FileOutput objects, or a dictionary of FileOutput objects, depending on what
+            the model returns.
+
+        Raises:
+            ModelError: If the model run fails
+            ValueError: If the reference format is invalid
+            TypeError: If both wait and prefer parameters are provided
+        """
         from .lib._predictions import run
 
         return run(
@@ -442,7 +469,34 @@ class AsyncReplicate(AsyncAPIClient):
         wait: Union[int, bool, NotGiven] = NOT_GIVEN,
         **params: Unpack[PredictionCreateParamsWithoutVersion],
     ) -> Any:
-        """Run a model and wait for its output."""
+        """
+        Run a model prediction asynchronously.
+
+        Args:
+            ref: Reference to the model or version to run. Can be:
+                - A string containing a version ID (e.g. "5c7d5dc6dd8bf75c1acaa8565735e7986bc5b66206b55cca93cb72c9bf15ccaa")
+                - A string with owner/name format (e.g. "replicate/hello-world")
+                - A string with owner/name:version format (e.g. "replicate/hello-world:5c7d5dc6...")
+                - A Model instance with owner and name attributes
+                - A Version instance with id attribute
+                - A ModelVersionIdentifier dictionary with owner, name, and/or version keys
+            use_file_output: If True (default), convert output URLs to AsyncFileOutput objects
+            file_encoding_strategy: Strategy for encoding file inputs, options are "base64" or "url"
+            wait: If True (default), wait for the prediction to complete. If False, return immediately.
+                  If an integer, wait up to that many seconds.
+            **params: Additional parameters to pass to the prediction creation endpoint including
+                      the required "input" dictionary with model-specific parameters
+
+        Returns:
+            The prediction output, which could be a basic type (str, int, etc.), an AsyncFileOutput object,
+            a list of AsyncFileOutput objects, or a dictionary of AsyncFileOutput objects, depending on what
+            the model returns.
+
+        Raises:
+            ModelError: If the model run fails
+            ValueError: If the reference format is invalid
+            TypeError: If both wait and prefer parameters are provided
+        """
         from .lib._predictions import async_run
 
         return await async_run(
