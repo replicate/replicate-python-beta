@@ -274,7 +274,9 @@ class TestRun:
         # Case where version ID is provided
         respx_mock.post("/predictions").mock(return_value=httpx.Response(201, json=create_mock_prediction()))
 
-        identifier: ModelVersionIdentifier = {"owner": "test-owner", "name": "test-model", "version": "test-version-id"}
+        identifier = ModelVersionIdentifier(
+            owner="test-owner", name="test-model", version="test-version-id"
+        )
         output = self.client.run(identifier, input={"prompt": "test prompt"})
 
         assert output == "test output"
@@ -506,7 +508,9 @@ class TestAsyncRun:
         # Case where version ID is provided
         respx_mock.post("/predictions").mock(return_value=httpx.Response(201, json=create_mock_prediction()))
 
-        identifier: ModelVersionIdentifier = {"owner": "test-owner", "name": "test-model", "version": "test-version-id"}
+        identifier = ModelVersionIdentifier(
+            owner="test-owner", name="test-model", version="test-version-id"
+        )
         output = await self.client.run(identifier, input={"prompt": "test prompt"})
 
         assert output == "test output"

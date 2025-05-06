@@ -242,7 +242,7 @@ async def async_run(
 def _has_output_iterator_array_type(version: Version) -> bool:
     schema = make_schema_backwards_compatible(version.openapi_schema, version.cog_version)
     output = schema.get("components", {}).get("schemas", {}).get("Output", {})
-    return output.get("type") == "array" and output.get("x-cog-array-type") == "iterator" # type: ignore[no-any-return]
+    return output.get("type") == "array" and output.get("x-cog-array-type") == "iterator"  # type: ignore[no-any-return]
 
 
 async def _make_async_iterator(list: List[Any]) -> AsyncIterator[Any]:

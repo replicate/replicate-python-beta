@@ -1,7 +1,7 @@
 from __future__ import annotations
 
-from typing import Any, Dict, Tuple, Union, Optional
-from typing_extensions import TypedDict
+import re
+from typing import Any, Dict, Tuple, Union, Optional, NamedTuple
 
 
 class Model:
@@ -35,12 +35,26 @@ class Version(BaseModel):
     """An OpenAPI description of the model inputs and outputs."""
 
 
-class ModelVersionIdentifier(TypedDict, total=False):
-    """A structure to identify a model version."""
+class ModelVersionIdentifier(NamedTuple):
+    """
+    A reference to a model version in the format owner/name or owner/name:version.
+    """
 
     owner: str
     name: str
-    version: str
+    version: Optional[str] = None
+
+    @classmethod
+    def parse(cls, ref: str) -> "ModelVersionIdentifier":
+        """
+        Split a reference in the format owner/name:version into its components.
+        """
+
+        match = re.match(r"^(?P<owner>[^/]+)/(?P<name>[^/:]+)(:(?P<version>.+))?$", ref)
+        if not match:
+            raise ValueError(f"Invalid reference to model version: {ref}. Expected format: owner/name:version")
+
+        return cls(match.group("owner"), match.group("name"), match.group("version"))
 
 
 def resolve_reference(
@@ -57,25 +71,13 @@ def resolve_reference(
     version_id = None
 
     if isinstance(ref, Model):
-        owner = ref.owner
-        name = ref.name
+        owner, name = ref.owner, ref.name
     elif isinstance(ref, Version):
+        version = ref
         version_id = ref.id
-    elif isinstance(ref, dict):
-        owner = ref.get("owner")
-        name = ref.get("name")
-        version_id = ref.get("version")
+    elif isinstance(ref, ModelVersionIdentifier):
+        owner, name, version_id = ref
     else:
-        # Check if the string is a version ID (assumed to be a hash-like string)
-        if "/" not in ref and len(ref) >= 32:
-            version_id = ref
-        else:
-            # Handle owner/name or owner/name/version format
-            parts = ref.split("/")
-            if len(parts) >= 2:
-                owner = parts[0]
-                name = parts[1]
-                if len(parts) >= 3:
-                    version_id = parts[2]
+        owner, name, version_id = ModelVersionIdentifier.parse(ref)
 
     return version, owner, name, version_id
