@@ -18,11 +18,11 @@ __all__ = [
 ]
 
 
-class ReplicateClientError(Exception):
+class ReplicateError(Exception):
     pass
 
 
-class APIError(ReplicateClientError):
+class APIError(ReplicateError):
     message: str
     request: httpx.Request
 

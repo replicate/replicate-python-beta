@@ -7,7 +7,7 @@ from typing import Any, cast
 
 import pytest
 
-from replicate import ReplicateClient, AsyncReplicateClient
+from replicate import Replicate, AsyncReplicate
 from tests.utils import assert_matches_type
 from replicate.types import Prediction
 from replicate._utils import parse_datetime
@@ -21,7 +21,7 @@ class TestPredictions:
 
     @pytest.mark.skip()
     @parametrize
-    def test_method_create(self, client: ReplicateClient) -> None:
+    def test_method_create(self, client: Replicate) -> None:
         prediction = client.predictions.create(
             input={},
             version="version",
@@ -30,7 +30,7 @@ class TestPredictions:
 
     @pytest.mark.skip()
     @parametrize
-    def test_method_create_with_all_params(self, client: ReplicateClient) -> None:
+    def test_method_create_with_all_params(self, client: Replicate) -> None:
         prediction = client.predictions.create(
             input={},
             version="version",
@@ -43,7 +43,7 @@ class TestPredictions:
 
     @pytest.mark.skip()
     @parametrize
-    def test_raw_response_create(self, client: ReplicateClient) -> None:
+    def test_raw_response_create(self, client: Replicate) -> None:
         response = client.predictions.with_raw_response.create(
             input={},
             version="version",
@@ -56,7 +56,7 @@ class TestPredictions:
 
     @pytest.mark.skip()
     @parametrize
-    def test_streaming_response_create(self, client: ReplicateClient) -> None:
+    def test_streaming_response_create(self, client: Replicate) -> None:
         with client.predictions.with_streaming_response.create(
             input={},
             version="version",
@@ -71,13 +71,13 @@ class TestPredictions:
 
     @pytest.mark.skip()
     @parametrize
-    def test_method_list(self, client: ReplicateClient) -> None:
+    def test_method_list(self, client: Replicate) -> None:
         prediction = client.predictions.list()
         assert_matches_type(SyncCursorURLPageWithCreatedFilters[Prediction], prediction, path=["response"])
 
     @pytest.mark.skip()
     @parametrize
-    def test_method_list_with_all_params(self, client: ReplicateClient) -> None:
+    def test_method_list_with_all_params(self, client: Replicate) -> None:
         prediction = client.predictions.list(
             created_after=parse_datetime("2025-01-01T00:00:00Z"),
             created_before=parse_datetime("2025-02-01T00:00:00Z"),
@@ -86,7 +86,7 @@ class TestPredictions:
 
     @pytest.mark.skip()
     @parametrize
-    def test_raw_response_list(self, client: ReplicateClient) -> None:
+    def test_raw_response_list(self, client: Replicate) -> None:
         response = client.predictions.with_raw_response.list()
 
         assert response.is_closed is True
@@ -96,7 +96,7 @@ class TestPredictions:
 
     @pytest.mark.skip()
     @parametrize
-    def test_streaming_response_list(self, client: ReplicateClient) -> None:
+    def test_streaming_response_list(self, client: Replicate) -> None:
         with client.predictions.with_streaming_response.list() as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -108,7 +108,7 @@ class TestPredictions:
 
     @pytest.mark.skip()
     @parametrize
-    def test_method_cancel(self, client: ReplicateClient) -> None:
+    def test_method_cancel(self, client: Replicate) -> None:
         prediction = client.predictions.cancel(
             "prediction_id",
         )
@@ -116,7 +116,7 @@ class TestPredictions:
 
     @pytest.mark.skip()
     @parametrize
-    def test_raw_response_cancel(self, client: ReplicateClient) -> None:
+    def test_raw_response_cancel(self, client: Replicate) -> None:
         response = client.predictions.with_raw_response.cancel(
             "prediction_id",
         )
@@ -128,7 +128,7 @@ class TestPredictions:
 
     @pytest.mark.skip()
     @parametrize
-    def test_streaming_response_cancel(self, client: ReplicateClient) -> None:
+    def test_streaming_response_cancel(self, client: Replicate) -> None:
         with client.predictions.with_streaming_response.cancel(
             "prediction_id",
         ) as response:
@@ -142,7 +142,7 @@ class TestPredictions:
 
     @pytest.mark.skip()
     @parametrize
-    def test_path_params_cancel(self, client: ReplicateClient) -> None:
+    def test_path_params_cancel(self, client: Replicate) -> None:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `prediction_id` but received ''"):
             client.predictions.with_raw_response.cancel(
                 "",
@@ -150,7 +150,7 @@ class TestPredictions:
 
     @pytest.mark.skip()
     @parametrize
-    def test_method_get(self, client: ReplicateClient) -> None:
+    def test_method_get(self, client: Replicate) -> None:
         prediction = client.predictions.get(
             "prediction_id",
         )
@@ -158,7 +158,7 @@ class TestPredictions:
 
     @pytest.mark.skip()
     @parametrize
-    def test_raw_response_get(self, client: ReplicateClient) -> None:
+    def test_raw_response_get(self, client: Replicate) -> None:
         response = client.predictions.with_raw_response.get(
             "prediction_id",
         )
@@ -170,7 +170,7 @@ class TestPredictions:
 
     @pytest.mark.skip()
     @parametrize
-    def test_streaming_response_get(self, client: ReplicateClient) -> None:
+    def test_streaming_response_get(self, client: Replicate) -> None:
         with client.predictions.with_streaming_response.get(
             "prediction_id",
         ) as response:
@@ -184,7 +184,7 @@ class TestPredictions:
 
     @pytest.mark.skip()
     @parametrize
-    def test_path_params_get(self, client: ReplicateClient) -> None:
+    def test_path_params_get(self, client: Replicate) -> None:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `prediction_id` but received ''"):
             client.predictions.with_raw_response.get(
                 "",
@@ -196,7 +196,7 @@ class TestAsyncPredictions:
 
     @pytest.mark.skip()
     @parametrize
-    async def test_method_create(self, async_client: AsyncReplicateClient) -> None:
+    async def test_method_create(self, async_client: AsyncReplicate) -> None:
         prediction = await async_client.predictions.create(
             input={},
             version="version",
@@ -205,7 +205,7 @@ class TestAsyncPredictions:
 
     @pytest.mark.skip()
     @parametrize
-    async def test_method_create_with_all_params(self, async_client: AsyncReplicateClient) -> None:
+    async def test_method_create_with_all_params(self, async_client: AsyncReplicate) -> None:
         prediction = await async_client.predictions.create(
             input={},
             version="version",
@@ -218,7 +218,7 @@ class TestAsyncPredictions:
 
     @pytest.mark.skip()
     @parametrize
-    async def test_raw_response_create(self, async_client: AsyncReplicateClient) -> None:
+    async def test_raw_response_create(self, async_client: AsyncReplicate) -> None:
         response = await async_client.predictions.with_raw_response.create(
             input={},
             version="version",
@@ -231,7 +231,7 @@ class TestAsyncPredictions:
 
     @pytest.mark.skip()
     @parametrize
-    async def test_streaming_response_create(self, async_client: AsyncReplicateClient) -> None:
+    async def test_streaming_response_create(self, async_client: AsyncReplicate) -> None:
         async with async_client.predictions.with_streaming_response.create(
             input={},
             version="version",
@@ -246,13 +246,13 @@ class TestAsyncPredictions:
 
     @pytest.mark.skip()
     @parametrize
-    async def test_method_list(self, async_client: AsyncReplicateClient) -> None:
+    async def test_method_list(self, async_client: AsyncReplicate) -> None:
         prediction = await async_client.predictions.list()
         assert_matches_type(AsyncCursorURLPageWithCreatedFilters[Prediction], prediction, path=["response"])
 
     @pytest.mark.skip()
     @parametrize
-    async def test_method_list_with_all_params(self, async_client: AsyncReplicateClient) -> None:
+    async def test_method_list_with_all_params(self, async_client: AsyncReplicate) -> None:
         prediction = await async_client.predictions.list(
             created_after=parse_datetime("2025-01-01T00:00:00Z"),
             created_before=parse_datetime("2025-02-01T00:00:00Z"),
@@ -261,7 +261,7 @@ class TestAsyncPredictions:
 
     @pytest.mark.skip()
     @parametrize
-    async def test_raw_response_list(self, async_client: AsyncReplicateClient) -> None:
+    async def test_raw_response_list(self, async_client: AsyncReplicate) -> None:
         response = await async_client.predictions.with_raw_response.list()
 
         assert response.is_closed is True
@@ -271,7 +271,7 @@ class TestAsyncPredictions:
 
     @pytest.mark.skip()
     @parametrize
-    async def test_streaming_response_list(self, async_client: AsyncReplicateClient) -> None:
+    async def test_streaming_response_list(self, async_client: AsyncReplicate) -> None:
         async with async_client.predictions.with_streaming_response.list() as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -283,7 +283,7 @@ class TestAsyncPredictions:
 
     @pytest.mark.skip()
     @parametrize
-    async def test_method_cancel(self, async_client: AsyncReplicateClient) -> None:
+    async def test_method_cancel(self, async_client: AsyncReplicate) -> None:
         prediction = await async_client.predictions.cancel(
             "prediction_id",
         )
@@ -291,7 +291,7 @@ class TestAsyncPredictions:
 
     @pytest.mark.skip()
     @parametrize
-    async def test_raw_response_cancel(self, async_client: AsyncReplicateClient) -> None:
+    async def test_raw_response_cancel(self, async_client: AsyncReplicate) -> None:
         response = await async_client.predictions.with_raw_response.cancel(
             "prediction_id",
         )
@@ -303,7 +303,7 @@ class TestAsyncPredictions:
 
     @pytest.mark.skip()
     @parametrize
-    async def test_streaming_response_cancel(self, async_client: AsyncReplicateClient) -> None:
+    async def test_streaming_response_cancel(self, async_client: AsyncReplicate) -> None:
         async with async_client.predictions.with_streaming_response.cancel(
             "prediction_id",
         ) as response:
@@ -317,7 +317,7 @@ class TestAsyncPredictions:
 
     @pytest.mark.skip()
     @parametrize
-    async def test_path_params_cancel(self, async_client: AsyncReplicateClient) -> None:
+    async def test_path_params_cancel(self, async_client: AsyncReplicate) -> None:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `prediction_id` but received ''"):
             await async_client.predictions.with_raw_response.cancel(
                 "",
@@ -325,7 +325,7 @@ class TestAsyncPredictions:
 
     @pytest.mark.skip()
     @parametrize
-    async def test_method_get(self, async_client: AsyncReplicateClient) -> None:
+    async def test_method_get(self, async_client: AsyncReplicate) -> None:
         prediction = await async_client.predictions.get(
             "prediction_id",
         )
@@ -333,7 +333,7 @@ class TestAsyncPredictions:
 
     @pytest.mark.skip()
     @parametrize
-    async def test_raw_response_get(self, async_client: AsyncReplicateClient) -> None:
+    async def test_raw_response_get(self, async_client: AsyncReplicate) -> None:
         response = await async_client.predictions.with_raw_response.get(
             "prediction_id",
         )
@@ -345,7 +345,7 @@ class TestAsyncPredictions:
 
     @pytest.mark.skip()
     @parametrize
-    async def test_streaming_response_get(self, async_client: AsyncReplicateClient) -> None:
+    async def test_streaming_response_get(self, async_client: AsyncReplicate) -> None:
         async with async_client.predictions.with_streaming_response.get(
             "prediction_id",
         ) as response:
@@ -359,7 +359,7 @@ class TestAsyncPredictions:
 
     @pytest.mark.skip()
     @parametrize
-    async def test_path_params_get(self, async_client: AsyncReplicateClient) -> None:
+    async def test_path_params_get(self, async_client: AsyncReplicate) -> None:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `prediction_id` but received ''"):
             await async_client.predictions.with_raw_response.get(
                 "",
