@@ -8,7 +8,7 @@ import httpx
 import pytest
 from respx import MockRouter
 
-from replicate import ReplicateClient, AsyncReplicateClient
+from replicate import Replicate, AsyncReplicate
 from replicate.lib._files import FileOutput, AsyncFileOutput
 from replicate._exceptions import ModelError, NotFoundError, BadRequestError
 from replicate.lib._models import Model, Version, ModelVersionIdentifier
@@ -49,7 +49,7 @@ def create_mock_prediction(
 
 
 class TestRun:
-    client = ReplicateClient(base_url=base_url, bearer_token=bearer_token, _strict_response_validation=True)
+    client = Replicate(base_url=base_url, bearer_token=bearer_token, _strict_response_validation=True)
 
     @pytest.mark.respx(base_url=base_url)
     def test_run_basic(self, respx_mock: MockRouter) -> None:
@@ -280,7 +280,7 @@ class TestRun:
 
 
 class TestAsyncRun:
-    client = AsyncReplicateClient(base_url=base_url, bearer_token=bearer_token, _strict_response_validation=True)
+    client = AsyncReplicate(base_url=base_url, bearer_token=bearer_token, _strict_response_validation=True)
 
     @pytest.mark.respx(base_url=base_url)
     async def test_async_run_basic(self, respx_mock: MockRouter) -> None:

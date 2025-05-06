@@ -7,7 +7,7 @@ from typing import Any, cast
 
 import pytest
 
-from replicate import ReplicateClient, AsyncReplicateClient
+from replicate import Replicate, AsyncReplicate
 from tests.utils import assert_matches_type
 from replicate.types.webhooks.default import SecretGetResponse
 
@@ -19,13 +19,13 @@ class TestSecret:
 
     @pytest.mark.skip()
     @parametrize
-    def test_method_get(self, client: ReplicateClient) -> None:
+    def test_method_get(self, client: Replicate) -> None:
         secret = client.webhooks.default.secret.get()
         assert_matches_type(SecretGetResponse, secret, path=["response"])
 
     @pytest.mark.skip()
     @parametrize
-    def test_raw_response_get(self, client: ReplicateClient) -> None:
+    def test_raw_response_get(self, client: Replicate) -> None:
         response = client.webhooks.default.secret.with_raw_response.get()
 
         assert response.is_closed is True
@@ -35,7 +35,7 @@ class TestSecret:
 
     @pytest.mark.skip()
     @parametrize
-    def test_streaming_response_get(self, client: ReplicateClient) -> None:
+    def test_streaming_response_get(self, client: Replicate) -> None:
         with client.webhooks.default.secret.with_streaming_response.get() as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -51,13 +51,13 @@ class TestAsyncSecret:
 
     @pytest.mark.skip()
     @parametrize
-    async def test_method_get(self, async_client: AsyncReplicateClient) -> None:
+    async def test_method_get(self, async_client: AsyncReplicate) -> None:
         secret = await async_client.webhooks.default.secret.get()
         assert_matches_type(SecretGetResponse, secret, path=["response"])
 
     @pytest.mark.skip()
     @parametrize
-    async def test_raw_response_get(self, async_client: AsyncReplicateClient) -> None:
+    async def test_raw_response_get(self, async_client: AsyncReplicate) -> None:
         response = await async_client.webhooks.default.secret.with_raw_response.get()
 
         assert response.is_closed is True
@@ -67,7 +67,7 @@ class TestAsyncSecret:
 
     @pytest.mark.skip()
     @parametrize
-    async def test_streaming_response_get(self, async_client: AsyncReplicateClient) -> None:
+    async def test_streaming_response_get(self, async_client: AsyncReplicate) -> None:
         async with async_client.webhooks.default.secret.with_streaming_response.get() as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"

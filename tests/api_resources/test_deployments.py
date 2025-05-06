@@ -7,7 +7,7 @@ from typing import Any, cast
 
 import pytest
 
-from replicate import ReplicateClient, AsyncReplicateClient
+from replicate import Replicate, AsyncReplicate
 from tests.utils import assert_matches_type
 from replicate.types import (
     DeploymentGetResponse,
@@ -25,7 +25,7 @@ class TestDeployments:
 
     @pytest.mark.skip()
     @parametrize
-    def test_method_create(self, client: ReplicateClient) -> None:
+    def test_method_create(self, client: Replicate) -> None:
         deployment = client.deployments.create(
             hardware="hardware",
             max_instances=0,
@@ -38,7 +38,7 @@ class TestDeployments:
 
     @pytest.mark.skip()
     @parametrize
-    def test_raw_response_create(self, client: ReplicateClient) -> None:
+    def test_raw_response_create(self, client: Replicate) -> None:
         response = client.deployments.with_raw_response.create(
             hardware="hardware",
             max_instances=0,
@@ -55,7 +55,7 @@ class TestDeployments:
 
     @pytest.mark.skip()
     @parametrize
-    def test_streaming_response_create(self, client: ReplicateClient) -> None:
+    def test_streaming_response_create(self, client: Replicate) -> None:
         with client.deployments.with_streaming_response.create(
             hardware="hardware",
             max_instances=0,
@@ -74,7 +74,7 @@ class TestDeployments:
 
     @pytest.mark.skip()
     @parametrize
-    def test_method_update(self, client: ReplicateClient) -> None:
+    def test_method_update(self, client: Replicate) -> None:
         deployment = client.deployments.update(
             deployment_name="deployment_name",
             deployment_owner="deployment_owner",
@@ -83,7 +83,7 @@ class TestDeployments:
 
     @pytest.mark.skip()
     @parametrize
-    def test_method_update_with_all_params(self, client: ReplicateClient) -> None:
+    def test_method_update_with_all_params(self, client: Replicate) -> None:
         deployment = client.deployments.update(
             deployment_name="deployment_name",
             deployment_owner="deployment_owner",
@@ -96,7 +96,7 @@ class TestDeployments:
 
     @pytest.mark.skip()
     @parametrize
-    def test_raw_response_update(self, client: ReplicateClient) -> None:
+    def test_raw_response_update(self, client: Replicate) -> None:
         response = client.deployments.with_raw_response.update(
             deployment_name="deployment_name",
             deployment_owner="deployment_owner",
@@ -109,7 +109,7 @@ class TestDeployments:
 
     @pytest.mark.skip()
     @parametrize
-    def test_streaming_response_update(self, client: ReplicateClient) -> None:
+    def test_streaming_response_update(self, client: Replicate) -> None:
         with client.deployments.with_streaming_response.update(
             deployment_name="deployment_name",
             deployment_owner="deployment_owner",
@@ -124,7 +124,7 @@ class TestDeployments:
 
     @pytest.mark.skip()
     @parametrize
-    def test_path_params_update(self, client: ReplicateClient) -> None:
+    def test_path_params_update(self, client: Replicate) -> None:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `deployment_owner` but received ''"):
             client.deployments.with_raw_response.update(
                 deployment_name="deployment_name",
@@ -139,13 +139,13 @@ class TestDeployments:
 
     @pytest.mark.skip()
     @parametrize
-    def test_method_list(self, client: ReplicateClient) -> None:
+    def test_method_list(self, client: Replicate) -> None:
         deployment = client.deployments.list()
         assert_matches_type(SyncCursorURLPage[DeploymentListResponse], deployment, path=["response"])
 
     @pytest.mark.skip()
     @parametrize
-    def test_raw_response_list(self, client: ReplicateClient) -> None:
+    def test_raw_response_list(self, client: Replicate) -> None:
         response = client.deployments.with_raw_response.list()
 
         assert response.is_closed is True
@@ -155,7 +155,7 @@ class TestDeployments:
 
     @pytest.mark.skip()
     @parametrize
-    def test_streaming_response_list(self, client: ReplicateClient) -> None:
+    def test_streaming_response_list(self, client: Replicate) -> None:
         with client.deployments.with_streaming_response.list() as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -167,7 +167,7 @@ class TestDeployments:
 
     @pytest.mark.skip()
     @parametrize
-    def test_method_delete(self, client: ReplicateClient) -> None:
+    def test_method_delete(self, client: Replicate) -> None:
         deployment = client.deployments.delete(
             deployment_name="deployment_name",
             deployment_owner="deployment_owner",
@@ -176,7 +176,7 @@ class TestDeployments:
 
     @pytest.mark.skip()
     @parametrize
-    def test_raw_response_delete(self, client: ReplicateClient) -> None:
+    def test_raw_response_delete(self, client: Replicate) -> None:
         response = client.deployments.with_raw_response.delete(
             deployment_name="deployment_name",
             deployment_owner="deployment_owner",
@@ -189,7 +189,7 @@ class TestDeployments:
 
     @pytest.mark.skip()
     @parametrize
-    def test_streaming_response_delete(self, client: ReplicateClient) -> None:
+    def test_streaming_response_delete(self, client: Replicate) -> None:
         with client.deployments.with_streaming_response.delete(
             deployment_name="deployment_name",
             deployment_owner="deployment_owner",
@@ -204,7 +204,7 @@ class TestDeployments:
 
     @pytest.mark.skip()
     @parametrize
-    def test_path_params_delete(self, client: ReplicateClient) -> None:
+    def test_path_params_delete(self, client: Replicate) -> None:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `deployment_owner` but received ''"):
             client.deployments.with_raw_response.delete(
                 deployment_name="deployment_name",
@@ -219,7 +219,7 @@ class TestDeployments:
 
     @pytest.mark.skip()
     @parametrize
-    def test_method_get(self, client: ReplicateClient) -> None:
+    def test_method_get(self, client: Replicate) -> None:
         deployment = client.deployments.get(
             deployment_name="deployment_name",
             deployment_owner="deployment_owner",
@@ -228,7 +228,7 @@ class TestDeployments:
 
     @pytest.mark.skip()
     @parametrize
-    def test_raw_response_get(self, client: ReplicateClient) -> None:
+    def test_raw_response_get(self, client: Replicate) -> None:
         response = client.deployments.with_raw_response.get(
             deployment_name="deployment_name",
             deployment_owner="deployment_owner",
@@ -241,7 +241,7 @@ class TestDeployments:
 
     @pytest.mark.skip()
     @parametrize
-    def test_streaming_response_get(self, client: ReplicateClient) -> None:
+    def test_streaming_response_get(self, client: Replicate) -> None:
         with client.deployments.with_streaming_response.get(
             deployment_name="deployment_name",
             deployment_owner="deployment_owner",
@@ -256,7 +256,7 @@ class TestDeployments:
 
     @pytest.mark.skip()
     @parametrize
-    def test_path_params_get(self, client: ReplicateClient) -> None:
+    def test_path_params_get(self, client: Replicate) -> None:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `deployment_owner` but received ''"):
             client.deployments.with_raw_response.get(
                 deployment_name="deployment_name",
@@ -275,7 +275,7 @@ class TestAsyncDeployments:
 
     @pytest.mark.skip()
     @parametrize
-    async def test_method_create(self, async_client: AsyncReplicateClient) -> None:
+    async def test_method_create(self, async_client: AsyncReplicate) -> None:
         deployment = await async_client.deployments.create(
             hardware="hardware",
             max_instances=0,
@@ -288,7 +288,7 @@ class TestAsyncDeployments:
 
     @pytest.mark.skip()
     @parametrize
-    async def test_raw_response_create(self, async_client: AsyncReplicateClient) -> None:
+    async def test_raw_response_create(self, async_client: AsyncReplicate) -> None:
         response = await async_client.deployments.with_raw_response.create(
             hardware="hardware",
             max_instances=0,
@@ -305,7 +305,7 @@ class TestAsyncDeployments:
 
     @pytest.mark.skip()
     @parametrize
-    async def test_streaming_response_create(self, async_client: AsyncReplicateClient) -> None:
+    async def test_streaming_response_create(self, async_client: AsyncReplicate) -> None:
         async with async_client.deployments.with_streaming_response.create(
             hardware="hardware",
             max_instances=0,
@@ -324,7 +324,7 @@ class TestAsyncDeployments:
 
     @pytest.mark.skip()
     @parametrize
-    async def test_method_update(self, async_client: AsyncReplicateClient) -> None:
+    async def test_method_update(self, async_client: AsyncReplicate) -> None:
         deployment = await async_client.deployments.update(
             deployment_name="deployment_name",
             deployment_owner="deployment_owner",
@@ -333,7 +333,7 @@ class TestAsyncDeployments:
 
     @pytest.mark.skip()
     @parametrize
-    async def test_method_update_with_all_params(self, async_client: AsyncReplicateClient) -> None:
+    async def test_method_update_with_all_params(self, async_client: AsyncReplicate) -> None:
         deployment = await async_client.deployments.update(
             deployment_name="deployment_name",
             deployment_owner="deployment_owner",
@@ -346,7 +346,7 @@ class TestAsyncDeployments:
 
     @pytest.mark.skip()
     @parametrize
-    async def test_raw_response_update(self, async_client: AsyncReplicateClient) -> None:
+    async def test_raw_response_update(self, async_client: AsyncReplicate) -> None:
         response = await async_client.deployments.with_raw_response.update(
             deployment_name="deployment_name",
             deployment_owner="deployment_owner",
@@ -359,7 +359,7 @@ class TestAsyncDeployments:
 
     @pytest.mark.skip()
     @parametrize
-    async def test_streaming_response_update(self, async_client: AsyncReplicateClient) -> None:
+    async def test_streaming_response_update(self, async_client: AsyncReplicate) -> None:
         async with async_client.deployments.with_streaming_response.update(
             deployment_name="deployment_name",
             deployment_owner="deployment_owner",
@@ -374,7 +374,7 @@ class TestAsyncDeployments:
 
     @pytest.mark.skip()
     @parametrize
-    async def test_path_params_update(self, async_client: AsyncReplicateClient) -> None:
+    async def test_path_params_update(self, async_client: AsyncReplicate) -> None:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `deployment_owner` but received ''"):
             await async_client.deployments.with_raw_response.update(
                 deployment_name="deployment_name",
@@ -389,13 +389,13 @@ class TestAsyncDeployments:
 
     @pytest.mark.skip()
     @parametrize
-    async def test_method_list(self, async_client: AsyncReplicateClient) -> None:
+    async def test_method_list(self, async_client: AsyncReplicate) -> None:
         deployment = await async_client.deployments.list()
         assert_matches_type(AsyncCursorURLPage[DeploymentListResponse], deployment, path=["response"])
 
     @pytest.mark.skip()
     @parametrize
-    async def test_raw_response_list(self, async_client: AsyncReplicateClient) -> None:
+    async def test_raw_response_list(self, async_client: AsyncReplicate) -> None:
         response = await async_client.deployments.with_raw_response.list()
 
         assert response.is_closed is True
@@ -405,7 +405,7 @@ class TestAsyncDeployments:
 
     @pytest.mark.skip()
     @parametrize
-    async def test_streaming_response_list(self, async_client: AsyncReplicateClient) -> None:
+    async def test_streaming_response_list(self, async_client: AsyncReplicate) -> None:
         async with async_client.deployments.with_streaming_response.list() as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -417,7 +417,7 @@ class TestAsyncDeployments:
 
     @pytest.mark.skip()
     @parametrize
-    async def test_method_delete(self, async_client: AsyncReplicateClient) -> None:
+    async def test_method_delete(self, async_client: AsyncReplicate) -> None:
         deployment = await async_client.deployments.delete(
             deployment_name="deployment_name",
             deployment_owner="deployment_owner",
@@ -426,7 +426,7 @@ class TestAsyncDeployments:
 
     @pytest.mark.skip()
     @parametrize
-    async def test_raw_response_delete(self, async_client: AsyncReplicateClient) -> None:
+    async def test_raw_response_delete(self, async_client: AsyncReplicate) -> None:
         response = await async_client.deployments.with_raw_response.delete(
             deployment_name="deployment_name",
             deployment_owner="deployment_owner",
@@ -439,7 +439,7 @@ class TestAsyncDeployments:
 
     @pytest.mark.skip()
     @parametrize
-    async def test_streaming_response_delete(self, async_client: AsyncReplicateClient) -> None:
+    async def test_streaming_response_delete(self, async_client: AsyncReplicate) -> None:
         async with async_client.deployments.with_streaming_response.delete(
             deployment_name="deployment_name",
             deployment_owner="deployment_owner",
@@ -454,7 +454,7 @@ class TestAsyncDeployments:
 
     @pytest.mark.skip()
     @parametrize
-    async def test_path_params_delete(self, async_client: AsyncReplicateClient) -> None:
+    async def test_path_params_delete(self, async_client: AsyncReplicate) -> None:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `deployment_owner` but received ''"):
             await async_client.deployments.with_raw_response.delete(
                 deployment_name="deployment_name",
@@ -469,7 +469,7 @@ class TestAsyncDeployments:
 
     @pytest.mark.skip()
     @parametrize
-    async def test_method_get(self, async_client: AsyncReplicateClient) -> None:
+    async def test_method_get(self, async_client: AsyncReplicate) -> None:
         deployment = await async_client.deployments.get(
             deployment_name="deployment_name",
             deployment_owner="deployment_owner",
@@ -478,7 +478,7 @@ class TestAsyncDeployments:
 
     @pytest.mark.skip()
     @parametrize
-    async def test_raw_response_get(self, async_client: AsyncReplicateClient) -> None:
+    async def test_raw_response_get(self, async_client: AsyncReplicate) -> None:
         response = await async_client.deployments.with_raw_response.get(
             deployment_name="deployment_name",
             deployment_owner="deployment_owner",
@@ -491,7 +491,7 @@ class TestAsyncDeployments:
 
     @pytest.mark.skip()
     @parametrize
-    async def test_streaming_response_get(self, async_client: AsyncReplicateClient) -> None:
+    async def test_streaming_response_get(self, async_client: AsyncReplicate) -> None:
         async with async_client.deployments.with_streaming_response.get(
             deployment_name="deployment_name",
             deployment_owner="deployment_owner",
@@ -506,7 +506,7 @@ class TestAsyncDeployments:
 
     @pytest.mark.skip()
     @parametrize
-    async def test_path_params_get(self, async_client: AsyncReplicateClient) -> None:
+    async def test_path_params_get(self, async_client: AsyncReplicate) -> None:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `deployment_owner` but received ''"):
             await async_client.deployments.with_raw_response.get(
                 deployment_name="deployment_name",

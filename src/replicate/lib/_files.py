@@ -16,7 +16,7 @@ from .._utils import is_mapping, is_sequence
 
 # Use TYPE_CHECKING to avoid circular imports
 if TYPE_CHECKING:
-    from .._client import ReplicateClient, AsyncReplicateClient
+    from .._client import Replicate, AsyncReplicate
 
 FileEncodingStrategy = Literal["base64", "url"]
 
@@ -32,7 +32,7 @@ except ImportError:
 # pylint: disable=too-many-return-statements
 def encode_json(
     obj: Any,  # noqa: ANN401
-    client: ReplicateClient,
+    client: Replicate,
     file_encoding_strategy: Optional["FileEncodingStrategy"] = None,
 ) -> Any:  # noqa: ANN401
     """
@@ -68,7 +68,7 @@ def encode_json(
 
 async def async_encode_json(
     obj: Any,  # noqa: ANN401
-    client: AsyncReplicateClient,
+    client: AsyncReplicate,
     file_encoding_strategy: Optional["FileEncodingStrategy"] = None,
 ) -> Any:  # noqa: ANN401
     """
@@ -138,9 +138,9 @@ class FileOutput(httpx.SyncByteStream):
     The file URL.
     """
 
-    _client: ReplicateClient
+    _client: Replicate
 
-    def __init__(self, url: str, client: ReplicateClient) -> None:
+    def __init__(self, url: str, client: Replicate) -> None:
         self.url = url
         self._client = client
 
@@ -183,9 +183,9 @@ class AsyncFileOutput(httpx.AsyncByteStream):
     The file URL.
     """
 
-    _client: AsyncReplicateClient
+    _client: AsyncReplicate
 
-    def __init__(self, url: str, client: AsyncReplicateClient) -> None:
+    def __init__(self, url: str, client: AsyncReplicate) -> None:
         self.url = url
         self._client = client
 
@@ -218,7 +218,7 @@ class AsyncFileOutput(httpx.AsyncByteStream):
         return f'{self.__class__.__name__}("{self.url}")'
 
 
-def transform_output(value: PredictionOutput, client: "ReplicateClient | AsyncReplicateClient") -> Any:
+def transform_output(value: PredictionOutput, client: "Replicate | AsyncReplicate") -> Any:
     """
     Transform the output of a prediction to a `FileOutput` object if it's a URL.
     """

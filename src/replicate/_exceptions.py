@@ -21,11 +21,11 @@ __all__ = [
 ]
 
 
-class ReplicateClientError(Exception):
+class ReplicateError(Exception):
     pass
 
 
-class APIError(ReplicateClientError):
+class APIError(ReplicateError):
     message: str
     request: httpx.Request
 
@@ -111,7 +111,7 @@ class InternalServerError(APIStatusError):
     pass
 
 
-class ModelError(ReplicateClientError):
+class ModelError(ReplicateError):
     """An error from user's code in a model."""
 
     prediction: Prediction

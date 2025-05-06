@@ -1,8 +1,8 @@
 import rich
 
-from replicate import ReplicateClient
+from replicate import Replicate
 
-client = ReplicateClient()
+client = Replicate()
 
 outputs = client.run(
     "black-forest-labs/flux-schnell",

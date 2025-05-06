@@ -14,11 +14,11 @@ from .._exceptions import ModelError
 
 if TYPE_CHECKING:
     from ._files import FileOutput
-    from .._client import ReplicateClient, AsyncReplicateClient
+    from .._client import Replicate, AsyncReplicate
 
 
 def run(
-    client: "ReplicateClient",
+    client: "Replicate",
     ref: Union[Model, Version, ModelVersionIdentifier, str],
     *,
     wait: Union[int, bool, NotGiven] = NOT_GIVEN,
@@ -30,7 +30,7 @@ def run(
     Run a model prediction.
 
     Args:
-        client: The ReplicateClient instance to use for API calls
+        client: The Replicate instance to use for API calls
         ref: Reference to the model or version to run. Can be:
             - A string containing a version ID (e.g. "5c7d5dc6dd8bf75c1acaa8565735e7986bc5b66206b55cca93cb72c9bf15ccaa")
             - A string with owner/name format (e.g. "replicate/hello-world")
@@ -120,7 +120,7 @@ def run(
 
 
 async def async_run(
-    client: "AsyncReplicateClient",
+    client: "AsyncReplicate",
     ref: Union[Model, Version, ModelVersionIdentifier, str],
     *,
     file_encoding_strategy: Optional["FileEncodingStrategy"] = None,
@@ -132,7 +132,7 @@ async def async_run(
     Run a model prediction asynchronously.
 
     Args:
-        client: The AsyncReplicateClient instance to use for API calls
+        client: The AsyncReplicate instance to use for API calls
         ref: Reference to the model or version to run. Can be:
             - A string containing a version ID (e.g. "5c7d5dc6dd8bf75c1acaa8565735e7986bc5b66206b55cca93cb72c9bf15ccaa")
             - A string with owner/name format (e.g. "replicate/hello-world")
