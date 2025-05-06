@@ -46,9 +46,9 @@ class PredictionsResource(SyncAPIResource):
 
     def create(
         self,
-        deployment_name: str,
         *,
         deployment_owner: str,
+        deployment_name: str,
         input: object,
         stream: bool | NotGiven = NOT_GIVEN,
         webhook: str | NotGiven = NOT_GIVEN,
@@ -203,9 +203,9 @@ class AsyncPredictionsResource(AsyncAPIResource):
 
     async def create(
         self,
-        deployment_name: str,
         *,
         deployment_owner: str,
+        deployment_name: str,
         input: object,
         stream: bool | NotGiven = NOT_GIVEN,
         webhook: str | NotGiven = NOT_GIVEN,
