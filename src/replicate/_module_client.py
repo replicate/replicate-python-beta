@@ -6,6 +6,7 @@ from typing import TYPE_CHECKING
 from typing_extensions import cast, override
 
 if TYPE_CHECKING:
+    from .resources.files import FilesResource
     from .resources.account import AccountResource
     from .resources.hardware import HardwareResource
     from .resources.trainings import TrainingsResource
@@ -17,6 +18,12 @@ if TYPE_CHECKING:
 
 from . import _load_client
 from ._utils import LazyProxy
+
+
+class FilesResourceProxy(LazyProxy["FilesResource"]):
+    @override
+    def __load__(self) -> FilesResource:
+        return _load_client().files
 
 
 class ModelsResourceProxy(LazyProxy["ModelsResource"]):
@@ -81,6 +88,7 @@ else:
 
     run = _run
 
+files: FilesResource = FilesResourceProxy().__as_proxied__()
 models: ModelsResource = ModelsResourceProxy().__as_proxied__()
 account: AccountResource = AccountResourceProxy().__as_proxied__()
 hardware: HardwareResource = HardwareResourceProxy().__as_proxied__()
