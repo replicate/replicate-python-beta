@@ -58,7 +58,7 @@ class FilesResource(SyncAPIResource):
         self,
         *,
         content: FileTypes,
-        filename: str | NotGiven = NOT_GIVEN,
+        filename: str,
         metadata: object | NotGiven = NOT_GIVEN,
         type: str | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
@@ -336,7 +336,7 @@ class AsyncFilesResource(AsyncAPIResource):
         self,
         *,
         content: FileTypes,
-        filename: str | NotGiven = NOT_GIVEN,
+        filename: str,
         metadata: object | NotGiven = NOT_GIVEN,
         type: str | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
