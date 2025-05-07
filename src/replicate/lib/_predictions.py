@@ -215,6 +215,6 @@ def output_iterator(prediction: Prediction, client: Replicate) -> Iterator[Any]:
     if prediction.status == "failed":
         raise ModelError(prediction=prediction)
 
-    output: list[Any] = prediction.output or []  # type: ignore
+    output = prediction.output or []  # type: ignore
     new_output = output[len(previous_output) :]
     yield from new_output
