@@ -83,13 +83,13 @@ class Replicate(SyncAPIClient):
     ) -> None:
         """Construct a new synchronous Replicate client instance.
 
-        This automatically infers the `api_key` argument from the `REPLICATE_CLIENT_API_KEY` environment variable if it is not provided.
+        This automatically infers the `api_key` argument from the `REPLICATE_API_TOKEN` environment variable if it is not provided.
         """
         if api_key is None:
-            api_key = os.environ.get("REPLICATE_CLIENT_API_KEY")
+            api_key = os.environ.get("REPLICATE_API_TOKEN")
         if api_key is None:
             raise ReplicateError(
-                "The api_key client option must be set either by passing api_key to the client or by setting the REPLICATE_CLIENT_API_KEY environment variable"
+                "The api_key client option must be set either by passing api_key to the client or by setting the REPLICATE_API_TOKEN environment variable"
             )
         self.api_key = api_key
 
@@ -305,13 +305,13 @@ class AsyncReplicate(AsyncAPIClient):
     ) -> None:
         """Construct a new async AsyncReplicate client instance.
 
-        This automatically infers the `api_key` argument from the `REPLICATE_CLIENT_API_KEY` environment variable if it is not provided.
+        This automatically infers the `api_key` argument from the `REPLICATE_API_TOKEN` environment variable if it is not provided.
         """
         if api_key is None:
-            api_key = os.environ.get("REPLICATE_CLIENT_API_KEY")
+            api_key = os.environ.get("REPLICATE_API_TOKEN")
         if api_key is None:
             raise ReplicateError(
-                "The api_key client option must be set either by passing api_key to the client or by setting the REPLICATE_CLIENT_API_KEY environment variable"
+                "The api_key client option must be set either by passing api_key to the client or by setting the REPLICATE_API_TOKEN environment variable"
             )
         self.api_key = api_key
 

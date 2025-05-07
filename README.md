@@ -28,7 +28,7 @@ import os
 from replicate import Replicate
 
 client = Replicate(
-    api_key=os.environ.get("REPLICATE_CLIENT_API_KEY"),  # This is the default and can be omitted
+    api_key=os.environ.get("REPLICATE_API_TOKEN"),  # This is the default and can be omitted
 )
 
 account = client.account.get()
@@ -37,7 +37,7 @@ print(account.type)
 
 While you can provide an `api_key` keyword argument,
 we recommend using [python-dotenv](https://pypi.org/project/python-dotenv/)
-to add `REPLICATE_CLIENT_API_KEY="My API Key"` to your `.env` file
+to add `REPLICATE_API_TOKEN="My API Key"` to your `.env` file
 so that your API Key is not stored in source control.
 
 ## Async usage
@@ -50,7 +50,7 @@ import asyncio
 from replicate import AsyncReplicate
 
 client = AsyncReplicate(
-    api_key=os.environ.get("REPLICATE_CLIENT_API_KEY"),  # This is the default and can be omitted
+    api_key=os.environ.get("REPLICATE_API_TOKEN"),  # This is the default and can be omitted
 )
 
 
