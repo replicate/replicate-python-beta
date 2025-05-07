@@ -31,8 +31,10 @@ client = Replicate(
     bearer_token=os.environ.get("REPLICATE_API_TOKEN"),  # This is the default and can be omitted
 )
 
-account = client.account.get()
-print(account.type)
+prediction = client.predictions.get(
+    prediction_id="gm3qorzdhgbfurvjtvhg6dckhu",
+)
+print(prediction.id)
 ```
 
 While you can provide a `bearer_token` keyword argument,
@@ -55,8 +57,10 @@ client = AsyncReplicate(
 
 
 async def main() -> None:
-    account = await client.account.get()
-    print(account.type)
+    prediction = await client.predictions.get(
+        prediction_id="gm3qorzdhgbfurvjtvhg6dckhu",
+    )
+    print(prediction.id)
 
 
 asyncio.run(main())
@@ -84,12 +88,12 @@ from replicate import Replicate
 
 client = Replicate()
 
-all_predictions = []
+all_models = []
 # Automatically fetches more pages as needed.
-for prediction in client.predictions.list():
-    # Do something with prediction here
-    all_predictions.append(prediction)
-print(all_predictions)
+for model in client.models.list():
+    # Do something with model here
+    all_models.append(model)
+print(all_models)
 ```
 
 Or, asynchronously:
@@ -102,11 +106,11 @@ client = AsyncReplicate()
 
 
 async def main() -> None:
-    all_predictions = []
+    all_models = []
     # Iterate through items across all pages, issuing requests as needed.
-    async for prediction in client.predictions.list():
-        all_predictions.append(prediction)
-    print(all_predictions)
+    async for model in client.models.list():
+        all_models.append(model)
+    print(all_models)
 
 
 asyncio.run(main())
@@ -115,7 +119,7 @@ asyncio.run(main())
 Alternatively, you can use the `.has_next_page()`, `.next_page_info()`, or `.get_next_page()` methods for more granular control working with pages:
 
 ```python
-first_page = await client.predictions.list()
+first_page = await client.models.list()
 if first_page.has_next_page():
     print(f"will fetch next page using these details: {first_page.next_page_info()}")
     next_page = await first_page.get_next_page()
@@ -127,11 +131,11 @@ if first_page.has_next_page():
 Or just work directly with the returned data:
 
 ```python
-first_page = await client.predictions.list()
+first_page = await client.models.list()
 
 print(f"next URL: {first_page.next}")  # => "next URL: ..."
-for prediction in first_page.results:
-    print(prediction.id)
+for model in first_page.results:
+    print(model.cover_image_url)
 
 # Remove `await` for non-async usage.
 ```
@@ -170,7 +174,10 @@ from replicate import Replicate
 client = Replicate()
 
 try:
-    client.account.get()
+    client.predictions.create(
+        input={"text": "Alice"},
+        version="replicate/hello-world:5c7d5dc6dd8bf75c1acaa8565735e7986bc5b66206b55cca93cb72c9bf15ccaa",
+    )
 except replicate.APIConnectionError as e:
     print("The server could not be reached")
     print(e.__cause__)  # an underlying Exception, likely raised within httpx.
@@ -213,7 +220,10 @@ client = Replicate(
 )
 
 # Or, configure per-request:
-client.with_options(max_retries=5).account.get()
+client.with_options(max_retries=5).predictions.create(
+    input={"text": "Alice"},
+    version="replicate/hello-world:5c7d5dc6dd8bf75c1acaa8565735e7986bc5b66206b55cca93cb72c9bf15ccaa",
+)
 ```
 
 ### Timeouts
@@ -236,7 +246,10 @@ client = Replicate(
 )
 
 # Override per-request:
-client.with_options(timeout=5.0).account.get()
+client.with_options(timeout=5.0).predictions.create(
+    input={"text": "Alice"},
+    version="replicate/hello-world:5c7d5dc6dd8bf75c1acaa8565735e7986bc5b66206b55cca93cb72c9bf15ccaa",
+)
 ```
 
 On timeout, an `APITimeoutError` is thrown.
@@ -277,11 +290,16 @@ The "raw" Response object can be accessed by prefixing `.with_raw_response.` to 
 from replicate import Replicate
 
 client = Replicate()
-response = client.account.with_raw_response.get()
+response = client.predictions.with_raw_response.create(
+    input={
+        "text": "Alice"
+    },
+    version="replicate/hello-world:5c7d5dc6dd8bf75c1acaa8565735e7986bc5b66206b55cca93cb72c9bf15ccaa",
+)
 print(response.headers.get('X-My-Header'))
 
-account = response.parse()  # get the object that `account.get()` would have returned
-print(account.type)
+prediction = response.parse()  # get the object that `predictions.create()` would have returned
+print(prediction.id)
 ```
 
 These methods return an [`APIResponse`](https://github.com/replicate/replicate-python-stainless/tree/main/src/replicate/_response.py) object.
@@ -295,7 +313,10 @@ The above interface eagerly reads the full response body when you make the reque
 To stream the response body, use `.with_streaming_response` instead, which requires a context manager and only reads the response body once you call `.read()`, `.text()`, `.json()`, `.iter_bytes()`, `.iter_text()`, `.iter_lines()` or `.parse()`. In the async client, these are async methods.
 
 ```python
-with client.account.with_streaming_response.get() as response:
+with client.predictions.with_streaming_response.create(
+    input={"text": "Alice"},
+    version="replicate/hello-world:5c7d5dc6dd8bf75c1acaa8565735e7986bc5b66206b55cca93cb72c9bf15ccaa",
+) as response:
     print(response.headers.get("X-My-Header"))
 
     for line in response.iter_lines():
