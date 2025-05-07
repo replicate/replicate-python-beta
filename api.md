@@ -154,3 +154,11 @@ from replicate.types.webhooks.default import SecretGetResponse
 Methods:
 
 - <code title="get /webhooks/default/secret">client.webhooks.default.secret.<a href="./src/replicate/resources/webhooks/default/secret.py">get</a>() -> <a href="./src/replicate/types/webhooks/default/secret_get_response.py">SecretGetResponse</a></code>
+
+# Files
+
+Types:
+
+```python
+from replicate.types import FileCreateResponse, FileListResponse, FileGetResponse
+```

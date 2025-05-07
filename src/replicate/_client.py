@@ -31,7 +31,8 @@ from ._base_client import (
 )
 
 if TYPE_CHECKING:
-    from .resources import models, account, hardware, webhooks, trainings, collections, deployments, predictions
+    from .resources import files, models, account, hardware, webhooks, trainings, collections, deployments, predictions
+    from .resources.files import FilesResource, AsyncFilesResource
     from .resources.account import AccountResource, AsyncAccountResource
     from .resources.hardware import HardwareResource, AsyncHardwareResource
     from .resources.trainings import TrainingsResource, AsyncTrainingsResource
@@ -155,6 +156,12 @@ class Replicate(SyncAPIClient):
         from .resources.webhooks import WebhooksResource
 
         return WebhooksResource(self)
+
+    @cached_property
+    def files(self) -> FilesResource:
+        from .resources.files import FilesResource
+
+        return FilesResource(self)
 
     @cached_property
     def with_raw_response(self) -> ReplicateWithRawResponse:
@@ -373,6 +380,12 @@ class AsyncReplicate(AsyncAPIClient):
         return AsyncWebhooksResource(self)
 
     @cached_property
+    def files(self) -> AsyncFilesResource:
+        from .resources.files import AsyncFilesResource
+
+        return AsyncFilesResource(self)
+
+    @cached_property
     def with_raw_response(self) -> AsyncReplicateWithRawResponse:
         return AsyncReplicateWithRawResponse(self)
 
@@ -539,6 +552,12 @@ class ReplicateWithRawResponse:
 
         return WebhooksResourceWithRawResponse(self._client.webhooks)
 
+    @cached_property
+    def files(self) -> files.FilesResourceWithRawResponse:
+        from .resources.files import FilesResourceWithRawResponse
+
+        return FilesResourceWithRawResponse(self._client.files)
+
 
 class AsyncReplicateWithRawResponse:
     _client: AsyncReplicate
@@ -593,6 +612,12 @@ class AsyncReplicateWithRawResponse:
         from .resources.webhooks import AsyncWebhooksResourceWithRawResponse
 
         return AsyncWebhooksResourceWithRawResponse(self._client.webhooks)
+
+    @cached_property
+    def files(self) -> files.AsyncFilesResourceWithRawResponse:
+        from .resources.files import AsyncFilesResourceWithRawResponse
+
+        return AsyncFilesResourceWithRawResponse(self._client.files)
 
 
 class ReplicateWithStreamedResponse:
@@ -649,6 +674,12 @@ class ReplicateWithStreamedResponse:
 
         return WebhooksResourceWithStreamingResponse(self._client.webhooks)
 
+    @cached_property
+    def files(self) -> files.FilesResourceWithStreamingResponse:
+        from .resources.files import FilesResourceWithStreamingResponse
+
+        return FilesResourceWithStreamingResponse(self._client.files)
+
 
 class AsyncReplicateWithStreamedResponse:
     _client: AsyncReplicate
@@ -703,6 +734,12 @@ class AsyncReplicateWithStreamedResponse:
         from .resources.webhooks import AsyncWebhooksResourceWithStreamingResponse
 
         return AsyncWebhooksResourceWithStreamingResponse(self._client.webhooks)
+
+    @cached_property
+    def files(self) -> files.AsyncFilesResourceWithStreamingResponse:
+        from .resources.files import AsyncFilesResourceWithStreamingResponse
+
+        return AsyncFilesResourceWithStreamingResponse(self._client.files)
 
 
 Client = Replicate
