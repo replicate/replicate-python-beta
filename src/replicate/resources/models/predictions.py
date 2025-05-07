@@ -48,9 +48,9 @@ class PredictionsResource(SyncAPIResource):
 
     def create(
         self,
-        model_name: str,
         *,
         model_owner: str,
+        model_name: str,
         input: object,
         stream: bool | NotGiven = NOT_GIVEN,
         webhook: str | NotGiven = NOT_GIVEN,
@@ -210,9 +210,9 @@ class AsyncPredictionsResource(AsyncAPIResource):
 
     async def create(
         self,
-        model_name: str,
         *,
         model_owner: str,
+        model_name: str,
         input: object,
         stream: bool | NotGiven = NOT_GIVEN,
         webhook: str | NotGiven = NOT_GIVEN,

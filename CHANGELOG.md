@@ -1,5 +1,35 @@
 # Changelog
 
+## 0.1.0 (2025-05-07)
+
+Full Changelog: [v0.1.0-alpha.10...v0.1.0](https://github.com/replicate/replicate-python-stainless/compare/v0.1.0-alpha.10...v0.1.0)
+
+### Features
+
+* **api:** api update ([e889b3d](https://github.com/replicate/replicate-python-stainless/commit/e889b3d0950cac908d53f0afef0660e50d822455))
+
+## 0.1.0-alpha.10 (2025-05-06)
+
+Full Changelog: [v0.1.0-alpha.9...v0.1.0-alpha.10](https://github.com/replicate/replicate-python-stainless/compare/v0.1.0-alpha.9...v0.1.0-alpha.10)
+
+### Bug Fixes
+
+* disable settings.positional_params ([f018f4b](https://github.com/replicate/replicate-python-stainless/commit/f018f4b81e50ae538d9430aa1cdde7f64100031a))
+
+## 0.1.0-alpha.9 (2025-05-06)
+
+Full Changelog: [v0.1.0-alpha.8...v0.1.0-alpha.9](https://github.com/replicate/replicate-python-stainless/compare/v0.1.0-alpha.8...v0.1.0-alpha.9)
+
+### Bug Fixes
+
+* change organization.name to replicate ([04b0797](https://github.com/replicate/replicate-python-stainless/commit/04b079729cd431cad9e992c5c0a0d82ad838f5ef))
+
+
+### Chores
+
+* use lazy imports for module level client ([14f6cfc](https://github.com/replicate/replicate-python-stainless/commit/14f6cfcad3045d1bde023d1896b369057d3f6b77))
+* use lazy imports for resources ([b2a0246](https://github.com/replicate/replicate-python-stainless/commit/b2a024612fc8b5a1bc7a15038cd33ab29e728b58))
+
 ## 0.1.0-alpha.8 (2025-04-30)
 
 Full Changelog: [v0.1.0-alpha.7...v0.1.0-alpha.8](https://github.com/replicate/replicate-python-stainless/compare/v0.1.0-alpha.7...v0.1.0-alpha.8)

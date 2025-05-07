@@ -13,6 +13,8 @@ class TrainingCreateParams(TypedDict, total=False):
 
     model_name: Required[str]
 
+    version_id: Required[str]
+
     destination: Required[str]
     """
     A string representing the desired model to push to in the format

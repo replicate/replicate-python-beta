@@ -5,7 +5,6 @@ from datetime import datetime
 from typing_extensions import Literal
 
 from .._models import BaseModel
-from .prediction_output import PredictionOutput
 
 __all__ = ["Prediction", "URLs"]
 
@@ -39,7 +38,11 @@ class Prediction(BaseModel):
     model: str
     """The name of the model that created the prediction"""
 
-    output: PredictionOutput
+    output: object
+    """
+    The prediction output, which can be any JSON-serializable value, depending on
+    the model
+    """
 
     status: Literal["starting", "processing", "succeeded", "failed", "canceled"]
 
