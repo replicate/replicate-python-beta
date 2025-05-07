@@ -1,10 +1,8 @@
 import rich
 
-from replicate import Replicate
+import replicate
 
-client = Replicate()
-
-outputs = client.run(
+outputs = replicate.run(
     "black-forest-labs/flux-schnell",
     input={"prompt": "astronaut riding a rocket like a horse"},
 )

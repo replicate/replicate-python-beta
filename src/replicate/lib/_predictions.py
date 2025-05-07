@@ -91,7 +91,7 @@ def run(
 
     # Return an iterator for the completed prediction when needed.
     if version and _has_output_iterator_array_type(version) and prediction.output is not None:
-        return (transform_output(chunk, client) for chunk in prediction.output) # type: ignore
+        return (transform_output(chunk, client) for chunk in prediction.output)  # type: ignore
 
     if use_file_output:
         return transform_output(prediction.output, client)  # type: ignore[no-any-return]
@@ -176,7 +176,7 @@ async def async_run(
 
     # Return an iterator for completed output if the model has an output iterator array type.
     if version and _has_output_iterator_array_type(version) and prediction.output is not None:
-        return (transform_output(chunk, client) async for chunk in _make_async_iterator(prediction.output)) # type: ignore
+        return (transform_output(chunk, client) async for chunk in _make_async_iterator(prediction.output))  # type: ignore
     if use_file_output:
         return transform_output(prediction.output, client)  # type: ignore[no-any-return]
 
@@ -199,10 +199,13 @@ def output_iterator(prediction: Prediction, client: Replicate) -> Iterator[Any]:
     Return an iterator of the prediction output.
     """
 
-    # TODO: check output is list
-    previous_output: Any = prediction.output or []
+    # output can really be anything, but if we hit this then we know
+    # it should be a list of something!
+    if not isinstance(prediction.output, list):
+        raise TypeError(f"Expected prediction output to be a list, got {type(prediction.output)}")
+    previous_output: list[Any] = prediction.output or []  # type: ignore[union-attr]
     while prediction.status not in ["succeeded", "failed", "canceled"]:
-        output: Any = prediction.output or []
+        output: list[Any] = prediction.output or []  # type: ignore[union-attr]
         new_output = output[len(previous_output) :]
         yield from new_output
         previous_output = output
@@ -212,6 +215,6 @@ def output_iterator(prediction: Prediction, client: Replicate) -> Iterator[Any]:
     if prediction.status == "failed":
         raise ModelError(prediction=prediction)
 
-    output = prediction.output or []
+    output: list[Any] = prediction.output or []  # type: ignore[union-attr]
     new_output = output[len(previous_output) :]
     yield from new_output
