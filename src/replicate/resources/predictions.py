@@ -52,10 +52,10 @@ class PredictionsResource(SyncAPIResource):
 
     def wait(self, prediction_id: str) -> Prediction:
         """Wait for prediction to finish."""
-        prediction = self.get(prediction_id)
+        prediction = self.get(prediction_id=prediction_id)
         while prediction.status not in PREDICTION_TERMINAL_STATES:
             self._sleep(self._client.poll_interval)
-            prediction = self.get(prediction.id)
+            prediction = self.get(prediction_id=prediction.id)
         return prediction
 
     def create(
@@ -479,10 +479,10 @@ class AsyncPredictionsResource(AsyncAPIResource):
 
     async def wait(self, prediction_id: str) -> Prediction:
         """Wait for prediction to finish."""
-        prediction = await self.get(prediction_id)
+        prediction = await self.get(prediction_id=prediction_id)
         while prediction.status not in PREDICTION_TERMINAL_STATES:
             await self._sleep(self._client.poll_interval)
-            prediction = await self.get(prediction.id)
+            prediction = await self.get(prediction_id=prediction.id)
         return prediction
 
     async def create(

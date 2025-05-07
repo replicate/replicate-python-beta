@@ -10,7 +10,7 @@ from replicate.lib._schema import make_schema_backwards_compatible
 from replicate.types.prediction import Prediction
 from replicate.types.prediction_create_params import PredictionCreateParamsWithoutVersion
 
-from ..types import PredictionOutput, PredictionCreateParams
+from ..types import PredictionCreateParams
 from .._types import NOT_GIVEN, NotGiven
 from .._utils import is_given
 from ._models import Model, Version, ModelVersionIdentifier, resolve_reference
@@ -29,7 +29,7 @@ def run(
     use_file_output: Optional[bool] = True,
     file_encoding_strategy: Optional["FileEncodingStrategy"] = None,
     **params: Unpack[PredictionCreateParamsWithoutVersion],
-) -> PredictionOutput | FileOutput | Iterable[FileOutput] | Dict[str, FileOutput]:
+) -> object | FileOutput | Iterable[FileOutput] | Dict[str, FileOutput]:
     from ._files import transform_output
 
     if is_given(wait) and "prefer" in params:
@@ -91,7 +91,7 @@ def run(
 
     # Return an iterator for the completed prediction when needed.
     if version and _has_output_iterator_array_type(version) and prediction.output is not None:
-        return (transform_output(chunk, client) for chunk in prediction.output)
+        return (transform_output(chunk, client) for chunk in prediction.output) # type: ignore
 
     if use_file_output:
         return transform_output(prediction.output, client)  # type: ignore[no-any-return]
@@ -107,7 +107,7 @@ async def async_run(
     wait: Union[int, bool, NotGiven] = NOT_GIVEN,
     use_file_output: Optional[bool] = True,
     **params: Unpack[PredictionCreateParamsWithoutVersion],
-) -> PredictionOutput | FileOutput | Iterable[FileOutput] | Dict[str, FileOutput]:
+) -> object | FileOutput | Iterable[FileOutput] | Dict[str, FileOutput]:
     from ._files import transform_output
 
     if is_given(wait) and "prefer" in params:
@@ -176,7 +176,7 @@ async def async_run(
 
     # Return an iterator for completed output if the model has an output iterator array type.
     if version and _has_output_iterator_array_type(version) and prediction.output is not None:
-        return (transform_output(chunk, client) async for chunk in _make_async_iterator(prediction.output))
+        return (transform_output(chunk, client) async for chunk in _make_async_iterator(prediction.output)) # type: ignore
     if use_file_output:
         return transform_output(prediction.output, client)  # type: ignore[no-any-return]
 
@@ -207,7 +207,7 @@ def output_iterator(prediction: Prediction, client: Replicate) -> Iterator[Any]:
         yield from new_output
         previous_output = output
         time.sleep(client.poll_interval)
-        prediction = client.predictions.get(prediction.id)
+        prediction = client.predictions.get(prediction_id=prediction.id)
 
     if prediction.status == "failed":
         raise ModelError(prediction=prediction)

@@ -10,8 +10,6 @@ from typing_extensions import override
 
 import httpx
 
-from replicate.types.prediction_output import PredictionOutput
-
 from .._utils import is_mapping, is_sequence
 
 # Use TYPE_CHECKING to avoid circular imports
@@ -218,7 +216,7 @@ class AsyncFileOutput(httpx.AsyncByteStream):
         return f'{self.__class__.__name__}("{self.url}")'
 
 
-def transform_output(value: PredictionOutput, client: "Replicate | AsyncReplicate") -> Any:
+def transform_output(value: object, client: "Replicate | AsyncReplicate") -> Any:
     """
     Transform the output of a prediction to a `FileOutput` object if it's a URL.
     """
