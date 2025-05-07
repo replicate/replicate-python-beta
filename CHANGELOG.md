@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.2.1 (2025-05-07)
+
+Full Changelog: [v0.2.0...v0.2.1](https://github.com/replicate/replicate-python-stainless/compare/v0.2.0...v0.2.1)
+
+### Documentation
+
+* update example requests ([eb0ba44](https://github.com/replicate/replicate-python-stainless/commit/eb0ba44af5b5006e758c9d9e65312f88b52dc3f5))
+
 ## 0.2.0 (2025-05-07)
 
 Full Changelog: [v0.1.0...v0.2.0](https://github.com/replicate/replicate-python-stainless/compare/v0.1.0...v0.2.0)
