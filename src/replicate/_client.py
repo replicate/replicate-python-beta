@@ -56,12 +56,12 @@ __all__ = [
 
 class Replicate(SyncAPIClient):
     # client options
-    api_key: str
+    bearer_token: str
 
     def __init__(
         self,
         *,
-        api_key: str | None = None,
+        bearer_token: str | None = None,
         base_url: str | httpx.URL | None = None,
         timeout: Union[float, Timeout, None, NotGiven] = NOT_GIVEN,
         max_retries: int = DEFAULT_MAX_RETRIES,
@@ -83,15 +83,15 @@ class Replicate(SyncAPIClient):
     ) -> None:
         """Construct a new synchronous Replicate client instance.
 
-        This automatically infers the `api_key` argument from the `REPLICATE_API_TOKEN` environment variable if it is not provided.
+        This automatically infers the `bearer_token` argument from the `REPLICATE_API_TOKEN` environment variable if it is not provided.
         """
-        if api_key is None:
-            api_key = os.environ.get("REPLICATE_API_TOKEN")
-        if api_key is None:
+        if bearer_token is None:
+            bearer_token = os.environ.get("REPLICATE_API_TOKEN")
+        if bearer_token is None:
             raise ReplicateError(
-                "The api_key client option must be set either by passing api_key to the client or by setting the REPLICATE_API_TOKEN environment variable"
+                "The bearer_token client option must be set either by passing bearer_token to the client or by setting the REPLICATE_API_TOKEN environment variable"
             )
-        self.api_key = api_key
+        self.bearer_token = bearer_token
 
         if base_url is None:
             base_url = os.environ.get("REPLICATE_BASE_URL")
@@ -179,8 +179,8 @@ class Replicate(SyncAPIClient):
     @property
     @override
     def auth_headers(self) -> dict[str, str]:
-        api_key = self.api_key
-        return {"Authorization": f"Bearer {api_key}"}
+        bearer_token = self.bearer_token
+        return {"Authorization": f"Bearer {bearer_token}"}
 
     @property
     @override
@@ -194,7 +194,7 @@ class Replicate(SyncAPIClient):
     def copy(
         self,
         *,
-        api_key: str | None = None,
+        bearer_token: str | None = None,
         base_url: str | httpx.URL | None = None,
         timeout: float | Timeout | None | NotGiven = NOT_GIVEN,
         http_client: httpx.Client | None = None,
@@ -228,7 +228,7 @@ class Replicate(SyncAPIClient):
 
         http_client = http_client or self._client
         return self.__class__(
-            api_key=api_key or self.api_key,
+            bearer_token=bearer_token or self.bearer_token,
             base_url=base_url or self.base_url,
             timeout=self.timeout if isinstance(timeout, NotGiven) else timeout,
             http_client=http_client,
@@ -278,12 +278,12 @@ class Replicate(SyncAPIClient):
 
 class AsyncReplicate(AsyncAPIClient):
     # client options
-    api_key: str
+    bearer_token: str
 
     def __init__(
         self,
         *,
-        api_key: str | None = None,
+        bearer_token: str | None = None,
         base_url: str | httpx.URL | None = None,
         timeout: Union[float, Timeout, None, NotGiven] = NOT_GIVEN,
         max_retries: int = DEFAULT_MAX_RETRIES,
@@ -305,15 +305,15 @@ class AsyncReplicate(AsyncAPIClient):
     ) -> None:
         """Construct a new async AsyncReplicate client instance.
 
-        This automatically infers the `api_key` argument from the `REPLICATE_API_TOKEN` environment variable if it is not provided.
+        This automatically infers the `bearer_token` argument from the `REPLICATE_API_TOKEN` environment variable if it is not provided.
         """
-        if api_key is None:
-            api_key = os.environ.get("REPLICATE_API_TOKEN")
-        if api_key is None:
+        if bearer_token is None:
+            bearer_token = os.environ.get("REPLICATE_API_TOKEN")
+        if bearer_token is None:
             raise ReplicateError(
-                "The api_key client option must be set either by passing api_key to the client or by setting the REPLICATE_API_TOKEN environment variable"
+                "The bearer_token client option must be set either by passing bearer_token to the client or by setting the REPLICATE_API_TOKEN environment variable"
             )
-        self.api_key = api_key
+        self.bearer_token = bearer_token
 
         if base_url is None:
             base_url = os.environ.get("REPLICATE_BASE_URL")
@@ -401,8 +401,8 @@ class AsyncReplicate(AsyncAPIClient):
     @property
     @override
     def auth_headers(self) -> dict[str, str]:
-        api_key = self.api_key
-        return {"Authorization": f"Bearer {api_key}"}
+        bearer_token = self.bearer_token
+        return {"Authorization": f"Bearer {bearer_token}"}
 
     @property
     @override
@@ -416,7 +416,7 @@ class AsyncReplicate(AsyncAPIClient):
     def copy(
         self,
         *,
-        api_key: str | None = None,
+        bearer_token: str | None = None,
         base_url: str | httpx.URL | None = None,
         timeout: float | Timeout | None | NotGiven = NOT_GIVEN,
         http_client: httpx.AsyncClient | None = None,
@@ -450,7 +450,7 @@ class AsyncReplicate(AsyncAPIClient):
 
         http_client = http_client or self._client
         return self.__class__(
-            api_key=api_key or self.api_key,
+            bearer_token=bearer_token or self.bearer_token,
             base_url=base_url or self.base_url,
             timeout=self.timeout if isinstance(timeout, NotGiven) else timeout,
             http_client=http_client,
