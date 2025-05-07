@@ -12,7 +12,7 @@ from replicate import DEFAULT_TIMEOUT, DEFAULT_MAX_RETRIES
 
 def reset_state() -> None:
     replicate._reset_client()
-    replicate.bearer_token = None or "My Bearer Token"
+    replicate.api_key = None or "My API Key"
     replicate.base_url = None
     replicate.timeout = DEFAULT_TIMEOUT
     replicate.max_retries = DEFAULT_MAX_RETRIES

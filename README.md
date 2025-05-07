@@ -28,17 +28,17 @@ import os
 from replicate import Replicate
 
 client = Replicate(
-    bearer_token=os.environ.get("REPLICATE_API_TOKEN"),  # This is the default and can be omitted
+    api_key=os.environ.get("REPLICATE_CLIENT_API_KEY"),  # This is the default and can be omitted
 )
 
 account = client.account.get()
 print(account.type)
 ```
 
-While you can provide a `bearer_token` keyword argument,
+While you can provide an `api_key` keyword argument,
 we recommend using [python-dotenv](https://pypi.org/project/python-dotenv/)
-to add `REPLICATE_API_TOKEN="My Bearer Token"` to your `.env` file
-so that your Bearer Token is not stored in source control.
+to add `REPLICATE_CLIENT_API_KEY="My API Key"` to your `.env` file
+so that your API Key is not stored in source control.
 
 ## Async usage
 
@@ -50,7 +50,7 @@ import asyncio
 from replicate import AsyncReplicate
 
 client = AsyncReplicate(
-    bearer_token=os.environ.get("REPLICATE_API_TOKEN"),  # This is the default and can be omitted
+    api_key=os.environ.get("REPLICATE_CLIENT_API_KEY"),  # This is the default and can be omitted
 )
 
 
@@ -135,6 +135,24 @@ for prediction in first_page.results:
 
 # Remove `await` for non-async usage.
 ```
+
+## File uploads
+
+Request parameters that correspond to file uploads can be passed as `bytes`, or a [`PathLike`](https://docs.python.org/3/library/os.html#os.PathLike) instance or a tuple of `(filename, contents, media type)`.
+
+```python
+from pathlib import Path
+from replicate import Replicate
+
+client = Replicate()
+
+client.files.create(
+    content=Path("/path/to/file"),
+    filename="filename",
+)
+```
+
+The async client uses the exact same interface. If you pass a [`PathLike`](https://docs.python.org/3/library/os.html#os.PathLike) instance, the file contents will be read asynchronously automatically.
 
 ## Handling errors
 
