@@ -16,7 +16,7 @@ The REST API documentation can be found on [replicate.com](https://replicate.com
 
 ```sh
 # install from PyPI
-pip install --pre replicate-stainless
+pip install replicate-stainless
 ```
 
 ## Usage
