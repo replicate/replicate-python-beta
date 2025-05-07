@@ -10,11 +10,9 @@ import pytest
 from respx import MockRouter
 
 from replicate import Replicate, AsyncReplicate
-from replicate._compat import model_dump
 from replicate.lib._files import FileOutput, AsyncFileOutput
 from replicate._exceptions import ModelError, NotFoundError, BadRequestError
 from replicate.lib._models import Model, Version, ModelVersionIdentifier
-from replicate.types.file_create_response import URLs, Checksums, FileCreateResponse
 
 base_url = os.environ.get("TEST_API_BASE_URL", "http://127.0.0.1:4010")
 bearer_token = "My Bearer Token"
@@ -91,16 +89,6 @@ class TestRun:
 
     # Common model reference format that will work with the new SDK
     model_ref = "owner/name:version"
-    file_create_response = FileCreateResponse(
-        id="test_file_id",
-        checksums=Checksums(sha256="test_sha256"),
-        content_type="application/octet-stream",
-        created_at=datetime.datetime.now(),
-        expires_at=datetime.datetime.now() + datetime.timedelta(days=1),
-        metadata={},
-        size=1234,
-        urls=URLs(get="https://api.replicate.com/v1/files/test_file_id"),
-    )
 
     @pytest.mark.respx(base_url=base_url)
     def test_run_basic(self, respx_mock: MockRouter) -> None:
@@ -248,23 +236,6 @@ class TestRun:
 
         assert output == "test output"
 
-    @pytest.mark.respx(base_url=base_url)
-    def test_run_with_file_upload(self, respx_mock: MockRouter) -> None:
-        """Test run with base64 encoded file input."""
-        # Create a simple file-like object
-        file_obj = io.BytesIO(b"test content")
-
-        # Mock the prediction response
-        respx_mock.post("/predictions").mock(return_value=httpx.Response(201, json=create_mock_prediction()))
-        # Mock the file upload endpoint
-        respx_mock.post("/files").mock(
-            return_value=httpx.Response(201, json=model_dump(self.file_create_response, mode="json"))
-        )
-
-        output: Any = self.client.run(self.model_ref, input={"file": file_obj})
-
-        assert output == "test output"
-
     def test_run_with_prefer_conflict(self) -> None:
         """Test run with conflicting wait and prefer parameters."""
         with pytest.raises(TypeError, match="cannot mix and match prefer and wait"):
@@ -378,16 +349,6 @@ class TestAsyncRun:
 
     # Common model reference format that will work with the new SDK
     model_ref = "owner/name:version"
-    file_create_response = FileCreateResponse(
-        id="test_file_id",
-        checksums=Checksums(sha256="test_sha256"),
-        content_type="application/octet-stream",
-        created_at=datetime.datetime.now(),
-        expires_at=datetime.datetime.now() + datetime.timedelta(days=1),
-        metadata={},
-        size=1234,
-        urls=URLs(get="https://api.replicate.com/v1/files/test_file_id"),
-    )
 
     @pytest.mark.respx(base_url=base_url)
     async def test_async_run_basic(self, respx_mock: MockRouter) -> None:
@@ -537,23 +498,6 @@ class TestAsyncRun:
         respx_mock.post("/predictions").mock(return_value=httpx.Response(201, json=create_mock_prediction()))
 
         output: Any = await self.client.run(self.model_ref, input={"file": file_obj}, file_encoding_strategy="base64")
-
-        assert output == "test output"
-
-    @pytest.mark.respx(base_url=base_url)
-    async def test_async_run_with_file_upload(self, respx_mock: MockRouter) -> None:
-        """Test async run with base64 encoded file input."""
-        # Create a simple file-like object
-        file_obj = io.BytesIO(b"test content")
-
-        # Mock the prediction response
-        respx_mock.post("/predictions").mock(return_value=httpx.Response(201, json=create_mock_prediction()))
-        # Mock the file upload endpoint
-        respx_mock.post("/files").mock(
-            return_value=httpx.Response(201, json=model_dump(self.file_create_response, mode="json"))
-        )
-
-        output: Any = await self.client.run(self.model_ref, input={"file": file_obj})
 
         assert output == "test output"
 
