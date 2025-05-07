@@ -104,7 +104,7 @@ import httpx as _httpx
 
 from ._base_client import DEFAULT_TIMEOUT, DEFAULT_MAX_RETRIES
 
-bearer_token: str | None = None
+api_key: str | None = None
 
 base_url: str | _httpx.URL | None = None
 
@@ -125,14 +125,14 @@ class _ModuleClient(Replicate):
 
     @property  # type: ignore
     @override
-    def bearer_token(self) -> str | None:
-        return bearer_token
+    def api_key(self) -> str | None:
+        return api_key
 
-    @bearer_token.setter  # type: ignore
-    def bearer_token(self, value: str | None) -> None:  # type: ignore
-        global bearer_token
+    @api_key.setter  # type: ignore
+    def api_key(self, value: str | None) -> None:  # type: ignore
+        global api_key
 
-        bearer_token = value
+        api_key = value
 
     @property
     @override
@@ -210,7 +210,7 @@ def _load_client() -> Replicate:  # type: ignore[reportUnusedFunction]
 
     if _client is None:
         _client = _ModuleClient(
-            bearer_token=bearer_token,
+            api_key=api_key,
             base_url=base_url,
             timeout=timeout,
             max_retries=max_retries,
@@ -230,6 +230,7 @@ def _reset_client() -> None:  # type: ignore[reportUnusedFunction]
 
 
 from ._module_client import (
+    files as files,
     models as models,
     account as account,
     hardware as hardware,
