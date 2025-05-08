@@ -2,11 +2,13 @@
 
 from __future__ import annotations
 
-from typing import List, Union
+from typing import List, Union, Optional
 from datetime import datetime
 from typing_extensions import Literal
 
 import httpx
+
+from replicate.lib._files import FileEncodingStrategy, encode_json, async_encode_json
 
 from ..types import prediction_list_params, prediction_create_params
 from .._types import NOT_GIVEN, Body, Query, Headers, NotGiven
@@ -24,6 +26,8 @@ from .._base_client import AsyncPaginator, make_request_options
 from ..types.prediction import Prediction
 
 __all__ = ["PredictionsResource", "AsyncPredictionsResource"]
+
+PREDICTION_TERMINAL_STATES = {"succeeded", "failed", "canceled"}
 
 
 class PredictionsResource(SyncAPIResource):
@@ -46,6 +50,14 @@ class PredictionsResource(SyncAPIResource):
         """
         return PredictionsResourceWithStreamingResponse(self)
 
+    def wait(self, prediction_id: str) -> Prediction:
+        """Wait for prediction to finish."""
+        prediction = self.get(prediction_id=prediction_id)
+        while prediction.status not in PREDICTION_TERMINAL_STATES:
+            self._sleep(self._client.poll_interval)
+            prediction = self.get(prediction_id=prediction.id)
+        return prediction
+
     def create(
         self,
         *,
@@ -55,6 +67,7 @@ class PredictionsResource(SyncAPIResource):
         webhook: str | NotGiven = NOT_GIVEN,
         webhook_events_filter: List[Literal["start", "output", "logs", "completed"]] | NotGiven = NOT_GIVEN,
         prefer: str | NotGiven = NOT_GIVEN,
+        file_encoding_strategy: Optional["FileEncodingStrategy"] = None,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -178,7 +191,7 @@ class PredictionsResource(SyncAPIResource):
             "/predictions",
             body=maybe_transform(
                 {
-                    "input": input,
+                    "input": encode_json(input, self._client, file_encoding_strategy=file_encoding_strategy),
                     "version": version,
                     "stream": stream,
                     "webhook": webhook,
@@ -486,6 +499,14 @@ class AsyncPredictionsResource(AsyncAPIResource):
         """
         return AsyncPredictionsResourceWithStreamingResponse(self)
 
+    async def wait(self, prediction_id: str) -> Prediction:
+        """Wait for prediction to finish."""
+        prediction = await self.get(prediction_id=prediction_id)
+        while prediction.status not in PREDICTION_TERMINAL_STATES:
+            await self._sleep(self._client.poll_interval)
+            prediction = await self.get(prediction_id=prediction.id)
+        return prediction
+
     async def create(
         self,
         *,
@@ -495,6 +516,7 @@ class AsyncPredictionsResource(AsyncAPIResource):
         webhook: str | NotGiven = NOT_GIVEN,
         webhook_events_filter: List[Literal["start", "output", "logs", "completed"]] | NotGiven = NOT_GIVEN,
         prefer: str | NotGiven = NOT_GIVEN,
+        file_encoding_strategy: Optional["FileEncodingStrategy"] = None,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -618,7 +640,9 @@ class AsyncPredictionsResource(AsyncAPIResource):
             "/predictions",
             body=await async_maybe_transform(
                 {
-                    "input": input,
+                    "input": await async_encode_json(
+                        input, self._client, file_encoding_strategy=file_encoding_strategy
+                    ),
                     "version": version,
                     "stream": stream,
                     "webhook": webhook,
