@@ -1,5 +1,27 @@
 # Changelog
 
+## 0.2.1 (2025-05-07)
+
+Full Changelog: [v0.2.0...v0.2.1](https://github.com/replicate/replicate-python-stainless/compare/v0.2.0...v0.2.1)
+
+### Documentation
+
+* update example requests ([eb0ba44](https://github.com/replicate/replicate-python-stainless/commit/eb0ba44af5b5006e758c9d9e65312f88b52dc3f5))
+
+## 0.2.0 (2025-05-07)
+
+Full Changelog: [v0.1.0...v0.2.0](https://github.com/replicate/replicate-python-stainless/compare/v0.1.0...v0.2.0)
+
+### Features
+
+* **api:** add Files API methods ([3173e5f](https://github.com/replicate/replicate-python-stainless/commit/3173e5f61edd89ffe0b64b53fc8e8e9905e145e4))
+* **api:** fix bearer token which also regressed when guessing with AI ([13162be](https://github.com/replicate/replicate-python-stainless/commit/13162be9d367de29d222b86506fa921a10800665))
+
+
+### Bug Fixes
+
+* **api:** fix client_settings.opts.api_key.read_env ([5a9b95c](https://github.com/replicate/replicate-python-stainless/commit/5a9b95ce89e536b539eefe0864a47784fdb0ec08))
+
 ## 0.1.0 (2025-05-07)
 
 Full Changelog: [v0.1.0-alpha.10...v0.1.0](https://github.com/replicate/replicate-python-stainless/compare/v0.1.0-alpha.10...v0.1.0)
