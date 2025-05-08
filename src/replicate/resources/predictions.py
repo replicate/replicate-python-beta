@@ -9,7 +9,7 @@ from typing_extensions import Literal
 import httpx
 
 from ..types import prediction_list_params, prediction_create_params
-from .._types import NOT_GIVEN, Body, Query, Headers, NoneType, NotGiven
+from .._types import NOT_GIVEN, Body, Query, Headers, NotGiven
 from .._utils import maybe_transform, strip_not_given, async_maybe_transform
 from .._compat import cached_property
 from .._resource import SyncAPIResource, AsyncAPIResource
@@ -317,9 +317,32 @@ class PredictionsResource(SyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> None:
+    ) -> Prediction:
         """
-        Cancel a prediction
+        Cancel a prediction that is currently running.
+
+        Example cURL request that creates a prediction and then cancels it:
+
+        ```console
+        # First, create a prediction
+        PREDICTION_ID=$(curl -s -X POST \\
+          -H "Authorization: Bearer $REPLICATE_API_TOKEN" \\
+          -H "Content-Type: application/json" \\
+          -d '{
+            "input": {
+              "prompt": "a video that may take a while to generate"
+            }
+          }' \\
+          https://api.replicate.com/v1/models/minimax/video-01/predictions | jq -r '.id')
+
+        # Echo the prediction ID
+        echo "Created prediction with ID: $PREDICTION_ID"
+
+        # Cancel the prediction
+        curl -s -X POST \\
+          -H "Authorization: Bearer $REPLICATE_API_TOKEN" \\
+          https://api.replicate.com/v1/predictions/$PREDICTION_ID/cancel
+        ```
 
         Args:
           extra_headers: Send extra headers
@@ -332,13 +355,12 @@ class PredictionsResource(SyncAPIResource):
         """
         if not prediction_id:
             raise ValueError(f"Expected a non-empty value for `prediction_id` but received {prediction_id!r}")
-        extra_headers = {"Accept": "*/*", **(extra_headers or {})}
         return self._post(
             f"/predictions/{prediction_id}/cancel",
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=NoneType,
+            cast_to=Prediction,
         )
 
     def get(
@@ -735,9 +757,32 @@ class AsyncPredictionsResource(AsyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> None:
+    ) -> Prediction:
         """
-        Cancel a prediction
+        Cancel a prediction that is currently running.
+
+        Example cURL request that creates a prediction and then cancels it:
+
+        ```console
+        # First, create a prediction
+        PREDICTION_ID=$(curl -s -X POST \\
+          -H "Authorization: Bearer $REPLICATE_API_TOKEN" \\
+          -H "Content-Type: application/json" \\
+          -d '{
+            "input": {
+              "prompt": "a video that may take a while to generate"
+            }
+          }' \\
+          https://api.replicate.com/v1/models/minimax/video-01/predictions | jq -r '.id')
+
+        # Echo the prediction ID
+        echo "Created prediction with ID: $PREDICTION_ID"
+
+        # Cancel the prediction
+        curl -s -X POST \\
+          -H "Authorization: Bearer $REPLICATE_API_TOKEN" \\
+          https://api.replicate.com/v1/predictions/$PREDICTION_ID/cancel
+        ```
 
         Args:
           extra_headers: Send extra headers
@@ -750,13 +795,12 @@ class AsyncPredictionsResource(AsyncAPIResource):
         """
         if not prediction_id:
             raise ValueError(f"Expected a non-empty value for `prediction_id` but received {prediction_id!r}")
-        extra_headers = {"Accept": "*/*", **(extra_headers or {})}
         return await self._post(
             f"/predictions/{prediction_id}/cancel",
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=NoneType,
+            cast_to=Prediction,
         )
 
     async def get(

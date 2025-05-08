@@ -112,7 +112,7 @@ class TestPredictions:
         prediction = client.predictions.cancel(
             prediction_id="prediction_id",
         )
-        assert prediction is None
+        assert_matches_type(Prediction, prediction, path=["response"])
 
     @pytest.mark.skip()
     @parametrize
@@ -124,7 +124,7 @@ class TestPredictions:
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
         prediction = response.parse()
-        assert prediction is None
+        assert_matches_type(Prediction, prediction, path=["response"])
 
     @pytest.mark.skip()
     @parametrize
@@ -136,7 +136,7 @@ class TestPredictions:
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
             prediction = response.parse()
-            assert prediction is None
+            assert_matches_type(Prediction, prediction, path=["response"])
 
         assert cast(Any, response.is_closed) is True
 
@@ -287,7 +287,7 @@ class TestAsyncPredictions:
         prediction = await async_client.predictions.cancel(
             prediction_id="prediction_id",
         )
-        assert prediction is None
+        assert_matches_type(Prediction, prediction, path=["response"])
 
     @pytest.mark.skip()
     @parametrize
@@ -299,7 +299,7 @@ class TestAsyncPredictions:
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
         prediction = await response.parse()
-        assert prediction is None
+        assert_matches_type(Prediction, prediction, path=["response"])
 
     @pytest.mark.skip()
     @parametrize
@@ -311,7 +311,7 @@ class TestAsyncPredictions:
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
             prediction = await response.parse()
-            assert prediction is None
+            assert_matches_type(Prediction, prediction, path=["response"])
 
         assert cast(Any, response.is_closed) is True
 
