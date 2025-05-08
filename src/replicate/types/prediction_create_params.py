@@ -7,10 +7,10 @@ from typing_extensions import Literal, Required, Annotated, TypedDict
 
 from .._utils import PropertyInfo
 
-__all__ = ["PredictionCreateParams"]
+__all__ = ["PredictionCreateParams", "PredictionCreateParamsWithoutVersion"]
 
 
-class PredictionCreateParams(TypedDict, total=False):
+class PredictionCreateParamsWithoutVersion(TypedDict, total=False):
     input: Required[object]
     """The model's input as a JSON object.
 
@@ -34,18 +34,6 @@ class PredictionCreateParams(TypedDict, total=False):
     - you have a small file <= 256kb
     - you don't want to upload and host the file somewhere
     - you don't need to use the file again (Replicate will not store it)
-    """
-
-    version: Required[str]
-    """The ID of the model version that you want to run.
-
-    This can be specified in two formats:
-
-    1. Just the 64-character version ID:
-       `9dcd6d78e7c6560c340d916fe32e9f24aabfa331e5cce95fe31f77fb03121426`
-    2. Full model identifier with version ID in the format `{owner}/{model}:{id}`.
-       For example,
-       `replicate/hello-world:9dcd6d78e7c6560c340d916fe32e9f24aabfa331e5cce95fe31f77fb03121426`
     """
 
     stream: bool
@@ -103,3 +91,8 @@ class PredictionCreateParams(TypedDict, total=False):
     """
 
     prefer: Annotated[str, PropertyInfo(alias="Prefer")]
+
+
+class PredictionCreateParams(PredictionCreateParamsWithoutVersion):
+    version: Required[str]
+    """The ID of the model version that you want to run."""

@@ -3,10 +3,14 @@
 from __future__ import annotations
 
 import os
-from typing import TYPE_CHECKING, Any, Union, Mapping
-from typing_extensions import Self, override
+from typing import TYPE_CHECKING, Any, Union, Mapping, Optional
+from typing_extensions import Self, Unpack, override
 
 import httpx
+
+from replicate.lib._files import FileEncodingStrategy
+from replicate.lib._predictions import Model, Version, ModelVersionIdentifier
+from replicate.types.prediction_create_params import PredictionCreateParamsWithoutVersion
 
 from . import _exceptions
 from ._qs import Querystring
@@ -171,6 +175,10 @@ class Replicate(SyncAPIClient):
     def with_streaming_response(self) -> ReplicateWithStreamedResponse:
         return ReplicateWithStreamedResponse(self)
 
+    @cached_property
+    def poll_interval(self) -> float:
+        return float(os.environ.get("REPLICATE_POLL_INTERVAL", "0.5"))
+
     @property
     @override
     def qs(self) -> Querystring:
@@ -190,6 +198,54 @@ class Replicate(SyncAPIClient):
             "X-Stainless-Async": "false",
             **self._custom_headers,
         }
+
+    def run(
+        self,
+        ref: Union[Model, Version, ModelVersionIdentifier, str],
+        *,
+        file_encoding_strategy: Optional["FileEncodingStrategy"] = None,
+        use_file_output: bool = True,
+        wait: Union[int, bool, NotGiven] = NOT_GIVEN,
+        **params: Unpack[PredictionCreateParamsWithoutVersion],
+    ) -> Any:
+        """
+        Run a model prediction.
+
+        Args:
+            ref: Reference to the model or version to run. Can be:
+                - A string containing a version ID (e.g. "5c7d5dc6dd8bf75c1acaa8565735e7986bc5b66206b55cca93cb72c9bf15ccaa")
+                - A string with owner/name format (e.g. "replicate/hello-world")
+                - A string with owner/name:version format (e.g. "replicate/hello-world:5c7d5dc6...")
+                - A Model instance with owner and name attributes
+                - A Version instance with id attribute
+                - A ModelVersionIdentifier dictionary with owner, name, and/or version keys
+            file_encoding_strategy: Strategy for encoding file inputs, options are "base64" or "url"
+            use_file_output: If True (default), convert output URLs to FileOutput objects
+            wait: If True (default), wait for the prediction to complete. If False, return immediately.
+                  If an integer, wait up to that many seconds.
+            **params: Additional parameters to pass to the prediction creation endpoint including
+                      the required "input" dictionary with model-specific parameters
+
+        Returns:
+            The prediction output, which could be a basic type (str, int, etc.), a FileOutput object,
+            a list of FileOutput objects, or a dictionary of FileOutput objects, depending on what
+            the model returns.
+
+        Raises:
+            ModelError: If the model run fails
+            ValueError: If the reference format is invalid
+            TypeError: If both wait and prefer parameters are provided
+        """
+        from .lib._predictions import run
+
+        return run(
+            self,
+            ref,
+            wait=wait,
+            use_file_output=use_file_output,
+            file_encoding_strategy=file_encoding_strategy,
+            **params,
+        )
 
     def copy(
         self,
@@ -393,6 +449,10 @@ class AsyncReplicate(AsyncAPIClient):
     def with_streaming_response(self) -> AsyncReplicateWithStreamedResponse:
         return AsyncReplicateWithStreamedResponse(self)
 
+    @cached_property
+    def poll_interval(self) -> float:
+        return float(os.environ.get("REPLICATE_POLL_INTERVAL", "0.5"))
+
     @property
     @override
     def qs(self) -> Querystring:
@@ -412,6 +472,54 @@ class AsyncReplicate(AsyncAPIClient):
             "X-Stainless-Async": f"async:{get_async_library()}",
             **self._custom_headers,
         }
+
+    async def run(
+        self,
+        ref: Union[Model, Version, ModelVersionIdentifier, str],
+        *,
+        use_file_output: bool = True,
+        file_encoding_strategy: Optional["FileEncodingStrategy"] = None,
+        wait: Union[int, bool, NotGiven] = NOT_GIVEN,
+        **params: Unpack[PredictionCreateParamsWithoutVersion],
+    ) -> Any:
+        """
+        Run a model prediction asynchronously.
+
+        Args:
+            ref: Reference to the model or version to run. Can be:
+                - A string containing a version ID (e.g. "5c7d5dc6dd8bf75c1acaa8565735e7986bc5b66206b55cca93cb72c9bf15ccaa")
+                - A string with owner/name format (e.g. "replicate/hello-world")
+                - A string with owner/name:version format (e.g. "replicate/hello-world:5c7d5dc6...")
+                - A Model instance with owner and name attributes
+                - A Version instance with id attribute
+                - A ModelVersionIdentifier dictionary with owner, name, and/or version keys
+            use_file_output: If True (default), convert output URLs to AsyncFileOutput objects
+            file_encoding_strategy: Strategy for encoding file inputs, options are "base64" or "url"
+            wait: If True (default), wait for the prediction to complete. If False, return immediately.
+                  If an integer, wait up to that many seconds.
+            **params: Additional parameters to pass to the prediction creation endpoint including
+                      the required "input" dictionary with model-specific parameters
+
+        Returns:
+            The prediction output, which could be a basic type (str, int, etc.), an AsyncFileOutput object,
+            a list of AsyncFileOutput objects, or a dictionary of AsyncFileOutput objects, depending on what
+            the model returns.
+
+        Raises:
+            ModelError: If the model run fails
+            ValueError: If the reference format is invalid
+            TypeError: If both wait and prefer parameters are provided
+        """
+        from .lib._predictions import async_run
+
+        return await async_run(
+            self,
+            ref,
+            wait=wait,
+            use_file_output=use_file_output,
+            file_encoding_strategy=file_encoding_strategy,
+            **params,
+        )
 
     def copy(
         self,

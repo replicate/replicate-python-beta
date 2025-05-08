@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from typing import TYPE_CHECKING
-from typing_extensions import override
+from typing_extensions import cast, override
 
 if TYPE_CHECKING:
     from .resources.files import FilesResource
@@ -73,6 +73,20 @@ class PredictionsResourceProxy(LazyProxy["PredictionsResource"]):
     def __load__(self) -> PredictionsResource:
         return _load_client().predictions
 
+
+if TYPE_CHECKING:
+    from ._client import Replicate
+
+    # get the type checker to infer the run symbol to the same type
+    # as the method on the client so we don't have to define it twice
+    __client: Replicate = cast(Replicate, {})
+    run = __client.run
+else:
+
+    def _run(*args, **kwargs):
+        return _load_client().run(*args, **kwargs)
+
+    run = _run
 
 files: FilesResource = FilesResourceProxy().__as_proxied__()
 models: ModelsResource = ModelsResourceProxy().__as_proxied__()

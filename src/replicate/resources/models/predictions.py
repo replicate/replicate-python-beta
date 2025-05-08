@@ -2,10 +2,12 @@
 
 from __future__ import annotations
 
-from typing import List
+from typing import List, Optional
 from typing_extensions import Literal
 
 import httpx
+
+from replicate.lib._files import FileEncodingStrategy, encode_json, async_encode_json
 
 from ..._types import NOT_GIVEN, Body, Query, Headers, NotGiven
 from ..._utils import maybe_transform, strip_not_given, async_maybe_transform
@@ -54,6 +56,7 @@ class PredictionsResource(SyncAPIResource):
         webhook: str | NotGiven = NOT_GIVEN,
         webhook_events_filter: List[Literal["start", "output", "logs", "completed"]] | NotGiven = NOT_GIVEN,
         prefer: str | NotGiven = NOT_GIVEN,
+        file_encoding_strategy: Optional["FileEncodingStrategy"] = None,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -171,7 +174,7 @@ class PredictionsResource(SyncAPIResource):
             f"/models/{model_owner}/{model_name}/predictions",
             body=maybe_transform(
                 {
-                    "input": input,
+                    "input": encode_json(input, self._client, file_encoding_strategy=file_encoding_strategy),
                     "stream": stream,
                     "webhook": webhook,
                     "webhook_events_filter": webhook_events_filter,
@@ -215,6 +218,7 @@ class AsyncPredictionsResource(AsyncAPIResource):
         webhook: str | NotGiven = NOT_GIVEN,
         webhook_events_filter: List[Literal["start", "output", "logs", "completed"]] | NotGiven = NOT_GIVEN,
         prefer: str | NotGiven = NOT_GIVEN,
+        file_encoding_strategy: Optional["FileEncodingStrategy"] = None,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -332,7 +336,9 @@ class AsyncPredictionsResource(AsyncAPIResource):
             f"/models/{model_owner}/{model_name}/predictions",
             body=await async_maybe_transform(
                 {
-                    "input": input,
+                    "input": await async_encode_json(
+                        input, self._client, file_encoding_strategy=file_encoding_strategy
+                    ),
                     "stream": stream,
                     "webhook": webhook,
                     "webhook_events_filter": webhook_events_filter,
