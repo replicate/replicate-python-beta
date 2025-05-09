@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.3.1 (2025-05-09)
+
+Full Changelog: [v0.3.0...v0.3.1](https://github.com/replicate/replicate-python-stainless/compare/v0.3.0...v0.3.1)
+
+### Chores
+
+* **internal:** avoid errors for isinstance checks on proxies ([b31e651](https://github.com/replicate/replicate-python-stainless/commit/b31e651903235d70ea0f3b03aac56de9320996bf))
+
 ## 0.3.0 (2025-05-08)
 
 Full Changelog: [v0.2.1...v0.3.0](https://github.com/replicate/replicate-python-stainless/compare/v0.2.1...v0.3.0)
