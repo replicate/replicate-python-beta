@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.3.2 (2025-05-13)
+
+Full Changelog: [v0.3.1...v0.3.2](https://github.com/replicate/replicate-python-stainless/compare/v0.3.1...v0.3.2)
+
+### Bug Fixes
+
+* **package:** support direct resource imports ([97b771a](https://github.com/replicate/replicate-python-stainless/commit/97b771a8f2f318e5907656c04ddb6b711af1d44a))
+
 ## 0.3.1 (2025-05-09)
 
 Full Changelog: [v0.3.0...v0.3.1](https://github.com/replicate/replicate-python-stainless/compare/v0.3.0...v0.3.1)
