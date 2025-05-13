@@ -13,7 +13,7 @@ class FileCreateParams(TypedDict, total=False):
     content: Required[FileTypes]
     """The file content"""
 
-    filename: Required[str]
+    filename: str
     """The filename"""
 
     metadata: object

@@ -152,7 +152,6 @@ client = Replicate()
 
 client.files.create(
     content=Path("/path/to/file"),
-    filename="filename",
 )
 ```
 
