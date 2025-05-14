@@ -35,7 +35,6 @@ class TestFiles:
     def test_method_create(self, client: Replicate) -> None:
         file = client.files.create(
             content=b"raw file contents",
-            filename="filename",
         )
         assert_matches_type(FileCreateResponse, file, path=["response"])
 
@@ -55,7 +54,6 @@ class TestFiles:
     def test_raw_response_create(self, client: Replicate) -> None:
         response = client.files.with_raw_response.create(
             content=b"raw file contents",
-            filename="filename",
         )
 
         assert response.is_closed is True
@@ -68,7 +66,6 @@ class TestFiles:
     def test_streaming_response_create(self, client: Replicate) -> None:
         with client.files.with_streaming_response.create(
             content=b"raw file contents",
-            filename="filename",
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -265,7 +262,6 @@ class TestAsyncFiles:
     async def test_method_create(self, async_client: AsyncReplicate) -> None:
         file = await async_client.files.create(
             content=b"raw file contents",
-            filename="filename",
         )
         assert_matches_type(FileCreateResponse, file, path=["response"])
 
@@ -285,7 +281,6 @@ class TestAsyncFiles:
     async def test_raw_response_create(self, async_client: AsyncReplicate) -> None:
         response = await async_client.files.with_raw_response.create(
             content=b"raw file contents",
-            filename="filename",
         )
 
         assert response.is_closed is True
@@ -298,7 +293,6 @@ class TestAsyncFiles:
     async def test_streaming_response_create(self, async_client: AsyncReplicate) -> None:
         async with async_client.files.with_streaming_response.create(
             content=b"raw file contents",
-            filename="filename",
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"

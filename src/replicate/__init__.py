@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import typing as _t
 from typing_extensions import override
 
 from . import types
@@ -88,6 +89,9 @@ __all__ = [
     "Version",
     "ModelVersionIdentifier",
 ]
+
+if not _t.TYPE_CHECKING:
+    from ._utils._resources_proxy import resources as resources
 
 _setup_logging()
 

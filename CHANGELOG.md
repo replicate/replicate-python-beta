@@ -1,5 +1,29 @@
 # Changelog
 
+## 0.4.0 (2025-05-13)
+
+Full Changelog: [v0.3.2...v0.4.0](https://github.com/replicate/replicate-python-stainless/compare/v0.3.2...v0.4.0)
+
+### Features
+
+* **api:** api update ([d36589e](https://github.com/replicate/replicate-python-stainless/commit/d36589ef3ec1718ff01948f56bfeb3dd5854d6de))
+
+## 0.3.2 (2025-05-13)
+
+Full Changelog: [v0.3.1...v0.3.2](https://github.com/replicate/replicate-python-stainless/compare/v0.3.1...v0.3.2)
+
+### Bug Fixes
+
+* **package:** support direct resource imports ([97b771a](https://github.com/replicate/replicate-python-stainless/commit/97b771a8f2f318e5907656c04ddb6b711af1d44a))
+
+## 0.3.1 (2025-05-09)
+
+Full Changelog: [v0.3.0...v0.3.1](https://github.com/replicate/replicate-python-stainless/compare/v0.3.0...v0.3.1)
+
+### Chores
+
+* **internal:** avoid errors for isinstance checks on proxies ([b31e651](https://github.com/replicate/replicate-python-stainless/commit/b31e651903235d70ea0f3b03aac56de9320996bf))
+
 ## 0.3.0 (2025-05-08)
 
 Full Changelog: [v0.2.1...v0.3.0](https://github.com/replicate/replicate-python-stainless/compare/v0.2.1...v0.3.0)
