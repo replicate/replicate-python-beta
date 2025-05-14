@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.5.0 (2025-05-14)
+
+Full Changelog: [v0.4.0...v0.5.0](https://github.com/replicate/replicate-python-stainless/compare/v0.4.0...v0.5.0)
+
+### Features
+
+* **api:** api update ([dbbd264](https://github.com/replicate/replicate-python-stainless/commit/dbbd264826d1d1e566c7489fb4dfbca2bb3a138f))
+
 ## 0.4.0 (2025-05-13)
 
 Full Changelog: [v0.3.2...v0.4.0](https://github.com/replicate/replicate-python-stainless/compare/v0.3.2...v0.4.0)

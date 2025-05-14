@@ -120,7 +120,7 @@ class ModelsResource(SyncAPIResource):
         curl -s -X POST \\
           -H "Authorization: Bearer $REPLICATE_API_TOKEN" \\
           -H 'Content-Type: application/json' \\
-          -d '{"owner": "alice", "name": "my-model", "description": "An example model", "visibility": "public", "hardware": "cpu"}' \\
+          -d '{"owner": "alice", "name": "hot-dog-detector", "description": "Detect hot dogs in images", "visibility": "public", "hardware": "cpu"}' \\
           https://api.replicate.com/v1/models
         ```
 
@@ -128,10 +128,10 @@ class ModelsResource(SyncAPIResource):
 
         ```json
         {
-          "url": "https://replicate.com/alice/my-model",
+          "url": "https://replicate.com/alice/hot-dog-detector",
           "owner": "alice",
-          "name": "my-model",
-          "description": "An example model",
+          "name": "hot-dog-detector",
+          "description": "Detect hot dogs in images",
           "visibility": "public",
           "github_url": null,
           "paper_url": null,
@@ -520,7 +520,7 @@ class AsyncModelsResource(AsyncAPIResource):
         curl -s -X POST \\
           -H "Authorization: Bearer $REPLICATE_API_TOKEN" \\
           -H 'Content-Type: application/json' \\
-          -d '{"owner": "alice", "name": "my-model", "description": "An example model", "visibility": "public", "hardware": "cpu"}' \\
+          -d '{"owner": "alice", "name": "hot-dog-detector", "description": "Detect hot dogs in images", "visibility": "public", "hardware": "cpu"}' \\
           https://api.replicate.com/v1/models
         ```
 
@@ -528,10 +528,10 @@ class AsyncModelsResource(AsyncAPIResource):
 
         ```json
         {
-          "url": "https://replicate.com/alice/my-model",
+          "url": "https://replicate.com/alice/hot-dog-detector",
           "owner": "alice",
-          "name": "my-model",
-          "description": "An example model",
+          "name": "hot-dog-detector",
+          "description": "Detect hot dogs in images",
           "visibility": "public",
           "github_url": null,
           "paper_url": null,

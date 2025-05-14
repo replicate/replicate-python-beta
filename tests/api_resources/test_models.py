@@ -22,9 +22,9 @@ class TestModels:
     @parametrize
     def test_method_create(self, client: Replicate) -> None:
         model = client.models.create(
-            hardware="hardware",
-            name="name",
-            owner="owner",
+            hardware="cpu",
+            name="hot-dog-detector",
+            owner="alice",
             visibility="public",
         )
         assert model is None
@@ -33,15 +33,15 @@ class TestModels:
     @parametrize
     def test_method_create_with_all_params(self, client: Replicate) -> None:
         model = client.models.create(
-            hardware="hardware",
-            name="name",
-            owner="owner",
+            hardware="cpu",
+            name="hot-dog-detector",
+            owner="alice",
             visibility="public",
             cover_image_url="cover_image_url",
-            description="description",
-            github_url="github_url",
+            description="Detect hot dogs in images",
+            github_url="https://github.com/alice/hot-dog-detector",
             license_url="license_url",
-            paper_url="paper_url",
+            paper_url="https://arxiv.org/abs/2504.17639",
         )
         assert model is None
 
@@ -49,9 +49,9 @@ class TestModels:
     @parametrize
     def test_raw_response_create(self, client: Replicate) -> None:
         response = client.models.with_raw_response.create(
-            hardware="hardware",
-            name="name",
-            owner="owner",
+            hardware="cpu",
+            name="hot-dog-detector",
+            owner="alice",
             visibility="public",
         )
 
@@ -64,9 +64,9 @@ class TestModels:
     @parametrize
     def test_streaming_response_create(self, client: Replicate) -> None:
         with client.models.with_streaming_response.create(
-            hardware="hardware",
-            name="name",
-            owner="owner",
+            hardware="cpu",
+            name="hot-dog-detector",
+            owner="alice",
             visibility="public",
         ) as response:
             assert not response.is_closed
@@ -251,9 +251,9 @@ class TestAsyncModels:
     @parametrize
     async def test_method_create(self, async_client: AsyncReplicate) -> None:
         model = await async_client.models.create(
-            hardware="hardware",
-            name="name",
-            owner="owner",
+            hardware="cpu",
+            name="hot-dog-detector",
+            owner="alice",
             visibility="public",
         )
         assert model is None
@@ -262,15 +262,15 @@ class TestAsyncModels:
     @parametrize
     async def test_method_create_with_all_params(self, async_client: AsyncReplicate) -> None:
         model = await async_client.models.create(
-            hardware="hardware",
-            name="name",
-            owner="owner",
+            hardware="cpu",
+            name="hot-dog-detector",
+            owner="alice",
             visibility="public",
             cover_image_url="cover_image_url",
-            description="description",
-            github_url="github_url",
+            description="Detect hot dogs in images",
+            github_url="https://github.com/alice/hot-dog-detector",
             license_url="license_url",
-            paper_url="paper_url",
+            paper_url="https://arxiv.org/abs/2504.17639",
         )
         assert model is None
 
@@ -278,9 +278,9 @@ class TestAsyncModels:
     @parametrize
     async def test_raw_response_create(self, async_client: AsyncReplicate) -> None:
         response = await async_client.models.with_raw_response.create(
-            hardware="hardware",
-            name="name",
-            owner="owner",
+            hardware="cpu",
+            name="hot-dog-detector",
+            owner="alice",
             visibility="public",
         )
 
@@ -293,9 +293,9 @@ class TestAsyncModels:
     @parametrize
     async def test_streaming_response_create(self, async_client: AsyncReplicate) -> None:
         async with async_client.models.with_streaming_response.create(
-            hardware="hardware",
-            name="name",
-            owner="owner",
+            hardware="cpu",
+            name="hot-dog-detector",
+            owner="alice",
             visibility="public",
         ) as response:
             assert not response.is_closed
