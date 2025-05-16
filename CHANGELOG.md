@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.5.1 (2025-05-16)
+
+Full Changelog: [v0.5.0...v0.5.1](https://github.com/replicate/replicate-python-stainless/compare/v0.5.0...v0.5.1)
+
+### Chores
+
+* **ci:** fix installation instructions ([eb4702f](https://github.com/replicate/replicate-python-stainless/commit/eb4702fdc5d6ac6eb112f69eb11095393f0de992))
+* **ci:** upload sdks to package manager ([59e0758](https://github.com/replicate/replicate-python-stainless/commit/59e075852ee7f4b914b23107018ebfb800fe4b91))
+
 ## 0.5.0 (2025-05-14)
 
 Full Changelog: [v0.4.0...v0.5.0](https://github.com/replicate/replicate-python-stainless/compare/v0.4.0...v0.5.0)
