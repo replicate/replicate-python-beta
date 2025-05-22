@@ -11,13 +11,16 @@ __all__ = ["Prediction", "URLs"]
 
 class URLs(BaseModel):
     cancel: str
-    """Cancel the prediction"""
+    """Cancel the prediction via API"""
 
     get: str
-    """Retrieve the latest state of the prediction"""
+    """Retrieve the latest state of the prediction via API"""
+
+    web: str
+    """View the prediction in a browser"""
 
     stream: Optional[str] = None
-    """An event source to stream the output of the prediction"""
+    """An event source to stream the output of the prediction via API"""
 
 
 class Prediction(BaseModel):
@@ -47,7 +50,7 @@ class Prediction(BaseModel):
     status: Literal["starting", "processing", "succeeded", "failed", "canceled"]
 
     urls: URLs
-    """API endpoints for working with the prediction"""
+    """URLs for working with the prediction"""
 
     version: Union[str, Literal["hidden"]]
     """The ID of the model version that created the prediction"""
