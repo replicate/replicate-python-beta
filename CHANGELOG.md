@@ -1,5 +1,18 @@
 # Changelog
 
+## 0.6.0 (2025-05-22)
+
+Full Changelog: [v0.5.1...v0.6.0](https://github.com/replicate/replicate-python-stainless/compare/v0.5.1...v0.6.0)
+
+### Features
+
+* **api:** api update ([eb2a462](https://github.com/replicate/replicate-python-stainless/commit/eb2a462c8bd7dd8a0e303020e8c09a302ef670a0))
+
+
+### Chores
+
+* **docs:** grammar improvements ([ba42564](https://github.com/replicate/replicate-python-stainless/commit/ba4256495f92133738016c03b198a1bb88b6ed21))
+
 ## 0.5.1 (2025-05-16)
 
 Full Changelog: [v0.5.0...v0.5.1](https://github.com/replicate/replicate-python-stainless/compare/v0.5.0...v0.5.1)
