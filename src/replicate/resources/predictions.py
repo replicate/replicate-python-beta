@@ -244,6 +244,7 @@ class PredictionsResource(SyncAPIResource):
               "source": "api",
               "status": "succeeded",
               "urls": {
+                "web": "https://replicate.com/p/gm3qorzdhgbfurvjtvhg6dckhu",
                 "get": "https://api.replicate.com/v1/predictions/gm3qorzdhgbfurvjtvhg6dckhu",
                 "cancel": "https://api.replicate.com/v1/predictions/gm3qorzdhgbfurvjtvhg6dckhu/cancel"
               },
@@ -407,8 +408,9 @@ class PredictionsResource(SyncAPIResource):
             "predict_time": 0.012683
           },
           "urls": {
-            "cancel": "https://api.replicate.com/v1/predictions/gm3qorzdhgbfurvjtvhg6dckhu/cancel",
-            "get": "https://api.replicate.com/v1/predictions/gm3qorzdhgbfurvjtvhg6dckhu"
+            "web": "https://replicate.com/p/gm3qorzdhgbfurvjtvhg6dckhu",
+            "get": "https://api.replicate.com/v1/predictions/gm3qorzdhgbfurvjtvhg6dckhu",
+            "cancel": "https://api.replicate.com/v1/predictions/gm3qorzdhgbfurvjtvhg6dckhu/cancel"
           }
         }
         ```
@@ -684,6 +686,7 @@ class AsyncPredictionsResource(AsyncAPIResource):
               "source": "api",
               "status": "succeeded",
               "urls": {
+                "web": "https://replicate.com/p/gm3qorzdhgbfurvjtvhg6dckhu",
                 "get": "https://api.replicate.com/v1/predictions/gm3qorzdhgbfurvjtvhg6dckhu",
                 "cancel": "https://api.replicate.com/v1/predictions/gm3qorzdhgbfurvjtvhg6dckhu/cancel"
               },
@@ -847,8 +850,9 @@ class AsyncPredictionsResource(AsyncAPIResource):
             "predict_time": 0.012683
           },
           "urls": {
-            "cancel": "https://api.replicate.com/v1/predictions/gm3qorzdhgbfurvjtvhg6dckhu/cancel",
-            "get": "https://api.replicate.com/v1/predictions/gm3qorzdhgbfurvjtvhg6dckhu"
+            "web": "https://replicate.com/p/gm3qorzdhgbfurvjtvhg6dckhu",
+            "get": "https://api.replicate.com/v1/predictions/gm3qorzdhgbfurvjtvhg6dckhu",
+            "cancel": "https://api.replicate.com/v1/predictions/gm3qorzdhgbfurvjtvhg6dckhu/cancel"
           }
         }
         ```

@@ -105,8 +105,9 @@ class TrainingsResource(SyncAPIResource):
           "status": "starting",
           "created_at": "2023-09-08T16:32:56.990893084Z",
           "urls": {
-            "cancel": "https://api.replicate.com/v1/predictions/zz4ibbonubfz7carwiefibzgga/cancel",
-            "get": "https://api.replicate.com/v1/predictions/zz4ibbonubfz7carwiefibzgga"
+            "web": "https://replicate.com/p/zz4ibbonubfz7carwiefibzgga",
+            "get": "https://api.replicate.com/v1/predictions/zz4ibbonubfz7carwiefibzgga",
+            "cancel": "https://api.replicate.com/v1/predictions/zz4ibbonubfz7carwiefibzgga/cancel"
           }
         }
         ```
@@ -250,6 +251,7 @@ class TrainingsResource(SyncAPIResource):
               "source": "api",
               "status": "succeeded",
               "urls": {
+                "web": "https://replicate.com/p/zz4ibbonubfz7carwiefibzgga",
                 "get": "https://api.replicate.com/v1/trainings/zz4ibbonubfz7carwiefibzgga",
                 "cancel": "https://api.replicate.com/v1/trainings/zz4ibbonubfz7carwiefibzgga/cancel"
               },
@@ -359,6 +361,7 @@ class TrainingsResource(SyncAPIResource):
           "started_at": "2023-09-08T16:32:57.112647Z",
           "status": "succeeded",
           "urls": {
+            "web": "https://replicate.com/p/zz4ibbonubfz7carwiefibzgga",
             "get": "https://api.replicate.com/v1/trainings/zz4ibbonubfz7carwiefibzgga",
             "cancel": "https://api.replicate.com/v1/trainings/zz4ibbonubfz7carwiefibzgga/cancel"
           },
@@ -486,8 +489,9 @@ class AsyncTrainingsResource(AsyncAPIResource):
           "status": "starting",
           "created_at": "2023-09-08T16:32:56.990893084Z",
           "urls": {
-            "cancel": "https://api.replicate.com/v1/predictions/zz4ibbonubfz7carwiefibzgga/cancel",
-            "get": "https://api.replicate.com/v1/predictions/zz4ibbonubfz7carwiefibzgga"
+            "web": "https://replicate.com/p/zz4ibbonubfz7carwiefibzgga",
+            "get": "https://api.replicate.com/v1/predictions/zz4ibbonubfz7carwiefibzgga",
+            "cancel": "https://api.replicate.com/v1/predictions/zz4ibbonubfz7carwiefibzgga/cancel"
           }
         }
         ```
@@ -631,6 +635,7 @@ class AsyncTrainingsResource(AsyncAPIResource):
               "source": "api",
               "status": "succeeded",
               "urls": {
+                "web": "https://replicate.com/p/zz4ibbonubfz7carwiefibzgga",
                 "get": "https://api.replicate.com/v1/trainings/zz4ibbonubfz7carwiefibzgga",
                 "cancel": "https://api.replicate.com/v1/trainings/zz4ibbonubfz7carwiefibzgga/cancel"
               },
@@ -740,6 +745,7 @@ class AsyncTrainingsResource(AsyncAPIResource):
           "started_at": "2023-09-08T16:32:57.112647Z",
           "status": "succeeded",
           "urls": {
+            "web": "https://replicate.com/p/zz4ibbonubfz7carwiefibzgga",
             "get": "https://api.replicate.com/v1/trainings/zz4ibbonubfz7carwiefibzgga",
             "cancel": "https://api.replicate.com/v1/trainings/zz4ibbonubfz7carwiefibzgga/cancel"
           },
