@@ -37,8 +37,8 @@ def client(request: FixtureRequest) -> Iterator[Replicate]:
     if not isinstance(strict, bool):
         raise TypeError(f"Unexpected fixture parameter type {type(strict)}, expected {bool}")
 
-    with Replicate(base_url=base_url, bearer_token=bearer_token, _strict_response_validation=strict) as client:
-        yield client
+    with Replicate(base_url=base_url, bearer_token=bearer_token, _strict_response_validation=strict) as replicate:
+        yield replicate
 
 
 @pytest.fixture(scope="session")
@@ -49,5 +49,5 @@ async def async_client(request: FixtureRequest) -> AsyncIterator[AsyncReplicate]
 
     async with AsyncReplicate(
         base_url=base_url, bearer_token=bearer_token, _strict_response_validation=strict
-    ) as client:
-        yield client
+    ) as replicate:
+        yield replicate
