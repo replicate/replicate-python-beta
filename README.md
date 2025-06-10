@@ -1,6 +1,6 @@
 # Replicate Python API library
 
-[![PyPI version](https://img.shields.io/pypi/v/replicate-stainless.svg)](https://pypi.org/project/replicate-stainless/)
+[![PyPI version](https://img.shields.io/pypi/v/replicate.svg)](https://pypi.org/project/replicate/)
 
 The Replicate Python library provides convenient access to the Replicate REST API from any Python 3.8+
 application. The library includes type definitions for all request params and response fields,
@@ -16,7 +16,7 @@ The REST API documentation can be found on [replicate.com](https://replicate.com
 
 ```sh
 # install from PyPI
-pip install replicate-stainless
+pip install replicate
 ```
 
 ## Usage
