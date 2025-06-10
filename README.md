@@ -16,7 +16,7 @@ The REST API documentation can be found on [replicate.com](https://replicate.com
 
 ```sh
 # install from PyPI
-pip install replicate
+pip install --pre replicate
 ```
 
 ## Usage
