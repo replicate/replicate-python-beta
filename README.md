@@ -1,6 +1,6 @@
 # Replicate Python API library
 
-[![PyPI version](https://img.shields.io/pypi/v/replicate-stainless.svg)](https://pypi.org/project/replicate-stainless/)
+[![PyPI version](https://img.shields.io/pypi/v/replicate.svg)](https://pypi.org/project/replicate/)
 
 The Replicate Python library provides convenient access to the Replicate REST API from any Python 3.8+
 application. The library includes type definitions for all request params and response fields,
@@ -16,7 +16,7 @@ The REST API documentation can be found on [replicate.com](https://replicate.com
 
 ```sh
 # install from PyPI
-pip install replicate-stainless
+pip install --pre replicate
 ```
 
 ## Usage
@@ -27,11 +27,11 @@ The full API of this library can be found in [api.md](api.md).
 import os
 from replicate import Replicate
 
-client = Replicate(
+replicate = Replicate(
     bearer_token=os.environ.get("REPLICATE_API_TOKEN"),  # This is the default and can be omitted
 )
 
-prediction = client.predictions.get(
+prediction = replicate.predictions.get(
     prediction_id="gm3qorzdhgbfurvjtvhg6dckhu",
 )
 print(prediction.id)
@@ -51,13 +51,13 @@ import os
 import asyncio
 from replicate import AsyncReplicate
 
-client = AsyncReplicate(
+replicate = AsyncReplicate(
     bearer_token=os.environ.get("REPLICATE_API_TOKEN"),  # This is the default and can be omitted
 )
 
 
 async def main() -> None:
-    prediction = await client.predictions.get(
+    prediction = await replicate.predictions.get(
         prediction_id="gm3qorzdhgbfurvjtvhg6dckhu",
     )
     print(prediction.id)
@@ -86,11 +86,11 @@ This library provides auto-paginating iterators with each list response, so you 
 ```python
 from replicate import Replicate
 
-client = Replicate()
+replicate = Replicate()
 
 all_models = []
 # Automatically fetches more pages as needed.
-for model in client.models.list():
+for model in replicate.models.list():
     # Do something with model here
     all_models.append(model)
 print(all_models)
@@ -102,13 +102,13 @@ Or, asynchronously:
 import asyncio
 from replicate import AsyncReplicate
 
-client = AsyncReplicate()
+replicate = AsyncReplicate()
 
 
 async def main() -> None:
     all_models = []
     # Iterate through items across all pages, issuing requests as needed.
-    async for model in client.models.list():
+    async for model in replicate.models.list():
         all_models.append(model)
     print(all_models)
 
@@ -119,7 +119,7 @@ asyncio.run(main())
 Alternatively, you can use the `.has_next_page()`, `.next_page_info()`, or `.get_next_page()` methods for more granular control working with pages:
 
 ```python
-first_page = await client.models.list()
+first_page = await replicate.models.list()
 if first_page.has_next_page():
     print(f"will fetch next page using these details: {first_page.next_page_info()}")
     next_page = await first_page.get_next_page()
@@ -131,7 +131,7 @@ if first_page.has_next_page():
 Or just work directly with the returned data:
 
 ```python
-first_page = await client.models.list()
+first_page = await replicate.models.list()
 
 print(f"next URL: {first_page.next}")  # => "next URL: ..."
 for model in first_page.results:
@@ -148,9 +148,9 @@ Request parameters that correspond to file uploads can be passed as `bytes`, or 
 from pathlib import Path
 from replicate import Replicate
 
-client = Replicate()
+replicate = Replicate()
 
-client.files.create(
+replicate.files.create(
     content=Path("/path/to/file"),
 )
 ```
@@ -170,10 +170,10 @@ All errors inherit from `replicate.APIError`.
 import replicate
 from replicate import Replicate
 
-client = Replicate()
+replicate = Replicate()
 
 try:
-    client.predictions.create(
+    replicate.predictions.create(
         input={"text": "Alice"},
         version="replicate/hello-world:5c7d5dc6dd8bf75c1acaa8565735e7986bc5b66206b55cca93cb72c9bf15ccaa",
     )
@@ -213,13 +213,13 @@ You can use the `max_retries` option to configure or disable retry settings:
 from replicate import Replicate
 
 # Configure the default for all requests:
-client = Replicate(
+replicate = Replicate(
     # default is 2
     max_retries=0,
 )
 
 # Or, configure per-request:
-client.with_options(max_retries=5).predictions.create(
+replicate.with_options(max_retries=5).predictions.create(
     input={"text": "Alice"},
     version="replicate/hello-world:5c7d5dc6dd8bf75c1acaa8565735e7986bc5b66206b55cca93cb72c9bf15ccaa",
 )
@@ -234,18 +234,18 @@ which accepts a float or an [`httpx.Timeout`](https://www.python-httpx.org/advan
 from replicate import Replicate
 
 # Configure the default for all requests:
-client = Replicate(
+replicate = Replicate(
     # 20 seconds (default is 1 minute)
     timeout=20.0,
 )
 
 # More granular control:
-client = Replicate(
+replicate = Replicate(
     timeout=httpx.Timeout(60.0, read=5.0, write=10.0, connect=2.0),
 )
 
 # Override per-request:
-client.with_options(timeout=5.0).predictions.create(
+replicate.with_options(timeout=5.0).predictions.create(
     input={"text": "Alice"},
     version="replicate/hello-world:5c7d5dc6dd8bf75c1acaa8565735e7986bc5b66206b55cca93cb72c9bf15ccaa",
 )
@@ -288,8 +288,8 @@ The "raw" Response object can be accessed by prefixing `.with_raw_response.` to 
 ```py
 from replicate import Replicate
 
-client = Replicate()
-response = client.predictions.with_raw_response.create(
+replicate = Replicate()
+response = replicate.predictions.with_raw_response.create(
     input={
         "text": "Alice"
     },
@@ -312,7 +312,7 @@ The above interface eagerly reads the full response body when you make the reque
 To stream the response body, use `.with_streaming_response` instead, which requires a context manager and only reads the response body once you call `.read()`, `.text()`, `.json()`, `.iter_bytes()`, `.iter_text()`, `.iter_lines()` or `.parse()`. In the async client, these are async methods.
 
 ```python
-with client.predictions.with_streaming_response.create(
+with replicate.predictions.with_streaming_response.create(
     input={"text": "Alice"},
     version="replicate/hello-world:5c7d5dc6dd8bf75c1acaa8565735e7986bc5b66206b55cca93cb72c9bf15ccaa",
 ) as response:
@@ -332,13 +332,13 @@ If you need to access undocumented endpoints, params, or response properties, th
 
 #### Undocumented endpoints
 
-To make requests to undocumented endpoints, you can make requests using `client.get`, `client.post`, and other
+To make requests to undocumented endpoints, you can make requests using `replicate.get`, `replicate.post`, and other
 http verbs. Options on the client will be respected (such as retries) when making this request.
 
 ```py
 import httpx
 
-response = client.post(
+response = replicate.post(
     "/foo",
     cast_to=httpx.Response,
     body={"my_param": True},
@@ -370,7 +370,7 @@ You can directly override the [httpx client](https://www.python-httpx.org/api/#c
 import httpx
 from replicate import Replicate, DefaultHttpxClient
 
-client = Replicate(
+replicate = Replicate(
     # Or use the `REPLICATE_BASE_URL` env var
     base_url="http://my.test.server.example.com:8083",
     http_client=DefaultHttpxClient(
@@ -383,7 +383,7 @@ client = Replicate(
 You can also customize the client on a per-request basis by using `with_options()`:
 
 ```python
-client.with_options(http_client=DefaultHttpxClient(...))
+replicate.with_options(http_client=DefaultHttpxClient(...))
 ```
 
 ### Managing HTTP resources
@@ -393,7 +393,7 @@ By default the library closes underlying HTTP connections whenever the client is
 ```py
 from replicate import Replicate
 
-with Replicate() as client:
+with Replicate() as replicate:
   # make requests here
   ...
 

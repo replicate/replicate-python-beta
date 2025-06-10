@@ -1,5 +1,28 @@
 # Changelog
 
+## 2.0.0-alpha.1 (2025-06-10)
+
+Full Changelog: [v0.6.0...v2.0.0-alpha.1](https://github.com/replicate/replicate-python-stainless/compare/v0.6.0...v2.0.0-alpha.1)
+
+### ⚠ BREAKING CHANGES
+
+* rename package to `replicate`
+
+### Features
+
+* **client:** add follow_redirects request option ([d606061](https://github.com/replicate/replicate-python-stainless/commit/d60606146abbdc778dc33573ccccdf7bedb524e4))
+
+
+### Chores
+
+* **docs:** remove reference to rye shell ([1dfaea4](https://github.com/replicate/replicate-python-stainless/commit/1dfaea4108bee6ea565c48c9f99ed503476fd58f))
+* rename package to `replicate` ([42e30b7](https://github.com/replicate/replicate-python-stainless/commit/42e30b7b0e736fbb39e95ef7744299746a70d1b5))
+
+
+### Documentation
+
+* **internal:** add support for the client config option default_client_example_name to Python ([b320609](https://github.com/replicate/replicate-python-stainless/commit/b3206093c824676a300bfc68da307fab5a0f3718))
+
 ## 0.6.0 (2025-05-22)
 
 Full Changelog: [v0.5.1...v0.6.0](https://github.com/replicate/replicate-python-stainless/compare/v0.5.1...v0.6.0)

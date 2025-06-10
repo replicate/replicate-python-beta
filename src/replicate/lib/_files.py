@@ -51,9 +51,8 @@ def encode_json(
         if file_encoding_strategy == "base64":
             return base64_encode_file(obj)
         else:
-            # todo: support files endpoint
-            # return client.files.create(obj).urls["get"]
-            raise NotImplementedError("File upload is not supported yet")
+            response = client.files.create(content=obj.read())
+            return response.urls.get
     if HAS_NUMPY:
         if isinstance(obj, np.integer):  # type: ignore
             return int(obj)
@@ -91,9 +90,8 @@ async def async_encode_json(
             # TODO: This should ideally use an async based file reader path.
             return base64_encode_file(obj)
         else:
-            # todo: support files endpoint
-            # return (await client.files.async_create(obj)).urls["get"]
-            raise NotImplementedError("File upload is not supported yet")
+            response = await client.files.create(content=obj.read())
+            return response.urls.get
     if HAS_NUMPY:
         if isinstance(obj, np.integer):  # type: ignore
             return int(obj)
