@@ -68,6 +68,39 @@ asyncio.run(main())
 
 Functionality between the synchronous and asynchronous clients is otherwise identical.
 
+## Running models
+
+```python
+import replicate
+
+output = replicate.run(
+    "black-forest-labs/flux-schnell", input={"prompt": "astronaut riding a rocket like a horse"}
+)
+
+# Write the output to a file
+for index, item in enumerate(output):
+    with open(f"output_{index}.webp", "wb") as file:
+        file.write(item.read())
+```
+
+`replicate.run()` raises `ModelError` if the prediction fails. You can access the exception's `prediction` property to get more information about the failure:
+
+```python
+import replicate
+from replicate import ModelError
+
+try:
+    output = replicate.run(
+        "stability-ai/stable-diffusion-3", input={"prompt": "An astronaut riding a rainbow unicorn"}
+    )
+except ModelError as e:
+    if "(some known issue)" in e.prediction.logs:
+        pass
+    print("Failed prediction: " + e.prediction.id)
+```
+
+By default the client will wait up to 60 seconds for the prediction to complete. The timeout can be configured by passing `wait=x` where `x` is a timeout in seconds between 1 and 60. To disable waiting, pass `wait=False`.
+
 ## Using types
 
 Nested request parameters are [TypedDicts](https://docs.python.org/3/library/typing.html#typing.TypedDict). Responses are [Pydantic models](https://docs.pydantic.dev) which also provide helper methods for things like:

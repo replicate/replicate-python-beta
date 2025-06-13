@@ -26,6 +26,7 @@ from ._constants import DEFAULT_TIMEOUT, DEFAULT_MAX_RETRIES, DEFAULT_CONNECTION
 from .lib._files import FileOutput as FileOutput, AsyncFileOutput as AsyncFileOutput
 from ._exceptions import (
     APIError,
+    ModelError,
     ConflictError,
     NotFoundError,
     APIStatusError,
@@ -68,6 +69,7 @@ __all__ = [
     "UnprocessableEntityError",
     "RateLimitError",
     "InternalServerError",
+    "ModelError",
     "Timeout",
     "RequestOptions",
     "Client",
