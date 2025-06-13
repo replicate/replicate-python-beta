@@ -1,5 +1,20 @@
 # Changelog
 
+## 2.0.0-alpha.2 (2025-06-13)
+
+Full Changelog: [v2.0.0-alpha.1...v2.0.0-alpha.2](https://github.com/replicate/replicate-python-stainless/compare/v2.0.0-alpha.1...v2.0.0-alpha.2)
+
+### Bug Fixes
+
+* **client:** correctly parse binary response | stream ([ec19335](https://github.com/replicate/replicate-python-stainless/commit/ec19335fcce5a7ceba6aa1a4ac67411421a571ec))
+* **test:** update prediction response ([b6608ca](https://github.com/replicate/replicate-python-stainless/commit/b6608ca5bbfc38d68a9bbfb853bbb8645e046d39))
+
+
+### Chores
+
+* **internal:** version bump ([497fe10](https://github.com/replicate/replicate-python-stainless/commit/497fe1047ade040d99bf5d7d4fb99f1b1b95a09d))
+* **tests:** run tests in parallel ([9330c56](https://github.com/replicate/replicate-python-stainless/commit/9330c565de11b0c61e43df899f4113c5214572c9))
+
 ## 2.0.0-alpha.1 (2025-06-10)
 
 Full Changelog: [v0.6.0...v2.0.0-alpha.1](https://github.com/replicate/replicate-python-stainless/compare/v0.6.0...v2.0.0-alpha.1)
