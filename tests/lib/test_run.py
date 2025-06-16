@@ -32,6 +32,7 @@ def create_mock_prediction(
         urls = {
             "get": "https://api.replicate.com/v1/predictions/test_prediction_id",
             "cancel": "https://api.replicate.com/v1/predictions/test_prediction_id/cancel",
+            "web": "https://replicate.com/p/test_prediction_id",
         }
 
     return {
