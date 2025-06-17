@@ -1,5 +1,13 @@
 # Changelog
 
+## 2.0.0-alpha.3 (2025-06-17)
+
+Full Changelog: [v2.0.0-alpha.2...v2.0.0-alpha.3](https://github.com/replicate/replicate-python-stainless/compare/v2.0.0-alpha.2...v2.0.0-alpha.3)
+
+### Chores
+
+* **tests:** add tests for httpx client instantiation & proxies ([b8dfd7a](https://github.com/replicate/replicate-python-stainless/commit/b8dfd7a455abb39f114bf86b89aacf2d9cb88eb3))
+
 ## 2.0.0-alpha.2 (2025-06-13)
 
 Full Changelog: [v2.0.0-alpha.1...v2.0.0-alpha.2](https://github.com/replicate/replicate-python-stainless/compare/v2.0.0-alpha.1...v2.0.0-alpha.2)
