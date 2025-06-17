@@ -815,7 +815,10 @@ class TestReplicate:
 
         respx_mock.post("/predictions").mock(side_effect=retry_handler)
 
-        response = client.predictions.with_raw_response.create(input={}, version="version")
+        response = client.predictions.with_raw_response.create(
+            input={"text": "Alice"},
+            version="replicate/hello-world:9dcd6d78e7c6560c340d916fe32e9f24aabfa331e5cce95fe31f77fb03121426",
+        )
 
         assert response.retries_taken == failures_before_success
         assert int(response.http_request.headers.get("x-stainless-retry-count")) == failures_before_success
@@ -840,7 +843,9 @@ class TestReplicate:
         respx_mock.post("/predictions").mock(side_effect=retry_handler)
 
         response = client.predictions.with_raw_response.create(
-            input={}, version="version", extra_headers={"x-stainless-retry-count": Omit()}
+            input={"text": "Alice"},
+            version="replicate/hello-world:9dcd6d78e7c6560c340d916fe32e9f24aabfa331e5cce95fe31f77fb03121426",
+            extra_headers={"x-stainless-retry-count": Omit()},
         )
 
         assert len(response.http_request.headers.get_list("x-stainless-retry-count")) == 0
@@ -865,7 +870,9 @@ class TestReplicate:
         respx_mock.post("/predictions").mock(side_effect=retry_handler)
 
         response = client.predictions.with_raw_response.create(
-            input={}, version="version", extra_headers={"x-stainless-retry-count": "42"}
+            input={"text": "Alice"},
+            version="replicate/hello-world:9dcd6d78e7c6560c340d916fe32e9f24aabfa331e5cce95fe31f77fb03121426",
+            extra_headers={"x-stainless-retry-count": "42"},
         )
 
         assert response.http_request.headers.get("x-stainless-retry-count") == "42"
@@ -1681,7 +1688,10 @@ class TestAsyncReplicate:
 
         respx_mock.post("/predictions").mock(side_effect=retry_handler)
 
-        response = await client.predictions.with_raw_response.create(input={}, version="version")
+        response = await client.predictions.with_raw_response.create(
+            input={"text": "Alice"},
+            version="replicate/hello-world:9dcd6d78e7c6560c340d916fe32e9f24aabfa331e5cce95fe31f77fb03121426",
+        )
 
         assert response.retries_taken == failures_before_success
         assert int(response.http_request.headers.get("x-stainless-retry-count")) == failures_before_success
@@ -1707,7 +1717,9 @@ class TestAsyncReplicate:
         respx_mock.post("/predictions").mock(side_effect=retry_handler)
 
         response = await client.predictions.with_raw_response.create(
-            input={}, version="version", extra_headers={"x-stainless-retry-count": Omit()}
+            input={"text": "Alice"},
+            version="replicate/hello-world:9dcd6d78e7c6560c340d916fe32e9f24aabfa331e5cce95fe31f77fb03121426",
+            extra_headers={"x-stainless-retry-count": Omit()},
         )
 
         assert len(response.http_request.headers.get_list("x-stainless-retry-count")) == 0
@@ -1733,7 +1745,9 @@ class TestAsyncReplicate:
         respx_mock.post("/predictions").mock(side_effect=retry_handler)
 
         response = await client.predictions.with_raw_response.create(
-            input={}, version="version", extra_headers={"x-stainless-retry-count": "42"}
+            input={"text": "Alice"},
+            version="replicate/hello-world:9dcd6d78e7c6560c340d916fe32e9f24aabfa331e5cce95fe31f77fb03121426",
+            extra_headers={"x-stainless-retry-count": "42"},
         )
 
         assert response.http_request.headers.get("x-stainless-retry-count") == "42"
