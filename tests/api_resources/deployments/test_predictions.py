@@ -23,7 +23,10 @@ class TestPredictions:
         prediction = client.deployments.predictions.create(
             deployment_owner="deployment_owner",
             deployment_name="deployment_name",
-            input={},
+            input={
+                "prompt": "Tell me a joke",
+                "system_prompt": "You are a helpful assistant",
+            },
         )
         assert_matches_type(Prediction, prediction, path=["response"])
 
@@ -33,10 +36,13 @@ class TestPredictions:
         prediction = client.deployments.predictions.create(
             deployment_owner="deployment_owner",
             deployment_name="deployment_name",
-            input={},
+            input={
+                "prompt": "Tell me a joke",
+                "system_prompt": "You are a helpful assistant",
+            },
             stream=True,
-            webhook="webhook",
-            webhook_events_filter=["start"],
+            webhook="https://example.com/my-webhook-handler",
+            webhook_events_filter=["start", "completed"],
             prefer="wait=5",
         )
         assert_matches_type(Prediction, prediction, path=["response"])
@@ -47,7 +53,10 @@ class TestPredictions:
         response = client.deployments.predictions.with_raw_response.create(
             deployment_owner="deployment_owner",
             deployment_name="deployment_name",
-            input={},
+            input={
+                "prompt": "Tell me a joke",
+                "system_prompt": "You are a helpful assistant",
+            },
         )
 
         assert response.is_closed is True
@@ -61,7 +70,10 @@ class TestPredictions:
         with client.deployments.predictions.with_streaming_response.create(
             deployment_owner="deployment_owner",
             deployment_name="deployment_name",
-            input={},
+            input={
+                "prompt": "Tell me a joke",
+                "system_prompt": "You are a helpful assistant",
+            },
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -78,14 +90,20 @@ class TestPredictions:
             client.deployments.predictions.with_raw_response.create(
                 deployment_owner="",
                 deployment_name="deployment_name",
-                input={},
+                input={
+                    "prompt": "Tell me a joke",
+                    "system_prompt": "You are a helpful assistant",
+                },
             )
 
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `deployment_name` but received ''"):
             client.deployments.predictions.with_raw_response.create(
                 deployment_owner="deployment_owner",
                 deployment_name="",
-                input={},
+                input={
+                    "prompt": "Tell me a joke",
+                    "system_prompt": "You are a helpful assistant",
+                },
             )
 
 
@@ -98,7 +116,10 @@ class TestAsyncPredictions:
         prediction = await async_client.deployments.predictions.create(
             deployment_owner="deployment_owner",
             deployment_name="deployment_name",
-            input={},
+            input={
+                "prompt": "Tell me a joke",
+                "system_prompt": "You are a helpful assistant",
+            },
         )
         assert_matches_type(Prediction, prediction, path=["response"])
 
@@ -108,10 +129,13 @@ class TestAsyncPredictions:
         prediction = await async_client.deployments.predictions.create(
             deployment_owner="deployment_owner",
             deployment_name="deployment_name",
-            input={},
+            input={
+                "prompt": "Tell me a joke",
+                "system_prompt": "You are a helpful assistant",
+            },
             stream=True,
-            webhook="webhook",
-            webhook_events_filter=["start"],
+            webhook="https://example.com/my-webhook-handler",
+            webhook_events_filter=["start", "completed"],
             prefer="wait=5",
         )
         assert_matches_type(Prediction, prediction, path=["response"])
@@ -122,7 +146,10 @@ class TestAsyncPredictions:
         response = await async_client.deployments.predictions.with_raw_response.create(
             deployment_owner="deployment_owner",
             deployment_name="deployment_name",
-            input={},
+            input={
+                "prompt": "Tell me a joke",
+                "system_prompt": "You are a helpful assistant",
+            },
         )
 
         assert response.is_closed is True
@@ -136,7 +163,10 @@ class TestAsyncPredictions:
         async with async_client.deployments.predictions.with_streaming_response.create(
             deployment_owner="deployment_owner",
             deployment_name="deployment_name",
-            input={},
+            input={
+                "prompt": "Tell me a joke",
+                "system_prompt": "You are a helpful assistant",
+            },
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -153,12 +183,18 @@ class TestAsyncPredictions:
             await async_client.deployments.predictions.with_raw_response.create(
                 deployment_owner="",
                 deployment_name="deployment_name",
-                input={},
+                input={
+                    "prompt": "Tell me a joke",
+                    "system_prompt": "You are a helpful assistant",
+                },
             )
 
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `deployment_name` but received ''"):
             await async_client.deployments.predictions.with_raw_response.create(
                 deployment_owner="deployment_owner",
                 deployment_name="",
-                input={},
+                input={
+                    "prompt": "Tell me a joke",
+                    "system_prompt": "You are a helpful assistant",
+                },
             )
