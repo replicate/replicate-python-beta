@@ -1,5 +1,25 @@
 # Changelog
 
+## 2.0.0-alpha.4 (2025-06-18)
+
+Full Changelog: [v2.0.0-alpha.3...v2.0.0-alpha.4](https://github.com/replicate/replicate-python-stainless/compare/v2.0.0-alpha.3...v2.0.0-alpha.4)
+
+### Features
+
+* **api:** api update ([a9be2e0](https://github.com/replicate/replicate-python-stainless/commit/a9be2e087bd6f01301608322a50b321b0b01d4da))
+
+
+### Bug Fixes
+
+* **tests:** fix: tests which call HTTP endpoints directly with the example parameters ([3dfe4f7](https://github.com/replicate/replicate-python-stainless/commit/3dfe4f711c061b6197017a5b999f9db4e7f2836d))
+
+
+### Chores
+
+* **ci:** enable for pull requests ([67ffb34](https://github.com/replicate/replicate-python-stainless/commit/67ffb34adaaef43b4e4e469e5fff7ce3cdca3dcf))
+* **internal:** update conftest.py ([90da407](https://github.com/replicate/replicate-python-stainless/commit/90da407a4818b21bd5a33347a3c4566189c4377d))
+* **readme:** update badges ([4f54c7a](https://github.com/replicate/replicate-python-stainless/commit/4f54c7a76e5107b854e82f5266578e4f84aacc74))
+
 ## 2.0.0-alpha.3 (2025-06-17)
 
 Full Changelog: [v2.0.0-alpha.2...v2.0.0-alpha.3](https://github.com/replicate/replicate-python-stainless/compare/v2.0.0-alpha.2...v2.0.0-alpha.3)
