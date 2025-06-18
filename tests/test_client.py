@@ -23,9 +23,7 @@ from pydantic import ValidationError
 
 from replicate import Replicate, AsyncReplicate, APIResponseValidationError
 from replicate._types import Omit
-from replicate._utils import maybe_transform
 from replicate._models import BaseModel, FinalRequestOptions
-from replicate._constants import RAW_RESPONSE_HEADER
 from replicate._exceptions import APIStatusError, ReplicateError, APITimeoutError, APIResponseValidationError
 from replicate._base_client import (
     DEFAULT_TIMEOUT,
@@ -35,7 +33,6 @@ from replicate._base_client import (
     DefaultAsyncHttpxClient,
     make_request_options,
 )
-from replicate.types.prediction_create_params import PredictionCreateParams
 
 from .utils import update_env
 
@@ -743,50 +740,27 @@ class TestReplicate:
 
     @mock.patch("replicate._base_client.BaseClient._calculate_retry_timeout", _low_retry_timeout)
     @pytest.mark.respx(base_url=base_url)
-    def test_retrying_timeout_errors_doesnt_leak(self, respx_mock: MockRouter) -> None:
+    def test_retrying_timeout_errors_doesnt_leak(self, respx_mock: MockRouter, client: Replicate) -> None:
         respx_mock.post("/predictions").mock(side_effect=httpx.TimeoutException("Test timeout error"))
 
         with pytest.raises(APITimeoutError):
-            self.client.post(
-                "/predictions",
-                body=cast(
-                    object,
-                    maybe_transform(
-                        dict(
-                            input={"text": "Alice"},
-                            version="replicate/hello-world:5c7d5dc6dd8bf75c1acaa8565735e7986bc5b66206b55cca93cb72c9bf15ccaa",
-                        ),
-                        PredictionCreateParams,
-                    ),
-                ),
-                cast_to=httpx.Response,
-                options={"headers": {RAW_RESPONSE_HEADER: "stream"}},
-            )
+            client.predictions.with_streaming_response.create(
+                input={"text": "Alice"},
+                version="replicate/hello-world:9dcd6d78e7c6560c340d916fe32e9f24aabfa331e5cce95fe31f77fb03121426",
+            ).__enter__()
 
         assert _get_open_connections(self.client) == 0
 
     @mock.patch("replicate._base_client.BaseClient._calculate_retry_timeout", _low_retry_timeout)
     @pytest.mark.respx(base_url=base_url)
-    def test_retrying_status_errors_doesnt_leak(self, respx_mock: MockRouter) -> None:
+    def test_retrying_status_errors_doesnt_leak(self, respx_mock: MockRouter, client: Replicate) -> None:
         respx_mock.post("/predictions").mock(return_value=httpx.Response(500))
 
         with pytest.raises(APIStatusError):
-            self.client.post(
-                "/predictions",
-                body=cast(
-                    object,
-                    maybe_transform(
-                        dict(
-                            input={"text": "Alice"},
-                            version="replicate/hello-world:5c7d5dc6dd8bf75c1acaa8565735e7986bc5b66206b55cca93cb72c9bf15ccaa",
-                        ),
-                        PredictionCreateParams,
-                    ),
-                ),
-                cast_to=httpx.Response,
-                options={"headers": {RAW_RESPONSE_HEADER: "stream"}},
-            )
-
+            client.predictions.with_streaming_response.create(
+                input={"text": "Alice"},
+                version="replicate/hello-world:9dcd6d78e7c6560c340d916fe32e9f24aabfa331e5cce95fe31f77fb03121426",
+            ).__enter__()
         assert _get_open_connections(self.client) == 0
 
     @pytest.mark.parametrize("failures_before_success", [0, 2, 4])
@@ -815,7 +789,10 @@ class TestReplicate:
 
         respx_mock.post("/predictions").mock(side_effect=retry_handler)
 
-        response = client.predictions.with_raw_response.create(input={}, version="version")
+        response = client.predictions.with_raw_response.create(
+            input={"text": "Alice"},
+            version="replicate/hello-world:9dcd6d78e7c6560c340d916fe32e9f24aabfa331e5cce95fe31f77fb03121426",
+        )
 
         assert response.retries_taken == failures_before_success
         assert int(response.http_request.headers.get("x-stainless-retry-count")) == failures_before_success
@@ -840,7 +817,9 @@ class TestReplicate:
         respx_mock.post("/predictions").mock(side_effect=retry_handler)
 
         response = client.predictions.with_raw_response.create(
-            input={}, version="version", extra_headers={"x-stainless-retry-count": Omit()}
+            input={"text": "Alice"},
+            version="replicate/hello-world:9dcd6d78e7c6560c340d916fe32e9f24aabfa331e5cce95fe31f77fb03121426",
+            extra_headers={"x-stainless-retry-count": Omit()},
         )
 
         assert len(response.http_request.headers.get_list("x-stainless-retry-count")) == 0
@@ -865,7 +844,9 @@ class TestReplicate:
         respx_mock.post("/predictions").mock(side_effect=retry_handler)
 
         response = client.predictions.with_raw_response.create(
-            input={}, version="version", extra_headers={"x-stainless-retry-count": "42"}
+            input={"text": "Alice"},
+            version="replicate/hello-world:9dcd6d78e7c6560c340d916fe32e9f24aabfa331e5cce95fe31f77fb03121426",
+            extra_headers={"x-stainless-retry-count": "42"},
         )
 
         assert response.http_request.headers.get("x-stainless-retry-count") == "42"
@@ -1608,50 +1589,31 @@ class TestAsyncReplicate:
 
     @mock.patch("replicate._base_client.BaseClient._calculate_retry_timeout", _low_retry_timeout)
     @pytest.mark.respx(base_url=base_url)
-    async def test_retrying_timeout_errors_doesnt_leak(self, respx_mock: MockRouter) -> None:
+    async def test_retrying_timeout_errors_doesnt_leak(
+        self, respx_mock: MockRouter, async_client: AsyncReplicate
+    ) -> None:
         respx_mock.post("/predictions").mock(side_effect=httpx.TimeoutException("Test timeout error"))
 
         with pytest.raises(APITimeoutError):
-            await self.client.post(
-                "/predictions",
-                body=cast(
-                    object,
-                    maybe_transform(
-                        dict(
-                            input={"text": "Alice"},
-                            version="replicate/hello-world:5c7d5dc6dd8bf75c1acaa8565735e7986bc5b66206b55cca93cb72c9bf15ccaa",
-                        ),
-                        PredictionCreateParams,
-                    ),
-                ),
-                cast_to=httpx.Response,
-                options={"headers": {RAW_RESPONSE_HEADER: "stream"}},
-            )
+            await async_client.predictions.with_streaming_response.create(
+                input={"text": "Alice"},
+                version="replicate/hello-world:9dcd6d78e7c6560c340d916fe32e9f24aabfa331e5cce95fe31f77fb03121426",
+            ).__aenter__()
 
         assert _get_open_connections(self.client) == 0
 
     @mock.patch("replicate._base_client.BaseClient._calculate_retry_timeout", _low_retry_timeout)
     @pytest.mark.respx(base_url=base_url)
-    async def test_retrying_status_errors_doesnt_leak(self, respx_mock: MockRouter) -> None:
+    async def test_retrying_status_errors_doesnt_leak(
+        self, respx_mock: MockRouter, async_client: AsyncReplicate
+    ) -> None:
         respx_mock.post("/predictions").mock(return_value=httpx.Response(500))
 
         with pytest.raises(APIStatusError):
-            await self.client.post(
-                "/predictions",
-                body=cast(
-                    object,
-                    maybe_transform(
-                        dict(
-                            input={"text": "Alice"},
-                            version="replicate/hello-world:5c7d5dc6dd8bf75c1acaa8565735e7986bc5b66206b55cca93cb72c9bf15ccaa",
-                        ),
-                        PredictionCreateParams,
-                    ),
-                ),
-                cast_to=httpx.Response,
-                options={"headers": {RAW_RESPONSE_HEADER: "stream"}},
-            )
-
+            await async_client.predictions.with_streaming_response.create(
+                input={"text": "Alice"},
+                version="replicate/hello-world:9dcd6d78e7c6560c340d916fe32e9f24aabfa331e5cce95fe31f77fb03121426",
+            ).__aenter__()
         assert _get_open_connections(self.client) == 0
 
     @pytest.mark.parametrize("failures_before_success", [0, 2, 4])
@@ -1681,7 +1643,10 @@ class TestAsyncReplicate:
 
         respx_mock.post("/predictions").mock(side_effect=retry_handler)
 
-        response = await client.predictions.with_raw_response.create(input={}, version="version")
+        response = await client.predictions.with_raw_response.create(
+            input={"text": "Alice"},
+            version="replicate/hello-world:9dcd6d78e7c6560c340d916fe32e9f24aabfa331e5cce95fe31f77fb03121426",
+        )
 
         assert response.retries_taken == failures_before_success
         assert int(response.http_request.headers.get("x-stainless-retry-count")) == failures_before_success
@@ -1707,7 +1672,9 @@ class TestAsyncReplicate:
         respx_mock.post("/predictions").mock(side_effect=retry_handler)
 
         response = await client.predictions.with_raw_response.create(
-            input={}, version="version", extra_headers={"x-stainless-retry-count": Omit()}
+            input={"text": "Alice"},
+            version="replicate/hello-world:9dcd6d78e7c6560c340d916fe32e9f24aabfa331e5cce95fe31f77fb03121426",
+            extra_headers={"x-stainless-retry-count": Omit()},
         )
 
         assert len(response.http_request.headers.get_list("x-stainless-retry-count")) == 0
@@ -1733,7 +1700,9 @@ class TestAsyncReplicate:
         respx_mock.post("/predictions").mock(side_effect=retry_handler)
 
         response = await client.predictions.with_raw_response.create(
-            input={}, version="version", extra_headers={"x-stainless-retry-count": "42"}
+            input={"text": "Alice"},
+            version="replicate/hello-world:9dcd6d78e7c6560c340d916fe32e9f24aabfa331e5cce95fe31f77fb03121426",
+            extra_headers={"x-stainless-retry-count": "42"},
         )
 
         assert response.http_request.headers.get("x-stainless-retry-count") == "42"

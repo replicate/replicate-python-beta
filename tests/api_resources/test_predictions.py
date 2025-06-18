@@ -23,8 +23,8 @@ class TestPredictions:
     @parametrize
     def test_method_create(self, client: Replicate) -> None:
         prediction = client.predictions.create(
-            input={},
-            version="version",
+            input={"text": "Alice"},
+            version="replicate/hello-world:9dcd6d78e7c6560c340d916fe32e9f24aabfa331e5cce95fe31f77fb03121426",
         )
         assert_matches_type(Prediction, prediction, path=["response"])
 
@@ -32,11 +32,11 @@ class TestPredictions:
     @parametrize
     def test_method_create_with_all_params(self, client: Replicate) -> None:
         prediction = client.predictions.create(
-            input={},
-            version="version",
+            input={"text": "Alice"},
+            version="replicate/hello-world:9dcd6d78e7c6560c340d916fe32e9f24aabfa331e5cce95fe31f77fb03121426",
             stream=True,
-            webhook="webhook",
-            webhook_events_filter=["start"],
+            webhook="https://example.com/my-webhook-handler",
+            webhook_events_filter=["start", "completed"],
             prefer="wait=5",
         )
         assert_matches_type(Prediction, prediction, path=["response"])
@@ -45,8 +45,8 @@ class TestPredictions:
     @parametrize
     def test_raw_response_create(self, client: Replicate) -> None:
         response = client.predictions.with_raw_response.create(
-            input={},
-            version="version",
+            input={"text": "Alice"},
+            version="replicate/hello-world:9dcd6d78e7c6560c340d916fe32e9f24aabfa331e5cce95fe31f77fb03121426",
         )
 
         assert response.is_closed is True
@@ -58,8 +58,8 @@ class TestPredictions:
     @parametrize
     def test_streaming_response_create(self, client: Replicate) -> None:
         with client.predictions.with_streaming_response.create(
-            input={},
-            version="version",
+            input={"text": "Alice"},
+            version="replicate/hello-world:9dcd6d78e7c6560c340d916fe32e9f24aabfa331e5cce95fe31f77fb03121426",
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -198,8 +198,8 @@ class TestAsyncPredictions:
     @parametrize
     async def test_method_create(self, async_client: AsyncReplicate) -> None:
         prediction = await async_client.predictions.create(
-            input={},
-            version="version",
+            input={"text": "Alice"},
+            version="replicate/hello-world:9dcd6d78e7c6560c340d916fe32e9f24aabfa331e5cce95fe31f77fb03121426",
         )
         assert_matches_type(Prediction, prediction, path=["response"])
 
@@ -207,11 +207,11 @@ class TestAsyncPredictions:
     @parametrize
     async def test_method_create_with_all_params(self, async_client: AsyncReplicate) -> None:
         prediction = await async_client.predictions.create(
-            input={},
-            version="version",
+            input={"text": "Alice"},
+            version="replicate/hello-world:9dcd6d78e7c6560c340d916fe32e9f24aabfa331e5cce95fe31f77fb03121426",
             stream=True,
-            webhook="webhook",
-            webhook_events_filter=["start"],
+            webhook="https://example.com/my-webhook-handler",
+            webhook_events_filter=["start", "completed"],
             prefer="wait=5",
         )
         assert_matches_type(Prediction, prediction, path=["response"])
@@ -220,8 +220,8 @@ class TestAsyncPredictions:
     @parametrize
     async def test_raw_response_create(self, async_client: AsyncReplicate) -> None:
         response = await async_client.predictions.with_raw_response.create(
-            input={},
-            version="version",
+            input={"text": "Alice"},
+            version="replicate/hello-world:9dcd6d78e7c6560c340d916fe32e9f24aabfa331e5cce95fe31f77fb03121426",
         )
 
         assert response.is_closed is True
@@ -233,8 +233,8 @@ class TestAsyncPredictions:
     @parametrize
     async def test_streaming_response_create(self, async_client: AsyncReplicate) -> None:
         async with async_client.predictions.with_streaming_response.create(
-            input={},
-            version="version",
+            input={"text": "Alice"},
+            version="replicate/hello-world:9dcd6d78e7c6560c340d916fe32e9f24aabfa331e5cce95fe31f77fb03121426",
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
