@@ -53,6 +53,7 @@ from ...pagination import SyncCursorURLPage, AsyncCursorURLPage
 from ..._base_client import AsyncPaginator, make_request_options
 from ...types.model_get_response import ModelGetResponse
 from ...types.model_list_response import ModelListResponse
+from ...types.model_search_response import ModelSearchResponse
 
 __all__ = ["ModelsResource", "AsyncModelsResource"]
 
@@ -414,7 +415,7 @@ class ModelsResource(SyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> SyncCursorURLPage[object]:
+    ) -> SyncCursorURLPage[ModelSearchResponse]:
         """
         Get a list of public models matching a search query.
 
@@ -447,12 +448,12 @@ class ModelsResource(SyncAPIResource):
         """
         return self._get_api_list(
             "/models",
-            page=SyncCursorURLPage[object],
+            page=SyncCursorURLPage[ModelSearchResponse],
             body=maybe_transform(body, model_search_params.ModelSearchParams),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            model=object,
+            model=ModelSearchResponse,
             method="query",
         )
 
@@ -814,7 +815,7 @@ class AsyncModelsResource(AsyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> AsyncPaginator[object, AsyncCursorURLPage[object]]:
+    ) -> AsyncPaginator[ModelSearchResponse, AsyncCursorURLPage[ModelSearchResponse]]:
         """
         Get a list of public models matching a search query.
 
@@ -847,12 +848,12 @@ class AsyncModelsResource(AsyncAPIResource):
         """
         return self._get_api_list(
             "/models",
-            page=AsyncCursorURLPage[object],
+            page=AsyncCursorURLPage[ModelSearchResponse],
             body=maybe_transform(body, model_search_params.ModelSearchParams),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            model=object,
+            model=ModelSearchResponse,
             method="query",
         )
 
