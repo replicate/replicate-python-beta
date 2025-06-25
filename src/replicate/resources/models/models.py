@@ -414,7 +414,7 @@ class ModelsResource(SyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> object:
+    ) -> SyncCursorURLPage[object]:
         """
         Get a list of public models matching a search query.
 
@@ -445,13 +445,15 @@ class ModelsResource(SyncAPIResource):
 
           timeout: Override the client-level default timeout for this request, in seconds
         """
-        return self._query(
+        return self._get_api_list(
             "/models",
+            page=SyncCursorURLPage[object],
             body=maybe_transform(body, model_search_params.ModelSearchParams),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=object,
+            model=object,
+            method="query",
         )
 
 
@@ -802,7 +804,7 @@ class AsyncModelsResource(AsyncAPIResource):
             cast_to=ModelGetResponse,
         )
 
-    async def search(
+    def search(
         self,
         *,
         body: str,
@@ -812,7 +814,7 @@ class AsyncModelsResource(AsyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> object:
+    ) -> AsyncPaginator[object, AsyncCursorURLPage[object]]:
         """
         Get a list of public models matching a search query.
 
@@ -843,13 +845,15 @@ class AsyncModelsResource(AsyncAPIResource):
 
           timeout: Override the client-level default timeout for this request, in seconds
         """
-        return await self._query(
+        return self._get_api_list(
             "/models",
-            body=await async_maybe_transform(body, model_search_params.ModelSearchParams),
+            page=AsyncCursorURLPage[object],
+            body=maybe_transform(body, model_search_params.ModelSearchParams),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=object,
+            model=object,
+            method="query",
         )
 
 

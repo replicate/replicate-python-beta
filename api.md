@@ -70,7 +70,7 @@ Methods:
 - <code title="get /models">replicate.models.<a href="./src/replicate/resources/models/models.py">list</a>() -> <a href="./src/replicate/types/model_list_response.py">SyncCursorURLPage[ModelListResponse]</a></code>
 - <code title="delete /models/{model_owner}/{model_name}">replicate.models.<a href="./src/replicate/resources/models/models.py">delete</a>(\*, model_owner, model_name) -> None</code>
 - <code title="get /models/{model_owner}/{model_name}">replicate.models.<a href="./src/replicate/resources/models/models.py">get</a>(\*, model_owner, model_name) -> <a href="./src/replicate/types/model_get_response.py">ModelGetResponse</a></code>
-- <code title="query /models">replicate.models.<a href="./src/replicate/resources/models/models.py">search</a>(\*\*<a href="src/replicate/types/model_search_params.py">params</a>) -> object</code>
+- <code title="query /models">replicate.models.<a href="./src/replicate/resources/models/models.py">search</a>(\*\*<a href="src/replicate/types/model_search_params.py">params</a>) -> SyncCursorURLPage[object]</code>
 
 ## Examples
 

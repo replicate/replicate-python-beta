@@ -215,7 +215,7 @@ class TestModels:
         model = client.models.search(
             body="body",
         )
-        assert_matches_type(object, model, path=["response"])
+        assert_matches_type(SyncCursorURLPage[object], model, path=["response"])
 
     @pytest.mark.skip(reason="Prism doesn't support query methods yet")
     @parametrize
@@ -227,7 +227,7 @@ class TestModels:
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
         model = response.parse()
-        assert_matches_type(object, model, path=["response"])
+        assert_matches_type(SyncCursorURLPage[object], model, path=["response"])
 
     @pytest.mark.skip(reason="Prism doesn't support query methods yet")
     @parametrize
@@ -239,7 +239,7 @@ class TestModels:
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
             model = response.parse()
-            assert_matches_type(object, model, path=["response"])
+            assert_matches_type(SyncCursorURLPage[object], model, path=["response"])
 
         assert cast(Any, response.is_closed) is True
 
@@ -446,7 +446,7 @@ class TestAsyncModels:
         model = await async_client.models.search(
             body="body",
         )
-        assert_matches_type(object, model, path=["response"])
+        assert_matches_type(AsyncCursorURLPage[object], model, path=["response"])
 
     @pytest.mark.skip(reason="Prism doesn't support query methods yet")
     @parametrize
@@ -458,7 +458,7 @@ class TestAsyncModels:
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
         model = await response.parse()
-        assert_matches_type(object, model, path=["response"])
+        assert_matches_type(AsyncCursorURLPage[object], model, path=["response"])
 
     @pytest.mark.skip(reason="Prism doesn't support query methods yet")
     @parametrize
@@ -470,6 +470,6 @@ class TestAsyncModels:
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
             model = await response.parse()
-            assert_matches_type(object, model, path=["response"])
+            assert_matches_type(AsyncCursorURLPage[object], model, path=["response"])
 
         assert cast(Any, response.is_closed) is True
