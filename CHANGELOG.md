@@ -1,5 +1,26 @@
 # Changelog
 
+## 2.0.0-alpha.5 (2025-06-25)
+
+Full Changelog: [v2.0.0-alpha.4...v2.0.0-alpha.5](https://github.com/replicate/replicate-python-stainless/compare/v2.0.0-alpha.4...v2.0.0-alpha.5)
+
+### Features
+
+* **api:** api update ([6e667da](https://github.com/replicate/replicate-python-stainless/commit/6e667da6c2e80add847e612bbd08db1c865793d7))
+* **api:** api update ([0a187a9](https://github.com/replicate/replicate-python-stainless/commit/0a187a9ba906c0bc5c4e658883266276fc357665))
+* **api:** api update ([edb14b6](https://github.com/replicate/replicate-python-stainless/commit/edb14b65c61203c2e42a1accd384e7b456e33448))
+* **client:** add support for aiohttp ([c802a30](https://github.com/replicate/replicate-python-stainless/commit/c802a30a0569cb25eb700ff5501c5a87291ef4b0))
+
+
+### Chores
+
+* **tests:** skip some failing tests on the latest python versions ([d331b72](https://github.com/replicate/replicate-python-stainless/commit/d331b72364eaed6f935f9b23fdc776303ebf57a6))
+
+
+### Documentation
+
+* **client:** fix httpx.Timeout documentation reference ([d17c345](https://github.com/replicate/replicate-python-stainless/commit/d17c3454afaa0ae0b022f468515e8478e5ba6568))
+
 ## 2.0.0-alpha.4 (2025-06-18)
 
 Full Changelog: [v2.0.0-alpha.3...v2.0.0-alpha.4](https://github.com/replicate/replicate-python-stainless/compare/v2.0.0-alpha.3...v2.0.0-alpha.4)

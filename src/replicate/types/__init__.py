@@ -6,12 +6,14 @@ from .prediction import Prediction as Prediction
 from .file_get_response import FileGetResponse as FileGetResponse
 from .file_create_params import FileCreateParams as FileCreateParams
 from .file_list_response import FileListResponse as FileListResponse
+from .model_get_response import ModelGetResponse as ModelGetResponse
 from .model_create_params import ModelCreateParams as ModelCreateParams
 from .model_list_response import ModelListResponse as ModelListResponse
 from .model_search_params import ModelSearchParams as ModelSearchParams
 from .account_get_response import AccountGetResponse as AccountGetResponse
 from .file_create_response import FileCreateResponse as FileCreateResponse
 from .file_download_params import FileDownloadParams as FileDownloadParams
+from .model_search_response import ModelSearchResponse as ModelSearchResponse
 from .training_get_response import TrainingGetResponse as TrainingGetResponse
 from .hardware_list_response import HardwareListResponse as HardwareListResponse
 from .prediction_list_params import PredictionListParams as PredictionListParams

@@ -1,6 +1,6 @@
 [project]
 name = "replicate"
-version = "2.0.0-alpha.4"
+version = "2.0.0-alpha.5"
 description = "The official Python library for the replicate API"
 dynamic = ["readme"]
 license = "Apache-2.0"
@@ -37,6 +37,8 @@ classifiers = [
 Homepage = "https://github.com/replicate/replicate-python-stainless"
 Repository = "https://github.com/replicate/replicate-python-stainless"
 
+[project.optional-dependencies]
+aiohttp = ["aiohttp", "httpx_aiohttp>=0.1.6"]
 
 [tool.rye]
 managed = true
