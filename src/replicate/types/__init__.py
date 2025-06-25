@@ -6,6 +6,7 @@ from .prediction import Prediction as Prediction
 from .file_get_response import FileGetResponse as FileGetResponse
 from .file_create_params import FileCreateParams as FileCreateParams
 from .file_list_response import FileListResponse as FileListResponse
+from .model_get_response import ModelGetResponse as ModelGetResponse
 from .model_create_params import ModelCreateParams as ModelCreateParams
 from .model_list_response import ModelListResponse as ModelListResponse
 from .model_search_params import ModelSearchParams as ModelSearchParams
