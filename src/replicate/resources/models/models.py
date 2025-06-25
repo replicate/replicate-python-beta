@@ -51,6 +51,7 @@ from .predictions import (
 )
 from ...pagination import SyncCursorURLPage, AsyncCursorURLPage
 from ..._base_client import AsyncPaginator, make_request_options
+from ...types.model_get_response import ModelGetResponse
 from ...types.model_list_response import ModelListResponse
 
 __all__ = ["ModelsResource", "AsyncModelsResource"]
@@ -306,7 +307,7 @@ class ModelsResource(SyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> None:
+    ) -> ModelGetResponse:
         """
         Example cURL request:
 
@@ -395,13 +396,12 @@ class ModelsResource(SyncAPIResource):
             raise ValueError(f"Expected a non-empty value for `model_owner` but received {model_owner!r}")
         if not model_name:
             raise ValueError(f"Expected a non-empty value for `model_name` but received {model_name!r}")
-        extra_headers = {"Accept": "*/*", **(extra_headers or {})}
         return self._get(
             f"/models/{model_owner}/{model_name}",
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=NoneType,
+            cast_to=ModelGetResponse,
         )
 
     def search(
@@ -414,7 +414,7 @@ class ModelsResource(SyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> None:
+    ) -> object:
         """
         Get a list of public models matching a search query.
 
@@ -445,14 +445,13 @@ class ModelsResource(SyncAPIResource):
 
           timeout: Override the client-level default timeout for this request, in seconds
         """
-        extra_headers = {"Accept": "*/*", **(extra_headers or {})}
         return self._query(
             "/models",
             body=maybe_transform(body, model_search_params.ModelSearchParams),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=NoneType,
+            cast_to=object,
         )
 
 
@@ -706,7 +705,7 @@ class AsyncModelsResource(AsyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> None:
+    ) -> ModelGetResponse:
         """
         Example cURL request:
 
@@ -795,13 +794,12 @@ class AsyncModelsResource(AsyncAPIResource):
             raise ValueError(f"Expected a non-empty value for `model_owner` but received {model_owner!r}")
         if not model_name:
             raise ValueError(f"Expected a non-empty value for `model_name` but received {model_name!r}")
-        extra_headers = {"Accept": "*/*", **(extra_headers or {})}
         return await self._get(
             f"/models/{model_owner}/{model_name}",
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=NoneType,
+            cast_to=ModelGetResponse,
         )
 
     async def search(
@@ -814,7 +812,7 @@ class AsyncModelsResource(AsyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> None:
+    ) -> object:
         """
         Get a list of public models matching a search query.
 
@@ -845,14 +843,13 @@ class AsyncModelsResource(AsyncAPIResource):
 
           timeout: Override the client-level default timeout for this request, in seconds
         """
-        extra_headers = {"Accept": "*/*", **(extra_headers or {})}
         return await self._query(
             "/models",
             body=await async_maybe_transform(body, model_search_params.ModelSearchParams),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=NoneType,
+            cast_to=object,
         )
 
 
