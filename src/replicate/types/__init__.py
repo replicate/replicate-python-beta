@@ -13,6 +13,7 @@ from .model_search_params import ModelSearchParams as ModelSearchParams
 from .account_get_response import AccountGetResponse as AccountGetResponse
 from .file_create_response import FileCreateResponse as FileCreateResponse
 from .file_download_params import FileDownloadParams as FileDownloadParams
+from .model_search_response import ModelSearchResponse as ModelSearchResponse
 from .training_get_response import TrainingGetResponse as TrainingGetResponse
 from .hardware_list_response import HardwareListResponse as HardwareListResponse
 from .prediction_list_params import PredictionListParams as PredictionListParams
