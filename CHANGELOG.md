@@ -1,5 +1,13 @@
 # Changelog
 
+## 2.0.0-alpha.6 (2025-06-26)
+
+Full Changelog: [v2.0.0-alpha.5...v2.0.0-alpha.6](https://github.com/replicate/replicate-python-stainless/compare/v2.0.0-alpha.5...v2.0.0-alpha.6)
+
+### Bug Fixes
+
+* **ci:** release-doctor — report correct token name ([de5bf18](https://github.com/replicate/replicate-python-stainless/commit/de5bf1856b2aa7167d50b9a4b8e1057430981ba8))
+
 ## 2.0.0-alpha.5 (2025-06-25)
 
 Full Changelog: [v2.0.0-alpha.4...v2.0.0-alpha.5](https://github.com/replicate/replicate-python-stainless/compare/v2.0.0-alpha.4...v2.0.0-alpha.5)
