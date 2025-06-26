@@ -8,6 +8,9 @@ from typing import Any, cast
 import pytest
 
 from replicate import Replicate, AsyncReplicate
+from tests.utils import assert_matches_type
+from replicate.types import CollectionGetResponse, CollectionListResponse
+from replicate.pagination import SyncCursorURLPage, AsyncCursorURLPage
 
 base_url = os.environ.get("TEST_API_BASE_URL", "http://127.0.0.1:4010")
 
@@ -19,7 +22,7 @@ class TestCollections:
     @parametrize
     def test_method_list(self, client: Replicate) -> None:
         collection = client.collections.list()
-        assert collection is None
+        assert_matches_type(SyncCursorURLPage[CollectionListResponse], collection, path=["response"])
 
     @pytest.mark.skip()
     @parametrize
@@ -29,7 +32,7 @@ class TestCollections:
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
         collection = response.parse()
-        assert collection is None
+        assert_matches_type(SyncCursorURLPage[CollectionListResponse], collection, path=["response"])
 
     @pytest.mark.skip()
     @parametrize
@@ -39,7 +42,7 @@ class TestCollections:
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
             collection = response.parse()
-            assert collection is None
+            assert_matches_type(SyncCursorURLPage[CollectionListResponse], collection, path=["response"])
 
         assert cast(Any, response.is_closed) is True
 
@@ -49,7 +52,7 @@ class TestCollections:
         collection = client.collections.get(
             collection_slug="collection_slug",
         )
-        assert collection is None
+        assert_matches_type(CollectionGetResponse, collection, path=["response"])
 
     @pytest.mark.skip()
     @parametrize
@@ -61,7 +64,7 @@ class TestCollections:
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
         collection = response.parse()
-        assert collection is None
+        assert_matches_type(CollectionGetResponse, collection, path=["response"])
 
     @pytest.mark.skip()
     @parametrize
@@ -73,7 +76,7 @@ class TestCollections:
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
             collection = response.parse()
-            assert collection is None
+            assert_matches_type(CollectionGetResponse, collection, path=["response"])
 
         assert cast(Any, response.is_closed) is True
 
@@ -95,7 +98,7 @@ class TestAsyncCollections:
     @parametrize
     async def test_method_list(self, async_client: AsyncReplicate) -> None:
         collection = await async_client.collections.list()
-        assert collection is None
+        assert_matches_type(AsyncCursorURLPage[CollectionListResponse], collection, path=["response"])
 
     @pytest.mark.skip()
     @parametrize
@@ -105,7 +108,7 @@ class TestAsyncCollections:
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
         collection = await response.parse()
-        assert collection is None
+        assert_matches_type(AsyncCursorURLPage[CollectionListResponse], collection, path=["response"])
 
     @pytest.mark.skip()
     @parametrize
@@ -115,7 +118,7 @@ class TestAsyncCollections:
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
             collection = await response.parse()
-            assert collection is None
+            assert_matches_type(AsyncCursorURLPage[CollectionListResponse], collection, path=["response"])
 
         assert cast(Any, response.is_closed) is True
 
@@ -125,7 +128,7 @@ class TestAsyncCollections:
         collection = await async_client.collections.get(
             collection_slug="collection_slug",
         )
-        assert collection is None
+        assert_matches_type(CollectionGetResponse, collection, path=["response"])
 
     @pytest.mark.skip()
     @parametrize
@@ -137,7 +140,7 @@ class TestAsyncCollections:
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
         collection = await response.parse()
-        assert collection is None
+        assert_matches_type(CollectionGetResponse, collection, path=["response"])
 
     @pytest.mark.skip()
     @parametrize
@@ -149,7 +152,7 @@ class TestAsyncCollections:
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
             collection = await response.parse()
-            assert collection is None
+            assert_matches_type(CollectionGetResponse, collection, path=["response"])
 
         assert cast(Any, response.is_closed) is True
 

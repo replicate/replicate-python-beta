@@ -13,13 +13,16 @@ from .model_search_params import ModelSearchParams as ModelSearchParams
 from .account_get_response import AccountGetResponse as AccountGetResponse
 from .file_create_response import FileCreateResponse as FileCreateResponse
 from .file_download_params import FileDownloadParams as FileDownloadParams
+from .model_create_response import ModelCreateResponse as ModelCreateResponse
 from .model_search_response import ModelSearchResponse as ModelSearchResponse
 from .training_get_response import TrainingGetResponse as TrainingGetResponse
 from .hardware_list_response import HardwareListResponse as HardwareListResponse
 from .prediction_list_params import PredictionListParams as PredictionListParams
 from .training_create_params import TrainingCreateParams as TrainingCreateParams
 from .training_list_response import TrainingListResponse as TrainingListResponse
+from .collection_get_response import CollectionGetResponse as CollectionGetResponse
 from .deployment_get_response import DeploymentGetResponse as DeploymentGetResponse
+from .collection_list_response import CollectionListResponse as CollectionListResponse
 from .deployment_create_params import DeploymentCreateParams as DeploymentCreateParams
 from .deployment_list_response import DeploymentListResponse as DeploymentListResponse
 from .deployment_update_params import DeploymentUpdateParams as DeploymentUpdateParams
