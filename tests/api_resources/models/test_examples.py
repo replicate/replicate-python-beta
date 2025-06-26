@@ -8,6 +8,9 @@ from typing import Any, cast
 import pytest
 
 from replicate import Replicate, AsyncReplicate
+from tests.utils import assert_matches_type
+from replicate.types import Prediction
+from replicate.pagination import SyncCursorURLPage, AsyncCursorURLPage
 
 base_url = os.environ.get("TEST_API_BASE_URL", "http://127.0.0.1:4010")
 
@@ -22,7 +25,7 @@ class TestExamples:
             model_owner="model_owner",
             model_name="model_name",
         )
-        assert example is None
+        assert_matches_type(SyncCursorURLPage[Prediction], example, path=["response"])
 
     @pytest.mark.skip()
     @parametrize
@@ -35,7 +38,7 @@ class TestExamples:
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
         example = response.parse()
-        assert example is None
+        assert_matches_type(SyncCursorURLPage[Prediction], example, path=["response"])
 
     @pytest.mark.skip()
     @parametrize
@@ -48,7 +51,7 @@ class TestExamples:
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
             example = response.parse()
-            assert example is None
+            assert_matches_type(SyncCursorURLPage[Prediction], example, path=["response"])
 
         assert cast(Any, response.is_closed) is True
 
@@ -80,7 +83,7 @@ class TestAsyncExamples:
             model_owner="model_owner",
             model_name="model_name",
         )
-        assert example is None
+        assert_matches_type(AsyncCursorURLPage[Prediction], example, path=["response"])
 
     @pytest.mark.skip()
     @parametrize
@@ -93,7 +96,7 @@ class TestAsyncExamples:
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
         example = await response.parse()
-        assert example is None
+        assert_matches_type(AsyncCursorURLPage[Prediction], example, path=["response"])
 
     @pytest.mark.skip()
     @parametrize
@@ -106,7 +109,7 @@ class TestAsyncExamples:
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
             example = await response.parse()
-            assert example is None
+            assert_matches_type(AsyncCursorURLPage[Prediction], example, path=["response"])
 
         assert cast(Any, response.is_closed) is True
 
