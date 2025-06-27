@@ -12,6 +12,7 @@ from tests.utils import assert_matches_type
 from replicate.types import (
     ModelGetResponse,
     ModelListResponse,
+    ModelCreateResponse,
     ModelSearchResponse,
 )
 from replicate.pagination import SyncCursorURLPage, AsyncCursorURLPage
@@ -31,7 +32,7 @@ class TestModels:
             owner="alice",
             visibility="public",
         )
-        assert model is None
+        assert_matches_type(ModelCreateResponse, model, path=["response"])
 
     @pytest.mark.skip()
     @parametrize
@@ -47,7 +48,7 @@ class TestModels:
             license_url="license_url",
             paper_url="https://arxiv.org/abs/2504.17639",
         )
-        assert model is None
+        assert_matches_type(ModelCreateResponse, model, path=["response"])
 
     @pytest.mark.skip()
     @parametrize
@@ -62,7 +63,7 @@ class TestModels:
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
         model = response.parse()
-        assert model is None
+        assert_matches_type(ModelCreateResponse, model, path=["response"])
 
     @pytest.mark.skip()
     @parametrize
@@ -77,7 +78,7 @@ class TestModels:
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
             model = response.parse()
-            assert model is None
+            assert_matches_type(ModelCreateResponse, model, path=["response"])
 
         assert cast(Any, response.is_closed) is True
 
@@ -262,7 +263,7 @@ class TestAsyncModels:
             owner="alice",
             visibility="public",
         )
-        assert model is None
+        assert_matches_type(ModelCreateResponse, model, path=["response"])
 
     @pytest.mark.skip()
     @parametrize
@@ -278,7 +279,7 @@ class TestAsyncModels:
             license_url="license_url",
             paper_url="https://arxiv.org/abs/2504.17639",
         )
-        assert model is None
+        assert_matches_type(ModelCreateResponse, model, path=["response"])
 
     @pytest.mark.skip()
     @parametrize
@@ -293,7 +294,7 @@ class TestAsyncModels:
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
         model = await response.parse()
-        assert model is None
+        assert_matches_type(ModelCreateResponse, model, path=["response"])
 
     @pytest.mark.skip()
     @parametrize
@@ -308,7 +309,7 @@ class TestAsyncModels:
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
             model = await response.parse()
-            assert model is None
+            assert_matches_type(ModelCreateResponse, model, path=["response"])
 
         assert cast(Any, response.is_closed) is True
 

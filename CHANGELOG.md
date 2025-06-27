@@ -1,5 +1,13 @@
 # Changelog
 
+## 2.0.0-alpha.7 (2025-06-27)
+
+Full Changelog: [v2.0.0-alpha.6...v2.0.0-alpha.7](https://github.com/replicate/replicate-python-stainless/compare/v2.0.0-alpha.6...v2.0.0-alpha.7)
+
+### Features
+
+* **api:** api update ([b1c14c8](https://github.com/replicate/replicate-python-stainless/commit/b1c14c8291ca205930dafbf639ba5e7bf9939d3a))
+
 ## 2.0.0-alpha.6 (2025-06-26)
 
 Full Changelog: [v2.0.0-alpha.5...v2.0.0-alpha.6](https://github.com/replicate/replicate-python-stainless/compare/v2.0.0-alpha.5...v2.0.0-alpha.6)

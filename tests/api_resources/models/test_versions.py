@@ -8,6 +8,9 @@ from typing import Any, cast
 import pytest
 
 from replicate import Replicate, AsyncReplicate
+from tests.utils import assert_matches_type
+from replicate.pagination import SyncCursorURLPage, AsyncCursorURLPage
+from replicate.types.models import VersionGetResponse, VersionListResponse
 
 base_url = os.environ.get("TEST_API_BASE_URL", "http://127.0.0.1:4010")
 
@@ -22,7 +25,7 @@ class TestVersions:
             model_owner="model_owner",
             model_name="model_name",
         )
-        assert version is None
+        assert_matches_type(SyncCursorURLPage[VersionListResponse], version, path=["response"])
 
     @pytest.mark.skip()
     @parametrize
@@ -35,7 +38,7 @@ class TestVersions:
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
         version = response.parse()
-        assert version is None
+        assert_matches_type(SyncCursorURLPage[VersionListResponse], version, path=["response"])
 
     @pytest.mark.skip()
     @parametrize
@@ -48,7 +51,7 @@ class TestVersions:
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
             version = response.parse()
-            assert version is None
+            assert_matches_type(SyncCursorURLPage[VersionListResponse], version, path=["response"])
 
         assert cast(Any, response.is_closed) is True
 
@@ -139,7 +142,7 @@ class TestVersions:
             model_name="model_name",
             version_id="version_id",
         )
-        assert version is None
+        assert_matches_type(VersionGetResponse, version, path=["response"])
 
     @pytest.mark.skip()
     @parametrize
@@ -153,7 +156,7 @@ class TestVersions:
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
         version = response.parse()
-        assert version is None
+        assert_matches_type(VersionGetResponse, version, path=["response"])
 
     @pytest.mark.skip()
     @parametrize
@@ -167,7 +170,7 @@ class TestVersions:
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
             version = response.parse()
-            assert version is None
+            assert_matches_type(VersionGetResponse, version, path=["response"])
 
         assert cast(Any, response.is_closed) is True
 
@@ -208,7 +211,7 @@ class TestAsyncVersions:
             model_owner="model_owner",
             model_name="model_name",
         )
-        assert version is None
+        assert_matches_type(AsyncCursorURLPage[VersionListResponse], version, path=["response"])
 
     @pytest.mark.skip()
     @parametrize
@@ -221,7 +224,7 @@ class TestAsyncVersions:
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
         version = await response.parse()
-        assert version is None
+        assert_matches_type(AsyncCursorURLPage[VersionListResponse], version, path=["response"])
 
     @pytest.mark.skip()
     @parametrize
@@ -234,7 +237,7 @@ class TestAsyncVersions:
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
             version = await response.parse()
-            assert version is None
+            assert_matches_type(AsyncCursorURLPage[VersionListResponse], version, path=["response"])
 
         assert cast(Any, response.is_closed) is True
 
@@ -325,7 +328,7 @@ class TestAsyncVersions:
             model_name="model_name",
             version_id="version_id",
         )
-        assert version is None
+        assert_matches_type(VersionGetResponse, version, path=["response"])
 
     @pytest.mark.skip()
     @parametrize
@@ -339,7 +342,7 @@ class TestAsyncVersions:
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
         version = await response.parse()
-        assert version is None
+        assert_matches_type(VersionGetResponse, version, path=["response"])
 
     @pytest.mark.skip()
     @parametrize
@@ -353,7 +356,7 @@ class TestAsyncVersions:
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
             version = await response.parse()
-            assert version is None
+            assert_matches_type(VersionGetResponse, version, path=["response"])
 
         assert cast(Any, response.is_closed) is True
 

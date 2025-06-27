@@ -1,9 +1,15 @@
 # Collections
 
+Types:
+
+```python
+from replicate.types import CollectionListResponse, CollectionGetResponse
+```
+
 Methods:
 
-- <code title="get /collections">replicate.collections.<a href="./src/replicate/resources/collections.py">list</a>() -> None</code>
-- <code title="get /collections/{collection_slug}">replicate.collections.<a href="./src/replicate/resources/collections.py">get</a>(\*, collection_slug) -> None</code>
+- <code title="get /collections">replicate.collections.<a href="./src/replicate/resources/collections.py">list</a>() -> <a href="./src/replicate/types/collection_list_response.py">SyncCursorURLPage[CollectionListResponse]</a></code>
+- <code title="get /collections/{collection_slug}">replicate.collections.<a href="./src/replicate/resources/collections.py">get</a>(\*, collection_slug) -> <a href="./src/replicate/types/collection_get_response.py">CollectionGetResponse</a></code>
 
 # Deployments
 
@@ -61,12 +67,17 @@ Methods:
 Types:
 
 ```python
-from replicate.types import ModelListResponse, ModelGetResponse, ModelSearchResponse
+from replicate.types import (
+    ModelCreateResponse,
+    ModelListResponse,
+    ModelGetResponse,
+    ModelSearchResponse,
+)
 ```
 
 Methods:
 
-- <code title="post /models">replicate.models.<a href="./src/replicate/resources/models/models.py">create</a>(\*\*<a href="src/replicate/types/model_create_params.py">params</a>) -> None</code>
+- <code title="post /models">replicate.models.<a href="./src/replicate/resources/models/models.py">create</a>(\*\*<a href="src/replicate/types/model_create_params.py">params</a>) -> <a href="./src/replicate/types/model_create_response.py">ModelCreateResponse</a></code>
 - <code title="get /models">replicate.models.<a href="./src/replicate/resources/models/models.py">list</a>() -> <a href="./src/replicate/types/model_list_response.py">SyncCursorURLPage[ModelListResponse]</a></code>
 - <code title="delete /models/{model_owner}/{model_name}">replicate.models.<a href="./src/replicate/resources/models/models.py">delete</a>(\*, model_owner, model_name) -> None</code>
 - <code title="get /models/{model_owner}/{model_name}">replicate.models.<a href="./src/replicate/resources/models/models.py">get</a>(\*, model_owner, model_name) -> <a href="./src/replicate/types/model_get_response.py">ModelGetResponse</a></code>
@@ -76,7 +87,7 @@ Methods:
 
 Methods:
 
-- <code title="get /models/{model_owner}/{model_name}/examples">replicate.models.examples.<a href="./src/replicate/resources/models/examples.py">list</a>(\*, model_owner, model_name) -> None</code>
+- <code title="get /models/{model_owner}/{model_name}/examples">replicate.models.examples.<a href="./src/replicate/resources/models/examples.py">list</a>(\*, model_owner, model_name) -> <a href="./src/replicate/types/prediction.py">SyncCursorURLPage[Prediction]</a></code>
 
 ## Predictions
 
@@ -98,11 +109,17 @@ Methods:
 
 ## Versions
 
+Types:
+
+```python
+from replicate.types.models import VersionListResponse, VersionGetResponse
+```
+
 Methods:
 
-- <code title="get /models/{model_owner}/{model_name}/versions">replicate.models.versions.<a href="./src/replicate/resources/models/versions.py">list</a>(\*, model_owner, model_name) -> None</code>
+- <code title="get /models/{model_owner}/{model_name}/versions">replicate.models.versions.<a href="./src/replicate/resources/models/versions.py">list</a>(\*, model_owner, model_name) -> <a href="./src/replicate/types/models/version_list_response.py">SyncCursorURLPage[VersionListResponse]</a></code>
 - <code title="delete /models/{model_owner}/{model_name}/versions/{version_id}">replicate.models.versions.<a href="./src/replicate/resources/models/versions.py">delete</a>(\*, model_owner, model_name, version_id) -> None</code>
-- <code title="get /models/{model_owner}/{model_name}/versions/{version_id}">replicate.models.versions.<a href="./src/replicate/resources/models/versions.py">get</a>(\*, model_owner, model_name, version_id) -> None</code>
+- <code title="get /models/{model_owner}/{model_name}/versions/{version_id}">replicate.models.versions.<a href="./src/replicate/resources/models/versions.py">get</a>(\*, model_owner, model_name, version_id) -> <a href="./src/replicate/types/models/version_get_response.py">VersionGetResponse</a></code>
 
 # Predictions
 

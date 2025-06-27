@@ -53,6 +53,7 @@ from ...pagination import SyncCursorURLPage, AsyncCursorURLPage
 from ..._base_client import AsyncPaginator, make_request_options
 from ...types.model_get_response import ModelGetResponse
 from ...types.model_list_response import ModelListResponse
+from ...types.model_create_response import ModelCreateResponse
 from ...types.model_search_response import ModelSearchResponse
 
 __all__ = ["ModelsResource", "AsyncModelsResource"]
@@ -112,7 +113,7 @@ class ModelsResource(SyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> None:
+    ) -> ModelCreateResponse:
         """
         Create a model.
 
@@ -183,7 +184,6 @@ class ModelsResource(SyncAPIResource):
 
           timeout: Override the client-level default timeout for this request, in seconds
         """
-        extra_headers = {"Accept": "*/*", **(extra_headers or {})}
         return self._post(
             "/models",
             body=maybe_transform(
@@ -203,7 +203,7 @@ class ModelsResource(SyncAPIResource):
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=NoneType,
+            cast_to=ModelCreateResponse,
         )
 
     def list(
@@ -512,7 +512,7 @@ class AsyncModelsResource(AsyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> None:
+    ) -> ModelCreateResponse:
         """
         Create a model.
 
@@ -583,7 +583,6 @@ class AsyncModelsResource(AsyncAPIResource):
 
           timeout: Override the client-level default timeout for this request, in seconds
         """
-        extra_headers = {"Accept": "*/*", **(extra_headers or {})}
         return await self._post(
             "/models",
             body=await async_maybe_transform(
@@ -603,7 +602,7 @@ class AsyncModelsResource(AsyncAPIResource):
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=NoneType,
+            cast_to=ModelCreateResponse,
         )
 
     def list(

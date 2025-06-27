@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import httpx
 
-from .._types import NOT_GIVEN, Body, Query, Headers, NoneType, NotGiven
+from .._types import NOT_GIVEN, Body, Query, Headers, NotGiven
 from .._compat import cached_property
 from .._resource import SyncAPIResource, AsyncAPIResource
 from .._response import (
@@ -13,7 +13,10 @@ from .._response import (
     async_to_raw_response_wrapper,
     async_to_streamed_response_wrapper,
 )
-from .._base_client import make_request_options
+from ..pagination import SyncCursorURLPage, AsyncCursorURLPage
+from .._base_client import AsyncPaginator, make_request_options
+from ..types.collection_get_response import CollectionGetResponse
+from ..types.collection_list_response import CollectionListResponse
 
 __all__ = ["CollectionsResource", "AsyncCollectionsResource"]
 
@@ -47,7 +50,7 @@ class CollectionsResource(SyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> None:
+    ) -> SyncCursorURLPage[CollectionListResponse]:
         """
         Example cURL request:
 
@@ -73,13 +76,13 @@ class CollectionsResource(SyncAPIResource):
         }
         ```
         """
-        extra_headers = {"Accept": "*/*", **(extra_headers or {})}
-        return self._get(
+        return self._get_api_list(
             "/collections",
+            page=SyncCursorURLPage[CollectionListResponse],
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=NoneType,
+            model=CollectionListResponse,
         )
 
     def get(
@@ -92,7 +95,7 @@ class CollectionsResource(SyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> None:
+    ) -> CollectionGetResponse:
         """
         Example cURL request:
 
@@ -125,13 +128,12 @@ class CollectionsResource(SyncAPIResource):
         """
         if not collection_slug:
             raise ValueError(f"Expected a non-empty value for `collection_slug` but received {collection_slug!r}")
-        extra_headers = {"Accept": "*/*", **(extra_headers or {})}
         return self._get(
             f"/collections/{collection_slug}",
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=NoneType,
+            cast_to=CollectionGetResponse,
         )
 
 
@@ -155,7 +157,7 @@ class AsyncCollectionsResource(AsyncAPIResource):
         """
         return AsyncCollectionsResourceWithStreamingResponse(self)
 
-    async def list(
+    def list(
         self,
         *,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
@@ -164,7 +166,7 @@ class AsyncCollectionsResource(AsyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> None:
+    ) -> AsyncPaginator[CollectionListResponse, AsyncCursorURLPage[CollectionListResponse]]:
         """
         Example cURL request:
 
@@ -190,13 +192,13 @@ class AsyncCollectionsResource(AsyncAPIResource):
         }
         ```
         """
-        extra_headers = {"Accept": "*/*", **(extra_headers or {})}
-        return await self._get(
+        return self._get_api_list(
             "/collections",
+            page=AsyncCursorURLPage[CollectionListResponse],
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=NoneType,
+            model=CollectionListResponse,
         )
 
     async def get(
@@ -209,7 +211,7 @@ class AsyncCollectionsResource(AsyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> None:
+    ) -> CollectionGetResponse:
         """
         Example cURL request:
 
@@ -242,13 +244,12 @@ class AsyncCollectionsResource(AsyncAPIResource):
         """
         if not collection_slug:
             raise ValueError(f"Expected a non-empty value for `collection_slug` but received {collection_slug!r}")
-        extra_headers = {"Accept": "*/*", **(extra_headers or {})}
         return await self._get(
             f"/collections/{collection_slug}",
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=NoneType,
+            cast_to=CollectionGetResponse,
         )
 
 
