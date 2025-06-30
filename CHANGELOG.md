@@ -1,5 +1,18 @@
 # Changelog
 
+## 2.0.0-alpha.8 (2025-06-30)
+
+Full Changelog: [v2.0.0-alpha.7...v2.0.0-alpha.8](https://github.com/replicate/replicate-python-stainless/compare/v2.0.0-alpha.7...v2.0.0-alpha.8)
+
+### Bug Fixes
+
+* **ci:** correct conditional ([b21a288](https://github.com/replicate/replicate-python-stainless/commit/b21a288650ed46c6c2a72f5d4ff73ff66f81d371))
+
+
+### Chores
+
+* **ci:** only run for pushes and fork pull requests ([33e1f74](https://github.com/replicate/replicate-python-stainless/commit/33e1f74f9c15cbd9102f95045f37061ef9d15504))
+
 ## 2.0.0-alpha.7 (2025-06-27)
 
 Full Changelog: [v2.0.0-alpha.6...v2.0.0-alpha.7](https://github.com/replicate/replicate-python-stainless/compare/v2.0.0-alpha.6...v2.0.0-alpha.7)
