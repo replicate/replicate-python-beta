@@ -1,5 +1,13 @@
 # Changelog
 
+## 2.0.0-alpha.9 (2025-07-02)
+
+Full Changelog: [v2.0.0-alpha.8...v2.0.0-alpha.9](https://github.com/replicate/replicate-python-stainless/compare/v2.0.0-alpha.8...v2.0.0-alpha.9)
+
+### Chores
+
+* **ci:** change upload type ([a588db6](https://github.com/replicate/replicate-python-stainless/commit/a588db620505f606f72a325717c8b32d3cfc58fc))
+
 ## 2.0.0-alpha.8 (2025-06-30)
 
 Full Changelog: [v2.0.0-alpha.7...v2.0.0-alpha.8](https://github.com/replicate/replicate-python-stainless/compare/v2.0.0-alpha.7...v2.0.0-alpha.8)
