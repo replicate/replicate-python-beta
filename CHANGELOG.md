@@ -1,5 +1,13 @@
 # Changelog
 
+## 2.0.0-alpha.10 (2025-07-08)
+
+Full Changelog: [v2.0.0-alpha.9...v2.0.0-alpha.10](https://github.com/replicate/replicate-python-stainless/compare/v2.0.0-alpha.9...v2.0.0-alpha.10)
+
+### Chores
+
+* **internal:** codegen related update ([b31fdbb](https://github.com/replicate/replicate-python-stainless/commit/b31fdbb3ffa3c483c796be98a4206d794dea864b))
+
 ## 2.0.0-alpha.9 (2025-07-02)
 
 Full Changelog: [v2.0.0-alpha.8...v2.0.0-alpha.9](https://github.com/replicate/replicate-python-stainless/compare/v2.0.0-alpha.8...v2.0.0-alpha.9)
