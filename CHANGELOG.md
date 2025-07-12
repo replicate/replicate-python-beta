@@ -1,5 +1,21 @@
 # Changelog
 
+## 2.0.0-alpha.11 (2025-07-12)
+
+Full Changelog: [v2.0.0-alpha.10...v2.0.0-alpha.11](https://github.com/replicate/replicate-python-stainless/compare/v2.0.0-alpha.10...v2.0.0-alpha.11)
+
+### Bug Fixes
+
+* **client:** don't send Content-Type header on GET requests ([32d3401](https://github.com/replicate/replicate-python-stainless/commit/32d3401e0180ab91d7e8aba5959d15dae8640814))
+* **parsing:** correctly handle nested discriminated unions ([2aaaab1](https://github.com/replicate/replicate-python-stainless/commit/2aaaab1999f44d7ee8581cc7466e3be04360f4c7))
+
+
+### Chores
+
+* **internal:** bump pinned h11 dep ([c3101fc](https://github.com/replicate/replicate-python-stainless/commit/c3101fc57487b08ea55344b8eff1308bb92290cf))
+* **package:** mark python 3.13 as supported ([1263862](https://github.com/replicate/replicate-python-stainless/commit/1263862868ee1a2750eb8b66d6b2f76c0b6f753d))
+* **readme:** fix version rendering on pypi ([626518b](https://github.com/replicate/replicate-python-stainless/commit/626518b846fd2dcb02ca21e1054a8fd4f0849130))
+
 ## 2.0.0-alpha.10 (2025-07-08)
 
 Full Changelog: [v2.0.0-alpha.9...v2.0.0-alpha.10](https://github.com/replicate/replicate-python-stainless/compare/v2.0.0-alpha.9...v2.0.0-alpha.10)
