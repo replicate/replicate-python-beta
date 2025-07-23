@@ -1,5 +1,19 @@
 # Changelog
 
+## 2.0.0-alpha.12 (2025-07-23)
+
+Full Changelog: [v2.0.0-alpha.11...v2.0.0-alpha.12](https://github.com/replicate/replicate-python-stainless/compare/v2.0.0-alpha.11...v2.0.0-alpha.12)
+
+### Features
+
+* clean up environment call outs ([3f64d12](https://github.com/replicate/replicate-python-stainless/commit/3f64d12c61eb36be75b9b5044f0cc2e3b6d52658))
+
+
+### Bug Fixes
+
+* **parsing:** ignore empty metadata ([d54a686](https://github.com/replicate/replicate-python-stainless/commit/d54a68644ded46361180488d36ede3d2c1ee4723))
+* **parsing:** parse extra field types ([4fed49d](https://github.com/replicate/replicate-python-stainless/commit/4fed49d8cc6e6a68c59505141574470fb33221f1))
+
 ## 2.0.0-alpha.11 (2025-07-12)
 
 Full Changelog: [v2.0.0-alpha.10...v2.0.0-alpha.11](https://github.com/replicate/replicate-python-stainless/compare/v2.0.0-alpha.10...v2.0.0-alpha.11)
