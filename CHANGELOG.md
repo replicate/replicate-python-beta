@@ -1,5 +1,13 @@
 # Changelog
 
+## 2.0.0-alpha.13 (2025-07-25)
+
+Full Changelog: [v2.0.0-alpha.12...v2.0.0-alpha.13](https://github.com/replicate/replicate-python-stainless/compare/v2.0.0-alpha.12...v2.0.0-alpha.13)
+
+### Chores
+
+* **project:** add settings file for vscode ([739fe12](https://github.com/replicate/replicate-python-stainless/commit/739fe12a2486b1926efe171d086de63e1ee17029))
+
 ## 2.0.0-alpha.12 (2025-07-23)
 
 Full Changelog: [v2.0.0-alpha.11...v2.0.0-alpha.12](https://github.com/replicate/replicate-python-stainless/compare/v2.0.0-alpha.11...v2.0.0-alpha.12)
