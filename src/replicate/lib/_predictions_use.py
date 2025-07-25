@@ -197,36 +197,25 @@ def _dereference_schema(schema: Dict[str, Any]) -> Dict[str, Any]:
 T = TypeVar("T")
 
 
-class OutputIterator(Generic[T]):
+class SyncOutputIterator(Generic[T]):
     """
-    An iterator wrapper that handles both regular iteration and string conversion.
-    Supports both sync and async iteration patterns.
+    A synchronous iterator wrapper that handles both regular iteration and string conversion.
     """
 
     def __init__(
         self,
         iterator_factory: Callable[[], Iterator[T]],
-        async_iterator_factory: Callable[[], AsyncIterator[T]],
         schema: Dict[str, Any],
         *,
         is_concatenate: bool,
     ) -> None:
         self.iterator_factory = iterator_factory
-        self.async_iterator_factory = async_iterator_factory
         self.schema = schema
         self.is_concatenate = is_concatenate
 
     def __iter__(self) -> Iterator[T]:
         """Iterate over output items synchronously."""
         for chunk in self.iterator_factory():
-            if self.is_concatenate:
-                yield chunk
-            else:
-                yield _process_iterator_item(chunk, self.schema)
-
-    async def __aiter__(self) -> AsyncIterator[T]:
-        """Iterate over output items asynchronously."""
-        async for chunk in self.async_iterator_factory():
             if self.is_concatenate:
                 yield chunk
             else:
@@ -239,8 +228,33 @@ class OutputIterator(Generic[T]):
             return "".join([str(segment) for segment in self.iterator_factory()])
         return str(list(self.iterator_factory()))
 
+
+class AsyncOutputIterator(Generic[T]):
+    """
+    An asynchronous iterator wrapper that handles both regular iteration and string conversion.
+    """
+
+    def __init__(
+        self,
+        async_iterator_factory: Callable[[], AsyncIterator[T]],
+        schema: Dict[str, Any],
+        *,
+        is_concatenate: bool,
+    ) -> None:
+        self.async_iterator_factory = async_iterator_factory
+        self.schema = schema
+        self.is_concatenate = is_concatenate
+
+    async def __aiter__(self) -> AsyncIterator[T]:
+        """Iterate over output items asynchronously."""
+        async for chunk in self.async_iterator_factory():
+            if self.is_concatenate:
+                yield chunk
+            else:
+                yield _process_iterator_item(chunk, self.schema)
+
     def __await__(self) -> Generator[Any, None, Union[List[T], str]]:
-        """Make OutputIterator awaitable, returning appropriate result based on concatenate mode."""
+        """Make AsyncOutputIterator awaitable, returning appropriate result based on concatenate mode."""
 
         async def _collect_result() -> Union[List[T], str]:
             if self.is_concatenate:
@@ -329,10 +343,12 @@ class Run(Generic[O]):
     Represents a running prediction with access to the underlying schema.
     """
 
+    _client: Client
     _prediction: Prediction
     _schema: Dict[str, Any]
 
-    def __init__(self, *, prediction: Prediction, schema: Dict[str, Any], streaming: bool) -> None:
+    def __init__(self, *, client: Client, prediction: Prediction, schema: Dict[str, Any], streaming: bool) -> None:
+        self._client = client
         self._prediction = prediction
         self._schema = schema
         self._streaming = streaming
@@ -342,22 +358,21 @@ class Run(Generic[O]):
         Return the output. For iterator types, returns immediately without waiting.
         For non-iterator types, waits for completion.
         """
-        # Return an OutputIterator immediately when streaming, we do this for all
+        # Return a SyncOutputIterator immediately when streaming, we do this for all
         # model return types regardless of whether they return an iterator.
         if self._streaming:
             is_concatenate = _has_concatenate_iterator_output_type(self._schema)
             return cast(
                 O,
-                OutputIterator(
-                    self._prediction.output_iterator,
-                    self._prediction.async_output_iterator,
+                SyncOutputIterator(
+                    self._output_iterator,
                     self._schema,
                     is_concatenate=is_concatenate,
                 ),
             )
 
         # For non-streaming, wait for completion and process output
-        self._prediction.wait()
+        self._prediction = self._client.predictions.wait(prediction_id=self._prediction.id)
 
         if self._prediction.status == "failed":
             raise ModelError(self._prediction)
@@ -375,9 +390,35 @@ class Run(Generic[O]):
         """
         Fetch and return the logs from the prediction.
         """
-        self._prediction.reload()
+        self._prediction = self._client.predictions.get(prediction_id=self._prediction.id)
 
         return self._prediction.logs
+
+    def _output_iterator(self) -> Iterator[Any]:
+        """
+        Return an iterator of the prediction output.
+        """
+        if self._prediction.status in ["succeeded", "failed", "canceled"] and self._prediction.output is not None:
+            yield from self._prediction.output
+
+        # TODO: check output is list
+        previous_output = self._prediction.output or []
+        while self._prediction.status not in ["succeeded", "failed", "canceled"]:
+            output = self._prediction.output or []
+            new_output = output[len(previous_output) :]
+            yield from new_output
+            previous_output = output
+            import time
+
+            time.sleep(self._client.poll_interval)
+            self._prediction = self._client.predictions.get(prediction_id=self._prediction.id)
+
+        if self._prediction.status == "failed":
+            raise ModelError(self._prediction)
+
+        output = self._prediction.output or []
+        new_output = output[len(previous_output) :]
+        yield from new_output
 
 
 class Function(Generic[Input, Output]):
@@ -401,10 +442,10 @@ class Function(Generic[Input, Output]):
         """
         Start a prediction with the specified inputs.
         """
-        # Process inputs to convert concatenate OutputIterators to strings and URLPath to URLs
+        # Process inputs to convert concatenate SyncOutputIterators to strings and URLPath to URLs
         processed_inputs = {}
         for key, value in inputs.items():
-            if isinstance(value, OutputIterator):
+            if isinstance(value, SyncOutputIterator):
                 if value.is_concatenate:
                     processed_inputs[key] = str(value)
                 else:
@@ -428,6 +469,7 @@ class Function(Generic[Input, Output]):
             prediction = self._client.models.predictions.create(model=self._model, input=processed_inputs)
 
         return Run(
+            client=self._client,
             prediction=prediction,
             schema=self.openapi_schema(),
             streaming=self._streaming,
@@ -511,10 +553,12 @@ class AsyncRun(Generic[O]):
     Represents a running prediction with access to its version (async version).
     """
 
+    _client: AsyncClient
     _prediction: Prediction
     _schema: Dict[str, Any]
 
-    def __init__(self, *, prediction: Prediction, schema: Dict[str, Any], streaming: bool) -> None:
+    def __init__(self, *, client: AsyncClient, prediction: Prediction, schema: Dict[str, Any], streaming: bool) -> None:
+        self._client = client
         self._prediction = prediction
         self._schema = schema
         self._streaming = streaming
@@ -524,22 +568,21 @@ class AsyncRun(Generic[O]):
         Return the output. For iterator types, returns immediately without waiting.
         For non-iterator types, waits for completion.
         """
-        # Return an OutputIterator immediately when streaming, we do this for all
+        # Return an AsyncOutputIterator immediately when streaming, we do this for all
         # model return types regardless of whether they return an iterator.
         if self._streaming:
             is_concatenate = _has_concatenate_iterator_output_type(self._schema)
             return cast(
                 O,
-                OutputIterator(
-                    self._prediction.output_iterator,
-                    self._prediction.async_output_iterator,
+                AsyncOutputIterator(
+                    self._async_output_iterator,
                     self._schema,
                     is_concatenate=is_concatenate,
                 ),
             )
 
         # For non-streaming, wait for completion and process output
-        await self._prediction.async_wait()
+        self._prediction = await self._client.predictions.wait(prediction_id=self._prediction.id)
 
         if self._prediction.status == "failed":
             raise ModelError(self._prediction)
@@ -557,9 +600,38 @@ class AsyncRun(Generic[O]):
         """
         Fetch and return the logs from the prediction asynchronously.
         """
-        await self._prediction.async_reload()
+        self._prediction = await self._client.predictions.async_get(prediction_id=self._prediction.id)
 
         return self._prediction.logs
+
+    async def _async_output_iterator(self) -> AsyncIterator[Any]:
+        """
+        Return an asynchronous iterator of the prediction output.
+        """
+        if self._prediction.status in ["succeeded", "failed", "canceled"] and self._prediction.output is not None:
+            for item in self._prediction.output:
+                yield item
+
+        # TODO: check output is list
+        previous_output = self._prediction.output or []
+        while self._prediction.status not in ["succeeded", "failed", "canceled"]:
+            output = self._prediction.output or []
+            new_output = output[len(previous_output) :]
+            for item in new_output:
+                yield item
+            previous_output = output
+            import asyncio
+
+            await asyncio.sleep(self._client.poll_interval)
+            self._prediction = await self._client.predictions.async_get(prediction_id=self._prediction.id)
+
+        if self._prediction.status == "failed":
+            raise ModelError(self._prediction)
+
+        output = self._prediction.output or []
+        new_output = output[len(previous_output) :]
+        for item in new_output:
+            yield item
 
 
 class AsyncFunction(Generic[Input, Output]):
@@ -622,10 +694,10 @@ class AsyncFunction(Generic[Input, Output]):
         """
         Start a prediction with the specified inputs asynchronously.
         """
-        # Process inputs to convert concatenate OutputIterators to strings and URLPath to URLs
+        # Process inputs to convert concatenate AsyncOutputIterators to strings and URLPath to URLs
         processed_inputs = {}
         for key, value in inputs.items():
-            if isinstance(value, OutputIterator):
+            if isinstance(value, AsyncOutputIterator):
                 processed_inputs[key] = await value
             elif url := get_path_url(value):
                 processed_inputs[key] = url
@@ -649,6 +721,7 @@ class AsyncFunction(Generic[Input, Output]):
             )
 
         return AsyncRun(
+            client=self._client,
             prediction=prediction,
             schema=await self.openapi_schema(),
             streaming=self._streaming,
