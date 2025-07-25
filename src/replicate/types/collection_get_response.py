@@ -3,6 +3,8 @@
 from typing import List, Optional
 from typing_extensions import Literal
 
+from replicate.types.models.version_get_response import VersionGetResponse
+
 from .._models import BaseModel
 
 __all__ = ["CollectionGetResponse", "Model"]
@@ -21,7 +23,7 @@ class Model(BaseModel):
     github_url: Optional[str] = None
     """A URL for the model's source code on GitHub"""
 
-    latest_version: Optional[object] = None
+    latest_version: Optional[VersionGetResponse] = None
     """The model's latest version"""
 
     license_url: Optional[str] = None

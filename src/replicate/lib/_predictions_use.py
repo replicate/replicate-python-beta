@@ -417,7 +417,13 @@ class Function(Generic[Input, Output]):
         version = self._version
 
         if version:
-            prediction = self._client.predictions.create(version=version, input=processed_inputs)
+            if isinstance(version, VersionGetResponse):
+                version_id = version.id
+            elif isinstance(version, dict) and "id" in version:
+                version_id = version["id"]
+            else:
+                version_id = str(version)
+            prediction = self._client.predictions.create(version=version_id, input=processed_inputs)
         else:
             prediction = self._client.models.predictions.create(model=self._model, input=processed_inputs)
 
@@ -629,7 +635,13 @@ class AsyncFunction(Generic[Input, Output]):
         version = await self._version()
 
         if version:
-            prediction = await self._client.predictions.create(version=version, input=processed_inputs)
+            if isinstance(version, VersionGetResponse):
+                version_id = version.id
+            elif isinstance(version, dict) and "id" in version:
+                version_id = version["id"]
+            else:
+                version_id = str(version)
+            prediction = await self._client.predictions.create(version=version_id, input=processed_inputs)
         else:
             model = await self._model()
             prediction = await self._client.models.predictions.create(
