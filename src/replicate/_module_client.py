@@ -87,8 +87,13 @@ else:
     def _run(*args, **kwargs):
         return _load_client().run(*args, **kwargs)
 
-    def _use(*args, **kwargs):
-        return _load_client().use(*args, **kwargs)
+    def _use(ref, *, hint=None, streaming=False, use_async=False, **kwargs):
+        if use_async:
+            # For async, we need to use AsyncReplicate instead
+            from ._client import AsyncReplicate
+            client = AsyncReplicate()
+            return client.use(ref, hint=hint, streaming=streaming, **kwargs)
+        return _load_client().use(ref, hint=hint, streaming=streaming, **kwargs)
 
     run = _run
     use = _use

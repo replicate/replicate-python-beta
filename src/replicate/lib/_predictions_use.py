@@ -466,7 +466,10 @@ class Function(Generic[Input, Output]):
                 version_id = str(version)
             prediction = self._client.predictions.create(version=version_id, input=processed_inputs)
         else:
-            prediction = self._client.models.predictions.create(model=self._model, input=processed_inputs)
+            model = self._model
+            prediction = self._client.models.predictions.create(
+                model_owner=model.owner or "", model_name=model.name or "", input=processed_inputs
+            )
 
         return Run(
             client=self._client,
@@ -600,7 +603,7 @@ class AsyncRun(Generic[O]):
         """
         Fetch and return the logs from the prediction asynchronously.
         """
-        self._prediction = await self._client.predictions.async_get(prediction_id=self._prediction.id)
+        self._prediction = await self._client.predictions.get(prediction_id=self._prediction.id)
 
         return self._prediction.logs
 
@@ -623,7 +626,7 @@ class AsyncRun(Generic[O]):
             import asyncio
 
             await asyncio.sleep(self._client.poll_interval)
-            self._prediction = await self._client.predictions.async_get(prediction_id=self._prediction.id)
+            self._prediction = await self._client.predictions.get(prediction_id=self._prediction.id)
 
         if self._prediction.status == "failed":
             raise ModelError(self._prediction)
