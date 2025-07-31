@@ -43,6 +43,89 @@ we recommend using [python-dotenv](https://pypi.org/project/python-dotenv/)
 to add `REPLICATE_API_TOKEN="My Bearer Token"` to your `.env` file
 so that your Bearer Token is not stored in source control.
 
+## Run a model
+
+You can run a model synchronously using `replicate.run()`:
+
+```python
+import replicate
+
+output = replicate.run(
+    "black-forest-labs/flux-schnell", input={"prompt": "astronaut riding a rocket like a horse"}
+)
+print(output)
+```
+
+The `run()` method is a convenience function that creates a prediction, waits for it to complete, and returns the output. If you want more control over the prediction process, you can use the lower-level API methods.
+
+### Handling errors
+
+`replicate.run()` raises `ModelError` if the prediction fails. You can catch this exception to handle errors gracefully:
+
+```python
+import replicate
+from replicate.exceptions import ModelError
+
+try:
+    output = replicate.run(
+        "stability-ai/stable-diffusion-3", input={"prompt": "An astronaut riding a rainbow unicorn"}
+    )
+except ModelError as e:
+    print(f"Prediction failed: {e}")
+    # The prediction object is available as e.prediction
+    print(f"Prediction ID: {e.prediction.id}")
+    print(f"Status: {e.prediction.status}")
+```
+
+### File inputs
+
+To run a model that takes file inputs, you can pass either a URL to a publicly accessible file or a file handle:
+
+```python
+# Using a URL
+output = replicate.run(
+    "andreasjansson/blip-2:f677695e5e89f8b236e52ecd1d3f01beb44c34606419bcc19345e046d8f786f9",
+    input={"image": "https://example.com/image.jpg"},
+)
+
+# Using a local file
+with open("path/to/image.jpg", "rb") as f:
+    output = replicate.run(
+        "andreasjansson/blip-2:f677695e5e89f8b236e52ecd1d3f01beb44c34606419bcc19345e046d8f786f9",
+        input={"image": f},
+    )
+```
+
+### Wait parameter
+
+By default, `replicate.run()` will wait up to 60 seconds for the prediction to complete. You can configure this timeout:
+
+```python
+# Wait up to 30 seconds
+output = replicate.run("...", input={...}, wait=30)
+
+# Don't wait at all - returns immediately
+output = replicate.run("...", input={...}, wait=False)
+```
+
+When `wait=False`, the method returns immediately after creating the prediction, and you'll need to poll for the result manually.
+
+## Run a model and stream its output
+
+For models that support streaming (particularly language models), you can use `replicate.stream()`:
+
+```python
+import replicate
+
+for event in replicate.stream(
+    "meta/meta-llama-3-70b-instruct",
+    input={
+        "prompt": "Please write a haiku about llamas.",
+    },
+):
+    print(str(event), end="")
+```
+
 ## Async usage
 
 Simply import `AsyncReplicate` instead of `Replicate` and use `await` with each API call:
@@ -68,6 +151,34 @@ asyncio.run(main())
 ```
 
 Functionality between the synchronous and asynchronous clients is otherwise identical.
+
+### Async run() and stream()
+
+The async client also supports `run()` and `stream()` methods:
+
+```python
+import asyncio
+from replicate import AsyncReplicate
+
+replicate = AsyncReplicate()
+
+
+async def main():
+    # Run a model
+    output = await replicate.run(
+        "black-forest-labs/flux-schnell", input={"prompt": "astronaut riding a rocket like a horse"}
+    )
+    print(output)
+
+    # Stream a model's output
+    async for event in replicate.stream(
+        "meta/meta-llama-3-70b-instruct", input={"prompt": "Write a haiku about coding"}
+    ):
+        print(str(event), end="")
+
+
+asyncio.run(main())
+```
 
 ### With aiohttp
 
