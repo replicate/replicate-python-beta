@@ -77,16 +77,27 @@ class PredictionsResourceProxy(LazyProxy["PredictionsResource"]):
 if TYPE_CHECKING:
     from ._client import Replicate
 
-    # get the type checker to infer the run symbol to the same type
+    # get the type checker to infer the run and use symbols to the same type
     # as the method on the client so we don't have to define it twice
     __client: Replicate = cast(Replicate, {})
     run = __client.run
+    use = __client.use
 else:
 
     def _run(*args, **kwargs):
         return _load_client().run(*args, **kwargs)
 
+    def _use(ref, *, hint=None, streaming=False, use_async=False, **kwargs):
+        if use_async:
+            # For async, we need to use AsyncReplicate instead
+            from ._client import AsyncReplicate
+
+            client = AsyncReplicate()
+            return client.use(ref, hint=hint, streaming=streaming, **kwargs)
+        return _load_client().use(ref, hint=hint, streaming=streaming, **kwargs)
+
     run = _run
+    use = _use
 
 files: FilesResource = FilesResourceProxy().__as_proxied__()
 models: ModelsResource = ModelsResourceProxy().__as_proxied__()

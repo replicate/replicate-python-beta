@@ -3,13 +3,25 @@
 from __future__ import annotations
 
 import os
-from typing import TYPE_CHECKING, Any, Union, Mapping, Optional
-from typing_extensions import Self, Unpack, override
+from typing import (
+    TYPE_CHECKING,
+    Any,
+    Union,
+    Literal,
+    Mapping,
+    TypeVar,
+    Callable,
+    Iterator,
+    Optional,
+    AsyncIterator,
+    overload,
+)
+from typing_extensions import Self, Unpack, ParamSpec, override
 
 import httpx
 
 from replicate.lib._files import FileEncodingStrategy
-from replicate.lib._predictions import Model, Version, ModelVersionIdentifier
+from replicate.lib._predictions_run import Model, Version, ModelVersionIdentifier
 from replicate.types.prediction_create_params import PredictionCreateParamsWithoutVersion
 
 from . import _exceptions
@@ -45,6 +57,12 @@ if TYPE_CHECKING:
     from .resources.models.models import ModelsResource, AsyncModelsResource
     from .resources.webhooks.webhooks import WebhooksResource, AsyncWebhooksResource
     from .resources.deployments.deployments import DeploymentsResource, AsyncDeploymentsResource
+
+if TYPE_CHECKING:
+    from .lib._predictions_use import Function, FunctionRef, AsyncFunction
+
+Input = ParamSpec("Input")
+Output = TypeVar("Output")
 
 __all__ = [
     "Timeout",
@@ -236,7 +254,7 @@ class Replicate(SyncAPIClient):
             ValueError: If the reference format is invalid
             TypeError: If both wait and prefer parameters are provided
         """
-        from .lib._predictions import run
+        from .lib._predictions_run import run
 
         return run(
             self,
@@ -246,6 +264,43 @@ class Replicate(SyncAPIClient):
             file_encoding_strategy=file_encoding_strategy,
             **params,
         )
+
+    @overload
+    def use(
+        self,
+        ref: Union[str, "FunctionRef[Input, Output]"],
+        *,
+        hint: Optional[Callable["Input", "Output"]] = None,
+        streaming: Literal[False] = False,
+    ) -> "Function[Input, Output]": ...
+
+    @overload
+    def use(
+        self,
+        ref: Union[str, "FunctionRef[Input, Output]"],
+        *,
+        hint: Optional[Callable["Input", "Output"]] = None,
+        streaming: Literal[True],
+    ) -> "Function[Input, Iterator[Output]]": ...
+
+    def use(
+        self,
+        ref: Union[str, "FunctionRef[Input, Output]"],
+        *,
+        hint: Optional[Callable["Input", "Output"]] = None,
+        streaming: bool = False,
+    ) -> Union["Function[Input, Output]", "Function[Input, Iterator[Output]]"]:
+        """
+        Use a Replicate model as a function.
+
+        Example:
+            flux_dev = replicate.use("black-forest-labs/flux-dev")
+            output = flux_dev(prompt="make me a sandwich")
+        """
+        from .lib._predictions_use import use as _use
+
+        # TODO: Fix mypy overload matching for streaming parameter
+        return _use(self, ref, hint=hint, streaming=streaming)  # type: ignore[call-overload, no-any-return]
 
     def copy(
         self,
@@ -510,7 +565,7 @@ class AsyncReplicate(AsyncAPIClient):
             ValueError: If the reference format is invalid
             TypeError: If both wait and prefer parameters are provided
         """
-        from .lib._predictions import async_run
+        from .lib._predictions_run import async_run
 
         return await async_run(
             self,
@@ -520,6 +575,43 @@ class AsyncReplicate(AsyncAPIClient):
             file_encoding_strategy=file_encoding_strategy,
             **params,
         )
+
+    @overload
+    def use(
+        self,
+        ref: Union[str, "FunctionRef[Input, Output]"],
+        *,
+        hint: Optional[Callable["Input", "Output"]] = None,
+        streaming: Literal[False] = False,
+    ) -> "AsyncFunction[Input, Output]": ...
+
+    @overload
+    def use(
+        self,
+        ref: Union[str, "FunctionRef[Input, Output]"],
+        *,
+        hint: Optional[Callable["Input", "Output"]] = None,
+        streaming: Literal[True],
+    ) -> "AsyncFunction[Input, AsyncIterator[Output]]": ...
+
+    def use(
+        self,
+        ref: Union[str, "FunctionRef[Input, Output]"],
+        *,
+        hint: Optional[Callable["Input", "Output"]] = None,
+        streaming: bool = False,
+    ) -> Union["AsyncFunction[Input, Output]", "AsyncFunction[Input, AsyncIterator[Output]]"]:
+        """
+        Use a Replicate model as an async function.
+
+        Example:
+            flux_dev = replicate.use("black-forest-labs/flux-dev", use_async=True)
+            output = await flux_dev(prompt="make me a sandwich")
+        """
+        from .lib._predictions_use import use as _use
+
+        # TODO: Fix mypy overload matching for streaming parameter
+        return _use(self, ref, hint=hint, streaming=streaming)  # type: ignore[call-overload, no-any-return]
 
     def copy(
         self,

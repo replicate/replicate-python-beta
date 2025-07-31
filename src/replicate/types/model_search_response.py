@@ -4,6 +4,7 @@ from typing import Optional
 from typing_extensions import Literal
 
 from .._models import BaseModel
+from .models.version_get_response import VersionGetResponse
 
 __all__ = ["ModelSearchResponse"]
 
@@ -21,7 +22,7 @@ class ModelSearchResponse(BaseModel):
     github_url: Optional[str] = None
     """A URL for the model's source code on GitHub"""
 
-    latest_version: Optional[object] = None
+    latest_version: Optional[VersionGetResponse] = None
     """The model's latest version"""
 
     license_url: Optional[str] = None
