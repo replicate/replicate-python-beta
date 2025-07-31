@@ -1,5 +1,22 @@
 # Changelog
 
+## 2.0.0-alpha.14 (2025-07-31)
+
+Full Changelog: [v2.0.0-alpha.13...v2.0.0-alpha.14](https://github.com/replicate/replicate-python-stainless/compare/v2.0.0-alpha.13...v2.0.0-alpha.14)
+
+### Features
+
+* add replicate.use() ([a7b12dd](https://github.com/replicate/replicate-python-stainless/commit/a7b12dd4bcd3a6292b6b06a59047994e408dad59))
+* **client:** support file upload requests ([756cad1](https://github.com/replicate/replicate-python-stainless/commit/756cad11209fa5d3661cb6fb5636660255ca7fbe))
+
+
+### Chores
+
+* **docs:** document replicate.run() ([681772d](https://github.com/replicate/replicate-python-stainless/commit/681772de2e0dca70018db9cefafe37277ad0c014))
+* **docs:** document replicate.use() ([b47c9bd](https://github.com/replicate/replicate-python-stainless/commit/b47c9bd42e1d390ca4a652247b1b65a936529017))
+* make the linter happy ([70c1af2](https://github.com/replicate/replicate-python-stainless/commit/70c1af25352ce7033fb834620a48b8aff275ad65))
+* make the mypy happy ([24ddc92](https://github.com/replicate/replicate-python-stainless/commit/24ddc922c5ab2e446fc090f5b5f60b1689712a77))
+
 ## 2.0.0-alpha.13 (2025-07-25)
 
 Full Changelog: [v2.0.0-alpha.12...v2.0.0-alpha.13](https://github.com/replicate/replicate-python-stainless/compare/v2.0.0-alpha.12...v2.0.0-alpha.13)
