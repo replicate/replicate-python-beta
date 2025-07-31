@@ -91,6 +91,7 @@ else:
         if use_async:
             # For async, we need to use AsyncReplicate instead
             from ._client import AsyncReplicate
+
             client = AsyncReplicate()
             return client.use(ref, hint=hint, streaming=streaming, **kwargs)
         return _load_client().use(ref, hint=hint, streaming=streaming, **kwargs)

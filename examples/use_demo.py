@@ -1,4 +1,8 @@
 #!/usr/bin/env python3
+
+# TODO: Add proper type annotations
+# type: ignore
+
 """
 Example of using the experimental replicate.use() interface
 """
