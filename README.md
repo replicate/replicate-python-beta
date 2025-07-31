@@ -436,6 +436,137 @@ with Replicate() as replicate:
 # HTTP client is now closed
 ```
 
+## Experimental: Using `replicate.use()`
+
+> [!WARNING]
+> The `replicate.use()` interface is experimental and subject to change. We welcome your feedback on this new API design.
+
+The `use()` method provides a more concise way to call Replicate models as functions. This experimental interface offers a more pythonic approach to running models:
+
+```python
+import replicate
+
+# Create a model function
+flux_dev = replicate.use("black-forest-labs/flux-dev")
+
+# Call it like a regular Python function
+outputs = flux_dev(
+    prompt="a cat wearing a wizard hat, digital art",
+    num_outputs=1,
+    aspect_ratio="1:1",
+    output_format="webp",
+)
+
+# outputs is a list of URLPath objects that auto-download when accessed
+for output in outputs:
+    print(output)  # e.g., Path(/tmp/a1b2c3/output.webp)
+```
+
+### Language models with streaming
+
+Many models, particularly language models, support streaming output. Use the `streaming=True` parameter to get results as they're generated:
+
+```python
+import replicate
+
+# Create a streaming language model function
+llama = replicate.use("meta/meta-llama-3-8b-instruct", streaming=True)
+
+# Stream the output
+output = llama(prompt="Write a haiku about Python programming", max_tokens=50)
+
+for chunk in output:
+    print(chunk, end="", flush=True)
+```
+
+### Chaining models
+
+You can easily chain models together by passing the output of one model as input to another:
+
+```python
+import replicate
+
+# Create two model functions
+flux_dev = replicate.use("black-forest-labs/flux-dev")
+llama = replicate.use("meta/meta-llama-3-8b-instruct")
+
+# Generate an image
+images = flux_dev(prompt="a mysterious ancient artifact")
+
+# Describe the image
+description = llama(
+    prompt="Describe this image in detail",
+    image=images[0],  # Pass the first image directly
+)
+
+print(description)
+```
+
+### Async support
+
+For async/await patterns, use the `use_async=True` parameter:
+
+```python
+import asyncio
+import replicate
+
+
+async def main():
+    # Create an async model function
+    flux_dev = replicate.use("black-forest-labs/flux-dev", use_async=True)
+
+    # Await the result
+    outputs = await flux_dev(prompt="futuristic city at sunset")
+
+    for output in outputs:
+        print(output)
+
+
+asyncio.run(main())
+```
+
+### Accessing URLs without downloading
+
+If you need the URL without downloading the file, use the `get_path_url()` helper:
+
+```python
+import replicate
+from replicate.lib._predictions_use import get_path_url
+
+flux_dev = replicate.use("black-forest-labs/flux-dev")
+outputs = flux_dev(prompt="a serene landscape")
+
+for output in outputs:
+    url = get_path_url(output)
+    print(f"URL: {url}")  # https://replicate.delivery/...
+```
+
+### Creating predictions without waiting
+
+To create a prediction without waiting for it to complete, use the `create()` method:
+
+```python
+import replicate
+
+llama = replicate.use("meta/meta-llama-3-8b-instruct")
+
+# Start the prediction
+run = llama.create(prompt="Explain quantum computing")
+
+# Check logs while it's running
+print(run.logs())
+
+# Get the output when ready
+result = run.output()
+print(result)
+```
+
+### Current limitations
+
+- The `use()` method must be called at the module level (not inside functions or classes)
+- Type hints are limited compared to the standard client interface
+- This is an experimental API and may change in future releases
+
 ## Versioning
 
 This package generally follows [SemVer](https://semver.org/spec/v2.0.0.html) conventions, though certain backwards-incompatible changes may be released as minor versions:
