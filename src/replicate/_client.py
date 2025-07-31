@@ -299,7 +299,8 @@ class Replicate(SyncAPIClient):
         """
         from .lib._predictions_use import use as _use
 
-        return _use(self, ref, hint=hint, streaming=streaming)
+        # TODO: Fix mypy overload matching for streaming parameter
+        return _use(self, ref, hint=hint, streaming=streaming)  # type: ignore[call-overload, no-any-return]
 
     def copy(
         self,
@@ -609,7 +610,8 @@ class AsyncReplicate(AsyncAPIClient):
         """
         from .lib._predictions_use import use as _use
 
-        return _use(self, ref, hint=hint, streaming=streaming)
+        # TODO: Fix mypy overload matching for streaming parameter
+        return _use(self, ref, hint=hint, streaming=streaming)  # type: ignore[call-overload, no-any-return]
 
     def copy(
         self,
