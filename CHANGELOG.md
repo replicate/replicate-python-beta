@@ -1,5 +1,14 @@
 # Changelog
 
+## 2.0.0-alpha.15 (2025-08-06)
+
+Full Changelog: [v2.0.0-alpha.14...v2.0.0-alpha.15](https://github.com/replicate/replicate-python-stainless/compare/v2.0.0-alpha.14...v2.0.0-alpha.15)
+
+### Chores
+
+* **internal:** fix ruff target version ([16c78dc](https://github.com/replicate/replicate-python-stainless/commit/16c78dc5837a91f73f28d8a4d153056587df7090))
+* update OpenAPI spec and rebuild SDKs ([fdca0c4](https://github.com/replicate/replicate-python-stainless/commit/fdca0c40e9a8009afe764ec39056d50fb43639f8))
+
 ## 2.0.0-alpha.14 (2025-07-31)
 
 Full Changelog: [v2.0.0-alpha.13...v2.0.0-alpha.14](https://github.com/replicate/replicate-python-stainless/compare/v2.0.0-alpha.13...v2.0.0-alpha.14)
