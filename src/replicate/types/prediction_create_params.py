@@ -35,7 +35,7 @@ class PredictionCreateParamsWithoutVersion(TypedDict, total=False):
     - you don't want to upload and host the file somewhere
     - you don't need to use the file again (Replicate will not store it)
     """
-
+    
     stream: bool
     """**This field is deprecated.**
 
@@ -95,4 +95,17 @@ class PredictionCreateParamsWithoutVersion(TypedDict, total=False):
 
 class PredictionCreateParams(PredictionCreateParamsWithoutVersion):
     version: Required[str]
-    """The ID of the model version that you want to run."""
+    """The identifier for the model or model version that you want to run.
+
+    This can be specified in a few different formats:
+
+    - `{owner_name}/{model_name}` - Use this format for
+      [official models](https://replicate.com/docs/topics/models/official-models).
+      For example, `black-forest-labs/flux-schnell`. For all other models, the
+      specific version is required.
+    - `{owner_name}/{model_name}:{version_id}` - The owner and model name, plus the
+      full 64-character version ID. For example,
+      `replicate/hello-world:9dcd6d78e7c6560c340d916fe32e9f24aabfa331e5cce95fe31f77fb03121426`.
+    - `{version_id}` - Just the 64-character version ID. For example,
+      `9dcd6d78e7c6560c340d916fe32e9f24aabfa331e5cce95fe31f77fb03121426`
+    """
