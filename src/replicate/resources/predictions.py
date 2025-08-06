@@ -78,10 +78,6 @@ class PredictionsResource(SyncAPIResource):
         """
         Create a prediction for the model version and inputs you provide.
 
-        If you're running an
-        [official model](https://replicate.com/collections/official), use the
-        [`models.predictions.create`](#models.predictions.create) operation instead.
-
         Example cURL request:
 
         ```console
@@ -123,14 +119,18 @@ class PredictionsResource(SyncAPIResource):
               - you don't want to upload and host the file somewhere
               - you don't need to use the file again (Replicate will not store it)
 
-          version: The ID of the model version that you want to run. This can be specified in two
-              formats:
+          version: The identifier for the model or model version that you want to run. This can be
+              specified in a few different formats:
 
-              1. Just the 64-character version ID:
-                 `9dcd6d78e7c6560c340d916fe32e9f24aabfa331e5cce95fe31f77fb03121426`
-              2. Full model identifier with version ID in the format `{owner}/{model}:{id}`.
-                 For example,
-                 `replicate/hello-world:9dcd6d78e7c6560c340d916fe32e9f24aabfa331e5cce95fe31f77fb03121426`
+              - `{owner_name}/{model_name}` - Use this format for
+                [official models](https://replicate.com/docs/topics/models/official-models).
+                For example, `black-forest-labs/flux-schnell`. For all other models, the
+                specific version is required.
+              - `{owner_name}/{model_name}:{version_id}` - The owner and model name, plus the
+                full 64-character version ID. For example,
+                `replicate/hello-world:9dcd6d78e7c6560c340d916fe32e9f24aabfa331e5cce95fe31f77fb03121426`.
+              - `{version_id}` - Just the 64-character version ID. For example,
+                `9dcd6d78e7c6560c340d916fe32e9f24aabfa331e5cce95fe31f77fb03121426`
 
           stream: **This field is deprecated.**
 
@@ -529,10 +529,6 @@ class AsyncPredictionsResource(AsyncAPIResource):
         """
         Create a prediction for the model version and inputs you provide.
 
-        If you're running an
-        [official model](https://replicate.com/collections/official), use the
-        [`models.predictions.create`](#models.predictions.create) operation instead.
-
         Example cURL request:
 
         ```console
@@ -574,14 +570,18 @@ class AsyncPredictionsResource(AsyncAPIResource):
               - you don't want to upload and host the file somewhere
               - you don't need to use the file again (Replicate will not store it)
 
-          version: The ID of the model version that you want to run. This can be specified in two
-              formats:
+          version: The identifier for the model or model version that you want to run. This can be
+              specified in a few different formats:
 
-              1. Just the 64-character version ID:
-                 `9dcd6d78e7c6560c340d916fe32e9f24aabfa331e5cce95fe31f77fb03121426`
-              2. Full model identifier with version ID in the format `{owner}/{model}:{id}`.
-                 For example,
-                 `replicate/hello-world:9dcd6d78e7c6560c340d916fe32e9f24aabfa331e5cce95fe31f77fb03121426`
+              - `{owner_name}/{model_name}` - Use this format for
+                [official models](https://replicate.com/docs/topics/models/official-models).
+                For example, `black-forest-labs/flux-schnell`. For all other models, the
+                specific version is required.
+              - `{owner_name}/{model_name}:{version_id}` - The owner and model name, plus the
+                full 64-character version ID. For example,
+                `replicate/hello-world:9dcd6d78e7c6560c340d916fe32e9f24aabfa331e5cce95fe31f77fb03121426`.
+              - `{version_id}` - Just the 64-character version ID. For example,
+                `9dcd6d78e7c6560c340d916fe32e9f24aabfa331e5cce95fe31f77fb03121426`
 
           stream: **This field is deprecated.**
 
