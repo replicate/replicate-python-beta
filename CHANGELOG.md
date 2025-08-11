@@ -1,5 +1,13 @@
 # Changelog
 
+## 2.0.0-alpha.16 (2025-08-09)
+
+Full Changelog: [v2.0.0-alpha.15...v2.0.0-alpha.16](https://github.com/replicate/replicate-python-stainless/compare/v2.0.0-alpha.15...v2.0.0-alpha.16)
+
+### Chores
+
+* update @stainless-api/prism-cli to v5.15.0 ([6fb0043](https://github.com/replicate/replicate-python-stainless/commit/6fb00432b7b91e8f8e0887e066b3cc5a55a4934b))
+
 ## 2.0.0-alpha.15 (2025-08-06)
 
 Full Changelog: [v2.0.0-alpha.14...v2.0.0-alpha.15](https://github.com/replicate/replicate-python-stainless/compare/v2.0.0-alpha.14...v2.0.0-alpha.15)
