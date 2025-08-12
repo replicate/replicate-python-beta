@@ -30,7 +30,7 @@ base_url = os.environ.get("TEST_API_BASE_URL", "http://127.0.0.1:4010")
 class TestFiles:
     parametrize = pytest.mark.parametrize("client", [False, True], indirect=True, ids=["loose", "strict"])
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     def test_method_create(self, client: Replicate) -> None:
         file = client.files.create(
@@ -38,7 +38,7 @@ class TestFiles:
         )
         assert_matches_type(FileCreateResponse, file, path=["response"])
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     def test_method_create_with_all_params(self, client: Replicate) -> None:
         file = client.files.create(
@@ -49,7 +49,7 @@ class TestFiles:
         )
         assert_matches_type(FileCreateResponse, file, path=["response"])
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     def test_raw_response_create(self, client: Replicate) -> None:
         response = client.files.with_raw_response.create(
@@ -61,7 +61,7 @@ class TestFiles:
         file = response.parse()
         assert_matches_type(FileCreateResponse, file, path=["response"])
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     def test_streaming_response_create(self, client: Replicate) -> None:
         with client.files.with_streaming_response.create(
@@ -75,13 +75,13 @@ class TestFiles:
 
         assert cast(Any, response.is_closed) is True
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     def test_method_list(self, client: Replicate) -> None:
         file = client.files.list()
         assert_matches_type(SyncCursorURLPage[FileListResponse], file, path=["response"])
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     def test_raw_response_list(self, client: Replicate) -> None:
         response = client.files.with_raw_response.list()
@@ -91,7 +91,7 @@ class TestFiles:
         file = response.parse()
         assert_matches_type(SyncCursorURLPage[FileListResponse], file, path=["response"])
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     def test_streaming_response_list(self, client: Replicate) -> None:
         with client.files.with_streaming_response.list() as response:
@@ -103,7 +103,7 @@ class TestFiles:
 
         assert cast(Any, response.is_closed) is True
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     def test_method_delete(self, client: Replicate) -> None:
         file = client.files.delete(
@@ -111,7 +111,7 @@ class TestFiles:
         )
         assert file is None
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     def test_raw_response_delete(self, client: Replicate) -> None:
         response = client.files.with_raw_response.delete(
@@ -123,7 +123,7 @@ class TestFiles:
         file = response.parse()
         assert file is None
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     def test_streaming_response_delete(self, client: Replicate) -> None:
         with client.files.with_streaming_response.delete(
@@ -137,7 +137,7 @@ class TestFiles:
 
         assert cast(Any, response.is_closed) is True
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     def test_path_params_delete(self, client: Replicate) -> None:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `file_id` but received ''"):
@@ -145,7 +145,6 @@ class TestFiles:
                 file_id="",
             )
 
-    @pytest.mark.skip()
     @parametrize
     @pytest.mark.respx(base_url=base_url)
     def test_method_download(self, client: Replicate, respx_mock: MockRouter) -> None:
@@ -161,7 +160,6 @@ class TestFiles:
         assert cast(Any, file.is_closed) is True
         assert isinstance(file, BinaryAPIResponse)
 
-    @pytest.mark.skip()
     @parametrize
     @pytest.mark.respx(base_url=base_url)
     def test_raw_response_download(self, client: Replicate, respx_mock: MockRouter) -> None:
@@ -179,7 +177,6 @@ class TestFiles:
         assert file.json() == {"foo": "bar"}
         assert isinstance(file, BinaryAPIResponse)
 
-    @pytest.mark.skip()
     @parametrize
     @pytest.mark.respx(base_url=base_url)
     def test_streaming_response_download(self, client: Replicate, respx_mock: MockRouter) -> None:
@@ -199,7 +196,6 @@ class TestFiles:
 
         assert cast(Any, file.is_closed) is True
 
-    @pytest.mark.skip()
     @parametrize
     @pytest.mark.respx(base_url=base_url)
     def test_path_params_download(self, client: Replicate) -> None:
@@ -211,7 +207,7 @@ class TestFiles:
                 signature="signature",
             )
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     def test_method_get(self, client: Replicate) -> None:
         file = client.files.get(
@@ -219,7 +215,7 @@ class TestFiles:
         )
         assert_matches_type(FileGetResponse, file, path=["response"])
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     def test_raw_response_get(self, client: Replicate) -> None:
         response = client.files.with_raw_response.get(
@@ -231,7 +227,7 @@ class TestFiles:
         file = response.parse()
         assert_matches_type(FileGetResponse, file, path=["response"])
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     def test_streaming_response_get(self, client: Replicate) -> None:
         with client.files.with_streaming_response.get(
@@ -245,7 +241,7 @@ class TestFiles:
 
         assert cast(Any, response.is_closed) is True
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     def test_path_params_get(self, client: Replicate) -> None:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `file_id` but received ''"):
@@ -259,7 +255,7 @@ class TestAsyncFiles:
         "async_client", [False, True, {"http_client": "aiohttp"}], indirect=True, ids=["loose", "strict", "aiohttp"]
     )
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     async def test_method_create(self, async_client: AsyncReplicate) -> None:
         file = await async_client.files.create(
@@ -267,7 +263,7 @@ class TestAsyncFiles:
         )
         assert_matches_type(FileCreateResponse, file, path=["response"])
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     async def test_method_create_with_all_params(self, async_client: AsyncReplicate) -> None:
         file = await async_client.files.create(
@@ -278,7 +274,7 @@ class TestAsyncFiles:
         )
         assert_matches_type(FileCreateResponse, file, path=["response"])
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     async def test_raw_response_create(self, async_client: AsyncReplicate) -> None:
         response = await async_client.files.with_raw_response.create(
@@ -290,7 +286,7 @@ class TestAsyncFiles:
         file = await response.parse()
         assert_matches_type(FileCreateResponse, file, path=["response"])
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     async def test_streaming_response_create(self, async_client: AsyncReplicate) -> None:
         async with async_client.files.with_streaming_response.create(
@@ -304,13 +300,13 @@ class TestAsyncFiles:
 
         assert cast(Any, response.is_closed) is True
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     async def test_method_list(self, async_client: AsyncReplicate) -> None:
         file = await async_client.files.list()
         assert_matches_type(AsyncCursorURLPage[FileListResponse], file, path=["response"])
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     async def test_raw_response_list(self, async_client: AsyncReplicate) -> None:
         response = await async_client.files.with_raw_response.list()
@@ -320,7 +316,7 @@ class TestAsyncFiles:
         file = await response.parse()
         assert_matches_type(AsyncCursorURLPage[FileListResponse], file, path=["response"])
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     async def test_streaming_response_list(self, async_client: AsyncReplicate) -> None:
         async with async_client.files.with_streaming_response.list() as response:
@@ -332,7 +328,7 @@ class TestAsyncFiles:
 
         assert cast(Any, response.is_closed) is True
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     async def test_method_delete(self, async_client: AsyncReplicate) -> None:
         file = await async_client.files.delete(
@@ -340,7 +336,7 @@ class TestAsyncFiles:
         )
         assert file is None
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     async def test_raw_response_delete(self, async_client: AsyncReplicate) -> None:
         response = await async_client.files.with_raw_response.delete(
@@ -352,7 +348,7 @@ class TestAsyncFiles:
         file = await response.parse()
         assert file is None
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     async def test_streaming_response_delete(self, async_client: AsyncReplicate) -> None:
         async with async_client.files.with_streaming_response.delete(
@@ -366,7 +362,7 @@ class TestAsyncFiles:
 
         assert cast(Any, response.is_closed) is True
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     async def test_path_params_delete(self, async_client: AsyncReplicate) -> None:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `file_id` but received ''"):
@@ -374,7 +370,6 @@ class TestAsyncFiles:
                 file_id="",
             )
 
-    @pytest.mark.skip()
     @parametrize
     @pytest.mark.respx(base_url=base_url)
     async def test_method_download(self, async_client: AsyncReplicate, respx_mock: MockRouter) -> None:
@@ -390,7 +385,6 @@ class TestAsyncFiles:
         assert cast(Any, file.is_closed) is True
         assert isinstance(file, AsyncBinaryAPIResponse)
 
-    @pytest.mark.skip()
     @parametrize
     @pytest.mark.respx(base_url=base_url)
     async def test_raw_response_download(self, async_client: AsyncReplicate, respx_mock: MockRouter) -> None:
@@ -408,7 +402,6 @@ class TestAsyncFiles:
         assert await file.json() == {"foo": "bar"}
         assert isinstance(file, AsyncBinaryAPIResponse)
 
-    @pytest.mark.skip()
     @parametrize
     @pytest.mark.respx(base_url=base_url)
     async def test_streaming_response_download(self, async_client: AsyncReplicate, respx_mock: MockRouter) -> None:
@@ -428,7 +421,6 @@ class TestAsyncFiles:
 
         assert cast(Any, file.is_closed) is True
 
-    @pytest.mark.skip()
     @parametrize
     @pytest.mark.respx(base_url=base_url)
     async def test_path_params_download(self, async_client: AsyncReplicate) -> None:
@@ -440,7 +432,7 @@ class TestAsyncFiles:
                 signature="signature",
             )
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     async def test_method_get(self, async_client: AsyncReplicate) -> None:
         file = await async_client.files.get(
@@ -448,7 +440,7 @@ class TestAsyncFiles:
         )
         assert_matches_type(FileGetResponse, file, path=["response"])
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     async def test_raw_response_get(self, async_client: AsyncReplicate) -> None:
         response = await async_client.files.with_raw_response.get(
@@ -460,7 +452,7 @@ class TestAsyncFiles:
         file = await response.parse()
         assert_matches_type(FileGetResponse, file, path=["response"])
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     async def test_streaming_response_get(self, async_client: AsyncReplicate) -> None:
         async with async_client.files.with_streaming_response.get(
@@ -474,7 +466,7 @@ class TestAsyncFiles:
 
         assert cast(Any, response.is_closed) is True
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     async def test_path_params_get(self, async_client: AsyncReplicate) -> None:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `file_id` but received ''"):

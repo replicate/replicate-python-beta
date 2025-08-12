@@ -17,13 +17,13 @@ base_url = os.environ.get("TEST_API_BASE_URL", "http://127.0.0.1:4010")
 class TestSecret:
     parametrize = pytest.mark.parametrize("client", [False, True], indirect=True, ids=["loose", "strict"])
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     def test_method_get(self, client: Replicate) -> None:
         secret = client.webhooks.default.secret.get()
         assert_matches_type(SecretGetResponse, secret, path=["response"])
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     def test_raw_response_get(self, client: Replicate) -> None:
         response = client.webhooks.default.secret.with_raw_response.get()
@@ -33,7 +33,7 @@ class TestSecret:
         secret = response.parse()
         assert_matches_type(SecretGetResponse, secret, path=["response"])
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     def test_streaming_response_get(self, client: Replicate) -> None:
         with client.webhooks.default.secret.with_streaming_response.get() as response:
@@ -51,13 +51,13 @@ class TestAsyncSecret:
         "async_client", [False, True, {"http_client": "aiohttp"}], indirect=True, ids=["loose", "strict", "aiohttp"]
     )
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     async def test_method_get(self, async_client: AsyncReplicate) -> None:
         secret = await async_client.webhooks.default.secret.get()
         assert_matches_type(SecretGetResponse, secret, path=["response"])
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     async def test_raw_response_get(self, async_client: AsyncReplicate) -> None:
         response = await async_client.webhooks.default.secret.with_raw_response.get()
@@ -67,7 +67,7 @@ class TestAsyncSecret:
         secret = await response.parse()
         assert_matches_type(SecretGetResponse, secret, path=["response"])
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     async def test_streaming_response_get(self, async_client: AsyncReplicate) -> None:
         async with async_client.webhooks.default.secret.with_streaming_response.get() as response:

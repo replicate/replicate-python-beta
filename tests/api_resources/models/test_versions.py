@@ -18,7 +18,7 @@ base_url = os.environ.get("TEST_API_BASE_URL", "http://127.0.0.1:4010")
 class TestVersions:
     parametrize = pytest.mark.parametrize("client", [False, True], indirect=True, ids=["loose", "strict"])
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     def test_method_list(self, client: Replicate) -> None:
         version = client.models.versions.list(
@@ -27,7 +27,7 @@ class TestVersions:
         )
         assert_matches_type(SyncCursorURLPage[VersionListResponse], version, path=["response"])
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     def test_raw_response_list(self, client: Replicate) -> None:
         response = client.models.versions.with_raw_response.list(
@@ -40,7 +40,7 @@ class TestVersions:
         version = response.parse()
         assert_matches_type(SyncCursorURLPage[VersionListResponse], version, path=["response"])
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     def test_streaming_response_list(self, client: Replicate) -> None:
         with client.models.versions.with_streaming_response.list(
@@ -55,7 +55,7 @@ class TestVersions:
 
         assert cast(Any, response.is_closed) is True
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     def test_path_params_list(self, client: Replicate) -> None:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `model_owner` but received ''"):
@@ -70,7 +70,7 @@ class TestVersions:
                 model_name="",
             )
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     def test_method_delete(self, client: Replicate) -> None:
         version = client.models.versions.delete(
@@ -80,7 +80,7 @@ class TestVersions:
         )
         assert version is None
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     def test_raw_response_delete(self, client: Replicate) -> None:
         response = client.models.versions.with_raw_response.delete(
@@ -94,7 +94,7 @@ class TestVersions:
         version = response.parse()
         assert version is None
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     def test_streaming_response_delete(self, client: Replicate) -> None:
         with client.models.versions.with_streaming_response.delete(
@@ -110,7 +110,7 @@ class TestVersions:
 
         assert cast(Any, response.is_closed) is True
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     def test_path_params_delete(self, client: Replicate) -> None:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `model_owner` but received ''"):
@@ -134,7 +134,7 @@ class TestVersions:
                 version_id="",
             )
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     def test_method_get(self, client: Replicate) -> None:
         version = client.models.versions.get(
@@ -144,7 +144,7 @@ class TestVersions:
         )
         assert_matches_type(VersionGetResponse, version, path=["response"])
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     def test_raw_response_get(self, client: Replicate) -> None:
         response = client.models.versions.with_raw_response.get(
@@ -158,7 +158,7 @@ class TestVersions:
         version = response.parse()
         assert_matches_type(VersionGetResponse, version, path=["response"])
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     def test_streaming_response_get(self, client: Replicate) -> None:
         with client.models.versions.with_streaming_response.get(
@@ -174,7 +174,7 @@ class TestVersions:
 
         assert cast(Any, response.is_closed) is True
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     def test_path_params_get(self, client: Replicate) -> None:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `model_owner` but received ''"):
@@ -204,7 +204,7 @@ class TestAsyncVersions:
         "async_client", [False, True, {"http_client": "aiohttp"}], indirect=True, ids=["loose", "strict", "aiohttp"]
     )
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     async def test_method_list(self, async_client: AsyncReplicate) -> None:
         version = await async_client.models.versions.list(
@@ -213,7 +213,7 @@ class TestAsyncVersions:
         )
         assert_matches_type(AsyncCursorURLPage[VersionListResponse], version, path=["response"])
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     async def test_raw_response_list(self, async_client: AsyncReplicate) -> None:
         response = await async_client.models.versions.with_raw_response.list(
@@ -226,7 +226,7 @@ class TestAsyncVersions:
         version = await response.parse()
         assert_matches_type(AsyncCursorURLPage[VersionListResponse], version, path=["response"])
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     async def test_streaming_response_list(self, async_client: AsyncReplicate) -> None:
         async with async_client.models.versions.with_streaming_response.list(
@@ -241,7 +241,7 @@ class TestAsyncVersions:
 
         assert cast(Any, response.is_closed) is True
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     async def test_path_params_list(self, async_client: AsyncReplicate) -> None:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `model_owner` but received ''"):
@@ -256,7 +256,7 @@ class TestAsyncVersions:
                 model_name="",
             )
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     async def test_method_delete(self, async_client: AsyncReplicate) -> None:
         version = await async_client.models.versions.delete(
@@ -266,7 +266,7 @@ class TestAsyncVersions:
         )
         assert version is None
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     async def test_raw_response_delete(self, async_client: AsyncReplicate) -> None:
         response = await async_client.models.versions.with_raw_response.delete(
@@ -280,7 +280,7 @@ class TestAsyncVersions:
         version = await response.parse()
         assert version is None
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     async def test_streaming_response_delete(self, async_client: AsyncReplicate) -> None:
         async with async_client.models.versions.with_streaming_response.delete(
@@ -296,7 +296,7 @@ class TestAsyncVersions:
 
         assert cast(Any, response.is_closed) is True
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     async def test_path_params_delete(self, async_client: AsyncReplicate) -> None:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `model_owner` but received ''"):
@@ -320,7 +320,7 @@ class TestAsyncVersions:
                 version_id="",
             )
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     async def test_method_get(self, async_client: AsyncReplicate) -> None:
         version = await async_client.models.versions.get(
@@ -330,7 +330,7 @@ class TestAsyncVersions:
         )
         assert_matches_type(VersionGetResponse, version, path=["response"])
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     async def test_raw_response_get(self, async_client: AsyncReplicate) -> None:
         response = await async_client.models.versions.with_raw_response.get(
@@ -344,7 +344,7 @@ class TestAsyncVersions:
         version = await response.parse()
         assert_matches_type(VersionGetResponse, version, path=["response"])
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     async def test_streaming_response_get(self, async_client: AsyncReplicate) -> None:
         async with async_client.models.versions.with_streaming_response.get(
@@ -360,7 +360,7 @@ class TestAsyncVersions:
 
         assert cast(Any, response.is_closed) is True
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     async def test_path_params_get(self, async_client: AsyncReplicate) -> None:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `model_owner` but received ''"):

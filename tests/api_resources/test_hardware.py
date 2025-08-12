@@ -17,13 +17,13 @@ base_url = os.environ.get("TEST_API_BASE_URL", "http://127.0.0.1:4010")
 class TestHardware:
     parametrize = pytest.mark.parametrize("client", [False, True], indirect=True, ids=["loose", "strict"])
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     def test_method_list(self, client: Replicate) -> None:
         hardware = client.hardware.list()
         assert_matches_type(HardwareListResponse, hardware, path=["response"])
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     def test_raw_response_list(self, client: Replicate) -> None:
         response = client.hardware.with_raw_response.list()
@@ -33,7 +33,7 @@ class TestHardware:
         hardware = response.parse()
         assert_matches_type(HardwareListResponse, hardware, path=["response"])
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     def test_streaming_response_list(self, client: Replicate) -> None:
         with client.hardware.with_streaming_response.list() as response:
@@ -51,13 +51,13 @@ class TestAsyncHardware:
         "async_client", [False, True, {"http_client": "aiohttp"}], indirect=True, ids=["loose", "strict", "aiohttp"]
     )
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     async def test_method_list(self, async_client: AsyncReplicate) -> None:
         hardware = await async_client.hardware.list()
         assert_matches_type(HardwareListResponse, hardware, path=["response"])
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     async def test_raw_response_list(self, async_client: AsyncReplicate) -> None:
         response = await async_client.hardware.with_raw_response.list()
@@ -67,7 +67,7 @@ class TestAsyncHardware:
         hardware = await response.parse()
         assert_matches_type(HardwareListResponse, hardware, path=["response"])
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     async def test_streaming_response_list(self, async_client: AsyncReplicate) -> None:
         async with async_client.hardware.with_streaming_response.list() as response:

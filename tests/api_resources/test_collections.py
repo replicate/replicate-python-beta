@@ -18,13 +18,13 @@ base_url = os.environ.get("TEST_API_BASE_URL", "http://127.0.0.1:4010")
 class TestCollections:
     parametrize = pytest.mark.parametrize("client", [False, True], indirect=True, ids=["loose", "strict"])
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     def test_method_list(self, client: Replicate) -> None:
         collection = client.collections.list()
         assert_matches_type(SyncCursorURLPage[CollectionListResponse], collection, path=["response"])
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     def test_raw_response_list(self, client: Replicate) -> None:
         response = client.collections.with_raw_response.list()
@@ -34,7 +34,7 @@ class TestCollections:
         collection = response.parse()
         assert_matches_type(SyncCursorURLPage[CollectionListResponse], collection, path=["response"])
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     def test_streaming_response_list(self, client: Replicate) -> None:
         with client.collections.with_streaming_response.list() as response:
@@ -46,7 +46,7 @@ class TestCollections:
 
         assert cast(Any, response.is_closed) is True
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     def test_method_get(self, client: Replicate) -> None:
         collection = client.collections.get(
@@ -54,7 +54,7 @@ class TestCollections:
         )
         assert_matches_type(CollectionGetResponse, collection, path=["response"])
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     def test_raw_response_get(self, client: Replicate) -> None:
         response = client.collections.with_raw_response.get(
@@ -66,7 +66,7 @@ class TestCollections:
         collection = response.parse()
         assert_matches_type(CollectionGetResponse, collection, path=["response"])
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     def test_streaming_response_get(self, client: Replicate) -> None:
         with client.collections.with_streaming_response.get(
@@ -80,7 +80,7 @@ class TestCollections:
 
         assert cast(Any, response.is_closed) is True
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     def test_path_params_get(self, client: Replicate) -> None:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `collection_slug` but received ''"):
@@ -94,13 +94,13 @@ class TestAsyncCollections:
         "async_client", [False, True, {"http_client": "aiohttp"}], indirect=True, ids=["loose", "strict", "aiohttp"]
     )
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     async def test_method_list(self, async_client: AsyncReplicate) -> None:
         collection = await async_client.collections.list()
         assert_matches_type(AsyncCursorURLPage[CollectionListResponse], collection, path=["response"])
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     async def test_raw_response_list(self, async_client: AsyncReplicate) -> None:
         response = await async_client.collections.with_raw_response.list()
@@ -110,7 +110,7 @@ class TestAsyncCollections:
         collection = await response.parse()
         assert_matches_type(AsyncCursorURLPage[CollectionListResponse], collection, path=["response"])
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     async def test_streaming_response_list(self, async_client: AsyncReplicate) -> None:
         async with async_client.collections.with_streaming_response.list() as response:
@@ -122,7 +122,7 @@ class TestAsyncCollections:
 
         assert cast(Any, response.is_closed) is True
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     async def test_method_get(self, async_client: AsyncReplicate) -> None:
         collection = await async_client.collections.get(
@@ -130,7 +130,7 @@ class TestAsyncCollections:
         )
         assert_matches_type(CollectionGetResponse, collection, path=["response"])
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     async def test_raw_response_get(self, async_client: AsyncReplicate) -> None:
         response = await async_client.collections.with_raw_response.get(
@@ -142,7 +142,7 @@ class TestAsyncCollections:
         collection = await response.parse()
         assert_matches_type(CollectionGetResponse, collection, path=["response"])
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     async def test_streaming_response_get(self, async_client: AsyncReplicate) -> None:
         async with async_client.collections.with_streaming_response.get(
@@ -156,7 +156,7 @@ class TestAsyncCollections:
 
         assert cast(Any, response.is_closed) is True
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     async def test_path_params_get(self, async_client: AsyncReplicate) -> None:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `collection_slug` but received ''"):
