@@ -17,7 +17,7 @@ base_url = os.environ.get("TEST_API_BASE_URL", "http://127.0.0.1:4010")
 class TestPredictions:
     parametrize = pytest.mark.parametrize("client", [False, True], indirect=True, ids=["loose", "strict"])
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     def test_method_create(self, client: Replicate) -> None:
         prediction = client.deployments.predictions.create(
@@ -30,7 +30,7 @@ class TestPredictions:
         )
         assert_matches_type(Prediction, prediction, path=["response"])
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     def test_method_create_with_all_params(self, client: Replicate) -> None:
         prediction = client.deployments.predictions.create(
@@ -47,7 +47,7 @@ class TestPredictions:
         )
         assert_matches_type(Prediction, prediction, path=["response"])
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     def test_raw_response_create(self, client: Replicate) -> None:
         response = client.deployments.predictions.with_raw_response.create(
@@ -64,7 +64,7 @@ class TestPredictions:
         prediction = response.parse()
         assert_matches_type(Prediction, prediction, path=["response"])
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     def test_streaming_response_create(self, client: Replicate) -> None:
         with client.deployments.predictions.with_streaming_response.create(
@@ -83,7 +83,7 @@ class TestPredictions:
 
         assert cast(Any, response.is_closed) is True
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     def test_path_params_create(self, client: Replicate) -> None:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `deployment_owner` but received ''"):
@@ -112,7 +112,7 @@ class TestAsyncPredictions:
         "async_client", [False, True, {"http_client": "aiohttp"}], indirect=True, ids=["loose", "strict", "aiohttp"]
     )
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     async def test_method_create(self, async_client: AsyncReplicate) -> None:
         prediction = await async_client.deployments.predictions.create(
@@ -125,7 +125,7 @@ class TestAsyncPredictions:
         )
         assert_matches_type(Prediction, prediction, path=["response"])
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     async def test_method_create_with_all_params(self, async_client: AsyncReplicate) -> None:
         prediction = await async_client.deployments.predictions.create(
@@ -142,7 +142,7 @@ class TestAsyncPredictions:
         )
         assert_matches_type(Prediction, prediction, path=["response"])
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     async def test_raw_response_create(self, async_client: AsyncReplicate) -> None:
         response = await async_client.deployments.predictions.with_raw_response.create(
@@ -159,7 +159,7 @@ class TestAsyncPredictions:
         prediction = await response.parse()
         assert_matches_type(Prediction, prediction, path=["response"])
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     async def test_streaming_response_create(self, async_client: AsyncReplicate) -> None:
         async with async_client.deployments.predictions.with_streaming_response.create(
@@ -178,7 +178,7 @@ class TestAsyncPredictions:
 
         assert cast(Any, response.is_closed) is True
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     async def test_path_params_create(self, async_client: AsyncReplicate) -> None:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `deployment_owner` but received ''"):

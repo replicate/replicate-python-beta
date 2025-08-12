@@ -23,7 +23,7 @@ base_url = os.environ.get("TEST_API_BASE_URL", "http://127.0.0.1:4010")
 class TestDeployments:
     parametrize = pytest.mark.parametrize("client", [False, True], indirect=True, ids=["loose", "strict"])
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     def test_method_create(self, client: Replicate) -> None:
         deployment = client.deployments.create(
@@ -36,7 +36,7 @@ class TestDeployments:
         )
         assert_matches_type(DeploymentCreateResponse, deployment, path=["response"])
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     def test_raw_response_create(self, client: Replicate) -> None:
         response = client.deployments.with_raw_response.create(
@@ -53,7 +53,7 @@ class TestDeployments:
         deployment = response.parse()
         assert_matches_type(DeploymentCreateResponse, deployment, path=["response"])
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     def test_streaming_response_create(self, client: Replicate) -> None:
         with client.deployments.with_streaming_response.create(
@@ -72,7 +72,7 @@ class TestDeployments:
 
         assert cast(Any, response.is_closed) is True
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     def test_method_update(self, client: Replicate) -> None:
         deployment = client.deployments.update(
@@ -81,7 +81,7 @@ class TestDeployments:
         )
         assert_matches_type(DeploymentUpdateResponse, deployment, path=["response"])
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     def test_method_update_with_all_params(self, client: Replicate) -> None:
         deployment = client.deployments.update(
@@ -94,7 +94,7 @@ class TestDeployments:
         )
         assert_matches_type(DeploymentUpdateResponse, deployment, path=["response"])
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     def test_raw_response_update(self, client: Replicate) -> None:
         response = client.deployments.with_raw_response.update(
@@ -107,7 +107,7 @@ class TestDeployments:
         deployment = response.parse()
         assert_matches_type(DeploymentUpdateResponse, deployment, path=["response"])
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     def test_streaming_response_update(self, client: Replicate) -> None:
         with client.deployments.with_streaming_response.update(
@@ -122,7 +122,7 @@ class TestDeployments:
 
         assert cast(Any, response.is_closed) is True
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     def test_path_params_update(self, client: Replicate) -> None:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `deployment_owner` but received ''"):
@@ -137,13 +137,13 @@ class TestDeployments:
                 deployment_name="",
             )
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     def test_method_list(self, client: Replicate) -> None:
         deployment = client.deployments.list()
         assert_matches_type(SyncCursorURLPage[DeploymentListResponse], deployment, path=["response"])
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     def test_raw_response_list(self, client: Replicate) -> None:
         response = client.deployments.with_raw_response.list()
@@ -153,7 +153,7 @@ class TestDeployments:
         deployment = response.parse()
         assert_matches_type(SyncCursorURLPage[DeploymentListResponse], deployment, path=["response"])
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     def test_streaming_response_list(self, client: Replicate) -> None:
         with client.deployments.with_streaming_response.list() as response:
@@ -165,7 +165,7 @@ class TestDeployments:
 
         assert cast(Any, response.is_closed) is True
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     def test_method_delete(self, client: Replicate) -> None:
         deployment = client.deployments.delete(
@@ -174,7 +174,7 @@ class TestDeployments:
         )
         assert deployment is None
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     def test_raw_response_delete(self, client: Replicate) -> None:
         response = client.deployments.with_raw_response.delete(
@@ -187,7 +187,7 @@ class TestDeployments:
         deployment = response.parse()
         assert deployment is None
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     def test_streaming_response_delete(self, client: Replicate) -> None:
         with client.deployments.with_streaming_response.delete(
@@ -202,7 +202,7 @@ class TestDeployments:
 
         assert cast(Any, response.is_closed) is True
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     def test_path_params_delete(self, client: Replicate) -> None:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `deployment_owner` but received ''"):
@@ -217,7 +217,7 @@ class TestDeployments:
                 deployment_name="",
             )
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     def test_method_get(self, client: Replicate) -> None:
         deployment = client.deployments.get(
@@ -226,7 +226,7 @@ class TestDeployments:
         )
         assert_matches_type(DeploymentGetResponse, deployment, path=["response"])
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     def test_raw_response_get(self, client: Replicate) -> None:
         response = client.deployments.with_raw_response.get(
@@ -239,7 +239,7 @@ class TestDeployments:
         deployment = response.parse()
         assert_matches_type(DeploymentGetResponse, deployment, path=["response"])
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     def test_streaming_response_get(self, client: Replicate) -> None:
         with client.deployments.with_streaming_response.get(
@@ -254,7 +254,7 @@ class TestDeployments:
 
         assert cast(Any, response.is_closed) is True
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     def test_path_params_get(self, client: Replicate) -> None:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `deployment_owner` but received ''"):
@@ -275,7 +275,7 @@ class TestAsyncDeployments:
         "async_client", [False, True, {"http_client": "aiohttp"}], indirect=True, ids=["loose", "strict", "aiohttp"]
     )
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     async def test_method_create(self, async_client: AsyncReplicate) -> None:
         deployment = await async_client.deployments.create(
@@ -288,7 +288,7 @@ class TestAsyncDeployments:
         )
         assert_matches_type(DeploymentCreateResponse, deployment, path=["response"])
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     async def test_raw_response_create(self, async_client: AsyncReplicate) -> None:
         response = await async_client.deployments.with_raw_response.create(
@@ -305,7 +305,7 @@ class TestAsyncDeployments:
         deployment = await response.parse()
         assert_matches_type(DeploymentCreateResponse, deployment, path=["response"])
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     async def test_streaming_response_create(self, async_client: AsyncReplicate) -> None:
         async with async_client.deployments.with_streaming_response.create(
@@ -324,7 +324,7 @@ class TestAsyncDeployments:
 
         assert cast(Any, response.is_closed) is True
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     async def test_method_update(self, async_client: AsyncReplicate) -> None:
         deployment = await async_client.deployments.update(
@@ -333,7 +333,7 @@ class TestAsyncDeployments:
         )
         assert_matches_type(DeploymentUpdateResponse, deployment, path=["response"])
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     async def test_method_update_with_all_params(self, async_client: AsyncReplicate) -> None:
         deployment = await async_client.deployments.update(
@@ -346,7 +346,7 @@ class TestAsyncDeployments:
         )
         assert_matches_type(DeploymentUpdateResponse, deployment, path=["response"])
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     async def test_raw_response_update(self, async_client: AsyncReplicate) -> None:
         response = await async_client.deployments.with_raw_response.update(
@@ -359,7 +359,7 @@ class TestAsyncDeployments:
         deployment = await response.parse()
         assert_matches_type(DeploymentUpdateResponse, deployment, path=["response"])
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     async def test_streaming_response_update(self, async_client: AsyncReplicate) -> None:
         async with async_client.deployments.with_streaming_response.update(
@@ -374,7 +374,7 @@ class TestAsyncDeployments:
 
         assert cast(Any, response.is_closed) is True
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     async def test_path_params_update(self, async_client: AsyncReplicate) -> None:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `deployment_owner` but received ''"):
@@ -389,13 +389,13 @@ class TestAsyncDeployments:
                 deployment_name="",
             )
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     async def test_method_list(self, async_client: AsyncReplicate) -> None:
         deployment = await async_client.deployments.list()
         assert_matches_type(AsyncCursorURLPage[DeploymentListResponse], deployment, path=["response"])
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     async def test_raw_response_list(self, async_client: AsyncReplicate) -> None:
         response = await async_client.deployments.with_raw_response.list()
@@ -405,7 +405,7 @@ class TestAsyncDeployments:
         deployment = await response.parse()
         assert_matches_type(AsyncCursorURLPage[DeploymentListResponse], deployment, path=["response"])
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     async def test_streaming_response_list(self, async_client: AsyncReplicate) -> None:
         async with async_client.deployments.with_streaming_response.list() as response:
@@ -417,7 +417,7 @@ class TestAsyncDeployments:
 
         assert cast(Any, response.is_closed) is True
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     async def test_method_delete(self, async_client: AsyncReplicate) -> None:
         deployment = await async_client.deployments.delete(
@@ -426,7 +426,7 @@ class TestAsyncDeployments:
         )
         assert deployment is None
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     async def test_raw_response_delete(self, async_client: AsyncReplicate) -> None:
         response = await async_client.deployments.with_raw_response.delete(
@@ -439,7 +439,7 @@ class TestAsyncDeployments:
         deployment = await response.parse()
         assert deployment is None
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     async def test_streaming_response_delete(self, async_client: AsyncReplicate) -> None:
         async with async_client.deployments.with_streaming_response.delete(
@@ -454,7 +454,7 @@ class TestAsyncDeployments:
 
         assert cast(Any, response.is_closed) is True
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     async def test_path_params_delete(self, async_client: AsyncReplicate) -> None:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `deployment_owner` but received ''"):
@@ -469,7 +469,7 @@ class TestAsyncDeployments:
                 deployment_name="",
             )
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     async def test_method_get(self, async_client: AsyncReplicate) -> None:
         deployment = await async_client.deployments.get(
@@ -478,7 +478,7 @@ class TestAsyncDeployments:
         )
         assert_matches_type(DeploymentGetResponse, deployment, path=["response"])
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     async def test_raw_response_get(self, async_client: AsyncReplicate) -> None:
         response = await async_client.deployments.with_raw_response.get(
@@ -491,7 +491,7 @@ class TestAsyncDeployments:
         deployment = await response.parse()
         assert_matches_type(DeploymentGetResponse, deployment, path=["response"])
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     async def test_streaming_response_get(self, async_client: AsyncReplicate) -> None:
         async with async_client.deployments.with_streaming_response.get(
@@ -506,7 +506,7 @@ class TestAsyncDeployments:
 
         assert cast(Any, response.is_closed) is True
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     async def test_path_params_get(self, async_client: AsyncReplicate) -> None:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `deployment_owner` but received ''"):
