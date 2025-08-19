@@ -1,7 +1,7 @@
 """Cog integration utilities for Replicate."""
 
 import os
-from typing import Any, Union, Callable, Iterator, cast
+from typing import Any, Union, Iterator, cast
 
 from replicate._utils._logs import logger
 
@@ -23,7 +23,7 @@ def _get_api_token_from_environment() -> Union[str, None]:
 
         # Get the items method and call it
         items_method = getattr(context, "items", None)
-        if not isinstance(items_method, Callable):
+        if not callable(items_method):
             return os.environ.get("REPLICATE_API_TOKEN")
 
         # Iterate through context items looking for the API token
