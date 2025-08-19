@@ -1,5 +1,13 @@
 # Changelog
 
+## 2.0.0-alpha.18 (2025-08-19)
+
+Full Changelog: [v2.0.0-alpha.17...v2.0.0-alpha.18](https://github.com/replicate/replicate-python-stainless/compare/v2.0.0-alpha.17...v2.0.0-alpha.18)
+
+### Features
+
+* **pipelines:** get API token from cog's current_scope, if available ([#48](https://github.com/replicate/replicate-python-stainless/issues/48)) ([7f60d30](https://github.com/replicate/replicate-python-stainless/commit/7f60d30644bce710fbcb35c247d87452b79ba058))
+
 ## 2.0.0-alpha.17 (2025-08-12)
 
 Full Changelog: [v2.0.0-alpha.16...v2.0.0-alpha.17](https://github.com/replicate/replicate-python-stainless/compare/v2.0.0-alpha.16...v2.0.0-alpha.17)
