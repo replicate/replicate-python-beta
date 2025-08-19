@@ -20,6 +20,7 @@ from typing_extensions import Self, Unpack, ParamSpec, override
 
 import httpx
 
+from replicate.lib.cog import _get_api_token_from_environment
 from replicate.lib._files import FileEncodingStrategy
 from replicate.lib._predictions_run import Model, Version, ModelVersionIdentifier
 from replicate.types.prediction_create_params import PredictionCreateParamsWithoutVersion
@@ -108,7 +109,7 @@ class Replicate(SyncAPIClient):
         This automatically infers the `bearer_token` argument from the `REPLICATE_API_TOKEN` environment variable if it is not provided.
         """
         if bearer_token is None:
-            bearer_token = os.environ.get("REPLICATE_API_TOKEN")
+            bearer_token = _get_api_token_from_environment()
         if bearer_token is None:
             raise ReplicateError(
                 "The bearer_token client option must be set either by passing bearer_token to the client or by setting the REPLICATE_API_TOKEN environment variable"
@@ -419,7 +420,7 @@ class AsyncReplicate(AsyncAPIClient):
         This automatically infers the `bearer_token` argument from the `REPLICATE_API_TOKEN` environment variable if it is not provided.
         """
         if bearer_token is None:
-            bearer_token = os.environ.get("REPLICATE_API_TOKEN")
+            bearer_token = _get_api_token_from_environment()
         if bearer_token is None:
             raise ReplicateError(
                 "The bearer_token client option must be set either by passing bearer_token to the client or by setting the REPLICATE_API_TOKEN environment variable"
