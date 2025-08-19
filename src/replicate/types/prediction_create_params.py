@@ -35,7 +35,7 @@ class PredictionCreateParamsWithoutVersion(TypedDict, total=False):
     - you don't want to upload and host the file somewhere
     - you don't need to use the file again (Replicate will not store it)
     """
-    
+
     stream: bool
     """**This field is deprecated.**
 
