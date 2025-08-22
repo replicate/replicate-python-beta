@@ -1,5 +1,13 @@
 # Changelog
 
+## 2.0.0-alpha.19 (2025-08-20)
+
+Full Changelog: [v2.0.0-alpha.18...v2.0.0-alpha.19](https://github.com/replicate/replicate-python-stainless/compare/v2.0.0-alpha.18...v2.0.0-alpha.19)
+
+### Features
+
+* allow Claude to run all scripts in scripts directory ([#51](https://github.com/replicate/replicate-python-stainless/issues/51)) ([d77081b](https://github.com/replicate/replicate-python-stainless/commit/d77081b93fa8bcc839d0b0cff60c824a2be119d7))
+
 ## 2.0.0-alpha.18 (2025-08-19)
 
 Full Changelog: [v2.0.0-alpha.17...v2.0.0-alpha.18](https://github.com/replicate/replicate-python-stainless/compare/v2.0.0-alpha.17...v2.0.0-alpha.18)
