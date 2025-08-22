@@ -1,5 +1,13 @@
 # Changelog
 
+## 2.0.0-alpha.20 (2025-08-22)
+
+Full Changelog: [v2.0.0-alpha.19...v2.0.0-alpha.20](https://github.com/replicate/replicate-python-stainless/compare/v2.0.0-alpha.19...v2.0.0-alpha.20)
+
+### Chores
+
+* update github action ([4d77067](https://github.com/replicate/replicate-python-stainless/commit/4d770674490bc704f29b25c2b349880596a3de84))
+
 ## 2.0.0-alpha.19 (2025-08-20)
 
 Full Changelog: [v2.0.0-alpha.18...v2.0.0-alpha.19](https://github.com/replicate/replicate-python-stainless/compare/v2.0.0-alpha.18...v2.0.0-alpha.19)
