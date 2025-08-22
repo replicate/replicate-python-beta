@@ -83,7 +83,7 @@ class PredictionsResource(SyncAPIResource):
 
         The request will wait up to 60 seconds for the model to run. If this time is
         exceeded the prediction will be returned in a `"starting"` state and need to be
-        retrieved using the `predictions.get` endpiont.
+        retrieved using the `predictions.get` endpoint.
 
         For a complete overview of the `deployments.predictions.create` API check out
         our documentation on
@@ -245,7 +245,7 @@ class AsyncPredictionsResource(AsyncAPIResource):
 
         The request will wait up to 60 seconds for the model to run. If this time is
         exceeded the prediction will be returned in a `"starting"` state and need to be
-        retrieved using the `predictions.get` endpiont.
+        retrieved using the `predictions.get` endpoint.
 
         For a complete overview of the `deployments.predictions.create` API check out
         our documentation on
