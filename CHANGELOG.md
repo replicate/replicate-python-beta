@@ -1,5 +1,19 @@
 # Changelog
 
+## 2.0.0-alpha.20 (2025-08-25)
+
+Full Changelog: [v2.0.0-alpha.19...v2.0.0-alpha.20](https://github.com/replicate/replicate-python-stainless/compare/v2.0.0-alpha.19...v2.0.0-alpha.20)
+
+### Bug Fixes
+
+* add missing packaging dependency ([#54](https://github.com/replicate/replicate-python-stainless/issues/54)) ([8c698f1](https://github.com/replicate/replicate-python-stainless/commit/8c698f1a63266cb86b59bbc0a9e5258f7c25394a))
+
+
+### Chores
+
+* update github action ([1c61a40](https://github.com/replicate/replicate-python-stainless/commit/1c61a40782062544ef5cb54994c5cf51d8747a76))
+* update OpenAPI spec and rebuild SDKs ([0179eac](https://github.com/replicate/replicate-python-stainless/commit/0179eacd9bc862a47f0c468fbf16a8b493852f8b))
+
 ## 2.0.0-alpha.19 (2025-08-20)
 
 Full Changelog: [v2.0.0-alpha.18...v2.0.0-alpha.19](https://github.com/replicate/replicate-python-stainless/compare/v2.0.0-alpha.18...v2.0.0-alpha.19)
