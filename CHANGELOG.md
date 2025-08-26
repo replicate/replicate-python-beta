@@ -1,5 +1,19 @@
 # Changelog
 
+## 2.0.0-alpha.21 (2025-08-26)
+
+Full Changelog: [v2.0.0-alpha.20...v2.0.0-alpha.21](https://github.com/replicate/replicate-python-stainless/compare/v2.0.0-alpha.20...v2.0.0-alpha.21)
+
+### Bug Fixes
+
+* avoid newer type syntax ([7a3be3b](https://github.com/replicate/replicate-python-stainless/commit/7a3be3bb9ec3b1b2476b394fe9733ff0726d3fd0))
+
+
+### Chores
+
+* **internal:** change ci workflow machines ([71bfc70](https://github.com/replicate/replicate-python-stainless/commit/71bfc705832f9fd1d8a34f2944e2a3cd68788c81))
+* **internal:** update pyright exclude list ([6906d75](https://github.com/replicate/replicate-python-stainless/commit/6906d752450d3081f63ebd14db74a52b4c7eaf37))
+
 ## 2.0.0-alpha.20 (2025-08-25)
 
 Full Changelog: [v2.0.0-alpha.19...v2.0.0-alpha.20](https://github.com/replicate/replicate-python-stainless/compare/v2.0.0-alpha.19...v2.0.0-alpha.20)
