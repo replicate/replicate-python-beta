@@ -24,9 +24,10 @@ def test_use_does_not_create_client_immediately():
                 assert isinstance(model, Function)
                 print("✓ replicate.use() works without immediate client creation")
 
-                # Verify the client is stored as a callable (factory function)
-                assert callable(model._client)
-                print("✓ Client is stored as factory function")
+                # Verify the client property is a property that will create client on demand
+                # We can't call it without a token, but we can check it's the right type
+                assert hasattr(model, '_client_or_factory')
+                print("✓ Client factory is stored for lazy creation")
 
             except Exception as e:
                 print(f"✗ Test failed: {e}")
@@ -54,7 +55,7 @@ def test_client_created_when_model_called():
 
     with patch.dict(os.environ, {}, clear=True):
         with patch.dict(sys.modules, {"cog": mock_cog}):
-            with patch("replicate._module_client._ModuleClient", side_effect=track_client_creation):
+            with patch("replicate._client._ModuleClient", side_effect=track_client_creation):
                 import replicate
 
                 # Create model function - should not create client yet

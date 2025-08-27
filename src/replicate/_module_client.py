@@ -88,15 +88,14 @@ else:
         return _load_client().run(*args, **kwargs)
 
     def _use(ref, *, hint=None, streaming=False, use_async=False, **kwargs):
+        from .lib._predictions_use import use
+        
         if use_async:
             # For async, we need to use AsyncReplicate instead
             from ._client import AsyncReplicate
-            from .lib._predictions_use import use
-
-            return use(lambda: AsyncReplicate(), ref, hint=hint, streaming=streaming, **kwargs)
-        from .lib._predictions_use import use
-
-        return use(_load_client, ref, hint=hint, streaming=streaming, **kwargs)
+            return use(lambda: AsyncReplicate(), ref, hint=hint, streaming=streaming, use_async=True, **kwargs)
+        
+        return use(_load_client, ref, hint=hint, streaming=streaming, use_async=False, **kwargs)
 
     run = _run
     use = _use

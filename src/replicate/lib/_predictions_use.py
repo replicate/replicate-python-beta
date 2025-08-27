@@ -858,6 +858,7 @@ def use(
     *,
     hint: Optional[Callable[Input, Output]] = None,  # pylint: disable=unused-argument # noqa: ARG001 # required for type inference
     streaming: bool = False,
+    use_async: bool = False,  # Internal parameter to indicate async mode
 ) -> Union[
     Function[Input, Output],
     AsyncFunction[Input, Output],
@@ -878,8 +879,8 @@ def use(
     except AttributeError:
         pass
 
-    # Determine if this is async by checking the type
-    is_async = isinstance(client, AsyncClient) or (callable(client) and isinstance(client(), AsyncClient))
+    # Determine if this is async
+    is_async = isinstance(client, AsyncClient) or use_async
 
     if is_async:
         # TODO: Fix type inference for AsyncFunction return type
