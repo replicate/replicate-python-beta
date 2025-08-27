@@ -1,6 +1,6 @@
 [project]
 name = "replicate"
-version = "2.0.0-alpha.20"
+version = "2.0.0-alpha.21"
 description = "The official Python library for the replicate API"
 dynamic = ["readme"]
 license = "Apache-2.0"
@@ -149,6 +149,7 @@ exclude = [
     "_dev",
     ".venv",
     ".nox",
+    ".git",
 ]
 
 reportImplicitOverride = true
