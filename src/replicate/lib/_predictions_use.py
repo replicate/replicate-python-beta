@@ -884,7 +884,7 @@ def use(
 
     if is_async:
         # TODO: Fix type inference for AsyncFunction return type
-        return AsyncFunction(client, str(ref), streaming=streaming)  # type: ignore[return-value]
+        return AsyncFunction(client, str(ref), streaming=streaming)  # type: ignore[return-value,arg-type]
     else:
         # TODO: Fix type inference for Function return type
-        return Function(client, str(ref), streaming=streaming)  # type: ignore[return-value]
+        return Function(client, str(ref), streaming=streaming)  # type: ignore[return-value,arg-type]
