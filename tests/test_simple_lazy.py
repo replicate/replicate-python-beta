@@ -2,6 +2,7 @@
 
 import os
 import sys
+from typing import Any
 from unittest.mock import MagicMock, patch
 
 
@@ -16,7 +17,7 @@ def test_use_does_not_create_client_immediately():
                 import replicate
 
                 # This should work now - no client is created yet
-                model = replicate.use("test/model")
+                model: Any = replicate.use("test/model")  # type: ignore[misc]
 
                 # Verify we got a Function object back
                 from replicate.lib._predictions_use import Function
@@ -26,7 +27,7 @@ def test_use_does_not_create_client_immediately():
 
                 # Verify the client property is a property that will create client on demand
                 # We can't call it without a token, but we can check it's the right type
-                assert hasattr(model, "_client_or_factory")
+                assert hasattr(model, "_client_or_factory")  # type: ignore[misc]
                 print("✓ Client factory is stored for lazy creation")
 
             except Exception as e:
@@ -50,7 +51,7 @@ def test_client_created_when_model_called():
             import replicate
 
             # Create model function - should work without errors
-            model = replicate.use("test/model")
+            model: Any = replicate.use("test/model")  # type: ignore[misc]
             print("✓ Model function created successfully")
 
             # Verify the model has the lazy client setup
