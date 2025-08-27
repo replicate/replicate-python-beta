@@ -95,6 +95,7 @@ else:
 
             return use(lambda: AsyncReplicate(), ref, hint=hint, streaming=streaming, **kwargs)
         from .lib._predictions_use import use
+
         return use(_load_client, ref, hint=hint, streaming=streaming, **kwargs)
 
     run = _run

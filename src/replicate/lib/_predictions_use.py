@@ -879,10 +879,8 @@ def use(
         pass
 
     # Determine if this is async by checking the type
-    is_async = isinstance(client, AsyncClient) or (
-        callable(client) and isinstance(client(), AsyncClient)
-    )
-    
+    is_async = isinstance(client, AsyncClient) or (callable(client) and isinstance(client(), AsyncClient))
+
     if is_async:
         # TODO: Fix type inference for AsyncFunction return type
         return AsyncFunction(client, str(ref), streaming=streaming)  # type: ignore[return-value]
