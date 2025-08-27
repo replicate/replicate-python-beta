@@ -94,9 +94,11 @@ else:
             # For async, we need to use AsyncReplicate instead
             from ._client import AsyncReplicate
 
-            return use(lambda: AsyncReplicate(), ref, hint=hint, streaming=streaming, use_async=True, **kwargs)
+            return use(AsyncReplicate, ref, hint=hint, streaming=streaming, **kwargs)
 
-        return use(_load_client, ref, hint=hint, streaming=streaming, use_async=False, **kwargs)
+        from ._client import Replicate
+
+        return use(Replicate, ref, hint=hint, streaming=streaming, **kwargs)
 
     run = _run
     use = _use

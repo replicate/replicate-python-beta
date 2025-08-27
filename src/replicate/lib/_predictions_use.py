@@ -9,6 +9,7 @@ from typing import (
     Any,
     Dict,
     List,
+    Type,
     Tuple,
     Union,
     Generic,
@@ -439,16 +440,14 @@ class Function(Generic[Input, Output]):
     _ref: str
     _streaming: bool
 
-    def __init__(self, client: Union[Client, Callable[[], Client]], ref: str, *, streaming: bool) -> None:
-        self._client_or_factory = client
+    def __init__(self, client: Type[Client], ref: str, *, streaming: bool) -> None:
+        self._client_class = client
         self._ref = ref
         self._streaming = streaming
 
     @property
     def _client(self) -> Client:
-        if callable(self._client_or_factory):
-            return self._client_or_factory()
-        return self._client_or_factory
+        return self._client_class()
 
     def __call__(self, *args: Input.args, **inputs: Input.kwargs) -> Output:
         return self.create(*args, **inputs).output()
@@ -675,16 +674,14 @@ class AsyncFunction(Generic[Input, Output]):
     _streaming: bool
     _openapi_schema: Optional[Dict[str, Any]] = None
 
-    def __init__(self, client: Union[AsyncClient, Callable[[], AsyncClient]], ref: str, *, streaming: bool) -> None:
-        self._client_or_factory = client
+    def __init__(self, client: Type[AsyncClient], ref: str, *, streaming: bool) -> None:
+        self._client_class = client
         self._ref = ref
         self._streaming = streaming
 
     @property
     def _client(self) -> AsyncClient:
-        if callable(self._client_or_factory):
-            return self._client_or_factory()
-        return self._client_or_factory
+        return self._client_class()
 
     @cached_property
     def _parsed_ref(self) -> Tuple[str, str, Optional[str]]:
@@ -814,7 +811,7 @@ class AsyncFunction(Generic[Input, Output]):
 
 @overload
 def use(
-    client: Union[Client, Callable[[], Client]],
+    client: Type[Client],
     ref: Union[str, FunctionRef[Input, Output]],
     *,
     hint: Optional[Callable[Input, Output]] = None,
@@ -824,7 +821,7 @@ def use(
 
 @overload
 def use(
-    client: Union[Client, Callable[[], Client]],
+    client: Type[Client],
     ref: Union[str, FunctionRef[Input, Output]],
     *,
     hint: Optional[Callable[Input, Output]] = None,
@@ -834,7 +831,7 @@ def use(
 
 @overload
 def use(
-    client: Union[AsyncClient, Callable[[], AsyncClient]],
+    client: Type[AsyncClient],
     ref: Union[str, FunctionRef[Input, Output]],
     *,
     hint: Optional[Callable[Input, Output]] = None,
@@ -844,7 +841,7 @@ def use(
 
 @overload
 def use(
-    client: Union[AsyncClient, Callable[[], AsyncClient]],
+    client: Type[AsyncClient],
     ref: Union[str, FunctionRef[Input, Output]],
     *,
     hint: Optional[Callable[Input, Output]] = None,
@@ -853,12 +850,11 @@ def use(
 
 
 def use(
-    client: Union[Client, AsyncClient, Callable[[], Client], Callable[[], AsyncClient]],
+    client: Union[Type[Client], Type[AsyncClient]],
     ref: Union[str, FunctionRef[Input, Output]],
     *,
     hint: Optional[Callable[Input, Output]] = None,  # pylint: disable=unused-argument # noqa: ARG001 # required for type inference
     streaming: bool = False,
-    use_async: bool = False,  # Internal parameter to indicate async mode
 ) -> Union[
     Function[Input, Output],
     AsyncFunction[Input, Output],
@@ -879,12 +875,9 @@ def use(
     except AttributeError:
         pass
 
-    # Determine if this is async
-    is_async = isinstance(client, AsyncClient) or use_async
-
-    if is_async:
+    if issubclass(client, AsyncClient):
         # TODO: Fix type inference for AsyncFunction return type
-        return AsyncFunction(client, str(ref), streaming=streaming)  # type: ignore[return-value,arg-type]
-    else:
-        # TODO: Fix type inference for Function return type
-        return Function(client, str(ref), streaming=streaming)  # type: ignore[return-value,arg-type]
+        return AsyncFunction(client, str(ref), streaming=streaming)  # type: ignore[return-value]
+
+    # TODO: Fix type inference for Function return type
+    return Function(client, str(ref), streaming=streaming)  # type: ignore[return-value]

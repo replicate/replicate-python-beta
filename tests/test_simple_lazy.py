@@ -27,8 +27,8 @@ def test_use_does_not_create_client_immediately():
 
                 # Verify the client property is a property that will create client on demand
                 # We can't call it without a token, but we can check it's the right type
-                assert hasattr(model, "_client_or_factory")  # type: ignore[misc]
-                print("✓ Client factory is stored for lazy creation")
+                assert hasattr(model, "_client_class")  # type: ignore[misc]
+                print("✓ Client class is stored for lazy creation")
 
             except Exception as e:
                 print(f"✗ Test failed: {e}")
@@ -55,9 +55,9 @@ def test_client_created_when_model_called():
             print("✓ Model function created successfully")
 
             # Verify the model has the lazy client setup
-            assert hasattr(model, "_client_or_factory")
-            assert callable(model._client_or_factory)
-            print("✓ Lazy client factory is properly configured")
+            assert hasattr(model, "_client_class")
+            assert isinstance(model._client_class, type)
+            print("✓ Lazy client class is properly configured")
 
             # Test that accessing _client property works (creates client)
             try:
