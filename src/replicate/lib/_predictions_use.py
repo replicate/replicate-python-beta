@@ -9,6 +9,7 @@ from typing import (
     Any,
     Dict,
     List,
+    Type,
     Tuple,
     Union,
     Generic,
@@ -436,14 +437,17 @@ class Function(Generic[Input, Output]):
     A wrapper for a Replicate model that can be called as a function.
     """
 
-    _client: Client
     _ref: str
     _streaming: bool
 
-    def __init__(self, client: Client, ref: str, *, streaming: bool) -> None:
-        self._client = client
+    def __init__(self, client: Type[Client], ref: str, *, streaming: bool) -> None:
+        self._client_class = client
         self._ref = ref
         self._streaming = streaming
+
+    @property
+    def _client(self) -> Client:
+        return self._client_class()
 
     def __call__(self, *args: Input.args, **inputs: Input.kwargs) -> Output:
         return self.create(*args, **inputs).output()
@@ -666,15 +670,18 @@ class AsyncFunction(Generic[Input, Output]):
     An async wrapper for a Replicate model that can be called as a function.
     """
 
-    _client: AsyncClient
     _ref: str
     _streaming: bool
     _openapi_schema: Optional[Dict[str, Any]] = None
 
-    def __init__(self, client: AsyncClient, ref: str, *, streaming: bool) -> None:
-        self._client = client
+    def __init__(self, client: Type[AsyncClient], ref: str, *, streaming: bool) -> None:
+        self._client_class = client
         self._ref = ref
         self._streaming = streaming
+
+    @property
+    def _client(self) -> AsyncClient:
+        return self._client_class()
 
     @cached_property
     def _parsed_ref(self) -> Tuple[str, str, Optional[str]]:
@@ -804,7 +811,7 @@ class AsyncFunction(Generic[Input, Output]):
 
 @overload
 def use(
-    client: Client,
+    client: Type[Client],
     ref: Union[str, FunctionRef[Input, Output]],
     *,
     hint: Optional[Callable[Input, Output]] = None,
@@ -814,7 +821,7 @@ def use(
 
 @overload
 def use(
-    client: Client,
+    client: Type[Client],
     ref: Union[str, FunctionRef[Input, Output]],
     *,
     hint: Optional[Callable[Input, Output]] = None,
@@ -824,7 +831,7 @@ def use(
 
 @overload
 def use(
-    client: AsyncClient,
+    client: Type[AsyncClient],
     ref: Union[str, FunctionRef[Input, Output]],
     *,
     hint: Optional[Callable[Input, Output]] = None,
@@ -834,7 +841,7 @@ def use(
 
 @overload
 def use(
-    client: AsyncClient,
+    client: Type[AsyncClient],
     ref: Union[str, FunctionRef[Input, Output]],
     *,
     hint: Optional[Callable[Input, Output]] = None,
@@ -843,7 +850,7 @@ def use(
 
 
 def use(
-    client: Union[Client, AsyncClient],
+    client: Union[Type[Client], Type[AsyncClient]],
     ref: Union[str, FunctionRef[Input, Output]],
     *,
     hint: Optional[Callable[Input, Output]] = None,  # pylint: disable=unused-argument # noqa: ARG001 # required for type inference
@@ -868,7 +875,7 @@ def use(
     except AttributeError:
         pass
 
-    if isinstance(client, AsyncClient):
+    if issubclass(client, AsyncClient):
         # TODO: Fix type inference for AsyncFunction return type
         return AsyncFunction(client, str(ref), streaming=streaming)  # type: ignore[return-value]
 
