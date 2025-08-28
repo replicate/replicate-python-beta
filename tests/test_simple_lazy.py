@@ -42,7 +42,7 @@ def test_client_created_when_model_called():
     # Test that we can create a model function with a token available
     # Mock cog to provide a token
     mock_scope = MagicMock()
-    mock_scope.context.items.return_value = [("REPLICATE_API_TOKEN", "test-token")]
+    mock_scope.context = {"REPLICATE_API_TOKEN": "test-token"}
     mock_cog = MagicMock()
     mock_cog.current_scope.return_value = mock_scope
 
