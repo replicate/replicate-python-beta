@@ -1,5 +1,13 @@
 # Changelog
 
+## 2.0.0-alpha.22 (2025-08-28)
+
+Full Changelog: [v2.0.0-alpha.21...v2.0.0-alpha.22](https://github.com/replicate/replicate-python-stainless/compare/v2.0.0-alpha.21...v2.0.0-alpha.22)
+
+### Bug Fixes
+
+* implement lazy client creation in replicate.use() ([#57](https://github.com/replicate/replicate-python-stainless/issues/57)) ([caf4c4e](https://github.com/replicate/replicate-python-stainless/commit/caf4c4efa2be271144b22b93a38ea490b10ad86b))
+
 ## 2.0.0-alpha.21 (2025-08-26)
 
 Full Changelog: [v2.0.0-alpha.20...v2.0.0-alpha.21](https://github.com/replicate/replicate-python-stainless/compare/v2.0.0-alpha.20...v2.0.0-alpha.21)
