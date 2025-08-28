@@ -14,7 +14,7 @@ def test_use_does_not_raise_without_token():
             import replicate
 
             # Should not raise an exception
-            model = replicate.use("test/model")
+            model = replicate.use("test/model")  # type: ignore[misc]
             assert model is not None
 
 
@@ -35,7 +35,7 @@ def test_cog_current_scope():
         with patch.dict(sys.modules, {"cog": mock_cog}):
             import replicate
 
-            model = replicate.use("test/model")
+            model = replicate.use("test/model")  # type: ignore[misc]
 
             # Access the client property - this should trigger client creation and cog.current_scope call
             _ = model._client
@@ -46,7 +46,7 @@ def test_cog_current_scope():
             mock_context.items.return_value = [("REPLICATE_API_TOKEN", "test-token-2")]
 
             # Create a new model to trigger another client creation
-            model2 = replicate.use("test/model2")
+            model2 = replicate.use("test/model2")  # type: ignore[misc]
             _ = model2._client
 
             assert mock_cog.current_scope.call_count == 2
