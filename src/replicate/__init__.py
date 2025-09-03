@@ -89,6 +89,7 @@ __all__ = [
     "Model",
     "Version",
     "ModelVersionIdentifier",
+    "get_path_url",
 ]
 
 if not _t.TYPE_CHECKING:
@@ -104,6 +105,9 @@ __locals = locals()
 for __name in __all__:
     if not __name.startswith("__"):
         try:
+            # Skip get_path_url as it's imported later
+            if __name == "get_path_url":
+                continue
             __locals[__name].__module__ = "replicate"
         except (TypeError, AttributeError):
             # Some of our exported symbols are builtins which we can't set attributes for.
@@ -253,4 +257,5 @@ from ._module_client import (
     collections as collections,
     deployments as deployments,
     predictions as predictions,
+    get_path_url as get_path_url,
 )
