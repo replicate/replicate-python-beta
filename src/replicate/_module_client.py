@@ -18,6 +18,7 @@ if TYPE_CHECKING:
 
 from . import _load_client
 from ._utils import LazyProxy
+from .lib._predictions_use import get_path_url  # noqa: F401  # pyright: ignore[reportUnusedImport]
 
 
 class FilesResourceProxy(LazyProxy["FilesResource"]):
@@ -82,9 +83,6 @@ if TYPE_CHECKING:
     __client: Replicate = cast(Replicate, {})
     run = __client.run
     use = __client.use
-
-    # Import get_path_url for type checking
-    from .lib._predictions_use import get_path_url
 else:
 
     def _run(*args, **kwargs):
@@ -103,14 +101,8 @@ else:
 
         return use(Replicate, ref, hint=hint, streaming=streaming, **kwargs)
 
-    def _get_path_url(path):
-        from .lib._predictions_use import get_path_url
-
-        return get_path_url(path)
-
     run = _run
     use = _use
-    get_path_url = _get_path_url
 
 files: FilesResource = FilesResourceProxy().__as_proxied__()
 models: ModelsResource = ModelsResourceProxy().__as_proxied__()

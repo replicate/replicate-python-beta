@@ -105,8 +105,8 @@ __locals = locals()
 for __name in __all__:
     if not __name.startswith("__"):
         try:
-            # Skip get_path_url as it's imported later
-            if __name == "get_path_url":
+            # Skip symbols that are imported later from _module_client
+            if __name in ("get_path_url", "run", "use"):
                 continue
             __locals[__name].__module__ = "replicate"
         except (TypeError, AttributeError):
