@@ -43,6 +43,7 @@ from ._exceptions import (
 from .lib._models import Model as Model, Version as Version, ModelVersionIdentifier as ModelVersionIdentifier
 from ._base_client import DefaultHttpxClient, DefaultAioHttpClient, DefaultAsyncHttpxClient
 from ._utils._logs import setup_logging as _setup_logging
+from .lib._predictions_use import get_path_url as get_path_url
 
 __all__ = [
     "types",
@@ -257,5 +258,4 @@ from ._module_client import (
     collections as collections,
     deployments as deployments,
     predictions as predictions,
-    get_path_url as get_path_url,
 )
