@@ -18,7 +18,7 @@ if TYPE_CHECKING:
 
 from . import _load_client
 from ._utils import LazyProxy
-from .lib._predictions_use import get_path_url  # noqa: F401  # pyright: ignore[reportUnusedImport]
+from .lib._predictions_use import get_path_url as get_path_url
 
 
 class FilesResourceProxy(LazyProxy["FilesResource"]):
