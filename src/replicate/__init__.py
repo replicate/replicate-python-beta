@@ -107,7 +107,7 @@ for __name in __all__:
     if not __name.startswith("__"):
         try:
             # Skip symbols that are imported later from _module_client
-            if __name in ("get_path_url", "run", "use"):
+            if __name in ("run", "use"):
                 continue
             __locals[__name].__module__ = "replicate"
         except (TypeError, AttributeError):
