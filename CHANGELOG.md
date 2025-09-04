@@ -1,5 +1,22 @@
 # Changelog
 
+## 2.0.0-alpha.23 (2025-09-04)
+
+Full Changelog: [v2.0.0-alpha.22...v2.0.0-alpha.23](https://github.com/replicate/replicate-python-stainless/compare/v2.0.0-alpha.22...v2.0.0-alpha.23)
+
+### Features
+
+* add get_path_url() function support for migration compatibility ([#61](https://github.com/replicate/replicate-python-stainless/issues/61)) ([951d9c5](https://github.com/replicate/replicate-python-stainless/commit/951d9c5cf4c72bb9346e4bde0d545abb1ab84741))
+* improve future compat with pydantic v3 ([06dfa6b](https://github.com/replicate/replicate-python-stainless/commit/06dfa6b2adf4cd5cfcb18f2602ca7d67182296a8))
+* **types:** replace List[str] with SequenceNotStr in params ([56dc0f2](https://github.com/replicate/replicate-python-stainless/commit/56dc0f2a68e6eb989574e9053f09161096c86eb3))
+
+
+### Chores
+
+* add agents files ([#59](https://github.com/replicate/replicate-python-stainless/issues/59)) ([b726483](https://github.com/replicate/replicate-python-stainless/commit/b726483034244776bf9b9c45504eb1eb1b2f3085))
+* **internal:** add Sequence related utils ([5a8f513](https://github.com/replicate/replicate-python-stainless/commit/5a8f513755a94211fa35b59527cf57965105ff6a))
+* **internal:** move mypy configurations to `pyproject.toml` file ([696d2c1](https://github.com/replicate/replicate-python-stainless/commit/696d2c18ebf0a38213371eb4fa1898fc85fc2581))
+
 ## 2.0.0-alpha.22 (2025-08-28)
 
 Full Changelog: [v2.0.0-alpha.21...v2.0.0-alpha.22](https://github.com/replicate/replicate-python-stainless/compare/v2.0.0-alpha.21...v2.0.0-alpha.22)
