@@ -139,6 +139,8 @@ class FileOutput(httpx.SyncByteStream):
     def __init__(self, url: str, client: Replicate) -> None:
         self.url = url
         self._client = client
+        # Add __url__ attribute for compatibility with get_path_url()
+        self.__url__ = url
 
     def read(self) -> bytes:
         if self.url.startswith("data:"):
@@ -184,6 +186,8 @@ class AsyncFileOutput(httpx.AsyncByteStream):
     def __init__(self, url: str, client: AsyncReplicate) -> None:
         self.url = url
         self._client = client
+        # Add __url__ attribute for compatibility with get_path_url()
+        self.__url__ = url
 
     async def read(self) -> bytes:
         if self.url.startswith("data:"):
