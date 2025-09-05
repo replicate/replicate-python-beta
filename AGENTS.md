@@ -1,6 +1,6 @@
 # AGENTS.md
 
-This file is for code-writing LLM agents like Claude Code, Gemini CLI, Cursor, etc.
+This file contains instructions for code-writing LLM agents like Claude Code, Gemini CLI, Cursor, OpenAI Codex, etc.
 
 CLAUDE.md symlinks to this file.
 
@@ -20,3 +20,16 @@ Use the `scripts/` directory to run scripts:
 - `scripts/format` - Run code formatting (ruff format + doc formatting)
 - `scripts/test` - Run full test suite (includes Prism mock server setup and Pydantic v1 compatibility tests)
 - `scripts/mock` - Start Prism mock server for testing
+
+
+## Branches and Pull Requests
+
+When opening a pull request, target the `next` branch.
+
+The `main` branch reflects code that has been released to the package manager whereas the next branch queues up unreleased changes for you to review via the release PR.
+
+
+## More information
+
+Read the CONTRIBUTING.md file in this repository for more information.
+
