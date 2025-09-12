@@ -1,5 +1,13 @@
 # Changelog
 
+## 2.0.0-alpha.24 (2025-09-11)
+
+Full Changelog: [v2.0.0-alpha.23...v2.0.0-alpha.24](https://github.com/replicate/replicate-python-stainless/compare/v2.0.0-alpha.23...v2.0.0-alpha.24)
+
+### Chores
+
+* **tests:** simplify `get_platform` test ([0b697dc](https://github.com/replicate/replicate-python-stainless/commit/0b697dc72e8a177ad383fac229b7e43ee5d7d1ee))
+
 ## 2.0.0-alpha.23 (2025-09-04)
 
 Full Changelog: [v2.0.0-alpha.22...v2.0.0-alpha.23](https://github.com/replicate/replicate-python-stainless/compare/v2.0.0-alpha.22...v2.0.0-alpha.23)
