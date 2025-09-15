@@ -22,6 +22,13 @@ class ModelCreateResponse(BaseModel):
     github_url: Optional[str] = None
     """A URL for the model's source code on GitHub"""
 
+    is_official: Optional[bool] = None
+    """Boolean indicating whether the model is officially maintained by Replicate.
+
+    Official models are always on, have stable API interfaces, and predictable
+    pricing.
+    """
+
     latest_version: Optional[VersionGetResponse] = None
     """The model's latest version"""
 
