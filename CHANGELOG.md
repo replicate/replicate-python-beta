@@ -1,5 +1,13 @@
 # Changelog
 
+## 2.0.0-alpha.25 (2025-09-15)
+
+Full Changelog: [v2.0.0-alpha.24...v2.0.0-alpha.25](https://github.com/replicate/replicate-python-stainless/compare/v2.0.0-alpha.24...v2.0.0-alpha.25)
+
+### Chores
+
+* update OpenAPI spec and rebuild SDKs ([5e7effd](https://github.com/replicate/replicate-python-stainless/commit/5e7effd94a0e68373d91c57205f639dae022efc4))
+
 ## 2.0.0-alpha.24 (2025-09-11)
 
 Full Changelog: [v2.0.0-alpha.23...v2.0.0-alpha.24](https://github.com/replicate/replicate-python-stainless/compare/v2.0.0-alpha.23...v2.0.0-alpha.24)
