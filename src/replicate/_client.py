@@ -27,25 +27,42 @@ from replicate.types.prediction_create_params import PredictionCreateParamsWitho
 
 from . import _exceptions
 from ._qs import Querystring
+from .types import client_search_params
 from ._types import (
     NOT_GIVEN,
+    Body,
     Omit,
+    Query,
+    Headers,
     Timeout,
     NotGiven,
     Transport,
     ProxiesTypes,
     RequestOptions,
 )
-from ._utils import is_given, get_async_library
+from ._utils import (
+    is_given,
+    maybe_transform,
+    get_async_library,
+    async_maybe_transform,
+)
 from ._compat import cached_property
 from ._version import __version__
+from ._response import (
+    to_raw_response_wrapper,
+    to_streamed_response_wrapper,
+    async_to_raw_response_wrapper,
+    async_to_streamed_response_wrapper,
+)
 from ._streaming import Stream as Stream, AsyncStream as AsyncStream
 from ._exceptions import APIStatusError, ReplicateError
 from ._base_client import (
     DEFAULT_MAX_RETRIES,
     SyncAPIClient,
     AsyncAPIClient,
+    make_request_options,
 )
+from .types.search_response import SearchResponse
 
 if TYPE_CHECKING:
     from .resources import files, models, account, hardware, webhooks, trainings, collections, deployments, predictions
@@ -353,6 +370,70 @@ class Replicate(SyncAPIClient):
     # Alias for `copy` for nicer inline usage, e.g.
     # client.with_options(timeout=10).foo.create(...)
     with_options = copy
+
+    def search(
+        self,
+        *,
+        query: str,
+        limit: int | NotGiven = NOT_GIVEN,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+    ) -> SearchResponse:
+        """
+        Search for public models, collections, and docs using a text query.
+
+        For models, the response includes all model data, plus a new `metadata` object
+        with the following fields:
+
+        - `generated_description`: A longer and more detailed AI-generated description
+          of the model
+        - `tags`: An array of tags for the model
+        - `score`: A score for the model's relevance to the search query
+
+        Example cURL request:
+
+        ```console
+        curl -s \\
+          -H "Authorization: Bearer $REPLICATE_API_TOKEN" \\
+          "https://api.replicate.com/v1/search?query=nano+banana"
+        ```
+
+        Note: This search API is currently in beta and may change in future versions.
+
+        Args:
+          query: The search query string
+
+          limit: Maximum number of model results to return (1-50, defaults to 20)
+
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        return self.get(
+            "/search",
+            options=make_request_options(
+                extra_headers=extra_headers,
+                extra_query=extra_query,
+                extra_body=extra_body,
+                timeout=timeout,
+                query=maybe_transform(
+                    {
+                        "query": query,
+                        "limit": limit,
+                    },
+                    client_search_params.ClientSearchParams,
+                ),
+            ),
+            cast_to=SearchResponse,
+        )
 
     @override
     def _make_status_error(
@@ -665,6 +746,70 @@ class AsyncReplicate(AsyncAPIClient):
     # client.with_options(timeout=10).foo.create(...)
     with_options = copy
 
+    async def search(
+        self,
+        *,
+        query: str,
+        limit: int | NotGiven = NOT_GIVEN,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+    ) -> SearchResponse:
+        """
+        Search for public models, collections, and docs using a text query.
+
+        For models, the response includes all model data, plus a new `metadata` object
+        with the following fields:
+
+        - `generated_description`: A longer and more detailed AI-generated description
+          of the model
+        - `tags`: An array of tags for the model
+        - `score`: A score for the model's relevance to the search query
+
+        Example cURL request:
+
+        ```console
+        curl -s \\
+          -H "Authorization: Bearer $REPLICATE_API_TOKEN" \\
+          "https://api.replicate.com/v1/search?query=nano+banana"
+        ```
+
+        Note: This search API is currently in beta and may change in future versions.
+
+        Args:
+          query: The search query string
+
+          limit: Maximum number of model results to return (1-50, defaults to 20)
+
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        return await self.get(
+            "/search",
+            options=make_request_options(
+                extra_headers=extra_headers,
+                extra_query=extra_query,
+                extra_body=extra_body,
+                timeout=timeout,
+                query=await async_maybe_transform(
+                    {
+                        "query": query,
+                        "limit": limit,
+                    },
+                    client_search_params.ClientSearchParams,
+                ),
+            ),
+            cast_to=SearchResponse,
+        )
+
     @override
     def _make_status_error(
         self,
@@ -704,6 +849,10 @@ class ReplicateWithRawResponse:
 
     def __init__(self, client: Replicate) -> None:
         self._client = client
+
+        self.search = to_raw_response_wrapper(
+            client.search,
+        )
 
     @cached_property
     def collections(self) -> collections.CollectionsResourceWithRawResponse:
@@ -766,6 +915,10 @@ class AsyncReplicateWithRawResponse:
     def __init__(self, client: AsyncReplicate) -> None:
         self._client = client
 
+        self.search = async_to_raw_response_wrapper(
+            client.search,
+        )
+
     @cached_property
     def collections(self) -> collections.AsyncCollectionsResourceWithRawResponse:
         from .resources.collections import AsyncCollectionsResourceWithRawResponse
@@ -827,6 +980,10 @@ class ReplicateWithStreamedResponse:
     def __init__(self, client: Replicate) -> None:
         self._client = client
 
+        self.search = to_streamed_response_wrapper(
+            client.search,
+        )
+
     @cached_property
     def collections(self) -> collections.CollectionsResourceWithStreamingResponse:
         from .resources.collections import CollectionsResourceWithStreamingResponse
@@ -887,6 +1044,10 @@ class AsyncReplicateWithStreamedResponse:
 
     def __init__(self, client: AsyncReplicate) -> None:
         self._client = client
+
+        self.search = async_to_streamed_response_wrapper(
+            client.search,
+        )
 
     @cached_property
     def collections(self) -> collections.AsyncCollectionsResourceWithStreamingResponse:
