@@ -1,5 +1,23 @@
 # Changelog
 
+## 2.0.0-alpha.26 (2025-09-17)
+
+Full Changelog: [v2.0.0-alpha.25...v2.0.0-alpha.26](https://github.com/replicate/replicate-python-stainless/compare/v2.0.0-alpha.25...v2.0.0-alpha.26)
+
+### Features
+
+* **api:** add new replicate.search() method (beta) ([30d7019](https://github.com/replicate/replicate-python-stainless/commit/30d701999ea48ee65c5e5fd467072ccd5db35f87))
+
+
+### Bug Fixes
+
+* **tests:** fix tests for module-level client ([1e72f23](https://github.com/replicate/replicate-python-stainless/commit/1e72f23da3f0930955fe126848a8a8e58dbb710e))
+
+
+### Chores
+
+* **internal:** update pydantic dependency ([54872cb](https://github.com/replicate/replicate-python-stainless/commit/54872cb5e00fb65cae2abffcf0169a8b138e35fa))
+
 ## 2.0.0-alpha.25 (2025-09-15)
 
 Full Changelog: [v2.0.0-alpha.24...v2.0.0-alpha.25](https://github.com/replicate/replicate-python-stainless/compare/v2.0.0-alpha.24...v2.0.0-alpha.25)
