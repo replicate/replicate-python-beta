@@ -1,3 +1,15 @@
+# Replicate
+
+Types:
+
+```python
+from replicate.types import SearchResponse
+```
+
+Methods:
+
+- <code title="get /search">replicate.<a href="./src/replicate/_client.py">search</a>(\*\*<a href="src/replicate/types/client_search_params.py">params</a>) -> <a href="./src/replicate/types/search_response.py">SearchResponse</a></code>
+
 # Collections
 
 Types:

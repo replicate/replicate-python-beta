@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from .prediction import Prediction as Prediction
+from .search_response import SearchResponse as SearchResponse
 from .file_get_response import FileGetResponse as FileGetResponse
 from .file_create_params import FileCreateParams as FileCreateParams
 from .file_list_response import FileListResponse as FileListResponse
@@ -11,6 +12,7 @@ from .model_create_params import ModelCreateParams as ModelCreateParams
 from .model_list_response import ModelListResponse as ModelListResponse
 from .model_search_params import ModelSearchParams as ModelSearchParams
 from .account_get_response import AccountGetResponse as AccountGetResponse
+from .client_search_params import ClientSearchParams as ClientSearchParams
 from .file_create_response import FileCreateResponse as FileCreateResponse
 from .file_download_params import FileDownloadParams as FileDownloadParams
 from .model_create_response import ModelCreateResponse as ModelCreateResponse
