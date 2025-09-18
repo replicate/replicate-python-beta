@@ -9,7 +9,7 @@ from typing_extensions import Literal
 import httpx
 
 from ..types import prediction_list_params, prediction_create_params
-from .._types import NOT_GIVEN, Body, Query, Headers, NotGiven
+from .._types import Body, Omit, Query, Headers, NotGiven, omit, not_given
 from .._utils import maybe_transform, strip_not_given, async_maybe_transform
 from .._compat import cached_property
 from .._resource import SyncAPIResource, AsyncAPIResource
@@ -51,16 +51,16 @@ class PredictionsResource(SyncAPIResource):
         *,
         input: object,
         version: str,
-        stream: bool | NotGiven = NOT_GIVEN,
-        webhook: str | NotGiven = NOT_GIVEN,
-        webhook_events_filter: List[Literal["start", "output", "logs", "completed"]] | NotGiven = NOT_GIVEN,
-        prefer: str | NotGiven = NOT_GIVEN,
+        stream: bool | Omit = omit,
+        webhook: str | Omit = omit,
+        webhook_events_filter: List[Literal["start", "output", "logs", "completed"]] | Omit = omit,
+        prefer: str | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> Prediction:
         """
         Create a prediction for the model version and inputs you provide.
@@ -195,14 +195,14 @@ class PredictionsResource(SyncAPIResource):
     def list(
         self,
         *,
-        created_after: Union[str, datetime] | NotGiven = NOT_GIVEN,
-        created_before: Union[str, datetime] | NotGiven = NOT_GIVEN,
+        created_after: Union[str, datetime] | Omit = omit,
+        created_before: Union[str, datetime] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> SyncCursorURLPageWithCreatedFilters[Prediction]:
         """
         Get a paginated list of all predictions created by the user or organization
@@ -317,7 +317,7 @@ class PredictionsResource(SyncAPIResource):
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> Prediction:
         """
         Cancel a prediction that is currently running.
@@ -373,7 +373,7 @@ class PredictionsResource(SyncAPIResource):
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> Prediction:
         """
         Get the current state of a prediction.
@@ -493,16 +493,16 @@ class AsyncPredictionsResource(AsyncAPIResource):
         *,
         input: object,
         version: str,
-        stream: bool | NotGiven = NOT_GIVEN,
-        webhook: str | NotGiven = NOT_GIVEN,
-        webhook_events_filter: List[Literal["start", "output", "logs", "completed"]] | NotGiven = NOT_GIVEN,
-        prefer: str | NotGiven = NOT_GIVEN,
+        stream: bool | Omit = omit,
+        webhook: str | Omit = omit,
+        webhook_events_filter: List[Literal["start", "output", "logs", "completed"]] | Omit = omit,
+        prefer: str | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> Prediction:
         """
         Create a prediction for the model version and inputs you provide.
@@ -637,14 +637,14 @@ class AsyncPredictionsResource(AsyncAPIResource):
     def list(
         self,
         *,
-        created_after: Union[str, datetime] | NotGiven = NOT_GIVEN,
-        created_before: Union[str, datetime] | NotGiven = NOT_GIVEN,
+        created_after: Union[str, datetime] | Omit = omit,
+        created_before: Union[str, datetime] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> AsyncPaginator[Prediction, AsyncCursorURLPageWithCreatedFilters[Prediction]]:
         """
         Get a paginated list of all predictions created by the user or organization
@@ -759,7 +759,7 @@ class AsyncPredictionsResource(AsyncAPIResource):
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> Prediction:
         """
         Cancel a prediction that is currently running.
@@ -815,7 +815,7 @@ class AsyncPredictionsResource(AsyncAPIResource):
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> Prediction:
         """
         Get the current state of a prediction.

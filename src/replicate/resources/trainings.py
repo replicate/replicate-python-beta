@@ -8,7 +8,7 @@ from typing_extensions import Literal
 import httpx
 
 from ..types import training_create_params
-from .._types import NOT_GIVEN, Body, Query, Headers, NotGiven
+from .._types import Body, Omit, Query, Headers, NotGiven, omit, not_given
 from .._utils import maybe_transform, async_maybe_transform
 from .._compat import cached_property
 from .._resource import SyncAPIResource, AsyncAPIResource
@@ -56,14 +56,14 @@ class TrainingsResource(SyncAPIResource):
         version_id: str,
         destination: str,
         input: object,
-        webhook: str | NotGiven = NOT_GIVEN,
-        webhook_events_filter: List[Literal["start", "output", "logs", "completed"]] | NotGiven = NOT_GIVEN,
+        webhook: str | Omit = omit,
+        webhook_events_filter: List[Literal["start", "output", "logs", "completed"]] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> TrainingCreateResponse:
         """
         Start a new training of the model version you specify.
@@ -207,7 +207,7 @@ class TrainingsResource(SyncAPIResource):
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> SyncCursorURLPage[TrainingListResponse]:
         """
         Get a paginated list of all trainings created by the user or organization
@@ -293,7 +293,7 @@ class TrainingsResource(SyncAPIResource):
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> TrainingCancelResponse:
         """
         Cancel a training
@@ -326,7 +326,7 @@ class TrainingsResource(SyncAPIResource):
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> TrainingGetResponse:
         """
         Get the current state of a training.
@@ -440,14 +440,14 @@ class AsyncTrainingsResource(AsyncAPIResource):
         version_id: str,
         destination: str,
         input: object,
-        webhook: str | NotGiven = NOT_GIVEN,
-        webhook_events_filter: List[Literal["start", "output", "logs", "completed"]] | NotGiven = NOT_GIVEN,
+        webhook: str | Omit = omit,
+        webhook_events_filter: List[Literal["start", "output", "logs", "completed"]] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> TrainingCreateResponse:
         """
         Start a new training of the model version you specify.
@@ -591,7 +591,7 @@ class AsyncTrainingsResource(AsyncAPIResource):
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> AsyncPaginator[TrainingListResponse, AsyncCursorURLPage[TrainingListResponse]]:
         """
         Get a paginated list of all trainings created by the user or organization
@@ -677,7 +677,7 @@ class AsyncTrainingsResource(AsyncAPIResource):
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> TrainingCancelResponse:
         """
         Cancel a training
@@ -710,7 +710,7 @@ class AsyncTrainingsResource(AsyncAPIResource):
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> TrainingGetResponse:
         """
         Get the current state of a training.
