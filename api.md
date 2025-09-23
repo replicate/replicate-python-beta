@@ -11,18 +11,17 @@ pip install replicate
 ```python
 import replicate
 
-# Create a model function
+# Create a model function for image generation
 banana = replicate.use("google/nano-banana")
 
-# Call it like any Python function
-output = banana(prompt="astronaut on a horse")
-print(output)
+# Call it - returns an image URL
+image_url = banana(prompt="astronaut on a horse")
+print(image_url)  # https://replicate.delivery/...
 
-# Or use run() for one-off predictions
-output = replicate.run(
-    "google/nano-banana",
-    input={"prompt": "astronaut on a horse"}
-)
+# Or for text generation
+claude = replicate.use("anthropic/claude-4-sonnet")
+text = claude(prompt="Write a haiku about Python")
+print(text)  # "Code flows like water..."
 ```
 
 ## Client Initialization
@@ -33,7 +32,7 @@ By default, the SDK uses the `REPLICATE_API_TOKEN` environment variable:
 import replicate
 
 # Uses REPLICATE_API_TOKEN from environment
-output = replicate.run("google/nano-banana", input={"prompt": "hello"})
+image_url = replicate.run("google/nano-banana", input={"prompt": "hello"})
 ```
 
 ### Custom Client Configuration
@@ -53,7 +52,7 @@ replicate = Replicate(
 )
 
 # Now use this configured client
-output = replicate.run("google/nano-banana", input={"prompt": "hello"})
+image_url = replicate.run("google/nano-banana", input={"prompt": "hello"})
 ```
 
 ### Asynchronous Client
@@ -66,11 +65,11 @@ import os
 async def main():
     # Can specify token explicitly if needed
     replicate = AsyncReplicate(bearer_token=os.environ.get("MY_REPLICATE_TOKEN"))
-    output = await replicate.run(
+    image_url = await replicate.run(
         "google/nano-banana",
         input={"prompt": "a watercolor painting"}
     )
-    print(output)
+    print(image_url)  # https://replicate.delivery/...
 
 asyncio.run(main())
 ```
@@ -82,28 +81,28 @@ asyncio.run(main())
 The most Pythonic way to interact with models. Creates a callable function for any model.
 
 ```python
-# Create a model function
+# Image generation - returns file URLs
 banana = replicate.use("google/nano-banana")
 
-# Call it like a regular function
-image = banana(prompt="a 19th century portrait of a wombat gentleman")
+# Simple call with just prompt (only required input)
+image_url = banana(prompt="a 19th century portrait of a wombat gentleman")
+print(image_url)  # Returns: https://replicate.delivery/...
 
-# Use it multiple times with different inputs
-image1 = banana(prompt="a cat in a hat", negative_prompt="blurry, low quality")
-image2 = banana(prompt="a dog in sunglasses", num_outputs=4)
+# Use it multiple times
+image1 = banana(prompt="a cat in a hat")
+image2 = banana(prompt="a dog in sunglasses")
 
-# Works great with language models too
+# Text generation - returns text string
 claude = replicate.use("anthropic/claude-4-sonnet")
-response = claude(
-    prompt="Write a haiku about Python programming",
-    temperature=0.7,
-    max_new_tokens=100
-)
 
-# Enable streaming for models that support it
+# Simple call with just prompt (only required input)
+text = claude(prompt="Write a haiku about Python programming")
+print(text)  # Returns: "Code flows like water..."
+
+# Enable streaming for text models
 claude_stream = replicate.use("anthropic/claude-4-sonnet", streaming=True)
 for chunk in claude_stream(prompt="Explain quantum computing"):
-    print(chunk, end="")
+    print(chunk, end="")  # Streams text chunks
 
 # Can accept model references in various formats
 model = replicate.use("owner/name:version")  # Specific version
@@ -116,24 +115,19 @@ model = replicate.use("5c7d5dc6dd8bf75c1acaa8565735e7986bc5b66206b55cca93cb72c9b
 Direct method to run a model and get output. Good for one-off predictions.
 
 ```python
-# Basic usage - returns output when complete
-output = replicate.run(
-    "google/nano-banana:39ed52f2a78e934b3ba6e2a89f5b1c712de7dfea535525255b1aa35c5565e08b",
+# Image generation - returns a file URL
+image_url = replicate.run(
+    "google/nano-banana",
     input={"prompt": "a 19th century portrait of a wombat gentleman"}
 )
+print(image_url)  # https://replicate.delivery/...
 
-# With options
-output = replicate.run(
+# Text generation - returns text string
+text = replicate.run(
     "anthropic/claude-4-sonnet",
-    input={
-        "prompt": "Write a poem about machine learning",
-        "max_new_tokens": 500,
-        "temperature": 0.7
-    },
-    wait=30,  # Wait up to 30 seconds for completion (or True for unlimited)
-    use_file_output=True,  # Return files as FileOutput objects
-    file_encoding_strategy="base64"  # Encode input files as base64 (or "url")
+    input={"prompt": "Write a poem about machine learning"}
 )
+print(text)  # "In silicon valleys deep and wide..."
 
 # Model reference formats
 replicate.run("owner/name:version", input={})  # Specific version
@@ -146,19 +140,19 @@ replicate.run("5c7d5dc6dd8bf75c1acaa8565735e7986bc5b66206b55cca93cb72c9bf15ccaa"
 For models that support streaming (like language models). Returns an iterator of output chunks.
 
 ```python
-# Stream text output
-for event in replicate.stream(
+# Stream text output (only for text models like Claude)
+for chunk in replicate.stream(
     "anthropic/claude-4-sonnet",
-    input={
-        "prompt": "Tell me a story about a robot",
-        "max_new_tokens": 1000
-    }
+    input={"prompt": "Tell me a story about a robot"}
 ):
-    print(str(event), end="")
+    print(chunk, end="")  # Prints each text chunk as it arrives
 
 # Async streaming
-async for event in async_replicate.stream("anthropic/claude-4-sonnet", input={"prompt": "Hello"}):
-    print(str(event), end="")
+async for chunk in async_replicate.stream(
+    "anthropic/claude-4-sonnet", 
+    input={"prompt": "Hello"}
+):
+    print(chunk, end="")
 ```
 
 ### search() - Search Models
@@ -278,6 +272,7 @@ prediction = replicate.models.predictions.create(
     model_name="nano-banana",
     input={"prompt": "a beautiful landscape"}
 )
+# prediction.output will be an image URL when complete
 ```
 
 #### Model Examples
@@ -444,25 +439,24 @@ print(f"Webhook signing secret: {webhook_secret.key}")
 The SDK supports multiple ways to provide file inputs:
 
 ```python
-# File object
+# For models that accept image inputs (like Claude with vision)
 with open("input.jpg", "rb") as f:
-    output = replicate.run("model:version", input={"image": f})
+    text = replicate.run("anthropic/claude-4-sonnet", input={
+        "prompt": "What's in this image?",
+        "image": f
+    })
 
 # File path (automatically opened)
-output = replicate.run("model:version", input={"image": "path/to/image.jpg"})
+text = replicate.run("anthropic/claude-4-sonnet", input={
+    "prompt": "Describe this",
+    "image": "path/to/image.jpg"
+})
 
 # URL
-output = replicate.run("model:version", input={"image": "https://example.com/image.jpg"})
-
-# Base64 data URI
-output = replicate.run("model:version", input={"image": "data:image/jpeg;base64,..."})
-
-# Control encoding strategy
-output = replicate.run(
-    "model:version",
-    input={"image": file_obj},
-    file_encoding_strategy="base64"  # or "url" (uploads to Replicate)
-)
+text = replicate.run("anthropic/claude-4-sonnet", input={
+    "prompt": "Analyze this image",
+    "image": "https://example.com/image.jpg"
+})
 ```
 
 ### Output Files
@@ -472,19 +466,23 @@ File outputs are automatically converted to `FileOutput` objects:
 ```python
 from replicate.helpers import FileOutput
 
-output = replicate.run("model:version", input={"prompt": "generate an image"})
+# Image generation returns a file URL
+image_url = replicate.run("google/nano-banana", input={"prompt": "sunset over mountains"})
+print(f"Generated image: {image_url}")
 
-# If output is a FileOutput
-if isinstance(output, FileOutput):
+# Text generation returns a string
+text = replicate.run("anthropic/claude-4-sonnet", input={"prompt": "Tell me a joke"})
+print(f"Response: {text}")
+
+# When using FileOutput wrapper
+from replicate.helpers import FileOutput
+if isinstance(image_url, FileOutput):
     # Get the URL
-    print(f"File URL: {output.url}")
-    
-    # Read the file content
-    content = output.read()
+    print(f"File URL: {image_url.url}")
     
     # Save to disk
     with open("output.jpg", "wb") as f:
-        for chunk in output:
+        for chunk in image_url:
             f.write(chunk)
 ```
 
@@ -502,7 +500,7 @@ from replicate.exceptions import (
 )
 
 try:
-    output = replicate.run("model:version", input={"prompt": "test"})
+    image_url = replicate.run("google/nano-banana", input={"prompt": "test"})
 except ModelError as e:
     # Model execution failed
     print(f"Model error: {e}")
@@ -598,8 +596,8 @@ replicate = Replicate(
 )
 
 # Per-request timeout
-output = replicate.run(
-    "model:version",
+image_url = replicate.run(
+    "google/nano-banana",
     input={"prompt": "test"},
     wait=60  # Wait up to 60 seconds for completion
 )
@@ -629,18 +627,19 @@ from replicate import AsyncReplicate
 async def main():
     replicate = AsyncReplicate()
     
-    # Run a model
-    output = await replicate.run(
+    # Image generation
+    image_url = await replicate.run(
         "google/nano-banana",
         input={"prompt": "a futuristic city"}
     )
+    print(f"Image: {image_url}")
     
-    # Stream output
-    async for event in replicate.stream(
+    # Stream text generation
+    async for chunk in replicate.stream(
         "anthropic/claude-4-sonnet",
         input={"prompt": "Tell me a joke"}
     ):
-        print(event, end="")
+        print(chunk, end="")
     
     # Pagination
     async for model in replicate.models.list():
@@ -648,9 +647,9 @@ async def main():
     
     # Concurrent requests
     tasks = [
-        replicate.run("model1", input={"prompt": "test1"}),
-        replicate.run("model2", input={"prompt": "test2"}),
-        replicate.run("model3", input={"prompt": "test3"})
+        replicate.run("google/nano-banana", input={"prompt": "cat"}),
+        replicate.run("google/nano-banana", input={"prompt": "dog"}),
+        replicate.run("anthropic/claude-4-sonnet", input={"prompt": "Hello"})
     ]
     results = await asyncio.gather(*tasks)
 
@@ -772,9 +771,9 @@ The new SDK uses a different API structure. Here's how to migrate:
 ```python
 import replicate
 
-# Run a model
-output = replicate.run(
-    "google/nano-banana:version",
+# Run a model - image generation returns URL
+image_url = replicate.run(
+    "google/nano-banana",
     input={"prompt": "a cat"}
 )
 
@@ -786,9 +785,9 @@ model = replicate.models.get("google/nano-banana")
 ```python
 import replicate
 
-# Run a model
-output = replicate.run(
-    "google/nano-banana:version",
+# Run a model - image generation returns URL
+image_url = replicate.run(
+    "google/nano-banana",
     input={"prompt": "a cat"}
 )
 
