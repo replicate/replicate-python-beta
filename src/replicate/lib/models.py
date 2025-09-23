@@ -91,7 +91,7 @@ def patch_models_resource(
             timeout: "float | httpx.Timeout | None | NotGiven" = NOT_GIVEN,
         ) -> "ModelGetResponse":
             owner, name = _parse_model_args(model_or_owner, model_owner, model_name)
-            return await models_resource._original_get(  # type: ignore[misc,no-any-return,attr-defined]
+            return await models_resource._original_get(  # type: ignore[misc,no-any-return,attr-defined,union-attr]
                 model_owner=owner,
                 model_name=name,
                 extra_headers=extra_headers,
@@ -114,7 +114,7 @@ def patch_models_resource(
             timeout: "float | httpx.Timeout | None | NotGiven" = NOT_GIVEN,
         ) -> "ModelGetResponse":
             owner, name = _parse_model_args(model_or_owner, model_owner, model_name)
-            return models_resource._original_get(  # type: ignore[misc,return-value,attr-defined]
+            return models_resource._original_get(  # type: ignore[misc,return-value,attr-defined,union-attr,no-any-return]
                 model_owner=owner,
                 model_name=name,
                 extra_headers=extra_headers,
