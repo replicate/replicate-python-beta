@@ -9,13 +9,13 @@ pip install replicate
 ## Quick Start
 
 ```python
-import replicate
+from replicate import Replicate
 
-# Initialize the client (uses REPLICATE_API_TOKEN env var by default)
-client = replicate.Replicate()
+# Initialize with REPLICATE_API_TOKEN env var by default
+replicate = Replicate()
 
 # Run a model
-output = client.run(
+output = replicate.run(
     "black-forest-labs/flux-schnell",
     input={"prompt": "astronaut on a horse"}
 )
@@ -30,16 +30,16 @@ print(output)
 from replicate import Replicate
 
 # Using environment variable (REPLICATE_API_TOKEN)
-client = Replicate()
+replicate = Replicate()
 
 # With explicit token
-client = Replicate(bearer_token="your_api_token")
+replicate = Replicate(bearer_token="your_api_token")
 
 # Legacy token parameter (for compatibility)
-client = Replicate(api_token="your_api_token")
+replicate = Replicate(api_token="your_api_token")
 
 # With custom configuration
-client = Replicate(
+replicate = Replicate(
     bearer_token="your_api_token",
     base_url="https://api.replicate.com/v1",  # Optional custom base URL
     timeout=120.0,  # Request timeout in seconds
@@ -54,8 +54,8 @@ from replicate import AsyncReplicate
 import asyncio
 
 async def main():
-    client = AsyncReplicate(bearer_token="your_api_token")
-    output = await client.run(
+    replicate = AsyncReplicate(bearer_token="your_api_token")
+    output = await replicate.run(
         "stability-ai/stable-diffusion",
         input={"prompt": "a watercolor painting"}
     )
@@ -72,13 +72,13 @@ The simplest way to run a model and get output.
 
 ```python
 # Basic usage - returns output when complete
-output = client.run(
+output = replicate.run(
     "stability-ai/sdxl:39ed52f2a78e934b3ba6e2a89f5b1c712de7dfea535525255b1aa35c5565e08b",
     input={"prompt": "a 19th century portrait of a wombat gentleman"}
 )
 
 # With options
-output = client.run(
+output = replicate.run(
     "meta/llama-2-70b-chat",
     input={
         "prompt": "Write a poem about machine learning",
@@ -91,9 +91,9 @@ output = client.run(
 )
 
 # Model reference formats
-client.run("owner/name:version", input={})  # Specific version
-client.run("owner/name", input={})  # Latest version
-client.run("5c7d5dc6dd8bf75c1acaa8565735e7986bc5b66206b55cca93cb72c9bf15ccaa", input={})  # Version ID
+replicate.run("owner/name:version", input={})  # Specific version
+replicate.run("owner/name", input={})  # Latest version
+replicate.run("5c7d5dc6dd8bf75c1acaa8565735e7986bc5b66206b55cca93cb72c9bf15ccaa", input={})  # Version ID
 ```
 
 ### stream() - Stream Model Output
@@ -102,7 +102,7 @@ For models that support streaming (like language models).
 
 ```python
 # Stream text output
-for event in client.stream(
+for event in replicate.stream(
     "meta/llama-2-70b-chat",
     input={
         "prompt": "Tell me a story about a robot",
@@ -112,7 +112,7 @@ for event in client.stream(
     print(str(event), end="")
 
 # Async streaming
-async for event in async_client.stream("meta/llama-2-70b-chat", input={"prompt": "Hello"}):
+async for event in async_replicate.stream("meta/llama-2-70b-chat", input={"prompt": "Hello"}):
     print(str(event), end="")
 ```
 
@@ -122,14 +122,14 @@ Experimental feature for creating reusable model functions.
 
 ```python
 # Create a model function
-stable_diffusion = client.use("stability-ai/stable-diffusion")
+stable_diffusion = replicate.use("stability-ai/stable-diffusion")
 
 # Use it multiple times
 image1 = stable_diffusion(prompt="a cat in a hat")
 image2 = stable_diffusion(prompt="a dog in sunglasses")
 
 # With streaming models
-llama = client.use("meta/llama-2-70b-chat", streaming=True)
+llama = replicate.use("meta/llama-2-70b-chat", streaming=True)
 for chunk in llama(prompt="Explain quantum computing"):
     print(chunk, end="")
 ```
@@ -138,7 +138,7 @@ for chunk in llama(prompt="Explain quantum computing"):
 
 ```python
 # Search for models
-results = client.search(query="image generation", limit=10)
+results = replicate.search(query="image generation", limit=10)
 
 for model in results:
     print(f"{model.owner}/{model.name}: {model.description}")
@@ -154,7 +154,7 @@ Create and manage model predictions.
 from replicate.types import Prediction
 
 # Create a prediction
-prediction = client.predictions.create(
+prediction = replicate.predictions.create(
     model="owner/model:version",
     input={"prompt": "hello world"},
     webhook="https://example.com/webhook",  # Optional webhook URL
@@ -162,19 +162,19 @@ prediction = client.predictions.create(
 )
 
 # Get prediction status
-prediction = client.predictions.get(prediction_id="abc123")
+prediction = replicate.predictions.get(prediction_id="abc123")
 print(f"Status: {prediction.status}")
 print(f"Output: {prediction.output}")
 
 # Cancel a prediction
-cancelled = client.predictions.cancel(prediction_id="abc123")
+cancelled = replicate.predictions.cancel(prediction_id="abc123")
 
 # List predictions
-for prediction in client.predictions.list():
+for prediction in replicate.predictions.list():
     print(f"{prediction.id}: {prediction.status}")
 
 # Wait for a prediction to complete
-completed = client.predictions.wait(
+completed = replicate.predictions.wait(
     prediction_id="abc123",
     timeout=60  # Optional timeout in seconds
 )
@@ -186,21 +186,21 @@ Interact with models and their versions.
 
 ```python
 # Get a specific model
-model = client.models.get(model_owner="stability-ai", model_name="stable-diffusion")
+model = replicate.models.get(model_owner="stability-ai", model_name="stable-diffusion")
 print(f"Model: {model.owner}/{model.name}")
 print(f"Description: {model.description}")
 print(f"Latest version: {model.latest_version.id}")
 
 # List all models (with pagination)
-for model in client.models.list():
+for model in replicate.models.list():
     print(f"{model.owner}/{model.name}")
 
 # Search models
-for model in client.models.search(query="text generation"):
+for model in replicate.models.search(query="text generation"):
     print(f"{model.owner}/{model.name}: {model.description}")
 
 # Create a new model
-model = client.models.create(
+model = replicate.models.create(
     owner="your-username",
     name="my-model",
     visibility="public",  # or "private"
@@ -210,28 +210,28 @@ model = client.models.create(
 )
 
 # Delete a model
-client.models.delete(model_owner="your-username", model_name="my-model")
+replicate.models.delete(model_owner="your-username", model_name="my-model")
 ```
 
 #### Model Versions
 
 ```python
 # List model versions
-for version in client.models.versions.list(
+for version in replicate.models.versions.list(
     model_owner="stability-ai",
     model_name="stable-diffusion"
 ):
     print(f"Version {version.id}: created at {version.created_at}")
 
 # Get a specific version
-version = client.models.versions.get(
+version = replicate.models.versions.get(
     model_owner="stability-ai",
     model_name="stable-diffusion",
     version_id="db21e45d3f7023abc2a46ee38a23973f6dce16bb082a930b0c49861f96d1e5bf"
 )
 
 # Delete a version
-client.models.versions.delete(
+replicate.models.versions.delete(
     model_owner="your-username",
     model_name="my-model",
     version_id="version-id"
@@ -244,7 +244,7 @@ Run predictions directly through a model.
 
 ```python
 # Create a prediction for a specific model
-prediction = client.models.predictions.create(
+prediction = replicate.models.predictions.create(
     model_owner="stability-ai",
     model_name="stable-diffusion",
     input={"prompt": "a beautiful landscape"}
@@ -255,7 +255,7 @@ prediction = client.models.predictions.create(
 
 ```python
 # Get example predictions for a model
-for example in client.models.examples.list(
+for example in replicate.models.examples.list(
     model_owner="stability-ai",
     model_name="stable-diffusion"
 ):
@@ -269,7 +269,7 @@ Manage model deployments for production use.
 
 ```python
 # Create a deployment
-deployment = client.deployments.create(
+deployment = replicate.deployments.create(
     name="my-deployment",
     model="owner/model:version",
     hardware="gpu-a100-large",
@@ -278,17 +278,17 @@ deployment = client.deployments.create(
 )
 
 # List deployments
-for deployment in client.deployments.list():
+for deployment in replicate.deployments.list():
     print(f"{deployment.owner}/{deployment.name}")
 
 # Get deployment details
-deployment = client.deployments.get(
+deployment = replicate.deployments.get(
     deployment_owner="your-username",
     deployment_name="my-deployment"
 )
 
 # Update deployment
-updated = client.deployments.update(
+updated = replicate.deployments.update(
     deployment_owner="your-username",
     deployment_name="my-deployment",
     min_instances=2,
@@ -296,13 +296,13 @@ updated = client.deployments.update(
 )
 
 # Delete deployment
-client.deployments.delete(
+replicate.deployments.delete(
     deployment_owner="your-username",
     deployment_name="my-deployment"
 )
 
 # Run a prediction on a deployment
-prediction = client.deployments.predictions.create(
+prediction = replicate.deployments.predictions.create(
     deployment_owner="your-username",
     deployment_name="my-deployment",
     input={"prompt": "hello world"}
@@ -315,7 +315,7 @@ Create and manage model training jobs.
 
 ```python
 # Start a training job
-training = client.trainings.create(
+training = replicate.trainings.create(
     model_owner="your-username",
     model_name="my-model",
     version_id="base-version-id",
@@ -328,15 +328,15 @@ training = client.trainings.create(
 )
 
 # Get training status
-training = client.trainings.get(training_id="training-abc123")
+training = replicate.trainings.get(training_id="training-abc123")
 print(f"Status: {training.status}")
 
 # List trainings
-for training in client.trainings.list():
+for training in replicate.trainings.list():
     print(f"{training.id}: {training.status}")
 
 # Cancel a training
-cancelled = client.trainings.cancel(training_id="training-abc123")
+cancelled = replicate.trainings.cancel(training_id="training-abc123")
 ```
 
 ### Collections
@@ -345,11 +345,11 @@ Browse curated model collections.
 
 ```python
 # List collections
-for collection in client.collections.list():
+for collection in replicate.collections.list():
     print(f"{collection.name}: {collection.description}")
 
 # Get a specific collection
-collection = client.collections.get(collection_slug="awesome-sdxl-models")
+collection = replicate.collections.get(collection_slug="awesome-sdxl-models")
 for model in collection.models:
     print(f"- {model.owner}/{model.name}")
 ```
@@ -361,19 +361,19 @@ Upload and manage files for model inputs.
 ```python
 # Create/upload a file
 with open("image.jpg", "rb") as f:
-    file_response = client.files.create(file=f)
+    file_response = replicate.files.create(file=f)
     file_url = file_response.urls.get
 
 # List files
-for file in client.files.list():
+for file in replicate.files.list():
     print(f"{file.id}: {file.name}")
 
 # Get file details
-file = client.files.get(file_id="file-abc123")
+file = replicate.files.get(file_id="file-abc123")
 print(f"File URL: {file.urls.get}")
 
 # Delete a file
-client.files.delete(file_id="file-abc123")
+replicate.files.delete(file_id="file-abc123")
 ```
 
 ### Hardware
@@ -382,7 +382,7 @@ Get information about available hardware.
 
 ```python
 # List available hardware SKUs
-hardware_list = client.hardware.list()
+hardware_list = replicate.hardware.list()
 for sku in hardware_list:
     print(f"{sku.name}: {sku.specs}")
 ```
@@ -393,7 +393,7 @@ Manage account information.
 
 ```python
 # Get account details
-account = client.account.get()
+account = replicate.account.get()
 print(f"Username: {account.username}")
 print(f"Email: {account.email}")
 ```
@@ -404,7 +404,7 @@ Configure webhooks for predictions.
 
 ```python
 # Get the default webhook secret
-webhook_secret = client.webhooks.default.secret.get()
+webhook_secret = replicate.webhooks.default.secret.get()
 print(f"Webhook signing secret: {webhook_secret.key}")
 ```
 
@@ -417,19 +417,19 @@ The SDK supports multiple ways to provide file inputs:
 ```python
 # File object
 with open("input.jpg", "rb") as f:
-    output = client.run("model:version", input={"image": f})
+    output = replicate.run("model:version", input={"image": f})
 
 # File path (automatically opened)
-output = client.run("model:version", input={"image": "path/to/image.jpg"})
+output = replicate.run("model:version", input={"image": "path/to/image.jpg"})
 
 # URL
-output = client.run("model:version", input={"image": "https://example.com/image.jpg"})
+output = replicate.run("model:version", input={"image": "https://example.com/image.jpg"})
 
 # Base64 data URI
-output = client.run("model:version", input={"image": "data:image/jpeg;base64,..."})
+output = replicate.run("model:version", input={"image": "data:image/jpeg;base64,..."})
 
 # Control encoding strategy
-output = client.run(
+output = replicate.run(
     "model:version",
     input={"image": file_obj},
     file_encoding_strategy="base64"  # or "url" (uploads to Replicate)
@@ -443,7 +443,7 @@ File outputs are automatically converted to `FileOutput` objects:
 ```python
 from replicate.helpers import FileOutput
 
-output = client.run("model:version", input={"prompt": "generate an image"})
+output = replicate.run("model:version", input={"prompt": "generate an image"})
 
 # If output is a FileOutput
 if isinstance(output, FileOutput):
@@ -473,7 +473,7 @@ from replicate.exceptions import (
 )
 
 try:
-    output = client.run("model:version", input={"prompt": "test"})
+    output = replicate.run("model:version", input={"prompt": "test"})
 except ModelError as e:
     # Model execution failed
     print(f"Model error: {e}")
@@ -499,11 +499,11 @@ The SDK automatically handles pagination for list operations:
 
 ```python
 # Automatic pagination (iterates through all pages)
-for model in client.models.list():
+for model in replicate.models.list():
     print(model.name)
 
 # Manual pagination
-first_page = client.models.list()
+first_page = replicate.models.list()
 print(f"Items in first page: {len(first_page.items)}")
 
 if first_page.has_next_page():
@@ -511,7 +511,7 @@ if first_page.has_next_page():
     print(f"Items in second page: {len(next_page.items)}")
 
 # Get all items at once
-all_models = list(client.models.list())
+all_models = list(replicate.models.list())
 ```
 
 ## Advanced Features
@@ -522,7 +522,7 @@ Access the underlying HTTP response:
 
 ```python
 # Get raw response
-response = client.predictions.with_raw_response.create(
+response = replicate.predictions.with_raw_response.create(
     model="model:version",
     input={"prompt": "test"}
 )
@@ -537,21 +537,21 @@ prediction = response.parse()
 
 ### Custom HTTP Client
 
-Configure a custom HTTP client:
+Configure a custom HTTP client for Replicate:
 
 ```python
 import httpx
 from replicate import DefaultHttpxClient
 
 # With proxy
-client = Replicate(
+replicate = Replicate(
     http_client=DefaultHttpxClient(
         proxy="http://proxy.example.com:8080"
     )
 )
 
 # With custom timeout
-client = Replicate(
+replicate = Replicate(
     http_client=DefaultHttpxClient(
         timeout=httpx.Timeout(60.0)
     )
@@ -563,13 +563,13 @@ client = Replicate(
 Configure retry behavior and timeouts:
 
 ```python
-client = Replicate(
+replicate = Replicate(
     max_retries=5,  # Maximum number of retries
     timeout=120.0  # Request timeout in seconds
 )
 
 # Per-request timeout
-output = client.run(
+output = replicate.run(
     "model:version",
     input={"prompt": "test"},
     wait=60  # Wait up to 60 seconds for completion
@@ -578,11 +578,11 @@ output = client.run(
 
 ### Client Copying
 
-Create a new client with modified settings:
+Create a new Replicate instance with modified settings:
 
 ```python
 # Create a copy with different settings
-new_client = client.copy(
+new_replicate = replicate.copy(
     bearer_token="different_token",
     timeout=60.0,
     max_retries=3
@@ -598,30 +598,30 @@ import asyncio
 from replicate import AsyncReplicate
 
 async def main():
-    client = AsyncReplicate()
+    replicate = AsyncReplicate()
     
     # Run a model
-    output = await client.run(
+    output = await replicate.run(
         "stability-ai/stable-diffusion",
         input={"prompt": "a futuristic city"}
     )
     
     # Stream output
-    async for event in client.stream(
+    async for event in replicate.stream(
         "meta/llama-2-70b-chat",
         input={"prompt": "Tell me a joke"}
     ):
         print(event, end="")
     
     # Pagination
-    async for model in client.models.list():
+    async for model in replicate.models.list():
         print(model.name)
     
     # Concurrent requests
     tasks = [
-        client.run("model1", input={"prompt": "test1"}),
-        client.run("model2", input={"prompt": "test2"}),
-        client.run("model3", input={"prompt": "test3"})
+        replicate.run("model1", input={"prompt": "test1"}),
+        replicate.run("model2", input={"prompt": "test2"}),
+        replicate.run("model3", input={"prompt": "test3"})
     ]
     results = await asyncio.gather(*tasks)
 
@@ -644,14 +644,14 @@ from replicate import Replicate
 from replicate.types import Prediction, PredictionStatus
 from replicate.pagination import SyncCursorURLPage
 
-client: Replicate = Replicate()
+replicate: Replicate = Replicate()
 
 # Type hints for responses
-prediction: Prediction = client.predictions.get(prediction_id="abc123")
+prediction: Prediction = replicate.predictions.get(prediction_id="abc123")
 status: PredictionStatus = prediction.status
 
 # Type hints for pagination
-page: SyncCursorURLPage[Prediction] = client.predictions.list()
+page: SyncCursorURLPage[Prediction] = replicate.predictions.list()
 ```
 
 ## Common Patterns
@@ -661,19 +661,19 @@ page: SyncCursorURLPage[Prediction] = client.predictions.list()
 ```python
 import time
 
-def wait_for_prediction(client, prediction_id, timeout=300):
+def wait_for_prediction(replicate, prediction_id, timeout=300):
     """Poll a prediction until it completes or times out."""
     start = time.time()
     while time.time() - start < timeout:
-        prediction = client.predictions.get(prediction_id)
+        prediction = replicate.predictions.get(prediction_id)
         if prediction.status in ["succeeded", "failed", "canceled"]:
             return prediction
         time.sleep(2)  # Poll every 2 seconds
     raise TimeoutError(f"Prediction {prediction_id} timed out")
 
 # Usage
-prediction = client.predictions.create(model="model:version", input={})
-result = wait_for_prediction(client, prediction.id)
+prediction = replicate.predictions.create(model="model:version", input={})
+result = wait_for_prediction(replicate, prediction.id)
 ```
 
 ### Batch Processing
@@ -684,9 +684,9 @@ from replicate import AsyncReplicate
 
 async def batch_process(prompts):
     """Process multiple prompts in parallel."""
-    client = AsyncReplicate()
+    replicate = AsyncReplicate()
     tasks = [
-        client.run("model:version", input={"prompt": prompt})
+        replicate.run("model:version", input={"prompt": prompt})
         for prompt in prompts
     ]
     return await asyncio.gather(*tasks)
@@ -717,7 +717,7 @@ def verify_webhook(payload, signature, secret):
 @app.route("/webhook", methods=["POST"])
 def webhook():
     # Get webhook secret
-    secret = "your_webhook_secret"  # Get from client.webhooks.default.secret.get()
+    secret = "your_webhook_secret"  # From replicate.webhooks.default.secret.get()
     
     # Verify signature
     signature = request.headers.get("X-Replicate-Signature")
@@ -758,16 +758,16 @@ model = replicate.models.get("stability-ai/stable-diffusion")
 ```python
 from replicate import Replicate
 
-client = Replicate()
+replicate = Replicate()
 
 # Run a model
-output = client.run(
+output = replicate.run(
     "stability-ai/stable-diffusion:version",
     input={"prompt": "a cat"}
 )
 
 # Get a model
-model = client.models.get(
+model = replicate.models.get(
     model_owner="stability-ai",
     model_name="stable-diffusion"
 )
@@ -779,10 +779,10 @@ For compatibility with older code:
 
 ```python
 # Old style (still supported)
-client = Replicate(api_token="your_token")
+replicate = Replicate(api_token="your_token")
 
 # New style (recommended)
-client = Replicate(bearer_token="your_token")
+replicate = Replicate(bearer_token="your_token")
 ```
 
 ## Support
