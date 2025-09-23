@@ -102,6 +102,7 @@ class Replicate(SyncAPIClient):
         self,
         *,
         bearer_token: str | None = None,
+        api_token: str | None = None,  # Legacy compatibility parameter
         base_url: str | httpx.URL | None = None,
         timeout: Union[float, Timeout, None, NotGiven] = NOT_GIVEN,
         max_retries: int = DEFAULT_MAX_RETRIES,
@@ -124,7 +125,17 @@ class Replicate(SyncAPIClient):
         """Construct a new synchronous Replicate client instance.
 
         This automatically infers the `bearer_token` argument from the `REPLICATE_API_TOKEN` environment variable if it is not provided.
+
+        For legacy compatibility, you can also pass `api_token` instead of `bearer_token`.
         """
+        # Handle legacy api_token parameter
+        if api_token is not None and bearer_token is not None:
+            raise ReplicateError(
+                "Cannot specify both 'bearer_token' and 'api_token'. Please use 'bearer_token' (recommended) or 'api_token' for legacy compatibility."
+            )
+        if api_token is not None:
+            bearer_token = api_token
+
         if bearer_token is None:
             bearer_token = _get_api_token_from_environment()
         if bearer_token is None:
@@ -477,6 +488,7 @@ class AsyncReplicate(AsyncAPIClient):
         self,
         *,
         bearer_token: str | None = None,
+        api_token: str | None = None,  # Legacy compatibility parameter
         base_url: str | httpx.URL | None = None,
         timeout: Union[float, Timeout, None, NotGiven] = NOT_GIVEN,
         max_retries: int = DEFAULT_MAX_RETRIES,
@@ -499,7 +511,17 @@ class AsyncReplicate(AsyncAPIClient):
         """Construct a new async AsyncReplicate client instance.
 
         This automatically infers the `bearer_token` argument from the `REPLICATE_API_TOKEN` environment variable if it is not provided.
+
+        For legacy compatibility, you can also pass `api_token` instead of `bearer_token`.
         """
+        # Handle legacy api_token parameter
+        if api_token is not None and bearer_token is not None:
+            raise ReplicateError(
+                "Cannot specify both 'bearer_token' and 'api_token'. Please use 'bearer_token' (recommended) or 'api_token' for legacy compatibility."
+            )
+        if api_token is not None:
+            bearer_token = api_token
+
         if bearer_token is None:
             bearer_token = _get_api_token_from_environment()
         if bearer_token is None:
