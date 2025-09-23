@@ -5,7 +5,7 @@ Custom models functionality with backward compatibility.
 from __future__ import annotations
 
 import inspect
-from typing import TYPE_CHECKING, Union
+from typing import TYPE_CHECKING, Union, overload
 
 from .._types import NOT_GIVEN, NotGiven
 from ._models import ModelVersionIdentifier
@@ -60,7 +60,15 @@ def _parse_model_args(
             "Use either models.get('owner/name') or models.get(model_owner='owner', model_name='name')"
         )
 
-    return model_owner, model_name
+    return model_owner, model_name  # type: ignore[return-value]
+
+
+@overload
+def patch_models_resource(models_resource: "ModelsResource") -> "ModelsResource": ...
+
+
+@overload
+def patch_models_resource(models_resource: "AsyncModelsResource") -> "AsyncModelsResource": ...
 
 
 def patch_models_resource(
@@ -72,7 +80,7 @@ def patch_models_resource(
 
     if is_async:
 
-        async def get_wrapper(
+        async def async_get_wrapper(
             model_or_owner: str | NotGiven = NOT_GIVEN,
             *,
             model_owner: str | NotGiven = NOT_GIVEN,
@@ -83,7 +91,7 @@ def patch_models_resource(
             timeout: "float | httpx.Timeout | None | NotGiven" = NOT_GIVEN,
         ) -> "ModelGetResponse":
             owner, name = _parse_model_args(model_or_owner, model_owner, model_name)
-            return await original_get(
+            return await models_resource._original_get(  # type: ignore[misc,no-any-return,attr-defined]
                 model_owner=owner,
                 model_name=name,
                 extra_headers=extra_headers,
@@ -91,9 +99,11 @@ def patch_models_resource(
                 extra_body=extra_body,
                 timeout=timeout,
             )
+
+        wrapper = async_get_wrapper
     else:
 
-        def get_wrapper(
+        def sync_get_wrapper(
             model_or_owner: str | NotGiven = NOT_GIVEN,
             *,
             model_owner: str | NotGiven = NOT_GIVEN,
@@ -104,7 +114,7 @@ def patch_models_resource(
             timeout: "float | httpx.Timeout | None | NotGiven" = NOT_GIVEN,
         ) -> "ModelGetResponse":
             owner, name = _parse_model_args(model_or_owner, model_owner, model_name)
-            return original_get(
+            return models_resource._original_get(  # type: ignore[misc,return-value,attr-defined]
                 model_owner=owner,
                 model_name=name,
                 extra_headers=extra_headers,
@@ -113,7 +123,9 @@ def patch_models_resource(
                 timeout=timeout,
             )
 
+        wrapper = sync_get_wrapper  # type: ignore[assignment]
+
     # Store original method for tests and replace with wrapper
-    models_resource._original_get = original_get
-    models_resource.get = get_wrapper
+    models_resource._original_get = original_get  # type: ignore[attr-defined,union-attr]
+    models_resource.get = wrapper  # type: ignore[method-assign]
     return models_resource

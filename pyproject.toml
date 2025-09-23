@@ -149,6 +149,7 @@ exclude = [
     ".venv",
     ".nox",
     ".git",
+    "tests/test_models_backward_compat.py",
 ]
 
 reportImplicitOverride = true
