@@ -14,12 +14,18 @@ from replicate import Replicate
 # Initialize with REPLICATE_API_TOKEN env var by default
 replicate = Replicate()
 
-# Run a model
+# Create a model function
+flux = replicate.use("black-forest-labs/flux-schnell")
+
+# Call it like any Python function
+output = flux(prompt="astronaut on a horse")
+print(output)
+
+# Or use run() for one-off predictions
 output = replicate.run(
     "black-forest-labs/flux-schnell",
     input={"prompt": "astronaut on a horse"}
 )
-print(output)
 ```
 
 ## Client Initialization
@@ -66,9 +72,43 @@ asyncio.run(main())
 
 ## High-Level Methods
 
-### run() - Run a Model
+### use() - Create a Reusable Model Function (Recommended)
 
-The simplest way to run a model and get output.
+The most Pythonic way to interact with models. Creates a callable function for any model.
+
+```python
+# Create a model function
+sdxl = replicate.use("stability-ai/sdxl")
+
+# Call it like a regular function
+image = sdxl(prompt="a 19th century portrait of a wombat gentleman")
+
+# Use it multiple times with different inputs
+image1 = sdxl(prompt="a cat in a hat", negative_prompt="blurry, low quality")
+image2 = sdxl(prompt="a dog in sunglasses", num_outputs=4)
+
+# Works great with language models too
+llama = replicate.use("meta/llama-2-70b-chat")
+response = llama(
+    prompt="Write a haiku about Python programming",
+    temperature=0.7,
+    max_new_tokens=100
+)
+
+# Enable streaming for models that support it
+llama_stream = replicate.use("meta/llama-2-70b-chat", streaming=True)
+for chunk in llama_stream(prompt="Explain quantum computing"):
+    print(chunk, end="")
+
+# Can accept model references in various formats
+model = replicate.use("owner/name:version")  # Specific version
+model = replicate.use("owner/name")  # Latest version
+model = replicate.use("5c7d5dc6dd8bf75c1acaa8565735e7986bc5b66206b55cca93cb72c9bf15ccaa")  # Version ID
+```
+
+### run() - Run a Model Once
+
+Direct method to run a model and get output. Good for one-off predictions.
 
 ```python
 # Basic usage - returns output when complete
@@ -98,7 +138,7 @@ replicate.run("5c7d5dc6dd8bf75c1acaa8565735e7986bc5b66206b55cca93cb72c9bf15ccaa"
 
 ### stream() - Stream Model Output
 
-For models that support streaming (like language models).
+For models that support streaming (like language models). Returns an iterator of output chunks.
 
 ```python
 # Stream text output
@@ -116,25 +156,9 @@ async for event in async_replicate.stream("meta/llama-2-70b-chat", input={"promp
     print(str(event), end="")
 ```
 
-### use() - Create a Reusable Model Function
-
-Experimental feature for creating reusable model functions.
-
-```python
-# Create a model function
-stable_diffusion = replicate.use("stability-ai/stable-diffusion")
-
-# Use it multiple times
-image1 = stable_diffusion(prompt="a cat in a hat")
-image2 = stable_diffusion(prompt="a dog in sunglasses")
-
-# With streaming models
-llama = replicate.use("meta/llama-2-70b-chat", streaming=True)
-for chunk in llama(prompt="Explain quantum computing"):
-    print(chunk, end="")
-```
-
 ### search() - Search Models
+
+Find models by keyword or description.
 
 ```python
 # Search for models
