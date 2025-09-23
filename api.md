@@ -9,10 +9,7 @@ pip install replicate
 ## Quick Start
 
 ```python
-from replicate import Replicate
-
-# Initialize with REPLICATE_API_TOKEN env var by default
-replicate = Replicate()
+import replicate
 
 # Create a model function
 banana = replicate.use("google/nano-banana")
@@ -30,27 +27,33 @@ output = replicate.run(
 
 ## Client Initialization
 
-### Synchronous Client
+By default, the SDK uses the `REPLICATE_API_TOKEN` environment variable:
+
+```python
+import replicate
+
+# Uses REPLICATE_API_TOKEN from environment
+output = replicate.run("google/nano-banana", input={"prompt": "hello"})
+```
+
+### Custom Client Configuration
+
+For advanced use cases, you can create an explicit client instance:
 
 ```python
 from replicate import Replicate
+import os
 
-# Using environment variable (REPLICATE_API_TOKEN)
-replicate = Replicate()
-
-# With explicit token
-replicate = Replicate(bearer_token="your_api_token")
-
-# Legacy token parameter (for compatibility)
-replicate = Replicate(api_token="your_api_token")
-
-# With custom configuration
+# Explicitly specify which environment variable to use
 replicate = Replicate(
-    bearer_token="your_api_token",
+    bearer_token=os.environ.get("MY_REPLICATE_TOKEN"),
     base_url="https://api.replicate.com/v1",  # Optional custom base URL
     timeout=120.0,  # Request timeout in seconds
     max_retries=5  # Maximum number of retries
 )
+
+# Now use this configured client
+output = replicate.run("google/nano-banana", input={"prompt": "hello"})
 ```
 
 ### Asynchronous Client
@@ -58,9 +61,11 @@ replicate = Replicate(
 ```python
 from replicate import AsyncReplicate
 import asyncio
+import os
 
 async def main():
-    replicate = AsyncReplicate(bearer_token="your_api_token")
+    # Can specify token explicitly if needed
+    replicate = AsyncReplicate(bearer_token=os.environ.get("MY_REPLICATE_TOKEN"))
     output = await replicate.run(
         "google/nano-banana",
         input={"prompt": "a watercolor painting"}
@@ -664,11 +669,9 @@ The SDK respects these environment variables:
 The SDK is fully typed with comprehensive type hints:
 
 ```python
-from replicate import Replicate
+import replicate
 from replicate.types import Prediction, PredictionStatus
 from replicate.pagination import SyncCursorURLPage
-
-replicate: Replicate = Replicate()
 
 # Type hints for responses
 prediction: Prediction = replicate.predictions.get(prediction_id="abc123")
@@ -708,6 +711,7 @@ from replicate import AsyncReplicate
 
 async def batch_process(prompts):
     """Process multiple prompts in parallel."""
+    from replicate import AsyncReplicate
     replicate = AsyncReplicate()
     tasks = [
         replicate.run("model:version", input={"prompt": prompt})
@@ -780,9 +784,7 @@ model = replicate.models.get("google/nano-banana")
 
 **New (v1.0+):**
 ```python
-from replicate import Replicate
-
-replicate = Replicate()
+import replicate
 
 # Run a model
 output = replicate.run(
@@ -802,6 +804,8 @@ model = replicate.models.get(
 For compatibility with older code:
 
 ```python
+from replicate import Replicate
+
 # Old style (still supported)
 replicate = Replicate(api_token="your_token")
 
