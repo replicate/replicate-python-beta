@@ -186,9 +186,11 @@ class Replicate(SyncAPIClient):
 
     @cached_property
     def models(self) -> ModelsResource:
+        from .lib.models import patch_models_resource
         from .resources.models import ModelsResource
 
-        return ModelsResource(self)
+        models_resource = ModelsResource(self)
+        return patch_models_resource(models_resource)
 
     @cached_property
     def predictions(self) -> PredictionsResource:
@@ -572,9 +574,11 @@ class AsyncReplicate(AsyncAPIClient):
 
     @cached_property
     def models(self) -> AsyncModelsResource:
+        from .lib.models import patch_models_resource
         from .resources.models import AsyncModelsResource
 
-        return AsyncModelsResource(self)
+        models_resource = AsyncModelsResource(self)
+        return patch_models_resource(models_resource)
 
     @cached_property
     def predictions(self) -> AsyncPredictionsResource:
