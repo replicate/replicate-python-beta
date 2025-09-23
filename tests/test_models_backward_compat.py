@@ -2,7 +2,7 @@
 Tests for backward compatibility in models.get() method.
 """
 
-from unittest.mock import Mock, AsyncMock, patch
+from unittest.mock import Mock, AsyncMock
 
 import pytest
 
@@ -36,8 +36,7 @@ class TestModelGetBackwardCompatibility:
     @pytest.fixture
     def client(self):
         """Create a Replicate client with mocked token."""
-        with patch("replicate.lib.cog._get_api_token_from_environment", return_value="test-token"):
-            return Replicate()
+        return Replicate(bearer_token="test-token")
 
     def test_legacy_format_owner_name(self, client, mock_model_response):
         """Test legacy format: models.get('owner/name')."""
@@ -150,8 +149,7 @@ class TestAsyncModelGetBackwardCompatibility:
     @pytest.fixture
     async def async_client(self):
         """Create an async Replicate client with mocked token."""
-        with patch("replicate.lib.cog._get_api_token_from_environment", return_value="test-token"):
-            return AsyncReplicate()
+        return AsyncReplicate(bearer_token="test-token")
 
     @pytest.mark.asyncio
     async def test_async_legacy_format_owner_name(self, async_client, mock_model_response):
@@ -208,8 +206,7 @@ class TestModelVersionIdentifierIntegration:
     @pytest.fixture
     def client(self):
         """Create a Replicate client with mocked token."""
-        with patch("replicate.lib.cog._get_api_token_from_environment", return_value="test-token"):
-            return Replicate()
+        return Replicate(bearer_token="test-token")
 
     def test_legacy_format_parsing_edge_cases(self, client, mock_model_response):
         """Test edge cases in legacy format parsing."""
