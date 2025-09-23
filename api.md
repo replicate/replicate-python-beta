@@ -15,15 +15,15 @@ from replicate import Replicate
 replicate = Replicate()
 
 # Create a model function
-flux = replicate.use("black-forest-labs/flux-schnell")
+banana = replicate.use("google/nano-banana")
 
 # Call it like any Python function
-output = flux(prompt="astronaut on a horse")
+output = banana(prompt="astronaut on a horse")
 print(output)
 
 # Or use run() for one-off predictions
 output = replicate.run(
-    "black-forest-labs/flux-schnell",
+    "google/nano-banana",
     input={"prompt": "astronaut on a horse"}
 )
 ```
@@ -62,7 +62,7 @@ import asyncio
 async def main():
     replicate = AsyncReplicate(bearer_token="your_api_token")
     output = await replicate.run(
-        "stability-ai/stable-diffusion",
+        "google/nano-banana",
         input={"prompt": "a watercolor painting"}
     )
     print(output)
@@ -78,26 +78,26 @@ The most Pythonic way to interact with models. Creates a callable function for a
 
 ```python
 # Create a model function
-sdxl = replicate.use("stability-ai/sdxl")
+banana = replicate.use("google/nano-banana")
 
 # Call it like a regular function
-image = sdxl(prompt="a 19th century portrait of a wombat gentleman")
+image = banana(prompt="a 19th century portrait of a wombat gentleman")
 
 # Use it multiple times with different inputs
-image1 = sdxl(prompt="a cat in a hat", negative_prompt="blurry, low quality")
-image2 = sdxl(prompt="a dog in sunglasses", num_outputs=4)
+image1 = banana(prompt="a cat in a hat", negative_prompt="blurry, low quality")
+image2 = banana(prompt="a dog in sunglasses", num_outputs=4)
 
 # Works great with language models too
-llama = replicate.use("meta/llama-2-70b-chat")
-response = llama(
+claude = replicate.use("anthropic/claude-4-sonnet")
+response = claude(
     prompt="Write a haiku about Python programming",
     temperature=0.7,
     max_new_tokens=100
 )
 
 # Enable streaming for models that support it
-llama_stream = replicate.use("meta/llama-2-70b-chat", streaming=True)
-for chunk in llama_stream(prompt="Explain quantum computing"):
+claude_stream = replicate.use("anthropic/claude-4-sonnet", streaming=True)
+for chunk in claude_stream(prompt="Explain quantum computing"):
     print(chunk, end="")
 
 # Can accept model references in various formats
@@ -113,13 +113,13 @@ Direct method to run a model and get output. Good for one-off predictions.
 ```python
 # Basic usage - returns output when complete
 output = replicate.run(
-    "stability-ai/sdxl:39ed52f2a78e934b3ba6e2a89f5b1c712de7dfea535525255b1aa35c5565e08b",
+    "google/nano-banana:39ed52f2a78e934b3ba6e2a89f5b1c712de7dfea535525255b1aa35c5565e08b",
     input={"prompt": "a 19th century portrait of a wombat gentleman"}
 )
 
 # With options
 output = replicate.run(
-    "meta/llama-2-70b-chat",
+    "anthropic/claude-4-sonnet",
     input={
         "prompt": "Write a poem about machine learning",
         "max_new_tokens": 500,
@@ -143,7 +143,7 @@ For models that support streaming (like language models). Returns an iterator of
 ```python
 # Stream text output
 for event in replicate.stream(
-    "meta/llama-2-70b-chat",
+    "anthropic/claude-4-sonnet",
     input={
         "prompt": "Tell me a story about a robot",
         "max_new_tokens": 1000
@@ -152,7 +152,7 @@ for event in replicate.stream(
     print(str(event), end="")
 
 # Async streaming
-async for event in async_replicate.stream("meta/llama-2-70b-chat", input={"prompt": "Hello"}):
+async for event in async_replicate.stream("anthropic/claude-4-sonnet", input={"prompt": "Hello"}):
     print(str(event), end="")
 ```
 
@@ -210,7 +210,7 @@ Interact with models and their versions.
 
 ```python
 # Get a specific model
-model = replicate.models.get(model_owner="stability-ai", model_name="stable-diffusion")
+model = replicate.models.get(model_owner="google", model_name="nano-banana")
 print(f"Model: {model.owner}/{model.name}")
 print(f"Description: {model.description}")
 print(f"Latest version: {model.latest_version.id}")
@@ -242,15 +242,15 @@ replicate.models.delete(model_owner="your-username", model_name="my-model")
 ```python
 # List model versions
 for version in replicate.models.versions.list(
-    model_owner="stability-ai",
-    model_name="stable-diffusion"
+    model_owner="google",
+    model_name="nano-banana"
 ):
     print(f"Version {version.id}: created at {version.created_at}")
 
 # Get a specific version
 version = replicate.models.versions.get(
-    model_owner="stability-ai",
-    model_name="stable-diffusion",
+    model_owner="google",
+    model_name="nano-banana",
     version_id="db21e45d3f7023abc2a46ee38a23973f6dce16bb082a930b0c49861f96d1e5bf"
 )
 
@@ -269,8 +269,8 @@ Run predictions directly through a model.
 ```python
 # Create a prediction for a specific model
 prediction = replicate.models.predictions.create(
-    model_owner="stability-ai",
-    model_name="stable-diffusion",
+    model_owner="google",
+    model_name="nano-banana",
     input={"prompt": "a beautiful landscape"}
 )
 ```
@@ -280,8 +280,8 @@ prediction = replicate.models.predictions.create(
 ```python
 # Get example predictions for a model
 for example in replicate.models.examples.list(
-    model_owner="stability-ai",
-    model_name="stable-diffusion"
+    model_owner="google",
+    model_name="nano-banana"
 ):
     print(f"Example input: {example.input}")
     print(f"Example output: {example.output}")
@@ -373,7 +373,7 @@ for collection in replicate.collections.list():
     print(f"{collection.name}: {collection.description}")
 
 # Get a specific collection
-collection = replicate.collections.get(collection_slug="awesome-sdxl-models")
+collection = replicate.collections.get(collection_slug="awesome-banana-models")
 for model in collection.models:
     print(f"- {model.owner}/{model.name}")
 ```
@@ -626,13 +626,13 @@ async def main():
     
     # Run a model
     output = await replicate.run(
-        "stability-ai/stable-diffusion",
+        "google/nano-banana",
         input={"prompt": "a futuristic city"}
     )
     
     # Stream output
     async for event in replicate.stream(
-        "meta/llama-2-70b-chat",
+        "anthropic/claude-4-sonnet",
         input={"prompt": "Tell me a joke"}
     ):
         print(event, end="")
@@ -770,12 +770,12 @@ import replicate
 
 # Run a model
 output = replicate.run(
-    "stability-ai/stable-diffusion:version",
+    "google/nano-banana:version",
     input={"prompt": "a cat"}
 )
 
 # Get a model
-model = replicate.models.get("stability-ai/stable-diffusion")
+model = replicate.models.get("google/nano-banana")
 ```
 
 **New (v1.0+):**
@@ -786,14 +786,14 @@ replicate = Replicate()
 
 # Run a model
 output = replicate.run(
-    "stability-ai/stable-diffusion:version",
+    "google/nano-banana:version",
     input={"prompt": "a cat"}
 )
 
 # Get a model
 model = replicate.models.get(
-    model_owner="stability-ai",
-    model_name="stable-diffusion"
+    model_owner="google",
+    model_name="nano-banana"
 )
 ```
 
