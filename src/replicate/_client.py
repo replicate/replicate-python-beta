@@ -337,6 +337,7 @@ class Replicate(SyncAPIClient):
         self,
         *,
         bearer_token: str | None = None,
+        api_token: str | None = None,  # Legacy compatibility parameter
         base_url: str | httpx.URL | None = None,
         timeout: float | Timeout | None | NotGiven = NOT_GIVEN,
         http_client: httpx.Client | None = None,
@@ -350,6 +351,12 @@ class Replicate(SyncAPIClient):
         """
         Create a new client instance re-using the same options given to the current client with optional overriding.
         """
+        # Handle legacy api_token parameter
+        if api_token is not None and bearer_token is not None:
+            raise ValueError("Cannot specify both 'bearer_token' and 'api_token'. Please use 'bearer_token' (recommended) or 'api_token' for legacy compatibility.")
+        if api_token is not None:
+            bearer_token = api_token
+
         if default_headers is not None and set_default_headers is not None:
             raise ValueError("The `default_headers` and `set_default_headers` arguments are mutually exclusive")
 
@@ -725,6 +732,7 @@ class AsyncReplicate(AsyncAPIClient):
         self,
         *,
         bearer_token: str | None = None,
+        api_token: str | None = None,  # Legacy compatibility parameter
         base_url: str | httpx.URL | None = None,
         timeout: float | Timeout | None | NotGiven = NOT_GIVEN,
         http_client: httpx.AsyncClient | None = None,
@@ -738,6 +746,12 @@ class AsyncReplicate(AsyncAPIClient):
         """
         Create a new client instance re-using the same options given to the current client with optional overriding.
         """
+        # Handle legacy api_token parameter
+        if api_token is not None and bearer_token is not None:
+            raise ValueError("Cannot specify both 'bearer_token' and 'api_token'. Please use 'bearer_token' (recommended) or 'api_token' for legacy compatibility.")
+        if api_token is not None:
+            bearer_token = api_token
+
         if default_headers is not None and set_default_headers is not None:
             raise ValueError("The `default_headers` and `set_default_headers` arguments are mutually exclusive")
 
