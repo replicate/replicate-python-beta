@@ -1,5 +1,18 @@
 # Changelog
 
+## 2.0.0-alpha.27 (2025-09-23)
+
+Full Changelog: [v2.0.0-alpha.26...v2.0.0-alpha.27](https://github.com/replicate/replicate-python-stainless/compare/v2.0.0-alpha.26...v2.0.0-alpha.27)
+
+### Features
+
+* add api_token parameter support for legacy compatibility ([8c05e64](https://github.com/replicate/replicate-python-stainless/commit/8c05e64f51460f2dd0587146c0e46be05a1aea51))
+
+
+### Chores
+
+* **types:** change optional parameter type from NotGiven to Omit ([f55f067](https://github.com/replicate/replicate-python-stainless/commit/f55f067f62a66c5f24af3a55fc6e173c6cf877f8))
+
 ## 2.0.0-alpha.26 (2025-09-17)
 
 Full Changelog: [v2.0.0-alpha.25...v2.0.0-alpha.26](https://github.com/replicate/replicate-python-stainless/compare/v2.0.0-alpha.25...v2.0.0-alpha.26)
