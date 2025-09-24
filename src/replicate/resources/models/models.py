@@ -405,19 +405,19 @@ class ModelsResource(SyncAPIResource):
                     "Cannot specify both positional and keyword arguments. "
                     "Use either models.get('owner/name') or models.get(model_owner='owner', model_name='name')"
                 )
-            
+
             # Parse the owner/name format
             if "/" not in model_or_owner:
                 raise ValueError(f"Invalid model reference '{model_or_owner}'. Expected format: 'owner/name'")
-            
+
             parts = model_or_owner.split("/", 1)
             model_owner = parts[0]
             model_name = parts[1]
-        
+
         # Validate required parameters
         if model_owner is NOT_GIVEN or model_name is NOT_GIVEN:
             raise ValueError("model_owner and model_name are required")
-        
+
         if not model_owner:
             raise ValueError(f"Expected a non-empty value for `model_owner` but received {model_owner!r}")
         if not model_name:
@@ -829,19 +829,19 @@ class AsyncModelsResource(AsyncAPIResource):
                     "Cannot specify both positional and keyword arguments. "
                     "Use either models.get('owner/name') or models.get(model_owner='owner', model_name='name')"
                 )
-            
+
             # Parse the owner/name format
             if "/" not in model_or_owner:
                 raise ValueError(f"Invalid model reference '{model_or_owner}'. Expected format: 'owner/name'")
-            
+
             parts = model_or_owner.split("/", 1)
             model_owner = parts[0]
             model_name = parts[1]
-        
+
         # Validate required parameters
         if model_owner is NOT_GIVEN or model_name is NOT_GIVEN:
             raise ValueError("model_owner and model_name are required")
-        
+
         if not model_owner:
             raise ValueError(f"Expected a non-empty value for `model_owner` but received {model_owner!r}")
         if not model_name:
