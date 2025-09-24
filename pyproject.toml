@@ -70,6 +70,7 @@ format = { chain = [
 ]}
 "format:docs" = "python scripts/utils/ruffen-docs.py README.md api.md"
 "format:ruff" = "ruff format"
+"update-api-docs" = "python scripts/utils/update-api-docs.py"
 
 "lint" = { chain = [
   "check:ruff",
