@@ -299,9 +299,10 @@ class ModelsResource(SyncAPIResource):
 
     def get(
         self,
+        model_or_owner: str | NotGiven = NOT_GIVEN,  # Legacy positional arg
         *,
-        model_owner: str,
-        model_name: str,
+        model_owner: str | NotGiven = NOT_GIVEN,
+        model_name: str | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -384,15 +385,39 @@ class ModelsResource(SyncAPIResource):
         The `latest_version` object is the model's most recently pushed
         [version](#models.versions.get).
 
+        Supports both legacy and new formats:
+        - Legacy: models.get("owner/name")
+        - New: models.get(model_owner="owner", model_name="name")
+
         Args:
+          model_or_owner: Legacy format string "owner/name" (positional argument)
+          model_owner: Model owner (keyword argument)
+          model_name: Model name (keyword argument)
           extra_headers: Send extra headers
-
           extra_query: Add additional query parameters to the request
-
           extra_body: Add additional JSON properties to the request
-
           timeout: Override the client-level default timeout for this request, in seconds
         """
+        # Handle legacy format: models.get("owner/name")
+        if model_or_owner is not NOT_GIVEN:
+            if model_owner is not NOT_GIVEN or model_name is not NOT_GIVEN:
+                raise ValueError(
+                    "Cannot specify both positional and keyword arguments. "
+                    "Use either models.get('owner/name') or models.get(model_owner='owner', model_name='name')"
+                )
+            
+            # Parse the owner/name format
+            if "/" not in model_or_owner:
+                raise ValueError(f"Invalid model reference '{model_or_owner}'. Expected format: 'owner/name'")
+            
+            parts = model_or_owner.split("/", 1)
+            model_owner = parts[0]
+            model_name = parts[1]
+        
+        # Validate required parameters
+        if model_owner is NOT_GIVEN or model_name is NOT_GIVEN:
+            raise ValueError("model_owner and model_name are required")
+        
         if not model_owner:
             raise ValueError(f"Expected a non-empty value for `model_owner` but received {model_owner!r}")
         if not model_name:
@@ -698,9 +723,10 @@ class AsyncModelsResource(AsyncAPIResource):
 
     async def get(
         self,
+        model_or_owner: str | NotGiven = NOT_GIVEN,  # Legacy positional arg
         *,
-        model_owner: str,
-        model_name: str,
+        model_owner: str | NotGiven = NOT_GIVEN,
+        model_name: str | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -783,15 +809,39 @@ class AsyncModelsResource(AsyncAPIResource):
         The `latest_version` object is the model's most recently pushed
         [version](#models.versions.get).
 
+        Supports both legacy and new formats:
+        - Legacy: models.get("owner/name")
+        - New: models.get(model_owner="owner", model_name="name")
+
         Args:
+          model_or_owner: Legacy format string "owner/name" (positional argument)
+          model_owner: Model owner (keyword argument)
+          model_name: Model name (keyword argument)
           extra_headers: Send extra headers
-
           extra_query: Add additional query parameters to the request
-
           extra_body: Add additional JSON properties to the request
-
           timeout: Override the client-level default timeout for this request, in seconds
         """
+        # Handle legacy format: models.get("owner/name")
+        if model_or_owner is not NOT_GIVEN:
+            if model_owner is not NOT_GIVEN or model_name is not NOT_GIVEN:
+                raise ValueError(
+                    "Cannot specify both positional and keyword arguments. "
+                    "Use either models.get('owner/name') or models.get(model_owner='owner', model_name='name')"
+                )
+            
+            # Parse the owner/name format
+            if "/" not in model_or_owner:
+                raise ValueError(f"Invalid model reference '{model_or_owner}'. Expected format: 'owner/name'")
+            
+            parts = model_or_owner.split("/", 1)
+            model_owner = parts[0]
+            model_name = parts[1]
+        
+        # Validate required parameters
+        if model_owner is NOT_GIVEN or model_name is NOT_GIVEN:
+            raise ValueError("model_owner and model_name are required")
+        
         if not model_owner:
             raise ValueError(f"Expected a non-empty value for `model_owner` but received {model_owner!r}")
         if not model_name:
