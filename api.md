@@ -72,27 +72,47 @@ Note: The `replicate.run()` method only returns output. If you need access to mo
 
 ## API operations
 
+Available operations:
+
+- [`search`](#search)
+- [`predictions.create`](#predictionscreate)
+- [`predictions.get`](#predictionsget)
+- [`predictions.list`](#predictionslist)
+- [`predictions.cancel`](#predictionscancel)
+- [`models.create`](#modelscreate)
+- [`models.get`](#modelsget)
+- [`models.list`](#modelslist)
+- [`models.delete`](#modelsdelete)
+- [`models.examples.list`](#modelsexampleslist)
+- [`models.predictions.create`](#modelspredictionscreate)
+- [`models.readme.get`](#modelsreadmeget)
+- [`models.versions.get`](#modelsversionsget)
+- [`models.versions.list`](#modelsversionslist)
+- [`models.versions.delete`](#modelsversionsdelete)
+- [`collections.get`](#collectionsget)
+- [`collections.list`](#collectionslist)
+- [`deployments.create`](#deploymentscreate)
+- [`deployments.get`](#deploymentsget)
+- [`deployments.list`](#deploymentslist)
+- [`deployments.update`](#deploymentsupdate)
+- [`deployments.delete`](#deploymentsdelete)
+- [`deployments.predictions.create`](#deploymentspredictionscreate)
+- [`files.list`](#fileslist)
+- [`files.create`](#filescreate)
+- [`files.delete`](#filesdelete)
+- [`files.get`](#filesget)
+- [`files.download`](#filesdownload)
+- [`trainings.create`](#trainingscreate)
+- [`trainings.get`](#trainingsget)
+- [`trainings.list`](#trainingslist)
+- [`trainings.cancel`](#trainingscancel)
+- [`hardware.list`](#hardwarelist)
+- [`account.get`](#accountget)
+- [`webhooks.default.secret.get`](#webhooksdefaultsecretget)
+
 ### `search`
 
 Search models, collections, and docs (beta)
-
-Search for public models, collections, and docs using a text query.
-
-For models, the response includes all model data, plus a new `metadata` object with the following fields:
-
-- `generated_description`: A longer and more detailed AI-generated description of the model
-- `tags`: An array of tags for the model
-- `score`: A score for the model's relevance to the search query
-
-Example cURL request:
-
-```console
-curl -s \
-  -H "Authorization: Bearer $REPLICATE_API_TOKEN" \
-  "https://api.replicate.com/v1/search?query=nano+banana"
-```
-
-Note: This search API is currently in beta and may change in future versions.
 
 
 ```python
@@ -104,107 +124,30 @@ print(response.collections)
 
 Docs: https://replicate.com/docs/reference/http#search
 
-### `predictions.cancel`
+---
 
-Cancel a prediction
+### `predictions.create`
 
-Cancel a prediction that is currently running.
-
-Example cURL request that creates a prediction and then cancels it:
-
-```console
-# First, create a prediction
-PREDICTION_ID=$(curl -s -X POST \
-  -H "Authorization: Bearer $REPLICATE_API_TOKEN" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "input": {
-      "prompt": "a video that may take a while to generate"
-    }
-  }' \
-  https://api.replicate.com/v1/models/minimax/video-01/predictions | jq -r '.id')
-
-# Echo the prediction ID
-echo "Created prediction with ID: $PREDICTION_ID"
-
-# Cancel the prediction
-curl -s -X POST \
-  -H "Authorization: Bearer $REPLICATE_API_TOKEN" \
-  https://api.replicate.com/v1/predictions/$PREDICTION_ID/cancel
-```
+Create a prediction
 
 
 ```python
-prediction = replicate.predictions.cancel(
-    prediction_id="prediction_id",
+prediction = replicate.predictions.create(
+    input={
+        "text": "Alice"
+    },
+    version="replicate/hello-world:9dcd6d78e7c6560c340d916fe32e9f24aabfa331e5cce95fe31f77fb03121426",
 )
 print(prediction.id)
 ```
 
-Docs: https://replicate.com/docs/reference/http#predictions.cancel
+Docs: https://replicate.com/docs/reference/http#predictions.create
+
+---
 
 ### `predictions.get`
 
 Get a prediction
-
-Get the current state of a prediction.
-
-Example cURL request:
-
-```console
-curl -s \
-  -H "Authorization: Bearer $REPLICATE_API_TOKEN" \
-  https://api.replicate.com/v1/predictions/gm3qorzdhgbfurvjtvhg6dckhu
-```
-
-The response will be the prediction object:
-
-```json
-{
-  "id": "gm3qorzdhgbfurvjtvhg6dckhu",
-  "model": "replicate/hello-world",
-  "version": "5c7d5dc6dd8bf75c1acaa8565735e7986bc5b66206b55cca93cb72c9bf15ccaa",
-  "input": {
-    "text": "Alice"
-  },
-  "logs": "",
-  "output": "hello Alice",
-  "error": null,
-  "status": "succeeded",
-  "created_at": "2023-09-08T16:19:34.765994Z",
-  "data_removed": false,
-  "started_at": "2023-09-08T16:19:34.779176Z",
-  "completed_at": "2023-09-08T16:19:34.791859Z",
-  "metrics": {
-    "predict_time": 0.012683
-  },
-  "urls": {
-    "web": "https://replicate.com/p/gm3qorzdhgbfurvjtvhg6dckhu",
-    "get": "https://api.replicate.com/v1/predictions/gm3qorzdhgbfurvjtvhg6dckhu",
-    "cancel": "https://api.replicate.com/v1/predictions/gm3qorzdhgbfurvjtvhg6dckhu/cancel"
-  }
-}
-```
-
-`status` will be one of:
-
-- `starting`: the prediction is starting up. If this status lasts longer than a few seconds, then it's typically because a new worker is being started to run the prediction.
-- `processing`: the `predict()` method of the model is currently running.
-- `succeeded`: the prediction completed successfully.
-- `failed`: the prediction encountered an error during processing.
-- `canceled`: the prediction was canceled by its creator.
-
-In the case of success, `output` will be an object containing the output of the model. Any files will be represented as HTTPS URLs. You'll need to pass the `Authorization` header to request them.
-
-In the case of failure, `error` will contain the error encountered during the prediction.
-
-Terminated predictions (with a status of `succeeded`, `failed`, or `canceled`) will include a `metrics` object with a `predict_time` property showing the amount of CPU or GPU time, in seconds, that the prediction used while running. It won't include time waiting for the prediction to start.
-
-All input parameters, output values, and logs are automatically removed after an hour, by default, for predictions created through the API.
-
-You must save a copy of any data or files in the output if you'd like to continue using them. The `output` key will still be present, but it's value will be `null` after the output has been removed.
-
-Output files are served by `replicate.delivery` and its subdomains. If you use an allow list of external domains for your assets, add `replicate.delivery` and `*.replicate.delivery` to it.
 
 
 ```python
@@ -216,131 +159,165 @@ print(prediction.id)
 
 Docs: https://replicate.com/docs/reference/http#predictions.get
 
-### `trainings.create`
+---
 
-Create a training
+### `predictions.list`
 
-Start a new training of the model version you specify.
-
-Example request body:
-
-```json
-{
-  "destination": "{new_owner}/{new_name}",
-  "input": {
-    "train_data": "https://example.com/my-input-images.zip",
-  },
-  "webhook": "https://example.com/my-webhook",
-}
-```
-
-Example cURL request:
-
-```console
-curl -s -X POST \
-  -d '{"destination": "{new_owner}/{new_name}", "input": {"input_images": "https://example.com/my-input-images.zip"}}' \
-  -H "Authorization: Bearer $REPLICATE_API_TOKEN" \
-  -H 'Content-Type: application/json' \
-  https://api.replicate.com/v1/models/stability-ai/sdxl/versions/da77bc59ee60423279fd632efb4795ab731d9e3ca9705ef3341091fb989b7eaf/trainings
-```
-
-The response will be the training object:
-
-```json
-{
-  "id": "zz4ibbonubfz7carwiefibzgga",
-  "model": "stability-ai/sdxl",
-  "version": "da77bc59ee60423279fd632efb4795ab731d9e3ca9705ef3341091fb989b7eaf",
-  "input": {
-    "input_images": "https://example.com/my-input-images.zip"
-  },
-  "logs": "",
-  "error": null,
-  "status": "starting",
-  "created_at": "2023-09-08T16:32:56.990893084Z",
-  "urls": {
-    "web": "https://replicate.com/p/zz4ibbonubfz7carwiefibzgga",
-     "get": "https://api.replicate.com/v1/predictions/zz4ibbonubfz7carwiefibzgga",
-     "cancel": "https://api.replicate.com/v1/predictions/zz4ibbonubfz7carwiefibzgga/cancel"
-  }
-}
-```
-
-As models can take several minutes or more to train, the result will not be available immediately. To get the final result of the training you should either provide a `webhook` HTTPS URL for us to call when the results are ready, or poll the [get a training](#trainings.get) endpoint until it has finished.
-
-When a training completes, it creates a new [version](https://replicate.com/docs/how-does-replicate-work#terminology) of the model at the specified destination.
-
-To find some models to train on, check out the [trainable language models collection](https://replicate.com/collections/trainable-language-models).
+List predictions
 
 
 ```python
-training = replicate.trainings.create(
-    model_owner="model_owner",
-    model_name="model_name",
-    version_id="version_id",
-    destination="destination",
-    input={},
-)
-print(training.id)
+page = replicate.predictions.list()
+page = page.results[0]
+print(page.id)
 ```
 
-Docs: https://replicate.com/docs/reference/http#trainings.create
+Docs: https://replicate.com/docs/reference/http#predictions.list
+
+---
+
+### `predictions.cancel`
+
+Cancel a prediction
+
+
+```python
+prediction = replicate.predictions.cancel(
+    prediction_id="prediction_id",
+)
+print(prediction.id)
+```
+
+Docs: https://replicate.com/docs/reference/http#predictions.cancel
+
+---
+
+### `models.create`
+
+Create a model
+
+
+```python
+model = replicate.models.create(
+    hardware="cpu",
+    name="hot-dog-detector",
+    owner="alice",
+    visibility="public",
+)
+print(model.cover_image_url)
+```
+
+Docs: https://replicate.com/docs/reference/http#models.create
+
+---
+
+### `models.get`
+
+Get a model
+
+
+```python
+model = replicate.models.get(
+    model_owner="model_owner",
+    model_name="model_name",
+)
+print(model.cover_image_url)
+```
+
+Docs: https://replicate.com/docs/reference/http#models.get
+
+---
+
+### `models.list`
+
+List public models
+
+
+```python
+page = replicate.models.list()
+page = page.results[0]
+print(page.cover_image_url)
+```
+
+Docs: https://replicate.com/docs/reference/http#models.list
+
+---
+
+### `models.delete`
+
+Delete a model
+
+
+```python
+replicate.models.delete(
+    model_owner="model_owner",
+    model_name="model_name",
+)
+```
+
+Docs: https://replicate.com/docs/reference/http#models.delete
+
+---
+
+### `models.examples.list`
+
+List examples for a model
+
+
+```python
+page = replicate.models.examples.list(
+    model_owner="model_owner",
+    model_name="model_name",
+)
+page = page.results[0]
+print(page.id)
+```
+
+Docs: https://replicate.com/docs/reference/http#models.examples.list
+
+---
+
+### `models.predictions.create`
+
+Create a prediction using an official model
+
+
+```python
+prediction = replicate.models.predictions.create(
+    model_owner="model_owner",
+    model_name="model_name",
+    input={
+        "prompt": "Tell me a joke",
+        "system_prompt": "You are a helpful assistant",
+    },
+)
+print(prediction.id)
+```
+
+Docs: https://replicate.com/docs/reference/http#models.predictions.create
+
+---
+
+### `models.readme.get`
+
+Get a model's README
+
+
+```python
+readme = replicate.models.readme.get(
+    model_owner="model_owner",
+    model_name="model_name",
+)
+print(readme)
+```
+
+Docs: https://replicate.com/docs/reference/http#models.readme.get
+
+---
 
 ### `models.versions.get`
 
 Get a model version
-
-Example cURL request:
-
-```console
-curl -s \
-  -H "Authorization: Bearer $REPLICATE_API_TOKEN" \
-  https://api.replicate.com/v1/models/replicate/hello-world/versions/5c7d5dc6dd8bf75c1acaa8565735e7986bc5b66206b55cca93cb72c9bf15ccaa
-```
-
-The response will be the version object:
-
-```json
-{
-  "id": "5c7d5dc6dd8bf75c1acaa8565735e7986bc5b66206b55cca93cb72c9bf15ccaa",
-  "created_at": "2022-04-26T19:29:04.418669Z",
-  "cog_version": "0.3.0",
-  "openapi_schema": {...}
-}
-```
-
-Every model describes its inputs and outputs with [OpenAPI Schema Objects](https://spec.openapis.org/oas/latest.html#schemaObject) in the `openapi_schema` property.
-
-The `openapi_schema.components.schemas.Input` property for the [replicate/hello-world](https://replicate.com/replicate/hello-world) model looks like this:
-
-```json
-{
-  "type": "object",
-  "title": "Input",
-  "required": [
-    "text"
-  ],
-  "properties": {
-    "text": {
-      "x-order": 0,
-      "type": "string",
-      "title": "Text",
-      "description": "Text to prefix with 'hello '"
-    }
-  }
-}
-```
-
-The `openapi_schema.components.schemas.Output` property for the [replicate/hello-world](https://replicate.com/replicate/hello-world) model looks like this:
-
-```json
-{
-  "type": "string",
-  "title": "Output"
-}
-```
-
-For more details, see the docs on [Cog's supported input and output types](https://github.com/replicate/cog/blob/75b7802219e7cd4cee845e34c4c22139558615d4/docs/python.md#input-and-output-types)
 
 
 ```python
@@ -354,30 +331,29 @@ print(version.id)
 
 Docs: https://replicate.com/docs/reference/http#models.versions.get
 
+---
+
+### `models.versions.list`
+
+List model versions
+
+
+```python
+page = replicate.models.versions.list(
+    model_owner="model_owner",
+    model_name="model_name",
+)
+page = page.results[0]
+print(page.id)
+```
+
+Docs: https://replicate.com/docs/reference/http#models.versions.list
+
+---
+
 ### `models.versions.delete`
 
 Delete a model version
-
-Delete a model version and all associated predictions, including all output files.
-
-Model version deletion has some restrictions:
-
-- You can only delete versions from models you own.
-- You can only delete versions from private models.
-- You cannot delete a version if someone other than you has run predictions with it.
-- You cannot delete a version if it is being used as the base model for a fine tune/training.
-- You cannot delete a version if it has an associated deployment.
-- You cannot delete a version if another model version is overridden to use it.
-
-Example cURL request:
-
-```command
-curl -s -X DELETE \
-  -H "Authorization: Bearer $REPLICATE_API_TOKEN" \
-  https://api.replicate.com/v1/models/replicate/hello-world/versions/5c7d5dc6dd8bf75c1acaa8565735e7986bc5b66206b55cca93cb72c9bf15ccaa
-```
-
-The response will be an empty 202, indicating the deletion request has been accepted. It might take a few minutes to be processed.
 
 
 ```python
@@ -390,28 +366,11 @@ replicate.models.versions.delete(
 
 Docs: https://replicate.com/docs/reference/http#models.versions.delete
 
+---
+
 ### `collections.get`
 
 Get a collection of models
-
-Example cURL request:
-
-```console
-curl -s \
-  -H "Authorization: Bearer $REPLICATE_API_TOKEN" \
-  https://api.replicate.com/v1/collections/super-resolution
-```
-
-The response will be a collection object with a nested list of the models in that collection:
-
-```json
-{
-  "name": "Super resolution",
-  "slug": "super-resolution",
-  "description": "Upscaling models that create high-quality images from low-quality images.",
-  "models": [...]
-}
-```
 
 
 ```python
@@ -423,56 +382,26 @@ print(collection.description)
 
 Docs: https://replicate.com/docs/reference/http#collections.get
 
+---
+
+### `collections.list`
+
+List collections of models
+
+
+```python
+page = replicate.collections.list()
+page = page.results[0]
+print(page.description)
+```
+
+Docs: https://replicate.com/docs/reference/http#collections.list
+
+---
+
 ### `deployments.create`
 
 Create a deployment
-
-Create a new deployment:
-
-Example cURL request:
-
-```console
-curl -s \
-  -X POST \
-  -H "Authorization: Bearer $REPLICATE_API_TOKEN" \
-  -H "Content-Type: application/json" \
-  -d '{
-        "name": "my-app-image-generator",
-        "model": "stability-ai/sdxl",
-        "version": "da77bc59ee60423279fd632efb4795ab731d9e3ca9705ef3341091fb989b7eaf",
-        "hardware": "gpu-t4",
-        "min_instances": 0,
-        "max_instances": 3
-      }' \
-  https://api.replicate.com/v1/deployments
-```
-
-The response will be a JSON object describing the deployment:
-
-```json
-{
-  "owner": "acme",
-  "name": "my-app-image-generator",
-  "current_release": {
-    "number": 1,
-    "model": "stability-ai/sdxl",
-    "version": "da77bc59ee60423279fd632efb4795ab731d9e3ca9705ef3341091fb989b7eaf",
-    "created_at": "2024-02-15T16:32:57.018467Z",
-    "created_by": {
-      "type": "organization",
-      "username": "acme",
-      "name": "Acme Corp, Inc.",
-      "avatar_url": "https://cdn.replicate.com/avatars/acme.png",
-      "github_url": "https://github.com/acme"
-    },
-    "configuration": {
-      "hardware": "gpu-t4",
-      "min_instances": 1,
-      "max_instances": 5
-    }
-  }
-}
-```
 
 
 ```python
@@ -489,46 +418,11 @@ print(deployment.current_release)
 
 Docs: https://replicate.com/docs/reference/http#deployments.create
 
+---
+
 ### `deployments.get`
 
 Get a deployment
-
-Get information about a deployment by name including the current release.
-
-Example cURL request:
-
-```console
-curl -s \
-  -H "Authorization: Bearer $REPLICATE_API_TOKEN" \
-  https://api.replicate.com/v1/deployments/replicate/my-app-image-generator
-```
-
-The response will be a JSON object describing the deployment:
-
-```json
-{
-  "owner": "acme",
-  "name": "my-app-image-generator",
-  "current_release": {
-    "number": 1,
-    "model": "stability-ai/sdxl",
-    "version": "da77bc59ee60423279fd632efb4795ab731d9e3ca9705ef3341091fb989b7eaf",
-    "created_at": "2024-02-15T16:32:57.018467Z",
-    "created_by": {
-      "type": "organization",
-      "username": "acme",
-      "name": "Acme Corp, Inc.",
-      "avatar_url": "https://cdn.replicate.com/avatars/acme.png",
-      "github_url": "https://github.com/acme"
-    },
-    "configuration": {
-      "hardware": "gpu-t4",
-      "min_instances": 1,
-      "max_instances": 5
-    }
-  }
-}
-```
 
 
 ```python
@@ -541,51 +435,26 @@ print(deployment.current_release)
 
 Docs: https://replicate.com/docs/reference/http#deployments.get
 
+---
+
+### `deployments.list`
+
+List deployments
+
+
+```python
+page = replicate.deployments.list()
+page = page.results[0]
+print(page.current_release)
+```
+
+Docs: https://replicate.com/docs/reference/http#deployments.list
+
+---
+
 ### `deployments.update`
 
 Update a deployment
-
-Update properties of an existing deployment, including hardware, min/max instances, and the deployment's underlying model [version](https://replicate.com/docs/how-does-replicate-work#versions).
-
-Example cURL request:
-
-```console
-curl -s \
-  -X PATCH \
-  -H "Authorization: Bearer $REPLICATE_API_TOKEN" \
-  -H "Content-Type: application/json" \
-  -d '{"min_instances": 3, "max_instances": 10}' \
-  https://api.replicate.com/v1/deployments/acme/my-app-image-generator
-```
-
-The response will be a JSON object describing the deployment:
-
-```json
-{
-  "owner": "acme",
-  "name": "my-app-image-generator",
-  "current_release": {
-    "number": 2,
-    "model": "stability-ai/sdxl",
-    "version": "da77bc59ee60423279fd632efb4795ab731d9e3ca9705ef3341091fb989b7eaf",
-    "created_at": "2024-02-15T16:32:57.018467Z",
-    "created_by": {
-      "type": "organization",
-      "username": "acme",
-      "name": "Acme Corp, Inc.",
-      "avatar_url": "https://cdn.replicate.com/avatars/acme.png",
-      "github_url": "https://github.com/acme"
-    },
-    "configuration": {
-      "hardware": "gpu-t4",
-      "min_instances": 3,
-      "max_instances": 10
-    }
-  }
-}
-```
-
-Updating any deployment properties will increment the `number` field of the `current_release`.
 
 
 ```python
@@ -598,25 +467,11 @@ print(deployment.current_release)
 
 Docs: https://replicate.com/docs/reference/http#deployments.update
 
+---
+
 ### `deployments.delete`
 
 Delete a deployment
-
-Delete a deployment
-
-Deployment deletion has some restrictions:
-
-- You can only delete deployments that have been offline and unused for at least 15 minutes.
-
-Example cURL request:
-
-```command
-curl -s -X DELETE \
-  -H "Authorization: Bearer $REPLICATE_API_TOKEN" \
-  https://api.replicate.com/v1/deployments/acme/my-app-image-generator
-```
-
-The response will be an empty 204, indicating the deployment has been deleted.
 
 
 ```python
@@ -628,21 +483,32 @@ replicate.deployments.delete(
 
 Docs: https://replicate.com/docs/reference/http#deployments.delete
 
+---
+
+### `deployments.predictions.create`
+
+Create a prediction using a deployment
+
+
+```python
+prediction = replicate.deployments.predictions.create(
+    deployment_owner="deployment_owner",
+    deployment_name="deployment_name",
+    input={
+        "prompt": "Tell me a joke",
+        "system_prompt": "You are a helpful assistant",
+    },
+)
+print(prediction.id)
+```
+
+Docs: https://replicate.com/docs/reference/http#deployments.predictions.create
+
+---
+
 ### `files.list`
 
 List files
-
-Get a paginated list of all files created by the user or organization associated with the provided API token.
-
-Example cURL request:
-
-```console
-curl -s \
-  -H "Authorization: Token $REPLICATE_API_TOKEN" \
-  https://api.replicate.com/v1/files
-```
-
-The response will be a paginated JSON array of file objects, sorted with the most recent file first.
 
 
 ```python
@@ -653,27 +519,11 @@ print(page.id)
 
 Docs: https://replicate.com/docs/reference/http#files.list
 
+---
+
 ### `files.create`
 
 Create a file
-
-Create a file by uploading its content and optional metadata.
-
-Example cURL request:
-
-```console
-curl -X POST https://api.replicate.com/v1/files \
-  -H "Authorization: Token $REPLICATE_API_TOKEN" \
-  -H 'Content-Type: multipart/form-data' \
-  -F 'content=@/path/to/archive.zip;type=application/zip;filename=example.zip' \
-  -F 'metadata={"customer_reference_id": 123};type=application/json'
-```
-
-The request must include:
-- `content`: The file content (required)
-- `type`: The content / MIME type for the file (defaults to `application/octet-stream`)
-- `filename`: The filename (required, ≤ 255 bytes, valid UTF-8)
-- `metadata`: User-provided metadata associated with the file (defaults to `{}`, must be valid JSON)
 
 
 ```python
@@ -685,19 +535,11 @@ print(file.id)
 
 Docs: https://replicate.com/docs/reference/http#files.create
 
+---
+
 ### `files.delete`
 
 Delete a file
-
-Delete a file. Once a file has been deleted, subsequent requests to the file resource return 404 Not found.
-
-Example cURL request:
-
-```console
-curl -X DELETE \
-  -H "Authorization: Token $REPLICATE_API_TOKEN" \
-  https://api.replicate.com/v1/files/cneqzikepnug6xezperrr4z55o
-```
 
 
 ```python
@@ -708,17 +550,27 @@ replicate.files.delete(
 
 Docs: https://replicate.com/docs/reference/http#files.delete
 
+---
+
+### `files.get`
+
+Get a file
+
+
+```python
+file = replicate.files.get(
+    file_id="file_id",
+)
+print(file.id)
+```
+
+Docs: https://replicate.com/docs/reference/http#files.get
+
+---
+
 ### `files.download`
 
 Download a file
-
-Download a file by providing the file owner, access expiry, and a valid signature.
-
-Example cURL request:
-
-```console
-curl -X GET "https://api.replicate.com/v1/files/cneqzikepnug6xezperrr4z55o/download?expiry=1708515345&owner=mattt&signature=zuoghqlrcnw8YHywkpaXQlHsVhWen%2FDZ4aal76dLiOo%3D"
-```
 
 
 ```python
@@ -735,6 +587,59 @@ print(content)
 
 Docs: https://replicate.com/docs/reference/http#files.download
 
+---
+
+### `trainings.create`
+
+Create a training
+
+
+```python
+training = replicate.trainings.create(
+    model_owner="model_owner",
+    model_name="model_name",
+    version_id="version_id",
+    destination="destination",
+    input={},
+)
+print(training.id)
+```
+
+Docs: https://replicate.com/docs/reference/http#trainings.create
+
+---
+
+### `trainings.get`
+
+Get a training
+
+
+```python
+training = replicate.trainings.get(
+    training_id="training_id",
+)
+print(training.id)
+```
+
+Docs: https://replicate.com/docs/reference/http#trainings.get
+
+---
+
+### `trainings.list`
+
+List trainings
+
+
+```python
+page = replicate.trainings.list()
+page = page.results[0]
+print(page.id)
+```
+
+Docs: https://replicate.com/docs/reference/http#trainings.list
+
+---
+
 ### `trainings.cancel`
 
 Cancel a training
@@ -749,97 +654,11 @@ print(response.id)
 
 Docs: https://replicate.com/docs/reference/http#trainings.cancel
 
-### `trainings.get`
-
-Get a training
-
-Get the current state of a training.
-
-Example cURL request:
-
-```console
-curl -s \
-  -H "Authorization: Bearer $REPLICATE_API_TOKEN" \
-  https://api.replicate.com/v1/trainings/zz4ibbonubfz7carwiefibzgga
-```
-
-The response will be the training object:
-
-```json
-{
-  "completed_at": "2023-09-08T16:41:19.826523Z",
-  "created_at": "2023-09-08T16:32:57.018467Z",
-  "error": null,
-  "id": "zz4ibbonubfz7carwiefibzgga",
-  "input": {
-    "input_images": "https://example.com/my-input-images.zip"
-  },
-  "logs": "...",
-  "metrics": {
-    "predict_time": 502.713876
-  },
-  "output": {
-    "version": "...",
-    "weights": "..."
-  },
-  "started_at": "2023-09-08T16:32:57.112647Z",
-  "status": "succeeded",
-  "urls": {
-    "web": "https://replicate.com/p/zz4ibbonubfz7carwiefibzgga",
-    "get": "https://api.replicate.com/v1/trainings/zz4ibbonubfz7carwiefibzgga",
-    "cancel": "https://api.replicate.com/v1/trainings/zz4ibbonubfz7carwiefibzgga/cancel"
-  },
-  "model": "stability-ai/sdxl",
-  "version": "da77bc59ee60423279fd632efb4795ab731d9e3ca9705ef3341091fb989b7eaf",
-}
-```
-
-`status` will be one of:
-
-- `starting`: the training is starting up. If this status lasts longer than a few seconds, then it's typically because a new worker is being started to run the training.
-- `processing`: the `train()` method of the model is currently running.
-- `succeeded`: the training completed successfully.
-- `failed`: the training encountered an error during processing.
-- `canceled`: the training was canceled by its creator.
-
-In the case of success, `output` will be an object containing the output of the model. Any files will be represented as HTTPS URLs. You'll need to pass the `Authorization` header to request them.
-
-In the case of failure, `error` will contain the error encountered during the training.
-
-Terminated trainings (with a status of `succeeded`, `failed`, or `canceled`) will include a `metrics` object with a `predict_time` property showing the amount of CPU or GPU time, in seconds, that the training used while running. It won't include time waiting for the training to start.
-
-
-```python
-training = replicate.trainings.get(
-    training_id="training_id",
-)
-print(training.id)
-```
-
-Docs: https://replicate.com/docs/reference/http#trainings.get
+---
 
 ### `hardware.list`
 
 List available hardware for models
-
-Example cURL request:
-
-```console
-curl -s \
-  -H "Authorization: Bearer $REPLICATE_API_TOKEN" \
-  https://api.replicate.com/v1/hardware
-```
-
-The response will be a JSON array of hardware objects:
-
-```json
-[
-    {"name": "CPU", "sku": "cpu"},
-    {"name": "Nvidia T4 GPU", "sku": "gpu-t4"},
-    {"name": "Nvidia A40 GPU", "sku": "gpu-a40-small"},
-    {"name": "Nvidia A40 (Large) GPU", "sku": "gpu-a40-large"},
-]
-```
 
 
 ```python
@@ -849,30 +668,11 @@ print(hardware)
 
 Docs: https://replicate.com/docs/reference/http#hardware.list
 
+---
+
 ### `account.get`
 
 Get the authenticated account
-
-Returns information about the user or organization associated with the provided API token.
-
-Example cURL request:
-
-```console
-curl -s \
-  -H "Authorization: Bearer $REPLICATE_API_TOKEN" \
-  https://api.replicate.com/v1/account
-```
-
-The response will be a JSON object describing the account:
-
-```json
-{
-  "type": "organization",
-  "username": "acme",
-  "name": "Acme Corp, Inc.",
-  "github_url": "https://github.com/acme",
-}
-```
 
 
 ```python
@@ -882,27 +682,11 @@ print(account.type)
 
 Docs: https://replicate.com/docs/reference/http#account.get
 
+---
+
 ### `webhooks.default.secret.get`
 
 Get the signing secret for the default webhook
-
-Get the signing secret for the default webhook endpoint. This is used to verify that webhook requests are coming from Replicate.
-
-Example cURL request:
-
-```console
-curl -s \
-  -H "Authorization: Bearer $REPLICATE_API_TOKEN" \
-  https://api.replicate.com/v1/webhooks/default/secret
-```
-
-The response will be a JSON object with a `key` property:
-
-```json
-{
-  "key": "..."
-}
-```
 
 
 ```python
@@ -911,6 +695,8 @@ print(secret.key)
 ```
 
 Docs: https://replicate.com/docs/reference/http#webhooks.default.secret.get
+
+---
 
 
 ## Low-level API

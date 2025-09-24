@@ -95,7 +95,6 @@ def remove_client_instantiation(code: str) -> str:
 def format_operation(operation_id: str, operation: dict[str, Any]) -> str:
     """Format a single operation as markdown."""
     summary = operation.get("summary", "").strip()
-    description = operation.get("description", "").strip()
 
     # Extract code sample
     code_sample = ""
@@ -120,15 +119,13 @@ def format_operation(operation_id: str, operation: dict[str, Any]) -> str:
         lines.append(summary)
         lines.append("")
 
-    if description and description != summary:
-        lines.append(description)
-        lines.append("")
-
     if code_sample:
         lines.append(code_sample)
         lines.append("")
 
     lines.append(f"Docs: {docs_link}")
+    lines.append("")
+    lines.append("---")
     lines.append("")
 
     return "\n".join(lines)
@@ -185,52 +182,54 @@ def get_ordered_operations(spec: dict[str, Any]) -> list[tuple[str, str, str, di
                 operation = path_obj[method]
                 op_id = extract_operation_id(path, method, operation)
 
-                # Try to match with our ordered list
+                # Try to match with our ordered list using multiple strategies
                 matched_name = None
-                for ordered_name in operation_order:
-                    # Convert ordered name to possible operation IDs
-                    # e.g., "predictions.create" might be "predictionsCreate" or "predictions_create"
-                    variants = [
-                        ordered_name,
-                        ordered_name.replace(".", "_"),
-                        ordered_name.replace(".", ""),
-                        "".join(word.capitalize() if i > 0 else word for i, word in enumerate(ordered_name.split("."))),
-                    ]
 
-                    if op_id in variants or any(v.lower() == op_id.lower() for v in variants):
-                        matched_name = ordered_name
-                        break
+                # Strategy 1: Direct operationId match
+                if op_id in operation_order:
+                    matched_name = op_id
 
-                    # Also check if the operation path matches
-                    path_parts = path.strip("/").split("/")
-                    ordered_parts = ordered_name.split(".")
-
-                    # Match by path structure
-                    if len(ordered_parts) >= 2:
-                        resource = ordered_parts[0]
-                        action = ordered_parts[-1]
-
-                        # Check if path contains the resource name
-                        if resource in path and action.lower() == method:
+                # Strategy 2: Case-insensitive exact match
+                if not matched_name:
+                    for ordered_name in operation_order:
+                        if op_id.lower() == ordered_name.lower():
                             matched_name = ordered_name
                             break
-                        elif resource in path and action in ["create"] and method == "post":
+
+                # Strategy 3: Convert ordered name to possible operation IDs
+                if not matched_name:
+                    for ordered_name in operation_order:
+                        # e.g., "predictions.create" might be "predictionsCreate" or "predictions_create"
+                        variants = [
+                            ordered_name.replace(".", "_"),
+                            ordered_name.replace(".", ""),
+                            "".join(word.capitalize() if i > 0 else word for i, word in enumerate(ordered_name.split("."))),
+                        ]
+
+                        if op_id in variants or any(v.lower() == op_id.lower() for v in variants):
                             matched_name = ordered_name
                             break
-                        elif resource in path and action in ["list", "get"] and method == "get":
-                            # Differentiate between list and get
-                            if "{" in path and action == "get":
+
+                # Strategy 4: Match by path structure and method
+                if not matched_name:
+                    for ordered_name in operation_order:
+                        ordered_parts = ordered_name.split(".")
+                        if len(ordered_parts) >= 2:
+                            resource = ordered_parts[0]
+                            action = ordered_parts[-1]
+
+                            # Check various path patterns
+                            path_lower = path.lower()
+                            if (resource in path_lower and
+                                ((action == "create" and method == "post") or
+                                 (action == "get" and method == "get" and "{" in path) or
+                                 (action == "list" and method == "get" and "{" not in path) or
+                                 (action == "update" and method in ["put", "patch"]) or
+                                 (action == "delete" and method == "delete") or
+                                 (action == "cancel" and method == "post" and "cancel" in path) or
+                                 (action == "search" and method == "get" and "search" in path))):
                                 matched_name = ordered_name
                                 break
-                            elif "{" not in path and action == "list":
-                                matched_name = ordered_name
-                                break
-                        elif resource in path and action in ["update"] and method in ["put", "patch"]:
-                            matched_name = ordered_name
-                            break
-                        elif resource in path and action in ["delete"] and method == "delete":
-                            matched_name = ordered_name
-                            break
 
                 key = matched_name or op_id
                 operations[key] = (op_id, path, method, operation)
@@ -257,6 +256,16 @@ def generate_api_docs(spec: dict[str, Any]) -> str:
     lines = []
     operations = get_ordered_operations(spec)
 
+    # Generate sorted list of operations at the top
+    lines.append("Available operations:")
+    lines.append("")
+    for op_id, _path, _method, _operation in operations:
+        # Create anchor link from operation_id
+        anchor = op_id.lower().replace('.', '').replace('_', '')
+        lines.append(f"- [`{op_id}`](#{anchor})")
+    lines.append("")
+
+    # Generate detailed documentation for each operation
     for op_id, _path, _method, operation in operations:
         lines.append(format_operation(op_id, operation))
 
