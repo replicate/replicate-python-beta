@@ -6,7 +6,7 @@
 pip install replicate
 ```
 
-## Quick Start
+## Quick start
 
 ```python
 import replicate
@@ -24,7 +24,7 @@ text = claude(prompt="Write a haiku about Python")
 print(text)  # "Code flows like water..."
 ```
 
-## Client Initialization
+## Client initialization
 
 By default, the SDK uses the `REPLICATE_API_TOKEN` environment variable:
 
@@ -35,7 +35,7 @@ import replicate
 image_url = replicate.run("google/nano-banana", input={"prompt": "hello"})
 ```
 
-### Custom Client Configuration
+### Custom client configuration
 
 For advanced use cases, you can create an explicit client instance:
 
@@ -55,7 +55,7 @@ replicate = Replicate(
 image_url = replicate.run("google/nano-banana", input={"prompt": "hello"})
 ```
 
-### Asynchronous Client
+### Asynchronous client
 
 ```python
 from replicate import AsyncReplicate
@@ -74,9 +74,9 @@ async def main():
 asyncio.run(main())
 ```
 
-## High-Level Methods
+## High-level methods
 
-### use() - Create a Reusable Model Function (Recommended)
+### use() - Create a reusable model function (recommended)
 
 The most Pythonic way to interact with models. Creates a callable function for any model.
 
@@ -110,7 +110,7 @@ model = replicate.use("owner/name")  # Latest version
 model = replicate.use("5c7d5dc6dd8bf75c1acaa8565735e7986bc5b66206b55cca93cb72c9bf15ccaa")  # Version ID
 ```
 
-### run() - Run a Model Once
+### run() - Run a model once
 
 Direct method to run a model and get output. Good for one-off predictions.
 
@@ -135,7 +135,7 @@ replicate.run("owner/name", input={})  # Latest version
 replicate.run("5c7d5dc6dd8bf75c1acaa8565735e7986bc5b66206b55cca93cb72c9bf15ccaa", input={})  # Version ID
 ```
 
-### stream() - Stream Model Output
+### stream() - Stream model output
 
 For models that support streaming (like language models). Returns an iterator of output chunks.
 
@@ -155,7 +155,7 @@ async for chunk in async_replicate.stream(
     print(chunk, end="")
 ```
 
-### search() - Search Models
+### search() - Search models
 
 Find models by keyword or description.
 
@@ -167,7 +167,7 @@ for model in results:
     print(f"{model.owner}/{model.name}: {model.description}")
 ```
 
-## Core Resources
+## Core resources
 
 ### Predictions
 
@@ -236,7 +236,7 @@ model = replicate.models.create(
 replicate.models.delete(model_owner="your-username", model_name="my-model")
 ```
 
-#### Model Versions
+#### Model versions
 
 ```python
 # List model versions
@@ -261,7 +261,7 @@ replicate.models.versions.delete(
 )
 ```
 
-#### Model Predictions
+#### Model predictions
 
 Run predictions directly through a model.
 
@@ -275,7 +275,7 @@ prediction = replicate.models.predictions.create(
 # prediction.output will be an image URL when complete
 ```
 
-#### Model Examples
+#### Model examples
 
 ```python
 # Get example predictions for a model
@@ -432,9 +432,9 @@ webhook_secret = replicate.webhooks.default.secret.get()
 print(f"Webhook signing secret: {webhook_secret.key}")
 ```
 
-## File Handling
+## File handling
 
-### Input Files
+### Input files
 
 The SDK supports multiple ways to provide file inputs:
 
@@ -459,7 +459,7 @@ text = replicate.run("anthropic/claude-4-sonnet", input={
 })
 ```
 
-### Output Files
+### Output files
 
 File outputs are automatically converted to `FileOutput` objects:
 
@@ -486,7 +486,7 @@ if isinstance(image_url, FileOutput):
             f.write(chunk)
 ```
 
-## Error Handling
+## Error handling
 
 The SDK provides detailed exception types for error handling:
 
@@ -541,9 +541,9 @@ if first_page.has_next_page():
 all_models = list(replicate.models.list())
 ```
 
-## Advanced Features
+## Advanced features
 
-### Raw Response Access
+### Raw response access
 
 Access the underlying HTTP response:
 
@@ -562,7 +562,7 @@ print(f"Headers: {response.headers}")
 prediction = response.parse()
 ```
 
-### Custom HTTP Client
+### Custom HTTP client
 
 Configure a custom HTTP client for Replicate:
 
@@ -585,7 +585,7 @@ replicate = Replicate(
 )
 ```
 
-### Retries and Timeouts
+### Retries and timeouts
 
 Configure retry behavior and timeouts:
 
@@ -603,7 +603,7 @@ image_url = replicate.run(
 )
 ```
 
-### Client Copying
+### Client copying
 
 Create a new Replicate instance with modified settings:
 
@@ -616,7 +616,7 @@ new_replicate = replicate.copy(
 )
 ```
 
-## Async/Await Support
+## Async/await support
 
 All methods have async equivalents when using `AsyncReplicate`:
 
@@ -656,14 +656,14 @@ async def main():
 asyncio.run(main())
 ```
 
-## Environment Variables
+## Environment variables
 
 The SDK respects these environment variables:
 
 - `REPLICATE_API_TOKEN` - API authentication token
 - `REPLICATE_BASE_URL` - Override the API base URL (default: `https://api.replicate.com/v1`)
 
-## Type Hints
+## Type hints
 
 The SDK is fully typed with comprehensive type hints:
 
@@ -680,9 +680,9 @@ status: PredictionStatus = prediction.status
 page: SyncCursorURLPage[Prediction] = replicate.predictions.list()
 ```
 
-## Common Patterns
+## Common patterns
 
-### Wait for Completion with Polling
+### Wait for completion with polling
 
 ```python
 import time
@@ -702,7 +702,7 @@ prediction = replicate.predictions.create(model="model:version", input={})
 result = wait_for_prediction(replicate, prediction.id)
 ```
 
-### Batch Processing
+### Batch processing
 
 ```python
 import asyncio
@@ -723,7 +723,7 @@ prompts = ["prompt 1", "prompt 2", "prompt 3"]
 results = asyncio.run(batch_process(prompts))
 ```
 
-### Webhook Handling
+### Webhook handling
 
 ```python
 from flask import Flask, request
@@ -761,7 +761,7 @@ def webhook():
     return "OK", 200
 ```
 
-## Migration Guide
+## Migration guide
 
 ### From v0.x to v1.0+
 
@@ -798,7 +798,7 @@ model = replicate.models.get(
 )
 ```
 
-### Using Legacy Authentication
+### Using legacy authentication
 
 For compatibility with older code:
 
