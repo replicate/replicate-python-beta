@@ -406,6 +406,9 @@ class ModelsResource(SyncAPIResource):
                     "Use either models.get('owner/name') or models.get(model_owner='owner', model_name='name')"
                 )
 
+            # Type guard: ensure model_or_owner is a string
+            assert isinstance(model_or_owner, str), "model_or_owner must be a string"
+
             # Parse the owner/name format
             if "/" not in model_or_owner:
                 raise ValueError(f"Invalid model reference '{model_or_owner}'. Expected format: 'owner/name'")
@@ -829,6 +832,9 @@ class AsyncModelsResource(AsyncAPIResource):
                     "Cannot specify both positional and keyword arguments. "
                     "Use either models.get('owner/name') or models.get(model_owner='owner', model_name='name')"
                 )
+
+            # Type guard: ensure model_or_owner is a string
+            assert isinstance(model_or_owner, str), "model_or_owner must be a string"
 
             # Parse the owner/name format
             if "/" not in model_or_owner:

@@ -11,7 +11,7 @@ from replicate.types.model_get_response import ModelGetResponse
 
 
 @pytest.fixture
-def mock_model_response():
+def mock_model_response() -> ModelGetResponse:
     """Mock response for model.get requests."""
     return ModelGetResponse(
         url="https://replicate.com/stability-ai/stable-diffusion",
@@ -33,11 +33,11 @@ class TestModelGetBackwardCompatibility:
     """Test backward compatibility for models.get() method."""
 
     @pytest.fixture
-    def client(self):
+    def client(self) -> Replicate:
         """Create a Replicate client with mocked token."""
         return Replicate(bearer_token="test-token")
 
-    def test_legacy_format_owner_name(self, client, mock_model_response):
+    def test_legacy_format_owner_name(self, client: Replicate, mock_model_response: ModelGetResponse) -> None:
         """Test legacy format: models.get('owner/name')."""
         # Mock the underlying _get method
         with patch.object(client.models, "_get", return_value=mock_model_response) as mock_get:
@@ -52,7 +52,7 @@ class TestModelGetBackwardCompatibility:
             )
             assert result == mock_model_response
 
-    def test_new_format_keyword_args(self, client, mock_model_response):
+    def test_new_format_keyword_args(self, client: Replicate, mock_model_response: ModelGetResponse) -> None:
         """Test new format: models.get(model_owner='owner', model_name='name')."""
         # Mock the underlying _get method
         with patch.object(client.models, "_get", return_value=mock_model_response) as mock_get:
@@ -67,7 +67,7 @@ class TestModelGetBackwardCompatibility:
             )
             assert result == mock_model_response
 
-    def test_legacy_format_with_extra_params(self, client, mock_model_response):
+    def test_legacy_format_with_extra_params(self, client: Replicate, mock_model_response: ModelGetResponse) -> None:
         """Test legacy format with extra parameters."""
         # Mock the underlying _get method
         with patch.object(client.models, "_get", return_value=mock_model_response) as mock_get:
@@ -80,14 +80,14 @@ class TestModelGetBackwardCompatibility:
             mock_get.assert_called_once()
             assert result == mock_model_response
 
-    def test_error_mixed_formats(self, client):
+    def test_error_mixed_formats(self, client: Replicate) -> None:
         """Test error when mixing legacy and new formats."""
         with pytest.raises(ValueError) as exc_info:
             client.models.get("stability-ai/stable-diffusion", model_owner="other-owner")
 
         assert "Cannot specify both positional and keyword arguments" in str(exc_info.value)
 
-    def test_error_invalid_legacy_format(self, client):
+    def test_error_invalid_legacy_format(self, client: Replicate) -> None:
         """Test error for invalid legacy format (no slash)."""
         with pytest.raises(ValueError) as exc_info:
             client.models.get("invalid-format")
@@ -95,14 +95,14 @@ class TestModelGetBackwardCompatibility:
         assert "Invalid model reference 'invalid-format'" in str(exc_info.value)
         assert "Expected format: 'owner/name'" in str(exc_info.value)
 
-    def test_error_missing_parameters(self, client):
+    def test_error_missing_parameters(self, client: Replicate) -> None:
         """Test error when no parameters are provided."""
         with pytest.raises(ValueError) as exc_info:
             client.models.get()
 
         assert "model_owner and model_name are required" in str(exc_info.value)
 
-    def test_legacy_format_with_complex_names(self, client, mock_model_response):
+    def test_legacy_format_with_complex_names(self, client: Replicate, mock_model_response: ModelGetResponse) -> None:
         """Test legacy format with complex owner/model names."""
         # Mock the underlying _get method
         with patch.object(client.models, "_get", return_value=mock_model_response) as mock_get:
@@ -115,8 +115,9 @@ class TestModelGetBackwardCompatibility:
                 options={},
                 cast_to=ModelGetResponse
             )
+            assert result == mock_model_response
 
-    def test_legacy_format_multiple_slashes(self, client):
+    def test_legacy_format_multiple_slashes(self, client: Replicate) -> None:
         """Test legacy format with multiple slashes (should split on first slash only)."""
         # Mock the underlying _get method
         with patch.object(client.models, "_get", return_value=Mock()) as mock_get:
@@ -135,12 +136,12 @@ class TestAsyncModelGetBackwardCompatibility:
     """Test backward compatibility for async models.get() method."""
 
     @pytest.fixture
-    async def async_client(self):
+    async def async_client(self) -> AsyncReplicate:
         """Create an async Replicate client with mocked token."""
         return AsyncReplicate(bearer_token="test-token")
 
     @pytest.mark.asyncio
-    async def test_async_legacy_format_owner_name(self, async_client, mock_model_response):
+    async def test_async_legacy_format_owner_name(self, async_client: AsyncReplicate, mock_model_response: ModelGetResponse) -> None:
         """Test async legacy format: models.get('owner/name')."""
         # Mock the underlying _get method
         with patch.object(async_client.models, "_get", return_value=mock_model_response) as mock_get:
@@ -156,7 +157,7 @@ class TestAsyncModelGetBackwardCompatibility:
             assert result == mock_model_response
 
     @pytest.mark.asyncio
-    async def test_async_new_format_keyword_args(self, async_client, mock_model_response):
+    async def test_async_new_format_keyword_args(self, async_client: AsyncReplicate, mock_model_response: ModelGetResponse) -> None:
         """Test async new format: models.get(model_owner='owner', model_name='name')."""
         # Mock the underlying _get method
         with patch.object(async_client.models, "_get", return_value=mock_model_response) as mock_get:
@@ -172,7 +173,7 @@ class TestAsyncModelGetBackwardCompatibility:
             assert result == mock_model_response
 
     @pytest.mark.asyncio
-    async def test_async_error_mixed_formats(self, async_client):
+    async def test_async_error_mixed_formats(self, async_client: AsyncReplicate) -> None:
         """Test async error when mixing legacy and new formats."""
         with pytest.raises(ValueError) as exc_info:
             await async_client.models.get("stability-ai/stable-diffusion", model_owner="other-owner")
