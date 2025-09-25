@@ -78,9 +78,10 @@ mypy-extensions==1.0.0
 nodeenv==1.8.0
     # via pyright
 nox==2023.4.22
-packaging==23.2
+packaging==25.0
     # via nox
     # via pytest
+    # via replicate
 platformdirs==3.11.0
     # via virtualenv
 pluggy==1.5.0
