@@ -9,7 +9,7 @@ import httpx
 
 from replicate.lib._files import FileEncodingStrategy, encode_json, async_encode_json
 
-from ..._types import Body, Query, Headers, NotGiven, not_given
+from ..._types import Body, Omit, Query, Headers, NotGiven, omit, not_given
 from ..._utils import maybe_transform, strip_not_given, async_maybe_transform
 from ..._compat import cached_property
 from ..._resource import SyncAPIResource, AsyncAPIResource
@@ -52,10 +52,10 @@ class PredictionsResource(SyncAPIResource):
         model_owner: str,
         model_name: str,
         input: object,
-        stream: bool | NotGiven = NOT_GIVEN,
-        webhook: str | NotGiven = NOT_GIVEN,
-        webhook_events_filter: List[Literal["start", "output", "logs", "completed"]] | NotGiven = NOT_GIVEN,
-        prefer: str | NotGiven = NOT_GIVEN,
+        stream: bool | Omit = omit,
+        webhook: str | Omit = omit,
+        webhook_events_filter: List[Literal["start", "output", "logs", "completed"]] | Omit = omit,
+        prefer: str | Omit = omit,
         file_encoding_strategy: Optional["FileEncodingStrategy"] = None,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -214,10 +214,10 @@ class AsyncPredictionsResource(AsyncAPIResource):
         model_owner: str,
         model_name: str,
         input: object,
-        stream: bool | NotGiven = NOT_GIVEN,
-        webhook: str | NotGiven = NOT_GIVEN,
-        webhook_events_filter: List[Literal["start", "output", "logs", "completed"]] | NotGiven = NOT_GIVEN,
-        prefer: str | NotGiven = NOT_GIVEN,
+        stream: bool | Omit = omit,
+        webhook: str | Omit = omit,
+        webhook_events_filter: List[Literal["start", "output", "logs", "completed"]] | Omit = omit,
+        prefer: str | Omit = omit,
         file_encoding_strategy: Optional["FileEncodingStrategy"] = None,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
