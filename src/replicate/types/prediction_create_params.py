@@ -59,7 +59,7 @@ class PredictionCreateParams(TypedDict, total=False):
     [server-sent events (SSE)](https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events).
 
     This field is no longer needed as the returned prediction will always have a
-    `stream` entry in its `url` property if the model supports streaming.
+    `stream` entry in its `urls` property if the model supports streaming.
     """
 
     webhook: str
