@@ -118,7 +118,7 @@ class PredictionsResource(SyncAPIResource):
               [server-sent events (SSE)](https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events).
 
               This field is no longer needed as the returned prediction will always have a
-              `stream` entry in its `url` property if the model supports streaming.
+              `stream` entry in its `urls` property if the model supports streaming.
 
           webhook: An HTTPS URL for receiving a webhook when the prediction has new output. The
               webhook will be a POST request where the request body is the same as the
@@ -280,7 +280,7 @@ class AsyncPredictionsResource(AsyncAPIResource):
               [server-sent events (SSE)](https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events).
 
               This field is no longer needed as the returned prediction will always have a
-              `stream` entry in its `url` property if the model supports streaming.
+              `stream` entry in its `urls` property if the model supports streaming.
 
           webhook: An HTTPS URL for receiving a webhook when the prediction has new output. The
               webhook will be a POST request where the request body is the same as the
