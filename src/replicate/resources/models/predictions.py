@@ -9,7 +9,7 @@ import httpx
 
 from replicate.lib._files import FileEncodingStrategy, encode_json, async_encode_json
 
-from ..._types import Body, Omit, Query, Headers, NotGiven, omit, not_given
+from ..._types import Body, Query, Headers, NotGiven, not_given
 from ..._utils import maybe_transform, strip_not_given, async_maybe_transform
 from ..._compat import cached_property
 from ..._resource import SyncAPIResource, AsyncAPIResource
