@@ -5,7 +5,7 @@ from __future__ import annotations
 import httpx
 
 from ...types import deployment_create_params, deployment_update_params
-from ..._types import NOT_GIVEN, Body, Query, Headers, NoneType, NotGiven
+from ..._types import Body, Omit, Query, Headers, NoneType, NotGiven, omit, not_given
 from ..._utils import maybe_transform, async_maybe_transform
 from ..._compat import cached_property
 from ..._resource import SyncAPIResource, AsyncAPIResource
@@ -71,7 +71,7 @@ class DeploymentsResource(SyncAPIResource):
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> DeploymentCreateResponse:
         """
         Create a new deployment:
@@ -167,16 +167,16 @@ class DeploymentsResource(SyncAPIResource):
         *,
         deployment_owner: str,
         deployment_name: str,
-        hardware: str | NotGiven = NOT_GIVEN,
-        max_instances: int | NotGiven = NOT_GIVEN,
-        min_instances: int | NotGiven = NOT_GIVEN,
-        version: str | NotGiven = NOT_GIVEN,
+        hardware: str | Omit = omit,
+        max_instances: int | Omit = omit,
+        min_instances: int | Omit = omit,
+        version: str | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> DeploymentUpdateResponse:
         """
         Update properties of an existing deployment, including hardware, min/max
@@ -271,7 +271,7 @@ class DeploymentsResource(SyncAPIResource):
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> SyncCursorURLPage[DeploymentListResponse]:
         """
         Get a list of deployments associated with the current account, including the
@@ -338,7 +338,7 @@ class DeploymentsResource(SyncAPIResource):
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> None:
         """
         Delete a deployment
@@ -390,7 +390,7 @@ class DeploymentsResource(SyncAPIResource):
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> DeploymentGetResponse:
         """
         Get information about a deployment by name including the current release.
@@ -490,7 +490,7 @@ class AsyncDeploymentsResource(AsyncAPIResource):
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> DeploymentCreateResponse:
         """
         Create a new deployment:
@@ -586,16 +586,16 @@ class AsyncDeploymentsResource(AsyncAPIResource):
         *,
         deployment_owner: str,
         deployment_name: str,
-        hardware: str | NotGiven = NOT_GIVEN,
-        max_instances: int | NotGiven = NOT_GIVEN,
-        min_instances: int | NotGiven = NOT_GIVEN,
-        version: str | NotGiven = NOT_GIVEN,
+        hardware: str | Omit = omit,
+        max_instances: int | Omit = omit,
+        min_instances: int | Omit = omit,
+        version: str | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> DeploymentUpdateResponse:
         """
         Update properties of an existing deployment, including hardware, min/max
@@ -690,7 +690,7 @@ class AsyncDeploymentsResource(AsyncAPIResource):
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> AsyncPaginator[DeploymentListResponse, AsyncCursorURLPage[DeploymentListResponse]]:
         """
         Get a list of deployments associated with the current account, including the
@@ -757,7 +757,7 @@ class AsyncDeploymentsResource(AsyncAPIResource):
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> None:
         """
         Delete a deployment
@@ -809,7 +809,7 @@ class AsyncDeploymentsResource(AsyncAPIResource):
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> DeploymentGetResponse:
         """
         Get information about a deployment by name including the current release.
