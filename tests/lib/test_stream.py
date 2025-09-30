@@ -15,7 +15,7 @@ bearer_token = "My Bearer Token"
 
 def create_mock_prediction_json(stream_url: str | None = None) -> dict[str, Any]:
     """Helper to create a complete prediction JSON response"""
-    prediction = {
+    prediction: dict[str, Any] = {
         "id": "test-prediction-id",
         "created_at": "2023-01-01T00:00:00Z",
         "data_removed": False,
@@ -31,7 +31,7 @@ def create_mock_prediction_json(stream_url: str | None = None) -> dict[str, Any]
         },
     }
     if stream_url:
-        prediction["urls"]["stream"] = stream_url
+        prediction["urls"]["stream"] = stream_url  # type: ignore[index]
     return prediction
 
 
@@ -62,7 +62,7 @@ def test_stream_with_model_owner_name(respx_mock: MockRouter) -> None:
     )
 
     # Stream the model
-    output = []
+    output: list[str] = []
     for chunk in client.stream(
         "meta/meta-llama-3-70b-instruct",
         input={"prompt": "Say hello"},
@@ -99,7 +99,7 @@ def test_stream_with_version_id(respx_mock: MockRouter) -> None:
     )
 
     # Stream the model
-    output = []
+    output: list[str] = []
     for chunk in client.stream(
         version_id,
         input={"prompt": "Test"},
@@ -154,7 +154,7 @@ async def test_async_stream_with_model_owner_name(respx_mock: MockRouter) -> Non
     )
 
     # Stream the model
-    output = []
+    output: list[str] = []
     async for chunk in async_client.stream(
         "meta/meta-llama-3-70b-instruct",
         input={"prompt": "Say hello"},
@@ -213,7 +213,7 @@ def test_stream_module_level(respx_mock: MockRouter) -> None:
     )
 
     # Stream using module-level function
-    output = []
+    output: list[str] = []
     for chunk in replicate.stream(
         "meta/meta-llama-3-70b-instruct",
         input={"prompt": "Test"},
