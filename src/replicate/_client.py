@@ -330,34 +330,16 @@ class Replicate(SyncAPIClient):
         """
         Stream output from a model prediction.
 
-        This creates a prediction and returns an iterator that yields output chunks
-        as strings as they become available from the streaming API.
-
-        Args:
-            ref: Reference to the model or version to run. Can be:
-                - A string containing a version ID (e.g. "5c7d5dc6dd8bf75c1acaa8565735e7986bc5b66206b55cca93cb72c9bf15ccaa")
-                - A string with owner/name format (e.g. "replicate/hello-world")
-                - A string with owner/name:version format (e.g. "replicate/hello-world:5c7d5dc6...")
-                - A Model instance with owner and name attributes
-                - A Version instance with id attribute
-                - A ModelVersionIdentifier dictionary with owner, name, and/or version keys
-            file_encoding_strategy: Strategy for encoding file inputs, options are "base64" or "url"
-            **params: Additional parameters to pass to the prediction creation endpoint including
-                      the required "input" dictionary with model-specific parameters
-
-        Yields:
-            str: Output chunks from the model as they become available
-
-        Raises:
-            ValueError: If the reference format is invalid or model doesn't support streaming
-            ReplicateError: If the prediction fails
-
         Example:
-            for event in replicate.stream(
+            ```python
+            for event in client.stream(
                 "meta/meta-llama-3-70b-instruct",
                 input={"prompt": "Write a haiku about coding"},
             ):
                 print(str(event), end="")
+            ```
+
+        See `replicate.lib._predictions_stream.stream` for full documentation.
         """
         from .lib._predictions_stream import stream
 
@@ -753,34 +735,16 @@ class AsyncReplicate(AsyncAPIClient):
         """
         Stream output from a model prediction asynchronously.
 
-        This creates a prediction and returns an async iterator that yields output chunks
-        as strings as they become available from the streaming API.
-
-        Args:
-            ref: Reference to the model or version to run. Can be:
-                - A string containing a version ID (e.g. "5c7d5dc6dd8bf75c1acaa8565735e7986bc5b66206b55cca93cb72c9bf15ccaa")
-                - A string with owner/name format (e.g. "replicate/hello-world")
-                - A string with owner/name:version format (e.g. "replicate/hello-world:5c7d5dc6...")
-                - A Model instance with owner and name attributes
-                - A Version instance with id attribute
-                - A ModelVersionIdentifier dictionary with owner, name, and/or version keys
-            file_encoding_strategy: Strategy for encoding file inputs, options are "base64" or "url"
-            **params: Additional parameters to pass to the prediction creation endpoint including
-                      the required "input" dictionary with model-specific parameters
-
-        Yields:
-            str: Output chunks from the model as they become available
-
-        Raises:
-            ValueError: If the reference format is invalid or model doesn't support streaming
-            ReplicateError: If the prediction fails
-
         Example:
-            async for event in replicate.stream(
+            ```python
+            async for event in client.stream(
                 "meta/meta-llama-3-70b-instruct",
                 input={"prompt": "Write a haiku about coding"},
             ):
                 print(str(event), end="")
+            ```
+
+        See `replicate.lib._predictions_stream.async_stream` for full documentation.
         """
         from .lib._predictions_stream import async_stream
 

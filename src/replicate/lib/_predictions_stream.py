@@ -13,6 +13,31 @@ from ._models import Model, Version, ModelVersionIdentifier, resolve_reference
 if TYPE_CHECKING:
     from .._client import Replicate, AsyncReplicate
 
+_STREAM_DOCSTRING = """
+Stream output from a model prediction.
+
+This creates a prediction and returns an iterator that yields output chunks
+as strings as they become available from the streaming API.
+
+Args:
+    ref: Reference to the model or version to run. Can be:
+        - A string containing a version ID
+        - A string with owner/name format (e.g. "replicate/hello-world")
+        - A string with owner/name:version format
+        - A Model instance
+        - A Version instance
+        - A ModelVersionIdentifier dictionary
+    file_encoding_strategy: Strategy for encoding file inputs
+    **params: Additional parameters including the required "input" dictionary
+
+Yields:
+    str: Output chunks from the model as they become available
+
+Raises:
+    ValueError: If the reference format is invalid
+    ReplicateError: If the prediction fails or streaming is not available
+"""
+
 
 def _resolve_reference(
     ref: Union[Model, Version, ModelVersionIdentifier, str],
@@ -35,31 +60,7 @@ def stream(
     file_encoding_strategy: Optional["FileEncodingStrategy"] = None,
     **params: Unpack[PredictionCreateParamsWithoutVersion],
 ) -> Iterator[str]:
-    """
-    Stream output from a model prediction.
-
-    This creates a prediction and returns an iterator that yields output chunks
-    as strings as they become available from the streaming API.
-
-    Args:
-        client: The Replicate client instance
-        ref: Reference to the model or version to run. Can be:
-            - A string containing a version ID
-            - A string with owner/name format (e.g. "replicate/hello-world")
-            - A string with owner/name:version format
-            - A Model instance
-            - A Version instance
-            - A ModelVersionIdentifier dictionary
-        file_encoding_strategy: Strategy for encoding file inputs
-        **params: Additional parameters including the required "input" dictionary
-
-    Yields:
-        str: Output chunks from the model as they become available
-
-    Raises:
-        ValueError: If the reference format is invalid
-        ReplicateError: If the prediction fails or streaming is not available
-    """
+    __doc__ = _STREAM_DOCSTRING
     version, owner, name, version_id = _resolve_reference(ref)
 
     # Create prediction
@@ -112,25 +113,7 @@ async def async_stream(
     file_encoding_strategy: Optional["FileEncodingStrategy"] = None,
     **params: Unpack[PredictionCreateParamsWithoutVersion],
 ) -> AsyncIterator[str]:
-    """
-    Async stream output from a model prediction.
-
-    This creates a prediction and returns an async iterator that yields output chunks
-    as strings as they become available from the streaming API.
-
-    Args:
-        client: The AsyncReplicate client instance
-        ref: Reference to the model or version to run
-        file_encoding_strategy: Strategy for encoding file inputs
-        **params: Additional parameters including the required "input" dictionary
-
-    Yields:
-        str: Output chunks from the model as they become available
-
-    Raises:
-        ValueError: If the reference format is invalid
-        ReplicateError: If the prediction fails or streaming is not available
-    """
+    __doc__ = _STREAM_DOCSTRING
     version, owner, name, version_id = _resolve_reference(ref)
 
     # Create prediction
