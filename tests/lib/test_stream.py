@@ -1,10 +1,11 @@
 from __future__ import annotations
 
 import os
-from typing import Iterator
+from typing import Any, Iterator
 
 import httpx
 import pytest
+from respx import MockRouter
 
 from replicate import Replicate, AsyncReplicate
 
@@ -12,7 +13,7 @@ base_url = os.environ.get("TEST_API_BASE_URL", "http://127.0.0.1:4010")
 bearer_token = "My Bearer Token"
 
 
-def create_mock_prediction_json(stream_url: str | None = None) -> dict:
+def create_mock_prediction_json(stream_url: str | None = None) -> dict[str, Any]:
     """Helper to create a complete prediction JSON response"""
     prediction = {
         "id": "test-prediction-id",
@@ -34,7 +35,7 @@ def create_mock_prediction_json(stream_url: str | None = None) -> dict:
     return prediction
 
 
-def test_stream_with_model_owner_name(respx_mock) -> None:
+def test_stream_with_model_owner_name(respx_mock: MockRouter) -> None:
     """Test streaming with owner/name format"""
     client = Replicate(base_url=base_url, bearer_token=bearer_token, _strict_response_validation=True)
 
@@ -71,7 +72,7 @@ def test_stream_with_model_owner_name(respx_mock) -> None:
     assert output == ["Hello", " world", "!"]
 
 
-def test_stream_with_version_id(respx_mock) -> None:
+def test_stream_with_version_id(respx_mock: MockRouter) -> None:
     """Test streaming with version ID"""
     client = Replicate(base_url=base_url, bearer_token=bearer_token, _strict_response_validation=True)
     version_id = "5c7d5dc6dd8bf75c1acaa8565735e7986bc5b66206b55cca93cb72c9bf15ccaa"
@@ -108,7 +109,7 @@ def test_stream_with_version_id(respx_mock) -> None:
     assert output == ["Test", "output"]
 
 
-def test_stream_no_stream_url_raises_error(respx_mock) -> None:
+def test_stream_no_stream_url_raises_error(respx_mock: MockRouter) -> None:
     """Test that streaming raises an error when model doesn't support streaming"""
     client = Replicate(base_url=base_url, bearer_token=bearer_token, _strict_response_validation=True)
 
@@ -127,7 +128,7 @@ def test_stream_no_stream_url_raises_error(respx_mock) -> None:
 
 
 @pytest.mark.asyncio
-async def test_async_stream_with_model_owner_name(respx_mock) -> None:
+async def test_async_stream_with_model_owner_name(respx_mock: MockRouter) -> None:
     """Test async streaming with owner/name format"""
     async_client = AsyncReplicate(base_url=base_url, bearer_token=bearer_token, _strict_response_validation=True)
 
@@ -164,7 +165,7 @@ async def test_async_stream_with_model_owner_name(respx_mock) -> None:
 
 
 @pytest.mark.asyncio
-async def test_async_stream_no_stream_url_raises_error(respx_mock) -> None:
+async def test_async_stream_no_stream_url_raises_error(respx_mock: MockRouter) -> None:
     """Test that async streaming raises an error when model doesn't support streaming"""
     async_client = AsyncReplicate(base_url=base_url, bearer_token=bearer_token, _strict_response_validation=True)
 
@@ -182,7 +183,7 @@ async def test_async_stream_no_stream_url_raises_error(respx_mock) -> None:
             pass
 
 
-def test_stream_module_level(respx_mock) -> None:
+def test_stream_module_level(respx_mock: MockRouter) -> None:
     """Test that module-level stream function works"""
     import replicate
 
