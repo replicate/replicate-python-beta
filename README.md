@@ -128,7 +128,7 @@ for event in replicate.stream(
     print(str(event), end="")
 ```
 
-The `stream()` method creates a prediction and returns an iterator that yields output chunks as they become available via Server-Sent Events (SSE). This is useful for language models where you want to display output as it's generated rather than waiting for the entire response.
+The `stream()` method creates a prediction and returns an iterator that yields output chunks as strings. This is useful for language models where you want to display output as it's generated rather than waiting for the entire response.
 
 ## Async usage
 

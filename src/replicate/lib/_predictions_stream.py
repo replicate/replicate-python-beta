@@ -25,7 +25,7 @@ def stream(
     Stream output from a model prediction.
 
     This creates a prediction and returns an iterator that yields output chunks
-    as they become available via Server-Sent Events (SSE).
+    as strings as they become available from the streaming API.
 
     Args:
         client: The Replicate client instance
@@ -113,7 +113,7 @@ async def async_stream(
     Async stream output from a model prediction.
 
     This creates a prediction and returns an async iterator that yields output chunks
-    as they become available via Server-Sent Events (SSE).
+    as strings as they become available from the streaming API.
 
     Args:
         client: The AsyncReplicate client instance

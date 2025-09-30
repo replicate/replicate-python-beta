@@ -331,7 +331,7 @@ class Replicate(SyncAPIClient):
         Stream output from a model prediction.
 
         This creates a prediction and returns an iterator that yields output chunks
-        as they become available via Server-Sent Events (SSE).
+        as strings as they become available from the streaming API.
 
         Args:
             ref: Reference to the model or version to run. Can be:
@@ -754,7 +754,7 @@ class AsyncReplicate(AsyncAPIClient):
         Stream output from a model prediction asynchronously.
 
         This creates a prediction and returns an async iterator that yields output chunks
-        as they become available via Server-Sent Events (SSE).
+        as strings as they become available from the streaming API.
 
         Args:
             ref: Reference to the model or version to run. Can be:
