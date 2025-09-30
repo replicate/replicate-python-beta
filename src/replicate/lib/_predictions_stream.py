@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Union, Iterator, Optional
+from typing import TYPE_CHECKING, Tuple, Union, Iterator, Optional
 from collections.abc import AsyncIterator
 from typing_extensions import Unpack
 
@@ -12,6 +12,20 @@ from ._models import Model, Version, ModelVersionIdentifier, resolve_reference
 
 if TYPE_CHECKING:
     from .._client import Replicate, AsyncReplicate
+
+
+def _resolve_reference(
+    ref: Union[Model, Version, ModelVersionIdentifier, str],
+) -> Tuple[Optional[Version], Optional[str], Optional[str], Optional[str]]:
+    """Resolve a model reference to its components, with fallback for plain version IDs."""
+    try:
+        return resolve_reference(ref)
+    except ValueError:
+        # If resolution fails, treat it as a version ID if it's a string
+        if isinstance(ref, str):
+            return None, None, None, ref
+        else:
+            raise
 
 
 def stream(
@@ -46,19 +60,9 @@ def stream(
         ValueError: If the reference format is invalid
         ReplicateError: If the prediction fails or streaming is not available
     """
-    # Resolve ref to its components
-    try:
-        version, owner, name, version_id = resolve_reference(ref)
-    except ValueError:
-        # If resolution fails, treat it as a version ID if it's a string
-        if isinstance(ref, str):
-            version_id = ref
-            owner = name = None
-        else:
-            raise
+    version, owner, name, version_id = _resolve_reference(ref)
 
     # Create prediction
-    prediction = None
     if version_id is not None:
         params_with_version: PredictionCreateParams = {**params, "version": version_id}
         prediction = client.predictions.create(file_encoding_strategy=file_encoding_strategy, **params_with_version)
@@ -80,7 +84,6 @@ def stream(
     if not prediction.urls or not prediction.urls.stream:
         raise ValueError("Model does not support streaming. The prediction URLs do not include a stream endpoint.")
 
-    # Make SSE request to the stream URL
     stream_url = prediction.urls.stream
 
     with client._client.stream(
@@ -128,19 +131,9 @@ async def async_stream(
         ValueError: If the reference format is invalid
         ReplicateError: If the prediction fails or streaming is not available
     """
-    # Resolve ref to its components
-    try:
-        version, owner, name, version_id = resolve_reference(ref)
-    except ValueError:
-        # If resolution fails, treat it as a version ID if it's a string
-        if isinstance(ref, str):
-            version_id = ref
-            owner = name = None
-        else:
-            raise
+    version, owner, name, version_id = _resolve_reference(ref)
 
     # Create prediction
-    prediction = None
     if version_id is not None:
         params_with_version: PredictionCreateParams = {**params, "version": version_id}
         prediction = await client.predictions.create(
@@ -166,7 +159,6 @@ async def async_stream(
     if not prediction.urls or not prediction.urls.stream:
         raise ValueError("Model does not support streaming. The prediction URLs do not include a stream endpoint.")
 
-    # Make SSE request to the stream URL
     stream_url = prediction.urls.stream
 
     async with client._client.stream(
