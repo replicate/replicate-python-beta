@@ -82,6 +82,7 @@ if TYPE_CHECKING:
     __client: Replicate = cast(Replicate, {})
     run = __client.run
     use = __client.use
+    stream = __client.stream
 else:
 
     def _run(*args, **kwargs):
@@ -100,8 +101,12 @@ else:
 
         return use(Replicate, ref, hint=hint, streaming=streaming, **kwargs)
 
+    def _stream(*args, **kwargs):
+        return _load_client().stream(*args, **kwargs)
+
     run = _run
     use = _use
+    stream = _stream
 
 files: FilesResource = FilesResourceProxy().__as_proxied__()
 models: ModelsResource = ModelsResourceProxy().__as_proxied__()

@@ -118,13 +118,17 @@ For models that support streaming (particularly language models), you can use `r
 import replicate
 
 for event in replicate.stream(
-    "meta/meta-llama-3-70b-instruct",
+    "anthropic/claude-4-sonnet",
     input={
-        "prompt": "Please write a haiku about llamas.",
+        "prompt": "Give me a recipe for tasty smashed avocado on sourdough toast.",
+        "max_tokens": 8192,
+        "system_prompt": "You are a helpful assistant",
     },
 ):
     print(str(event), end="")
 ```
+
+The `stream()` method creates a prediction and returns an iterator that yields output chunks as they become available via Server-Sent Events (SSE). This is useful for language models where you want to display output as it's generated rather than waiting for the entire response.
 
 ## Async usage
 
@@ -172,7 +176,11 @@ async def main():
 
     # Stream a model's output
     async for event in replicate.stream(
-        "meta/meta-llama-3-70b-instruct", input={"prompt": "Write a haiku about coding"}
+        "anthropic/claude-4-sonnet",
+        input={
+            "prompt": "Write a haiku about coding",
+            "system_prompt": "You are a helpful assistant",
+        },
     ):
         print(str(event), end="")
 

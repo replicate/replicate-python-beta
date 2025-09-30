@@ -109,7 +109,7 @@ for __name in __all__:
     if not __name.startswith("__"):
         try:
             # Skip symbols that are imported later from _module_client
-            if __name in ("run", "use"):
+            if __name in ("run", "use", "stream"):
                 continue
             __locals[__name].__module__ = "replicate"
         except (TypeError, AttributeError):
@@ -253,6 +253,7 @@ from ._module_client import (
     use as use,
     files as files,
     models as models,
+    stream as stream,
     account as account,
     hardware as hardware,
     webhooks as webhooks,
