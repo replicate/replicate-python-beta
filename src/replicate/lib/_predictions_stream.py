@@ -61,7 +61,7 @@ def stream(
     **params: Unpack[PredictionCreateParamsWithoutVersion],
 ) -> Iterator[str]:
     __doc__ = _STREAM_DOCSTRING
-    version, owner, name, version_id = _resolve_reference(ref)
+    _, owner, name, version_id = _resolve_reference(ref)
 
     # Create prediction
     if version_id is not None:
@@ -114,7 +114,7 @@ async def async_stream(
     **params: Unpack[PredictionCreateParamsWithoutVersion],
 ) -> AsyncIterator[str]:
     __doc__ = _STREAM_DOCSTRING
-    version, owner, name, version_id = _resolve_reference(ref)
+    _, owner, name, version_id = _resolve_reference(ref)
 
     # Create prediction
     if version_id is not None:
