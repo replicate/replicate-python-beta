@@ -542,13 +542,17 @@ The validation logic is identical; only import paths may differ.
 
 ## Experimental use() interface
 
-The experimental `use()` interface is available in both versions with similar functionality. V2 adds async support.
+The experimental `use()` interface is available in both versions with similar functionality.
 
 ### Before (v1)
 
 ```python
 flux = replicate.use("black-forest-labs/flux-schnell")
 outputs = flux(prompt="astronaut on a horse")
+
+# Async support
+async_flux = replicate.use("black-forest-labs/flux-schnell")
+outputs = await async_flux(prompt="astronaut on a horse")
 ```
 
 ### After (v2)
@@ -558,7 +562,7 @@ outputs = flux(prompt="astronaut on a horse")
 flux = replicate.use("black-forest-labs/flux-schnell")
 outputs = flux(prompt="astronaut on a horse")
 
-# NEW: Async support
+# Async support (uses use_async parameter)
 async_flux = replicate.use("black-forest-labs/flux-schnell", use_async=True)
 outputs = await async_flux(prompt="astronaut on a horse")
 ```
