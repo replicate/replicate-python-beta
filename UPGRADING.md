@@ -351,18 +351,18 @@ for page in replicate.paginate(replicate.predictions.list):
 ### After (v2)
 
 ```python
-# Auto-pagination built-in
-page = replicate.predictions.list()
-
-# Iterate directly over page
-for prediction in page:
+# Auto-pagination: iterate through all pages automatically
+for prediction in replicate.predictions.list():
     print(prediction.id)
+    # Automatically fetches more pages as needed
 
-# Manual pagination
+# Manual pagination (if needed)
+page = replicate.predictions.list()
 if page.has_next_page():
     next_page = page.get_next_page()
 
-# Access results list still available
+# Access results from a single page
+page = replicate.predictions.list()
 for prediction in page.results:
     print(prediction.id)
 ```
