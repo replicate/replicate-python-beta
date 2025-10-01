@@ -75,44 +75,6 @@ output = replicate.run(...)
 
 The `api_token` parameter is still accepted for backward compatibility, but `bearer_token` is preferred.
 
-## Running models
-
-The basic `run()` method works similarly, but the `wait` parameter handling has changed.
-
-### Before (v1)
-
-```python
-# Wait up to 60 seconds (default)
-output = replicate.run(
-    "black-forest-labs/flux-schnell",
-    input={"prompt": "astronaut riding a rocket"}
-)
-
-# Custom timeout
-output = replicate.run(..., wait=30)
-
-# Don't wait
-output = replicate.run(..., wait=False)
-```
-
-### After (v2)
-
-```python
-# Wait up to 60 seconds (default)
-output = replicate.run(
-    "black-forest-labs/flux-schnell",
-    input={"prompt": "astronaut riding a rocket"}
-)
-
-# Custom timeout
-output = replicate.run(..., wait=30)
-
-# Don't wait
-output = replicate.run(..., wait=False)
-```
-
-The interface is the same, but v2 uses HTTP `Prefer` headers internally for better standards compliance.
-
 ## Streaming output
 
 Streaming works similarly, but prediction objects no longer have a `stream()` method.
