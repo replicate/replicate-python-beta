@@ -616,6 +616,8 @@ print(response.http_response.status_code)
 prediction = response.parse()
 ```
 
+The response object is an [`APIResponse`](https://github.com/replicate/replicate-python-stainless/tree/main/src/replicate/_response.py) instance. See the [README](https://github.com/replicate/replicate-python-stainless#accessing-raw-response-data-eg-headers) for full documentation.
+
 ### Streaming response wrapper
 
 ```python
