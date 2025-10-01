@@ -31,11 +31,11 @@ dependencies = [
 
 ## Quick migration checklist
 
-- Update client initialization to use `Replicate()` instead of `Client()` and `bearer_token` instead of `api_token`
-- Replace prediction instance methods with client methods (e.g., `replicate.predictions.wait(id)` instead of `prediction.wait()`)
-- Update async code to use `AsyncReplicate` client or context-aware module-level functions
-- Add keyword arguments to all API calls
-- Update exception handling to use new exception types
+- Update client initialization to use `Replicate()` instead of `Client()` and `bearer_token` instead of `api_token` - [details](#client-initialization-and-authentication)
+- Replace prediction instance methods with client methods (e.g., `replicate.predictions.wait(id)` instead of `prediction.wait()`) - [details](#predictions)
+- Update async code to use `AsyncReplicate` client or context-aware module-level functions - [details](#async-support)
+- Add keyword arguments to all API calls - [details](#models-and-versions)
+- Update exception handling to use new exception types - [details](#error-handling)
 
 ## Client initialization and authentication
 
