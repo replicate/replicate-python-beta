@@ -442,7 +442,17 @@ training = replicate.trainings.create(
 )
 
 # No instance methods available
-# Use resource methods
+# Use client methods instead
+
+# Wait for training (no trainings.wait() available)
+# Poll with get() instead
+while True:
+    training = replicate.trainings.get(training_id=training.id)
+    if training.status in ["succeeded", "failed", "canceled"]:
+        break
+    time.sleep(1)
+
+# Cancel training
 training = replicate.trainings.cancel(training_id=training.id)
 ```
 
