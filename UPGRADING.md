@@ -32,7 +32,7 @@ dependencies = [
 ## Quick migration checklist
 
 - Update client initialization to use `Replicate()` instead of `Client()` and `bearer_token` instead of `api_token`
-- Replace prediction instance methods (`wait()`, `cancel()`, `reload()`) with resource methods
+- Replace prediction instance methods with client methods (e.g., `replicate.predictions.wait(id)` instead of `prediction.wait()`)
 - Update async code to use `AsyncReplicate` client or context-aware module-level functions
 - Add keyword arguments to all API calls
 - Update exception handling to use new exception types
@@ -115,7 +115,7 @@ To stream a specific prediction in v2, use the top-level `stream()` function.
 
 ## Predictions
 
-Prediction objects have changed significantly. Instance methods like `wait()`, `cancel()`, and `reload()` are removed in favor of resource methods.
+Prediction objects have changed significantly. Instance methods like `wait()`, `cancel()`, and `reload()` are removed in favor of client methods (e.g., use `replicate.predictions.wait(prediction.id)` instead of `prediction.wait()`).
 
 ### Creating predictions
 
