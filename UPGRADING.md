@@ -476,7 +476,14 @@ url = file.urls["get"]
 ### After (v2)
 
 ```python
-# Upload file (takes bytes, not file handle)
+# Upload file (supports file handle, bytes, or PathLike)
+with open("image.jpg", "rb") as f:
+    file = replicate.files.create(
+        content=f,  # Can pass file handle directly
+        filename="image.jpg"
+    )
+
+# Or read into memory if needed
 with open("image.jpg", "rb") as f:
     file = replicate.files.create(
         content=f.read(),
