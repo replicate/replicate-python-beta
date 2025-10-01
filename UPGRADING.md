@@ -392,12 +392,9 @@ versions = replicate.models.versions.list(
     model_owner="owner",
     model_name="name"
 )
-
-# NEW: List all models
-all_models = replicate.models.list()
 ```
 
-The `model.versions` shorthand is not available in v2. The v2 SDK adds a new `models.list()` method to list all models.
+The `model.versions` shorthand is not available in v2.
 
 ## Trainings
 
