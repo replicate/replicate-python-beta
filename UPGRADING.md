@@ -1,0 +1,677 @@
+# Upgrading from v1 to v2
+
+This guide helps you migrate from the v1 Replicate Python SDK to v2. The v2 SDK is a complete rewrite generated from Replicate's OpenAPI specification, providing better type safety, more consistent error handling, and improved async support.
+
+## Installation
+
+```sh
+pip install --pre replicate
+```
+
+The v2 SDK requires Python 3.8 or higher, same as v1.
+
+## Pinning to 1.x
+
+You are not required to upgrade to the new 2.x version. If you're already using the 1.x version and want to continue using it, pin the version number in your dependency file.
+
+Here's an example `requirements.txt`:
+
+```
+replicate>=1.0.0,<2.0.0
+```
+
+Here's an example `pyproject.toml`:
+
+```toml
+[project]
+dependencies = [
+    "replicate>=1.0.0,<2.0.0",
+]
+```
+
+## Quick migration checklist
+
+- Update client initialization to use `Replicate()` instead of `Client()` and `bearer_token` instead of `api_token`
+- Replace prediction instance methods (`wait()`, `cancel()`, `reload()`) with resource methods
+- Update async code to use `AsyncReplicate` client or context-aware module-level functions
+- Add keyword arguments to all API calls
+- Update exception handling to use new exception types
+
+## Client initialization and authentication
+
+The client class name and parameter names have changed.
+
+### Before (v1)
+
+```python
+import replicate
+from replicate import Client
+
+# Using environment variable
+client = Client()
+
+# Explicit token
+client = Client(api_token="r8_...")
+
+# Module-level usage
+output = replicate.run(...)
+```
+
+### After (v2)
+
+```python
+import replicate
+from replicate import Replicate
+
+# Using environment variable (REPLICATE_API_TOKEN)
+client = Replicate()
+
+# Explicit token (note: bearer_token, not api_token)
+client = Replicate(bearer_token="r8_...")
+
+# Module-level usage (still works)
+output = replicate.run(...)
+```
+
+The `api_token` parameter is still accepted for backward compatibility, but `bearer_token` is preferred.
+
+## Running models
+
+The basic `run()` method works similarly, but the `wait` parameter handling has changed.
+
+### Before (v1)
+
+```python
+# Wait up to 60 seconds (default)
+output = replicate.run(
+    "black-forest-labs/flux-schnell",
+    input={"prompt": "astronaut riding a rocket"}
+)
+
+# Custom timeout
+output = replicate.run(..., wait=30)
+
+# Don't wait
+output = replicate.run(..., wait=False)
+```
+
+### After (v2)
+
+```python
+# Wait up to 60 seconds (default)
+output = replicate.run(
+    "black-forest-labs/flux-schnell",
+    input={"prompt": "astronaut riding a rocket"}
+)
+
+# Custom timeout
+output = replicate.run(..., wait=30)
+
+# Don't wait
+output = replicate.run(..., wait=False)
+```
+
+The interface is the same, but v2 uses HTTP `Prefer` headers internally for better standards compliance.
+
+## Streaming output
+
+Streaming works similarly, but prediction objects no longer have a `stream()` method.
+
+### Before (v1)
+
+```python
+# Top-level streaming
+for event in replicate.stream(
+    "meta/meta-llama-3-70b-instruct",
+    input={"prompt": "Write a haiku"}
+):
+    print(str(event), end="")
+
+# Streaming from prediction object
+prediction = replicate.predictions.create(..., stream=True)
+for event in prediction.stream():
+    print(str(event), end="")
+```
+
+### After (v2)
+
+```python
+# Top-level streaming (same)
+for event in replicate.stream(
+    "meta/meta-llama-3-70b-instruct",
+    input={"prompt": "Write a haiku"}
+):
+    print(str(event), end="")
+
+# Streaming from prediction requires using stream() function
+prediction = replicate.predictions.create(...)
+# prediction.stream() is not available in v2
+# Use replicate.stream() instead
+```
+
+To stream a specific prediction in v2, use the top-level `stream()` function.
+
+## Predictions
+
+Prediction objects have changed significantly. Instance methods like `wait()`, `cancel()`, and `reload()` are removed in favor of resource methods.
+
+### Creating predictions
+
+#### Before (v1)
+
+```python
+prediction = replicate.predictions.create(
+    version="abc123...",
+    input={"prompt": "..."},
+    webhook="https://example.com/webhook"
+)
+
+# Create via model
+prediction = replicate.predictions.create(
+    model="owner/model",
+    input={"prompt": "..."}
+)
+```
+
+#### After (v2)
+
+```python
+# Version is required
+prediction = replicate.predictions.create(
+    version="abc123...",
+    input={"prompt": "..."},
+    webhook="https://example.com/webhook"
+)
+
+# Create via models resource (different structure)
+prediction = replicate.models.predictions.create(
+    model_owner="owner",
+    model_name="model",
+    input={"prompt": "..."}
+)
+```
+
+### Getting predictions
+
+#### Before (v1)
+
+```python
+prediction = replicate.predictions.get("prediction_id")
+```
+
+#### After (v2)
+
+```python
+# Note: keyword argument required
+prediction = replicate.predictions.get(prediction_id="prediction_id")
+```
+
+### Waiting for predictions
+
+#### Before (v1)
+
+```python
+prediction = replicate.predictions.create(...)
+prediction.wait()
+```
+
+#### After (v2)
+
+```python
+prediction = replicate.predictions.create(...)
+# prediction.wait() is not available
+
+# Use resource method instead
+prediction = replicate.predictions.wait(prediction.id)
+```
+
+### Canceling predictions
+
+#### Before (v1)
+
+```python
+prediction = replicate.predictions.get("prediction_id")
+prediction.cancel()
+```
+
+#### After (v2)
+
+```python
+prediction = replicate.predictions.get(prediction_id="prediction_id")
+# prediction.cancel() is not available
+
+# Use resource method instead
+prediction = replicate.predictions.cancel(prediction.id)
+```
+
+### Reloading predictions
+
+#### Before (v1)
+
+```python
+prediction = replicate.predictions.get("prediction_id")
+prediction.reload()
+print(prediction.status)
+```
+
+#### After (v2)
+
+```python
+prediction = replicate.predictions.get(prediction_id="prediction_id")
+# prediction.reload() is not available
+
+# Fetch fresh data instead
+prediction = replicate.predictions.get(prediction_id=prediction.id)
+print(prediction.status)
+```
+
+## Async support
+
+Async functionality has been redesigned. Instead of separate `async_*` methods, v2 uses a dedicated `AsyncReplicate` client.
+
+### Before (v1)
+
+```python
+import replicate
+
+# Async methods with async_ prefix
+output = await replicate.async_run(...)
+
+for event in replicate.async_stream(...):
+    print(event)
+
+prediction = await replicate.predictions.async_create(...)
+prediction = await replicate.predictions.async_get("id")
+await prediction.async_wait()
+```
+
+### After (v2)
+
+```python
+from replicate import AsyncReplicate
+
+# Use AsyncReplicate client
+client = AsyncReplicate()
+
+# Same method names, no async_ prefix
+output = await client.run(...)
+
+async for event in client.stream(...):
+    print(event)
+
+prediction = await client.predictions.create(...)
+prediction = await client.predictions.get(prediction_id="id")
+prediction = await client.predictions.wait(prediction.id)
+
+# Or use module-level functions (context-aware)
+output = await replicate.run(...)
+async for event in replicate.stream(...):
+    print(event)
+```
+
+## Error handling
+
+Error handling is more granular in v2, with specific exception types for each HTTP status code.
+
+### Before (v1)
+
+```python
+from replicate.exceptions import ReplicateError, ModelError
+
+try:
+    output = replicate.run(...)
+except ModelError as e:
+    print(f"Model failed: {e.prediction.error}")
+except ReplicateError as e:
+    print(f"API error: {e}")
+```
+
+### After (v2)
+
+```python
+from replicate.exceptions import (
+    ModelError,
+    NotFoundError,
+    AuthenticationError,
+    RateLimitError,
+    APIStatusError
+)
+
+try:
+    output = replicate.run(...)
+except ModelError as e:
+    print(f"Model failed: {e.prediction.error}")
+except NotFoundError as e:
+    print(f"Not found: {e.message}")
+except RateLimitError as e:
+    print(f"Rate limited: {e.message}")
+except APIStatusError as e:
+    print(f"API error {e.status_code}: {e.message}")
+```
+
+Available exception types in v2:
+
+- `APIError` - Base exception for all API errors
+- `APIConnectionError` - Network connection errors
+- `APITimeoutError` - Request timeout errors
+- `APIStatusError` - Base for HTTP status errors
+- `BadRequestError` - 400 errors
+- `AuthenticationError` - 401 errors
+- `PermissionDeniedError` - 403 errors
+- `NotFoundError` - 404 errors
+- `ConflictError` - 409 errors
+- `UnprocessableEntityError` - 422 errors
+- `RateLimitError` - 429 errors
+- `InternalServerError` - 500+ errors
+- `ModelError` - Model execution failures
+
+## Pagination
+
+Pagination is more streamlined in v2 with auto-pagination support.
+
+### Before (v1)
+
+```python
+# Manual pagination
+page = replicate.predictions.list()
+for prediction in page.results:
+    print(prediction.id)
+
+if page.next:
+    next_page = replicate.predictions.list(cursor=page.next)
+
+# Auto-pagination
+for page in replicate.paginate(replicate.predictions.list):
+    for prediction in page.results:
+        print(prediction.id)
+```
+
+### After (v2)
+
+```python
+# Auto-pagination built-in
+page = replicate.predictions.list()
+
+# Iterate directly over page
+for prediction in page:
+    print(prediction.id)
+
+# Manual pagination
+if page.has_next_page():
+    next_page = page.get_next_page()
+
+# Access results list still available
+for prediction in page.results:
+    print(prediction.id)
+```
+
+## Models and versions
+
+Model and version access uses keyword arguments throughout.
+
+### Before (v1)
+
+```python
+# Get model
+model = replicate.models.get("owner/name")
+
+# Get version from model
+version = model.versions.get("version_id")
+
+# List versions
+versions = model.versions.list()
+```
+
+### After (v2)
+
+```python
+# Get model (keyword arguments required)
+model = replicate.models.get(
+    model_owner="owner",
+    model_name="name"
+)
+
+# Get version (no shorthand via model object)
+version = replicate.models.versions.get(
+    model_owner="owner",
+    model_name="name",
+    version_id="version_id"
+)
+
+# List versions
+versions = replicate.models.versions.list(
+    model_owner="owner",
+    model_name="name"
+)
+
+# NEW: List all models
+all_models = replicate.models.list()
+```
+
+The `model.versions` shorthand is not available in v2. The v2 SDK adds a new `models.list()` method to list all models.
+
+## Trainings
+
+Training objects also lose their instance methods in v2.
+
+### Before (v1)
+
+```python
+training = replicate.trainings.create(
+    version="version_id",
+    input={"train_data": "https://..."},
+    destination="owner/model"
+)
+
+# Wait and cancel
+training.wait()
+training.cancel()
+```
+
+### After (v2)
+
+```python
+training = replicate.trainings.create(
+    model_owner="owner",
+    model_name="model",
+    version_id="version_id",
+    input={"train_data": "https://..."},
+    destination="owner/new-model"
+)
+
+# No instance methods available
+# Use resource methods
+training = replicate.trainings.cancel(training_id=training.id)
+```
+
+## File uploads
+
+File upload handling has changed slightly.
+
+### Before (v1)
+
+```python
+# Upload file
+file = replicate.files.create(
+    file=open("image.jpg", "rb"),
+    filename="image.jpg"
+)
+
+# Access URL
+url = file.urls["get"]
+```
+
+### After (v2)
+
+```python
+# Upload file (takes bytes, not file handle)
+with open("image.jpg", "rb") as f:
+    file = replicate.files.create(
+        content=f.read(),
+        filename="image.jpg"
+    )
+
+# Access URL (property instead of dict)
+url = file.urls.get
+```
+
+File inputs to predictions work the same way in both versions.
+
+## Collections
+
+Collections API uses keyword arguments in v2.
+
+### Before (v1)
+
+```python
+collection = replicate.collections.get("collection_slug")
+models = collection.models
+```
+
+### After (v2)
+
+```python
+collection = replicate.collections.get(collection_slug="collection_slug")
+
+# Models accessed via nested resource
+models = replicate.collections.models.list(collection_slug="collection_slug")
+```
+
+## Webhooks
+
+Webhook validation is compatible between v1 and v2.
+
+### Before (v1)
+
+```python
+from replicate.webhook import Webhooks
+
+secret = replicate.webhooks.default.secret()
+Webhooks.validate(request, secret)
+```
+
+### After (v2)
+
+```python
+from replicate.resources.webhooks import Webhooks
+
+secret = replicate.webhooks.default.secret()
+Webhooks.validate(request, secret)
+```
+
+The validation logic is identical; only import paths may differ.
+
+## Experimental use() interface
+
+The experimental `use()` interface is available in both versions with similar functionality. V2 adds async support.
+
+### Before (v1)
+
+```python
+flux = replicate.use("black-forest-labs/flux-schnell")
+outputs = flux(prompt="astronaut on a horse")
+```
+
+### After (v2)
+
+```python
+# Same interface
+flux = replicate.use("black-forest-labs/flux-schnell")
+outputs = flux(prompt="astronaut on a horse")
+
+# NEW: Async support
+async_flux = replicate.use("black-forest-labs/flux-schnell", use_async=True)
+outputs = await async_flux(prompt="astronaut on a horse")
+```
+
+## New features in v2
+
+### Models listing
+
+```python
+# List all models (not available in v1)
+for model in replicate.models.list():
+    print(model.name)
+```
+
+### Better type safety
+
+V2 includes comprehensive type hints generated from the OpenAPI spec, providing better IDE autocomplete and type checking.
+
+```python
+from replicate import Replicate
+from replicate.types import Prediction
+
+client: Replicate = Replicate()
+prediction: Prediction = client.predictions.get(prediction_id="...")
+```
+
+### HTTP client customization
+
+```python
+from replicate import Replicate, DefaultHttpxClient
+import httpx
+
+client = Replicate(
+    http_client=DefaultHttpxClient(
+        proxy="http://proxy.example.com",
+        transport=httpx.HTTPTransport(local_address="0.0.0.0")
+    ),
+    timeout=30.0,
+    max_retries=3
+)
+```
+
+### Raw response access
+
+```python
+# Access raw HTTP responses
+response = client.with_raw_response.predictions.get(prediction_id="...")
+print(response.headers)
+print(response.http_response.status_code)
+
+prediction = response.parse()
+```
+
+### Streaming response wrapper
+
+```python
+# Stream response body
+with client.with_streaming_response.predictions.get(
+    prediction_id="..."
+) as response:
+    for chunk in response.iter_bytes():
+        process(chunk)
+```
+
+## Removed features
+
+The following features are not available in v2:
+
+- Prediction instance methods: `wait()`, `cancel()`, `reload()`, `stream()`, `output_iterator()`
+- Training instance methods: `cancel()`, `reload()`
+- Model instance methods: `predict()`
+- `model.versions` shorthand (use `replicate.models.versions` instead)
+- Separate `async_*` methods (use `AsyncReplicate` client)
+- Positional arguments (all methods require keyword arguments)
+
+## Migration strategy
+
+For a gradual migration:
+
+1. Start by updating client initialization and imports
+2. Replace prediction instance methods with resource methods
+3. Update async code to use `AsyncReplicate`
+4. Add keyword arguments to all API calls
+5. Update error handling to use specific exception types
+6. Test thoroughly, especially prediction lifecycle code
+
+For codebases with extensive v1 usage, consider creating adapter functions to bridge the differences while you migrate incrementally.
+
+## Getting help
+
+If you encounter issues during migration:
+
+- Check the [API documentation](https://replicate.com/docs/reference/http)
+- Review the [full API reference](api.md)
+- Open an issue on [GitHub](https://github.com/replicate/replicate-python-stainless/issues)
