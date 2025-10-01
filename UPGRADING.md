@@ -122,13 +122,7 @@ Prediction objects have changed significantly. Instance methods like `wait()`, `
 #### Before (v1)
 
 ```python
-prediction = replicate.predictions.create(
-    version="abc123...",
-    input={"prompt": "..."},
-    webhook="https://example.com/webhook"
-)
-
-# Create via model
+# Create via model shorthand
 prediction = replicate.predictions.create(
     model="owner/model",
     input={"prompt": "..."}
@@ -138,14 +132,7 @@ prediction = replicate.predictions.create(
 #### After (v2)
 
 ```python
-# Version is required
-prediction = replicate.predictions.create(
-    version="abc123...",
-    input={"prompt": "..."},
-    webhook="https://example.com/webhook"
-)
-
-# Create via models resource (different structure)
+# Create with keyword arguments model_owner and model_name
 prediction = replicate.models.predictions.create(
     model_owner="owner",
     model_name="model",
