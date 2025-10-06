@@ -13,6 +13,9 @@ class Metrics(BaseModel):
     predict_time: Optional[float] = None
     """The amount of CPU or GPU time, in seconds, that the training used while running"""
 
+    total_time: Optional[float] = None
+    """The total time, in seconds, that the training took to complete"""
+
 
 class Output(BaseModel):
     version: Optional[str] = None
