@@ -110,22 +110,6 @@ output = replicate.run("...", input={...}, wait=False)
 
 When `wait=False`, the method returns immediately after creating the prediction, and you'll need to poll for the result manually.
 
-## Run a model and stream its output
-
-For models that support streaming (particularly language models), you can use `replicate.stream()`:
-
-```python
-import replicate
-
-for event in replicate.stream(
-    "meta/meta-llama-3-70b-instruct",
-    input={
-        "prompt": "Please write a haiku about llamas.",
-    },
-):
-    print(str(event), end="")
-```
-
 ## Async usage
 
 Simply import `AsyncReplicate` instead of `Replicate` and use `await` with each API call:
