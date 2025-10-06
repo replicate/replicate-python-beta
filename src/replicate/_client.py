@@ -350,7 +350,7 @@ class Replicate(SyncAPIClient):
         """
         from .lib._stream import stream as _stream
 
-        return _stream(type(self), ref, input=input)  # type: ignore[return-value, arg-type]  # pyright: ignore[reportDeprecated]
+        return _stream(type(self), ref, input=input)  # type: ignore[return-value, arg-type]  # pyright: ignore[reportDeprecated, reportGeneralTypeIssues]
 
     def copy(
         self,
@@ -757,7 +757,7 @@ class AsyncReplicate(AsyncAPIClient):
         """
         from .lib._stream import stream as _stream
 
-        return _stream(type(self), ref, input=input)  # type: ignore[return-value, arg-type]  # pyright: ignore[reportDeprecated]
+        return _stream(type(self), ref, input=input)  # type: ignore[return-value, arg-type]  # pyright: ignore[reportDeprecated, reportGeneralTypeIssues]
 
     def copy(
         self,
