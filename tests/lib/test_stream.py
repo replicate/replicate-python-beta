@@ -126,8 +126,8 @@ def test_stream_works_same_as_use_with_streaming():
         mock_function.return_value = iter(expected_output.copy())
 
         # Get output from use() with streaming=True
-        model = client.use("test-model", streaming=True)
-        use_output = list(model(prompt="test"))
+        model = client.use("test-model", streaming=True)  # pyright: ignore[reportUnknownVariableType]
+        use_output = list(model(prompt="test"))  # pyright: ignore[reportUnknownVariableType, reportUnknownArgumentType]
 
         # Verify they produce the same output
         assert stream_output == use_output
@@ -183,7 +183,7 @@ async def test_async_stream_shows_deprecation_warning():
                 "anthropic/claude-4.5-sonnet",
                 input={"prompt": "Hello"},
             ):
-                result.append(item)
+                result.append(item)  # pyright: ignore[reportUnknownMemberType]
 
             # Check that deprecation warnings were raised
             assert len(w) > 0
