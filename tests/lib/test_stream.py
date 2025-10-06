@@ -13,7 +13,7 @@ from replicate import Replicate, AsyncReplicate
 
 def test_stream_shows_deprecation_warning():
     """Test that stream() shows a deprecation warning."""
-    with patch("replicate.lib._predictions_use.use") as mock_use:
+    with patch("replicate.lib._stream.use") as mock_use:
         # Create a mock function that returns an iterator
         mock_function = Mock()
         mock_function.return_value = iter(["Hello", " ", "world"])
@@ -24,8 +24,8 @@ def test_stream_shows_deprecation_warning():
             warnings.simplefilter("always")
 
             client = Replicate(bearer_token="test-token")
-            result = list(
-                client.stream(
+            _ = list(  # pyright: ignore[reportDeprecated]
+                client.stream(  # pyright: ignore[reportDeprecated]
                     "anthropic/claude-4.5-sonnet",
                     input={"prompt": "Hello"},
                 )
@@ -39,16 +39,13 @@ def test_stream_shows_deprecation_warning():
             # Verify the @deprecated decorator message appears
             # (there may be multiple warnings from different decorator levels)
             messages = [str(warning.message) for warning in deprecation_warnings]
-            expected_message = (
-                "replicate.stream() is deprecated. "
-                "Use replicate.use() with streaming=True instead"
-            )
+            expected_message = "replicate.stream() is deprecated. Use replicate.use() with streaming=True instead"
             assert expected_message in messages
 
 
 def test_stream_calls_use_with_streaming_true():
     """Test that stream() internally calls use() with streaming=True."""
-    with patch("replicate.lib._predictions_use.use") as mock_use:
+    with patch("replicate.lib._stream.use") as mock_use:
         # Create a mock function that returns an iterator
         mock_function = Mock()
         mock_function.return_value = iter(["Hello", " ", "world"])
@@ -59,8 +56,8 @@ def test_stream_calls_use_with_streaming_true():
         # Suppress deprecation warnings for this test
         with warnings.catch_warnings():
             warnings.simplefilter("ignore", DeprecationWarning)
-            result = list(
-                client.stream(
+            _ = list(  # pyright: ignore[reportDeprecated]
+                client.stream(  # pyright: ignore[reportDeprecated]
                     "anthropic/claude-4.5-sonnet",
                     input={"prompt": "Hello"},
                 )
@@ -70,7 +67,7 @@ def test_stream_calls_use_with_streaming_true():
         mock_use.assert_called_once()
         call_args = mock_use.call_args
         assert call_args.kwargs["streaming"] is True
-        assert call_args.args[1] == "anthropic/claude-4.5-sonnet"
+        assert call_args.args[0] == "anthropic/claude-4.5-sonnet"
 
         # Verify the mock function was called with the input
         mock_function.assert_called_once_with(prompt="Hello")
@@ -78,7 +75,7 @@ def test_stream_calls_use_with_streaming_true():
 
 def test_stream_returns_iterator():
     """Test that stream() returns an iterator of strings."""
-    with patch("replicate.lib._predictions_use.use") as mock_use:
+    with patch("replicate.lib._stream.use") as mock_use:
         # Create a mock function that returns an iterator
         mock_function = Mock()
         mock_function.return_value = iter(["Hello", " ", "world", "!"])
@@ -89,7 +86,7 @@ def test_stream_returns_iterator():
         # Suppress deprecation warnings for this test
         with warnings.catch_warnings():
             warnings.simplefilter("ignore", DeprecationWarning)
-            result = client.stream(
+            result = client.stream(  # pyright: ignore[reportDeprecated]
                 "anthropic/claude-4.5-sonnet",
                 input={"prompt": "Say hello"},
             )
@@ -104,7 +101,7 @@ def test_stream_returns_iterator():
 
 def test_stream_works_same_as_use_with_streaming():
     """Test that stream() produces the same output as use() with streaming=True."""
-    with patch("replicate.lib._predictions_use.use") as mock_use:
+    with patch("replicate.lib._stream.use") as mock_use:
         # Create a mock function that returns an iterator
         mock_function = Mock()
         expected_output = ["Test", " ", "output"]
@@ -117,7 +114,7 @@ def test_stream_works_same_as_use_with_streaming():
         with warnings.catch_warnings():
             warnings.simplefilter("ignore", DeprecationWarning)
             stream_output = list(
-                client.stream(
+                client.stream(  # pyright: ignore[reportDeprecated]
                     "test-model",
                     input={"prompt": "test"},
                 )
@@ -136,7 +133,7 @@ def test_stream_works_same_as_use_with_streaming():
 
 def test_module_level_stream_function():
     """Test that the module-level replicate.stream() function works."""
-    with patch("replicate.lib._predictions_use.use") as mock_use:
+    with patch("replicate.lib._stream.use") as mock_use:
         # Create a mock function that returns an iterator
         mock_function = Mock()
         mock_function.return_value = iter(["a", "b", "c"])
@@ -146,7 +143,7 @@ def test_module_level_stream_function():
         with warnings.catch_warnings():
             warnings.simplefilter("ignore", DeprecationWarning)
             result = list(
-                replicate.stream(
+                replicate.stream(  # pyright: ignore[reportDeprecated]
                     "test-model",
                     input={"prompt": "test"},
                 )
@@ -163,7 +160,7 @@ def test_module_level_stream_function():
 @pytest.mark.asyncio
 async def test_async_stream_shows_deprecation_warning():
     """Test that async stream() shows a deprecation warning."""
-    with patch("replicate.lib._predictions_use.use") as mock_use:
+    with patch("replicate.lib._stream.use") as mock_use:
         # Create a mock async function that returns an async iterator
         async def async_gen():
             yield "Hello"
@@ -180,7 +177,7 @@ async def test_async_stream_shows_deprecation_warning():
 
             client = AsyncReplicate(bearer_token="test-token")
             result = []
-            async for item in await client.stream(
+            async for item in await client.stream(  # pyright: ignore[reportDeprecated]
                 "anthropic/claude-4.5-sonnet",
                 input={"prompt": "Hello"},
             ):
@@ -193,16 +190,13 @@ async def test_async_stream_shows_deprecation_warning():
 
             # Verify the @deprecated decorator message appears
             messages = [str(warning.message) for warning in deprecation_warnings]
-            expected_message = (
-                "replicate.stream() is deprecated. "
-                "Use replicate.use() with streaming=True instead"
-            )
+            expected_message = "replicate.stream() is deprecated. Use replicate.use() with streaming=True instead"
             assert expected_message in messages
 
 
 def test_deprecation_message_includes_example():
     """Test that the detailed deprecation message includes a helpful example."""
-    with patch("replicate.lib._predictions_use.use") as mock_use:
+    with patch("replicate.lib._stream.use") as mock_use:
         mock_function = Mock()
         mock_function.return_value = iter([])
         mock_use.return_value = mock_function
@@ -212,7 +206,7 @@ def test_deprecation_message_includes_example():
         with warnings.catch_warnings(record=True) as w:
             warnings.simplefilter("always")
             list(
-                client.stream(
+                client.stream(  # pyright: ignore[reportDeprecated]
                     "anthropic/claude-4.5-sonnet",
                     input={"prompt": "Hello", "max_tokens": 100},
                 )

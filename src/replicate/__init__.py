@@ -253,7 +253,7 @@ from ._module_client import (
     use as use,
     files as files,
     models as models,
-    stream as stream,
+    stream as stream,  # pyright: ignore[reportDeprecated]
     account as account,
     hardware as hardware,
     webhooks as webhooks,

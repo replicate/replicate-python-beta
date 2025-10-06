@@ -92,7 +92,7 @@ def stream(
     )
 
     # Use the existing use() function with streaming=True
-    model = use(client, ref, streaming=True)
+    model = use(client, ref, streaming=True)  # pyright: ignore[reportUnknownVariableType]
 
     # Call the model with the input
     return model(**input)  # type: ignore[return-value]

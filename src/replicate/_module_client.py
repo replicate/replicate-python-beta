@@ -82,7 +82,7 @@ if TYPE_CHECKING:
     __client: Replicate = cast(Replicate, {})
     run = __client.run
     use = __client.use
-    stream = __client.stream
+    stream = __client.stream  # pyright: ignore[reportDeprecated]
 else:
 
     def _run(*args, **kwargs):
