@@ -1,4 +1,4 @@
 configured_endpoints: 36
-openapi_spec_url: https://storage.googleapis.com/stainless-sdk-openapi-specs/replicate%2Freplicate-client-c0e1943df75f6bdf6b856cf51b703e203606877b0ae96879632039bfc071fe6a.yml
-openapi_spec_hash: 4fcc989f63cf3b4c36a0b0573002956c
+openapi_spec_url: https://storage.googleapis.com/stainless-sdk-openapi-specs/replicate%2Freplicate-client-1029a7d9615d8a4fa72ca7bb2c0762d98cef9919c6f35079f87cc2db2b8ce9f5.yml
+openapi_spec_hash: f8b9ef3c211e9113e141f1894436eba6
 config_hash: 407acf62c906ee301314f2d23cdb58b1

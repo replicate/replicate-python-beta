@@ -55,6 +55,7 @@ class PredictionsResource(SyncAPIResource):
         webhook: str | Omit = omit,
         webhook_events_filter: List[Literal["start", "output", "logs", "completed"]] | Omit = omit,
         prefer: str | Omit = omit,
+        replicate_max_lifetime: str | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -173,7 +174,15 @@ class PredictionsResource(SyncAPIResource):
 
           timeout: Override the client-level default timeout for this request, in seconds
         """
-        extra_headers = {**strip_not_given({"Prefer": prefer}), **(extra_headers or {})}
+        extra_headers = {
+            **strip_not_given(
+                {
+                    "Prefer": prefer,
+                    "Replicate-Max-Lifetime": replicate_max_lifetime,
+                }
+            ),
+            **(extra_headers or {}),
+        }
         return self._post(
             "/predictions",
             body=maybe_transform(
@@ -499,6 +508,7 @@ class AsyncPredictionsResource(AsyncAPIResource):
         webhook: str | Omit = omit,
         webhook_events_filter: List[Literal["start", "output", "logs", "completed"]] | Omit = omit,
         prefer: str | Omit = omit,
+        replicate_max_lifetime: str | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -617,7 +627,15 @@ class AsyncPredictionsResource(AsyncAPIResource):
 
           timeout: Override the client-level default timeout for this request, in seconds
         """
-        extra_headers = {**strip_not_given({"Prefer": prefer}), **(extra_headers or {})}
+        extra_headers = {
+            **strip_not_given(
+                {
+                    "Prefer": prefer,
+                    "Replicate-Max-Lifetime": replicate_max_lifetime,
+                }
+            ),
+            **(extra_headers or {}),
+        }
         return await self._post(
             "/predictions",
             body=await async_maybe_transform(
