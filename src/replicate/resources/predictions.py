@@ -435,7 +435,9 @@ class PredictionsResource(SyncAPIResource):
         Terminated predictions (with a status of `succeeded`, `failed`, or `canceled`)
         will include a `metrics` object with a `predict_time` property showing the
         amount of CPU or GPU time, in seconds, that the prediction used while running.
-        It won't include time waiting for the prediction to start.
+        It won't include time waiting for the prediction to start. The `metrics` object
+        will also include a `total_time` property showing the total time, in seconds,
+        that the prediction took to complete.
 
         All input parameters, output values, and logs are automatically removed after an
         hour, by default, for predictions created through the API.
@@ -877,7 +879,9 @@ class AsyncPredictionsResource(AsyncAPIResource):
         Terminated predictions (with a status of `succeeded`, `failed`, or `canceled`)
         will include a `metrics` object with a `predict_time` property showing the
         amount of CPU or GPU time, in seconds, that the prediction used while running.
-        It won't include time waiting for the prediction to start.
+        It won't include time waiting for the prediction to start. The `metrics` object
+        will also include a `total_time` property showing the total time, in seconds,
+        that the prediction took to complete.
 
         All input parameters, output values, and logs are automatically removed after an
         hour, by default, for predictions created through the API.

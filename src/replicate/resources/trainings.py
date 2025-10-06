@@ -390,7 +390,9 @@ class TrainingsResource(SyncAPIResource):
         Terminated trainings (with a status of `succeeded`, `failed`, or `canceled`)
         will include a `metrics` object with a `predict_time` property showing the
         amount of CPU or GPU time, in seconds, that the training used while running. It
-        won't include time waiting for the training to start.
+        won't include time waiting for the training to start. The `metrics` object will
+        also include a `total_time` property showing the total time, in seconds, that
+        the training took to complete.
 
         Args:
           extra_headers: Send extra headers
@@ -774,7 +776,9 @@ class AsyncTrainingsResource(AsyncAPIResource):
         Terminated trainings (with a status of `succeeded`, `failed`, or `canceled`)
         will include a `metrics` object with a `predict_time` property showing the
         amount of CPU or GPU time, in seconds, that the training used while running. It
-        won't include time waiting for the training to start.
+        won't include time waiting for the training to start. The `metrics` object will
+        also include a `total_time` property showing the total time, in seconds, that
+        the training took to complete.
 
         Args:
           extra_headers: Send extra headers
