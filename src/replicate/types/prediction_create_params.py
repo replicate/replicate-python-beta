@@ -92,6 +92,8 @@ class PredictionCreateParamsWithoutVersion(TypedDict, total=False):
 
     prefer: Annotated[str, PropertyInfo(alias="Prefer")]
 
+    replicate_max_lifetime: Annotated[str, PropertyInfo(alias="Replicate-Max-Lifetime")]
+
 
 class PredictionCreateParams(PredictionCreateParamsWithoutVersion):
     version: Required[str]

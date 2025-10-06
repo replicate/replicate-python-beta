@@ -77,6 +77,12 @@ class Prediction(BaseModel):
     completed_at: Optional[datetime] = None
     """The time that the model completed the prediction and all outputs were uploaded"""
 
+    deadline: Optional[datetime] = None
+    """
+    The absolute time at which the prediction will be automatically canceled if it
+    has not completed
+    """
+
     deployment: Optional[str] = None
     """The name of the deployment that created the prediction"""
 

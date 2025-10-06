@@ -38,6 +38,7 @@ class TestPredictions:
             webhook="https://example.com/my-webhook-handler",
             webhook_events_filter=["start", "completed"],
             prefer="wait=5",
+            replicate_max_lifetime="5m",
         )
         assert_matches_type(Prediction, prediction, path=["response"])
 
@@ -215,6 +216,7 @@ class TestAsyncPredictions:
             webhook="https://example.com/my-webhook-handler",
             webhook_events_filter=["start", "completed"],
             prefer="wait=5",
+            replicate_max_lifetime="5m",
         )
         assert_matches_type(Prediction, prediction, path=["response"])
 
