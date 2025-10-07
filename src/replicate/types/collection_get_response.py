@@ -65,3 +65,6 @@ class CollectionGetResponse(BaseModel):
 
     slug: str
     """The slug of the collection (lowercase with dashes)"""
+
+    full_description: Optional[str] = None
+    """The full description of the collection in markdown format"""
