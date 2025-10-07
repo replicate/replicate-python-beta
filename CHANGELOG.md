@@ -1,5 +1,24 @@
 # Changelog
 
+## 2.0.0-alpha.28 (2025-10-07)
+
+Full Changelog: [v2.0.0-alpha.27...v2.0.0-alpha.28](https://github.com/replicate/replicate-python-stainless/compare/v2.0.0-alpha.27...v2.0.0-alpha.28)
+
+### Chores
+
+* do not install brew dependencies in ./scripts/bootstrap by default ([40f38a7](https://github.com/replicate/replicate-python-stainless/commit/40f38a774220bb1364e12de4d7aef9448fb60c58))
+* **types:** change optional parameter type from NotGiven to Omit ([f331b97](https://github.com/replicate/replicate-python-stainless/commit/f331b97a15226c9ae17112567a3be01010439f21))
+* update OpenAPI spec and rebuild SDKs ([8b43277](https://github.com/replicate/replicate-python-stainless/commit/8b432772af94ac3f471bc642671322c11c7d4ff0))
+* update OpenAPI spec and rebuild SDKs ([77c9c21](https://github.com/replicate/replicate-python-stainless/commit/77c9c216dea9886a412fd5a1b8f0dfec2e0de155))
+* update OpenAPI spec and rebuild SDKs ([d5ed889](https://github.com/replicate/replicate-python-stainless/commit/d5ed889c6f84e0ea48129f12db494d1d08e3ffbf))
+* update OpenAPI spec and rebuild SDKs ([0a821f8](https://github.com/replicate/replicate-python-stainless/commit/0a821f8f63208585cd4730a50842907ce26a3139))
+* update OpenAPI spec and rebuild SDKs ([a4bdae2](https://github.com/replicate/replicate-python-stainless/commit/a4bdae264cff81657e2e7dcd43eb41bbd1f15237))
+
+
+### Documentation
+
+* remove replicate.stream from README ([#78](https://github.com/replicate/replicate-python-stainless/issues/78)) ([9efac9a](https://github.com/replicate/replicate-python-stainless/commit/9efac9a97e7db41d5829c055959b29f154f4c175))
+
 ## 2.0.0-alpha.27 (2025-09-29)
 
 Full Changelog: [v2.0.0-alpha.26...v2.0.0-alpha.27](https://github.com/replicate/replicate-python-stainless/compare/v2.0.0-alpha.26...v2.0.0-alpha.27)
