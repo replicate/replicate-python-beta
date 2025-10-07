@@ -113,6 +113,7 @@ class CollectionsResource(SyncAPIResource):
           "name": "Super resolution",
           "slug": "super-resolution",
           "description": "Upscaling models that create high-quality images from low-quality images.",
+          "full_description": "## Overview\n\nThese models generate high-quality images from low-quality images. Many of these models are based on **advanced upscaling techniques**.\n\n### Key Features\n\n- Enhance image resolution\n- Restore fine details\n- Improve overall image quality",
           "models": [...]
         }
         ```
@@ -229,6 +230,7 @@ class AsyncCollectionsResource(AsyncAPIResource):
           "name": "Super resolution",
           "slug": "super-resolution",
           "description": "Upscaling models that create high-quality images from low-quality images.",
+          "full_description": "## Overview\n\nThese models generate high-quality images from low-quality images. Many of these models are based on **advanced upscaling techniques**.\n\n### Key Features\n\n- Enhance image resolution\n- Restore fine details\n- Improve overall image quality",
           "models": [...]
         }
         ```
