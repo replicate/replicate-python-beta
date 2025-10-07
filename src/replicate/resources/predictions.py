@@ -11,7 +11,7 @@ import httpx
 from replicate.lib._files import FileEncodingStrategy, encode_json, async_encode_json
 
 from ..types import prediction_list_params, prediction_create_params
-from .._types import NOT_GIVEN, Body, Query, Headers, NotGiven
+from .._types import Body, Omit, Query, Headers, NotGiven, omit, not_given
 from .._utils import maybe_transform, strip_not_given, async_maybe_transform
 from .._compat import cached_property
 from .._resource import SyncAPIResource, AsyncAPIResource
@@ -63,17 +63,18 @@ class PredictionsResource(SyncAPIResource):
         *,
         input: object,
         version: str,
-        stream: bool | NotGiven = NOT_GIVEN,
-        webhook: str | NotGiven = NOT_GIVEN,
-        webhook_events_filter: List[Literal["start", "output", "logs", "completed"]] | NotGiven = NOT_GIVEN,
-        prefer: str | NotGiven = NOT_GIVEN,
+        stream: bool | Omit = omit,
+        webhook: str | Omit = omit,
+        webhook_events_filter: List[Literal["start", "output", "logs", "completed"]] | Omit = omit,
+        prefer: str | Omit = omit,
+        replicate_max_lifetime: str | Omit = omit,
         file_encoding_strategy: Optional["FileEncodingStrategy"] = None,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> Prediction:
         """
         Create a prediction for the model version and inputs you provide.
@@ -138,7 +139,7 @@ class PredictionsResource(SyncAPIResource):
               [server-sent events (SSE)](https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events).
 
               This field is no longer needed as the returned prediction will always have a
-              `stream` entry in its `url` property if the model supports streaming.
+              `stream` entry in its `urls` property if the model supports streaming.
 
           webhook: An HTTPS URL for receiving a webhook when the prediction has new output. The
               webhook will be a POST request where the request body is the same as the
@@ -186,7 +187,15 @@ class PredictionsResource(SyncAPIResource):
 
           timeout: Override the client-level default timeout for this request, in seconds
         """
-        extra_headers = {**strip_not_given({"Prefer": prefer}), **(extra_headers or {})}
+        extra_headers = {
+            **strip_not_given(
+                {
+                    "Prefer": prefer,
+                    "Replicate-Max-Lifetime": replicate_max_lifetime,
+                }
+            ),
+            **(extra_headers or {}),
+        }
         return self._post(
             "/predictions",
             body=maybe_transform(
@@ -208,14 +217,14 @@ class PredictionsResource(SyncAPIResource):
     def list(
         self,
         *,
-        created_after: Union[str, datetime] | NotGiven = NOT_GIVEN,
-        created_before: Union[str, datetime] | NotGiven = NOT_GIVEN,
+        created_after: Union[str, datetime] | Omit = omit,
+        created_before: Union[str, datetime] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> SyncCursorURLPageWithCreatedFilters[Prediction]:
         """
         Get a paginated list of all predictions created by the user or organization
@@ -330,7 +339,7 @@ class PredictionsResource(SyncAPIResource):
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> Prediction:
         """
         Cancel a prediction that is currently running.
@@ -386,7 +395,7 @@ class PredictionsResource(SyncAPIResource):
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> Prediction:
         """
         Get the current state of a prediction.
@@ -448,7 +457,9 @@ class PredictionsResource(SyncAPIResource):
         Terminated predictions (with a status of `succeeded`, `failed`, or `canceled`)
         will include a `metrics` object with a `predict_time` property showing the
         amount of CPU or GPU time, in seconds, that the prediction used while running.
-        It won't include time waiting for the prediction to start.
+        It won't include time waiting for the prediction to start. The `metrics` object
+        will also include a `total_time` property showing the total time, in seconds,
+        that the prediction took to complete.
 
         All input parameters, output values, and logs are automatically removed after an
         hour, by default, for predictions created through the API.
@@ -514,17 +525,18 @@ class AsyncPredictionsResource(AsyncAPIResource):
         *,
         input: object,
         version: str,
-        stream: bool | NotGiven = NOT_GIVEN,
-        webhook: str | NotGiven = NOT_GIVEN,
-        webhook_events_filter: List[Literal["start", "output", "logs", "completed"]] | NotGiven = NOT_GIVEN,
-        prefer: str | NotGiven = NOT_GIVEN,
+        stream: bool | Omit = omit,
+        webhook: str | Omit = omit,
+        webhook_events_filter: List[Literal["start", "output", "logs", "completed"]] | Omit = omit,
+        prefer: str | Omit = omit,
+        replicate_max_lifetime: str | Omit = omit,
         file_encoding_strategy: Optional["FileEncodingStrategy"] = None,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> Prediction:
         """
         Create a prediction for the model version and inputs you provide.
@@ -589,7 +601,7 @@ class AsyncPredictionsResource(AsyncAPIResource):
               [server-sent events (SSE)](https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events).
 
               This field is no longer needed as the returned prediction will always have a
-              `stream` entry in its `url` property if the model supports streaming.
+              `stream` entry in its `urls` property if the model supports streaming.
 
           webhook: An HTTPS URL for receiving a webhook when the prediction has new output. The
               webhook will be a POST request where the request body is the same as the
@@ -637,7 +649,15 @@ class AsyncPredictionsResource(AsyncAPIResource):
 
           timeout: Override the client-level default timeout for this request, in seconds
         """
-        extra_headers = {**strip_not_given({"Prefer": prefer}), **(extra_headers or {})}
+        extra_headers = {
+            **strip_not_given(
+                {
+                    "Prefer": prefer,
+                    "Replicate-Max-Lifetime": replicate_max_lifetime,
+                }
+            ),
+            **(extra_headers or {}),
+        }
         return await self._post(
             "/predictions",
             body=await async_maybe_transform(
@@ -661,14 +681,14 @@ class AsyncPredictionsResource(AsyncAPIResource):
     def list(
         self,
         *,
-        created_after: Union[str, datetime] | NotGiven = NOT_GIVEN,
-        created_before: Union[str, datetime] | NotGiven = NOT_GIVEN,
+        created_after: Union[str, datetime] | Omit = omit,
+        created_before: Union[str, datetime] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> AsyncPaginator[Prediction, AsyncCursorURLPageWithCreatedFilters[Prediction]]:
         """
         Get a paginated list of all predictions created by the user or organization
@@ -783,7 +803,7 @@ class AsyncPredictionsResource(AsyncAPIResource):
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> Prediction:
         """
         Cancel a prediction that is currently running.
@@ -839,7 +859,7 @@ class AsyncPredictionsResource(AsyncAPIResource):
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> Prediction:
         """
         Get the current state of a prediction.
@@ -901,7 +921,9 @@ class AsyncPredictionsResource(AsyncAPIResource):
         Terminated predictions (with a status of `succeeded`, `failed`, or `canceled`)
         will include a `metrics` object with a `predict_time` property showing the
         amount of CPU or GPU time, in seconds, that the prediction used while running.
-        It won't include time waiting for the prediction to start.
+        It won't include time waiting for the prediction to start. The `metrics` object
+        will also include a `total_time` property showing the total time, in seconds,
+        that the prediction took to complete.
 
         All input parameters, output values, and logs are automatically removed after an
         hour, by default, for predictions created through the API.

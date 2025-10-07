@@ -54,6 +54,7 @@ class PredictionsResource(SyncAPIResource):
         webhook: str | Omit = omit,
         webhook_events_filter: List[Literal["start", "output", "logs", "completed"]] | Omit = omit,
         prefer: str | Omit = omit,
+        replicate_max_lifetime: str | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -111,7 +112,7 @@ class PredictionsResource(SyncAPIResource):
               [server-sent events (SSE)](https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events).
 
               This field is no longer needed as the returned prediction will always have a
-              `stream` entry in its `url` property if the model supports streaming.
+              `stream` entry in its `urls` property if the model supports streaming.
 
           webhook: An HTTPS URL for receiving a webhook when the prediction has new output. The
               webhook will be a POST request where the request body is the same as the
@@ -162,7 +163,15 @@ class PredictionsResource(SyncAPIResource):
             raise ValueError(f"Expected a non-empty value for `deployment_owner` but received {deployment_owner!r}")
         if not deployment_name:
             raise ValueError(f"Expected a non-empty value for `deployment_name` but received {deployment_name!r}")
-        extra_headers = {**strip_not_given({"Prefer": prefer}), **(extra_headers or {})}
+        extra_headers = {
+            **strip_not_given(
+                {
+                    "Prefer": prefer,
+                    "Replicate-Max-Lifetime": replicate_max_lifetime,
+                }
+            ),
+            **(extra_headers or {}),
+        }
         return self._post(
             f"/deployments/{deployment_owner}/{deployment_name}/predictions",
             body=maybe_transform(
@@ -211,6 +220,7 @@ class AsyncPredictionsResource(AsyncAPIResource):
         webhook: str | Omit = omit,
         webhook_events_filter: List[Literal["start", "output", "logs", "completed"]] | Omit = omit,
         prefer: str | Omit = omit,
+        replicate_max_lifetime: str | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -268,7 +278,7 @@ class AsyncPredictionsResource(AsyncAPIResource):
               [server-sent events (SSE)](https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events).
 
               This field is no longer needed as the returned prediction will always have a
-              `stream` entry in its `url` property if the model supports streaming.
+              `stream` entry in its `urls` property if the model supports streaming.
 
           webhook: An HTTPS URL for receiving a webhook when the prediction has new output. The
               webhook will be a POST request where the request body is the same as the
@@ -319,7 +329,15 @@ class AsyncPredictionsResource(AsyncAPIResource):
             raise ValueError(f"Expected a non-empty value for `deployment_owner` but received {deployment_owner!r}")
         if not deployment_name:
             raise ValueError(f"Expected a non-empty value for `deployment_name` but received {deployment_name!r}")
-        extra_headers = {**strip_not_given({"Prefer": prefer}), **(extra_headers or {})}
+        extra_headers = {
+            **strip_not_given(
+                {
+                    "Prefer": prefer,
+                    "Replicate-Max-Lifetime": replicate_max_lifetime,
+                }
+            ),
+            **(extra_headers or {}),
+        }
         return await self._post(
             f"/deployments/{deployment_owner}/{deployment_name}/predictions",
             body=await async_maybe_transform(
