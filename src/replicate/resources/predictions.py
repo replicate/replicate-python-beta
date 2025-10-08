@@ -66,6 +66,7 @@ class PredictionsResource(SyncAPIResource):
         stream: bool | Omit = omit,
         webhook: str | Omit = omit,
         webhook_events_filter: List[Literal["start", "output", "logs", "completed"]] | Omit = omit,
+        cancel_after: str | Omit = omit,
         prefer: str | Omit = omit,
         file_encoding_strategy: Optional["FileEncodingStrategy"] = None,
         replicate_max_lifetime: str | Omit = omit,
@@ -190,8 +191,8 @@ class PredictionsResource(SyncAPIResource):
         extra_headers = {
             **strip_not_given(
                 {
+                    "Cancel-After": cancel_after,
                     "Prefer": prefer,
-                    "Replicate-Max-Lifetime": replicate_max_lifetime,
                 }
             ),
             **(extra_headers or {}),
@@ -528,6 +529,7 @@ class AsyncPredictionsResource(AsyncAPIResource):
         stream: bool | Omit = omit,
         webhook: str | Omit = omit,
         webhook_events_filter: List[Literal["start", "output", "logs", "completed"]] | Omit = omit,
+        cancel_after: str | Omit = omit,
         prefer: str | Omit = omit,
         file_encoding_strategy: Optional["FileEncodingStrategy"] = None,
         replicate_max_lifetime: str | Omit = omit,
@@ -652,8 +654,8 @@ class AsyncPredictionsResource(AsyncAPIResource):
         extra_headers = {
             **strip_not_given(
                 {
+                    "Cancel-After": cancel_after,
                     "Prefer": prefer,
-                    "Replicate-Max-Lifetime": replicate_max_lifetime,
                 }
             ),
             **(extra_headers or {}),
