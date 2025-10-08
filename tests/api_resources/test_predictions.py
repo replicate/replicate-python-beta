@@ -37,8 +37,8 @@ class TestPredictions:
             stream=True,
             webhook="https://example.com/my-webhook-handler",
             webhook_events_filter=["start", "completed"],
+            cancel_after="5m",
             prefer="wait=5",
-            replicate_max_lifetime="5m",
         )
         assert_matches_type(Prediction, prediction, path=["response"])
 
@@ -215,8 +215,8 @@ class TestAsyncPredictions:
             stream=True,
             webhook="https://example.com/my-webhook-handler",
             webhook_events_filter=["start", "completed"],
+            cancel_after="5m",
             prefer="wait=5",
-            replicate_max_lifetime="5m",
         )
         assert_matches_type(Prediction, prediction, path=["response"])
 
