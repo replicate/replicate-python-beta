@@ -5,6 +5,7 @@ from __future__ import annotations
 from .prediction import Prediction as Prediction
 from .search_response import SearchResponse as SearchResponse
 from .file_get_response import FileGetResponse as FileGetResponse
+from .model_list_params import ModelListParams as ModelListParams
 from .file_create_params import FileCreateParams as FileCreateParams
 from .file_list_response import FileListResponse as FileListResponse
 from .model_get_response import ModelGetResponse as ModelGetResponse
