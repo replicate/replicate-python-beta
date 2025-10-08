@@ -93,6 +93,6 @@ class PredictionCreateParams(TypedDict, total=False):
     sent regardless of throttling.
     """
 
-    cancel_after: Annotated[str, PropertyInfo(alias="Cancel-After")]
-
     prefer: Annotated[str, PropertyInfo(alias="Prefer")]
+
+    replicate_max_lifetime: Annotated[str, PropertyInfo(alias="Replicate-Max-Lifetime")]
