@@ -14,7 +14,7 @@ from .readme import (
     ReadmeResourceWithStreamingResponse,
     AsyncReadmeResourceWithStreamingResponse,
 )
-from ...types import model_create_params, model_search_params
+from ...types import model_list_params, model_create_params, model_search_params
 from ..._types import Body, Omit, Query, Headers, NoneType, NotGiven, omit, not_given
 from ..._utils import maybe_transform, async_maybe_transform
 from .examples import (
@@ -209,6 +209,8 @@ class ModelsResource(SyncAPIResource):
     def list(
         self,
         *,
+        sort_by: Literal["model_created_at", "latest_version_created_at"] | Omit = omit,
+        sort_direction: Literal["asc", "desc"] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -231,12 +233,56 @@ class ModelsResource(SyncAPIResource):
 
         See the [`models.get`](#models.get) docs for more details about the model
         object.
+
+        ## Sorting
+
+        You can sort the results using the `sort_by` and `sort_direction` query
+        parameters.
+
+        For example, to get the most recently created models:
+
+        ```console
+        curl -s \\
+          -H "Authorization: Bearer $REPLICATE_API_TOKEN" \\
+          "https://api.replicate.com/v1/models?sort_by=model_created_at&sort_direction=desc"
+        ```
+
+        Available sorting options:
+
+        - `model_created_at`: Sort by when the model was first created
+        - `latest_version_created_at`: Sort by when the model's latest version was
+          created (default)
+
+        Sort direction can be `asc` (ascending) or `desc` (descending, default).
+
+        Args:
+          sort_by: Field to sort models by. Defaults to `latest_version_created_at`.
+
+          sort_direction: Sort direction. Defaults to `desc` (descending, newest first).
+
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
         """
         return self._get_api_list(
             "/models",
             page=SyncCursorURLPage[ModelListResponse],
             options=make_request_options(
-                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+                extra_headers=extra_headers,
+                extra_query=extra_query,
+                extra_body=extra_body,
+                timeout=timeout,
+                query=maybe_transform(
+                    {
+                        "sort_by": sort_by,
+                        "sort_direction": sort_direction,
+                    },
+                    model_list_params.ModelListParams,
+                ),
             ),
             model=ModelListResponse,
         )
@@ -608,6 +654,8 @@ class AsyncModelsResource(AsyncAPIResource):
     def list(
         self,
         *,
+        sort_by: Literal["model_created_at", "latest_version_created_at"] | Omit = omit,
+        sort_direction: Literal["asc", "desc"] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -630,12 +678,56 @@ class AsyncModelsResource(AsyncAPIResource):
 
         See the [`models.get`](#models.get) docs for more details about the model
         object.
+
+        ## Sorting
+
+        You can sort the results using the `sort_by` and `sort_direction` query
+        parameters.
+
+        For example, to get the most recently created models:
+
+        ```console
+        curl -s \\
+          -H "Authorization: Bearer $REPLICATE_API_TOKEN" \\
+          "https://api.replicate.com/v1/models?sort_by=model_created_at&sort_direction=desc"
+        ```
+
+        Available sorting options:
+
+        - `model_created_at`: Sort by when the model was first created
+        - `latest_version_created_at`: Sort by when the model's latest version was
+          created (default)
+
+        Sort direction can be `asc` (ascending) or `desc` (descending, default).
+
+        Args:
+          sort_by: Field to sort models by. Defaults to `latest_version_created_at`.
+
+          sort_direction: Sort direction. Defaults to `desc` (descending, newest first).
+
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
         """
         return self._get_api_list(
             "/models",
             page=AsyncCursorURLPage[ModelListResponse],
             options=make_request_options(
-                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+                extra_headers=extra_headers,
+                extra_query=extra_query,
+                extra_body=extra_body,
+                timeout=timeout,
+                query=maybe_transform(
+                    {
+                        "sort_by": sort_by,
+                        "sort_direction": sort_direction,
+                    },
+                    model_list_params.ModelListParams,
+                ),
             ),
             model=ModelListResponse,
         )

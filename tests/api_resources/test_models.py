@@ -90,6 +90,15 @@ class TestModels:
 
     @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
+    def test_method_list_with_all_params(self, client: Replicate) -> None:
+        model = client.models.list(
+            sort_by="model_created_at",
+            sort_direction="asc",
+        )
+        assert_matches_type(SyncCursorURLPage[ModelListResponse], model, path=["response"])
+
+    @pytest.mark.skip(reason="Prism tests are disabled")
+    @parametrize
     def test_raw_response_list(self, client: Replicate) -> None:
         response = client.models.with_raw_response.list()
 
@@ -317,6 +326,15 @@ class TestAsyncModels:
     @parametrize
     async def test_method_list(self, async_client: AsyncReplicate) -> None:
         model = await async_client.models.list()
+        assert_matches_type(AsyncCursorURLPage[ModelListResponse], model, path=["response"])
+
+    @pytest.mark.skip(reason="Prism tests are disabled")
+    @parametrize
+    async def test_method_list_with_all_params(self, async_client: AsyncReplicate) -> None:
+        model = await async_client.models.list(
+            sort_by="model_created_at",
+            sort_direction="asc",
+        )
         assert_matches_type(AsyncCursorURLPage[ModelListResponse], model, path=["response"])
 
     @pytest.mark.skip(reason="Prism tests are disabled")
