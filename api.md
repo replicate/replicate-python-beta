@@ -1,193 +1,731 @@
-# Replicate
+# Replicate Python SDK API reference
 
-Types:
+## Installation
 
-```python
-from replicate.types import SearchResponse
+```bash
+pip install replicate
 ```
 
-Methods:
+## Initialize a client
 
-- <code title="get /search">replicate.<a href="./src/replicate/_client.py">search</a>(\*\*<a href="src/replicate/types/client_search_params.py">params</a>) -> <a href="./src/replicate/types/search_response.py">SearchResponse</a></code>
+Start by setting a `REPLICATE_API_TOKEN` environment variable in your environment. You can create a token at [replicate.com/account/api-tokens](https://replicate.com/account/api-tokens).
 
-# Collections
+Then use this code to initialize a client:
 
-Types:
-
-```python
-from replicate.types import CollectionListResponse, CollectionGetResponse
+```py
+import replicate
 ```
 
-Methods:
+That's it! You can now use the client to make API calls.
 
-- <code title="get /collections">replicate.collections.<a href="./src/replicate/resources/collections.py">list</a>() -> <a href="./src/replicate/types/collection_list_response.py">SyncCursorURLPage[CollectionListResponse]</a></code>
-- <code title="get /collections/{collection_slug}">replicate.collections.<a href="./src/replicate/resources/collections.py">get</a>(\*, collection_slug) -> <a href="./src/replicate/types/collection_get_response.py">CollectionGetResponse</a></code>
 
-# Deployments
+If you want to explicitly pass the token when creating a client, you can do so like this:
 
-Types:
 
 ```python
-from replicate.types import (
-    DeploymentCreateResponse,
-    DeploymentUpdateResponse,
-    DeploymentListResponse,
-    DeploymentGetResponse,
+import os
+import replicate
+
+client = replicate.Replicate(
+    bearer_token=os.environ["REPLICATE_API_TOKEN"]
 )
 ```
 
-Methods:
+## High-level operations
 
-- <code title="post /deployments">replicate.deployments.<a href="./src/replicate/resources/deployments/deployments.py">create</a>(\*\*<a href="src/replicate/types/deployment_create_params.py">params</a>) -> <a href="./src/replicate/types/deployment_create_response.py">DeploymentCreateResponse</a></code>
-- <code title="patch /deployments/{deployment_owner}/{deployment_name}">replicate.deployments.<a href="./src/replicate/resources/deployments/deployments.py">update</a>(\*, deployment_owner, deployment_name, \*\*<a href="src/replicate/types/deployment_update_params.py">params</a>) -> <a href="./src/replicate/types/deployment_update_response.py">DeploymentUpdateResponse</a></code>
-- <code title="get /deployments">replicate.deployments.<a href="./src/replicate/resources/deployments/deployments.py">list</a>() -> <a href="./src/replicate/types/deployment_list_response.py">SyncCursorURLPage[DeploymentListResponse]</a></code>
-- <code title="delete /deployments/{deployment_owner}/{deployment_name}">replicate.deployments.<a href="./src/replicate/resources/deployments/deployments.py">delete</a>(\*, deployment_owner, deployment_name) -> None</code>
-- <code title="get /deployments/{deployment_owner}/{deployment_name}">replicate.deployments.<a href="./src/replicate/resources/deployments/deployments.py">get</a>(\*, deployment_owner, deployment_name) -> <a href="./src/replicate/types/deployment_get_response.py">DeploymentGetResponse</a></code>
+### `replicate.use()`
 
-## Predictions
-
-Methods:
-
-- <code title="post /deployments/{deployment_owner}/{deployment_name}/predictions">replicate.deployments.predictions.<a href="./src/replicate/resources/deployments/predictions.py">create</a>(\*, deployment_owner, deployment_name, \*\*<a href="src/replicate/types/deployments/prediction_create_params.py">params</a>) -> <a href="./src/replicate/types/prediction.py">Prediction</a></code>
-
-# Hardware
-
-Types:
+Create a reference to a model that can be used to make predictions.
 
 ```python
-from replicate.types import HardwareListResponse
+import replicate
+
+claude = replicate.use("anthropic/claude-sonnet-4")
+
+output = claude(prompt="Hello, world!")
+print(output)
+
+banana = replicate.use("google/nano-banana")
+output = banana(prompt="Make me a sandwich")
+print(output)
 ```
 
-Methods:
+Note: The `replicate.use()` method only returns output. If you need access to more metadata like prediction ID, status, metrics, or input values, use `replicate.predictions.create()` instead.
 
-- <code title="get /hardware">replicate.hardware.<a href="./src/replicate/resources/hardware.py">list</a>() -> <a href="./src/replicate/types/hardware_list_response.py">HardwareListResponse</a></code>
+### `replicate.run()`
 
-# Account
-
-Types:
+Run a model and wait for the output. This is a convenience method that creates a prediction and waits for it to complete.
 
 ```python
-from replicate.types import AccountGetResponse
+import replicate
+
+# Run a model and get the output directly
+output = replicate.run(
+    "anthropic/claude-sonnet-4",
+    input={"prompt": "Hello, world!"}
+)
+print(output)
 ```
 
-Methods:
+Note: The `replicate.run()` method only returns output. If you need access to more metadata like prediction ID, status, metrics, or input values, use `replicate.predictions.create()` instead.
 
-- <code title="get /account">replicate.account.<a href="./src/replicate/resources/account.py">get</a>() -> <a href="./src/replicate/types/account_get_response.py">AccountGetResponse</a></code>
 
-# Models
+## API operations
 
-Types:
+Available operations:
+
+- [`search`](#search)
+- [`predictions.create`](#predictionscreate)
+- [`predictions.get`](#predictionsget)
+- [`predictions.list`](#predictionslist)
+- [`predictions.cancel`](#predictionscancel)
+- [`models.create`](#modelscreate)
+- [`models.get`](#modelsget)
+- [`models.list`](#modelslist)
+- [`models.delete`](#modelsdelete)
+- [`models.examples.list`](#modelsexampleslist)
+- [`models.predictions.create`](#modelspredictionscreate)
+- [`models.readme.get`](#modelsreadmeget)
+- [`models.versions.get`](#modelsversionsget)
+- [`models.versions.list`](#modelsversionslist)
+- [`models.versions.delete`](#modelsversionsdelete)
+- [`collections.get`](#collectionsget)
+- [`collections.list`](#collectionslist)
+- [`deployments.create`](#deploymentscreate)
+- [`deployments.get`](#deploymentsget)
+- [`deployments.list`](#deploymentslist)
+- [`deployments.update`](#deploymentsupdate)
+- [`deployments.delete`](#deploymentsdelete)
+- [`deployments.predictions.create`](#deploymentspredictionscreate)
+- [`files.list`](#fileslist)
+- [`files.create`](#filescreate)
+- [`files.delete`](#filesdelete)
+- [`files.get`](#filesget)
+- [`files.download`](#filesdownload)
+- [`trainings.create`](#trainingscreate)
+- [`trainings.get`](#trainingsget)
+- [`trainings.list`](#trainingslist)
+- [`trainings.cancel`](#trainingscancel)
+- [`hardware.list`](#hardwarelist)
+- [`account.get`](#accountget)
+- [`webhooks.default.secret.get`](#webhooksdefaultsecretget)
+
+### `search`
+
+Search models, collections, and docs (beta)
+
 
 ```python
-from replicate.types import (
-    ModelCreateResponse,
-    ModelListResponse,
-    ModelGetResponse,
-    ModelSearchResponse,
+response = replicate.search(
+    query="nano banana",
+)
+print(response.collections)
+```
+
+Docs: https://replicate.com/docs/reference/http#search
+
+---
+
+### `predictions.create`
+
+Create a prediction
+
+
+```python
+prediction = replicate.predictions.create(
+    input={
+        "text": "Alice"
+    },
+    version="replicate/hello-world:9dcd6d78e7c6560c340d916fe32e9f24aabfa331e5cce95fe31f77fb03121426",
+)
+print(prediction.id)
+```
+
+Docs: https://replicate.com/docs/reference/http#predictions.create
+
+---
+
+### `predictions.get`
+
+Get a prediction
+
+
+```python
+prediction = replicate.predictions.get(
+    prediction_id="prediction_id",
+)
+print(prediction.id)
+```
+
+Docs: https://replicate.com/docs/reference/http#predictions.get
+
+---
+
+### `predictions.list`
+
+List predictions
+
+
+```python
+page = replicate.predictions.list()
+page = page.results[0]
+print(page.id)
+```
+
+Docs: https://replicate.com/docs/reference/http#predictions.list
+
+---
+
+### `predictions.cancel`
+
+Cancel a prediction
+
+
+```python
+prediction = replicate.predictions.cancel(
+    prediction_id="prediction_id",
+)
+print(prediction.id)
+```
+
+Docs: https://replicate.com/docs/reference/http#predictions.cancel
+
+---
+
+### `models.create`
+
+Create a model
+
+
+```python
+model = replicate.models.create(
+    hardware="cpu",
+    name="hot-dog-detector",
+    owner="alice",
+    visibility="public",
+)
+print(model.cover_image_url)
+```
+
+Docs: https://replicate.com/docs/reference/http#models.create
+
+---
+
+### `models.get`
+
+Get a model
+
+
+```python
+model = replicate.models.get(
+    model_owner="model_owner",
+    model_name="model_name",
+)
+print(model.cover_image_url)
+```
+
+Docs: https://replicate.com/docs/reference/http#models.get
+
+---
+
+### `models.list`
+
+List public models
+
+
+```python
+page = replicate.models.list()
+page = page.results[0]
+print(page.cover_image_url)
+```
+
+Docs: https://replicate.com/docs/reference/http#models.list
+
+---
+
+### `models.delete`
+
+Delete a model
+
+
+```python
+replicate.models.delete(
+    model_owner="model_owner",
+    model_name="model_name",
 )
 ```
 
-Methods:
+Docs: https://replicate.com/docs/reference/http#models.delete
 
-- <code title="post /models">replicate.models.<a href="./src/replicate/resources/models/models.py">create</a>(\*\*<a href="src/replicate/types/model_create_params.py">params</a>) -> <a href="./src/replicate/types/model_create_response.py">ModelCreateResponse</a></code>
-- <code title="get /models">replicate.models.<a href="./src/replicate/resources/models/models.py">list</a>() -> <a href="./src/replicate/types/model_list_response.py">SyncCursorURLPage[ModelListResponse]</a></code>
-- <code title="delete /models/{model_owner}/{model_name}">replicate.models.<a href="./src/replicate/resources/models/models.py">delete</a>(\*, model_owner, model_name) -> None</code>
-- <code title="get /models/{model_owner}/{model_name}">replicate.models.<a href="./src/replicate/resources/models/models.py">get</a>(\*, model_owner, model_name) -> <a href="./src/replicate/types/model_get_response.py">ModelGetResponse</a></code>
-- <code title="query /models">replicate.models.<a href="./src/replicate/resources/models/models.py">search</a>(\*\*<a href="src/replicate/types/model_search_params.py">params</a>) -> <a href="./src/replicate/types/model_search_response.py">SyncCursorURLPage[ModelSearchResponse]</a></code>
+---
 
-## Examples
+### `models.examples.list`
 
-Methods:
+List examples for a model
 
-- <code title="get /models/{model_owner}/{model_name}/examples">replicate.models.examples.<a href="./src/replicate/resources/models/examples.py">list</a>(\*, model_owner, model_name) -> <a href="./src/replicate/types/prediction.py">SyncCursorURLPage[Prediction]</a></code>
-
-## Predictions
-
-Methods:
-
-- <code title="post /models/{model_owner}/{model_name}/predictions">replicate.models.predictions.<a href="./src/replicate/resources/models/predictions.py">create</a>(\*, model_owner, model_name, \*\*<a href="src/replicate/types/models/prediction_create_params.py">params</a>) -> <a href="./src/replicate/types/prediction.py">Prediction</a></code>
-
-## Readme
-
-Types:
 
 ```python
-from replicate.types.models import ReadmeGetResponse
+page = replicate.models.examples.list(
+    model_owner="model_owner",
+    model_name="model_name",
+)
+page = page.results[0]
+print(page.id)
 ```
 
-Methods:
+Docs: https://replicate.com/docs/reference/http#models.examples.list
 
-- <code title="get /models/{model_owner}/{model_name}/readme">replicate.models.readme.<a href="./src/replicate/resources/models/readme.py">get</a>(\*, model_owner, model_name) -> str</code>
+---
 
-## Versions
+### `models.predictions.create`
 
-Types:
+Create a prediction using an official model
+
 
 ```python
-from replicate.types.models import VersionListResponse, VersionGetResponse
+prediction = replicate.models.predictions.create(
+    model_owner="model_owner",
+    model_name="model_name",
+    input={
+        "prompt": "Tell me a joke",
+        "system_prompt": "You are a helpful assistant",
+    },
+)
+print(prediction.id)
 ```
 
-Methods:
+Docs: https://replicate.com/docs/reference/http#models.predictions.create
 
-- <code title="get /models/{model_owner}/{model_name}/versions">replicate.models.versions.<a href="./src/replicate/resources/models/versions.py">list</a>(\*, model_owner, model_name) -> <a href="./src/replicate/types/models/version_list_response.py">SyncCursorURLPage[VersionListResponse]</a></code>
-- <code title="delete /models/{model_owner}/{model_name}/versions/{version_id}">replicate.models.versions.<a href="./src/replicate/resources/models/versions.py">delete</a>(\*, model_owner, model_name, version_id) -> None</code>
-- <code title="get /models/{model_owner}/{model_name}/versions/{version_id}">replicate.models.versions.<a href="./src/replicate/resources/models/versions.py">get</a>(\*, model_owner, model_name, version_id) -> <a href="./src/replicate/types/models/version_get_response.py">VersionGetResponse</a></code>
+---
 
-# Predictions
+### `models.readme.get`
 
-Types:
+Get a model's README
+
 
 ```python
-from replicate.types import Prediction, PredictionOutput, PredictionRequest
+readme = replicate.models.readme.get(
+    model_owner="model_owner",
+    model_name="model_name",
+)
+print(readme)
 ```
 
-Methods:
+Docs: https://replicate.com/docs/reference/http#models.readme.get
 
-- <code title="post /predictions">replicate.predictions.<a href="./src/replicate/resources/predictions.py">create</a>(\*\*<a href="src/replicate/types/prediction_create_params.py">params</a>) -> <a href="./src/replicate/types/prediction.py">Prediction</a></code>
-- <code title="get /predictions">replicate.predictions.<a href="./src/replicate/resources/predictions.py">list</a>(\*\*<a href="src/replicate/types/prediction_list_params.py">params</a>) -> <a href="./src/replicate/types/prediction.py">SyncCursorURLPageWithCreatedFilters[Prediction]</a></code>
-- <code title="post /predictions/{prediction_id}/cancel">replicate.predictions.<a href="./src/replicate/resources/predictions.py">cancel</a>(\*, prediction_id) -> <a href="./src/replicate/types/prediction.py">Prediction</a></code>
-- <code title="get /predictions/{prediction_id}">replicate.predictions.<a href="./src/replicate/resources/predictions.py">get</a>(\*, prediction_id) -> <a href="./src/replicate/types/prediction.py">Prediction</a></code>
+---
 
-# Trainings
+### `models.versions.get`
 
-Types:
+Get a model version
+
 
 ```python
-from replicate.types import (
-    TrainingCreateResponse,
-    TrainingListResponse,
-    TrainingCancelResponse,
-    TrainingGetResponse,
+version = replicate.models.versions.get(
+    model_owner="model_owner",
+    model_name="model_name",
+    version_id="version_id",
+)
+print(version.id)
+```
+
+Docs: https://replicate.com/docs/reference/http#models.versions.get
+
+---
+
+### `models.versions.list`
+
+List model versions
+
+
+```python
+page = replicate.models.versions.list(
+    model_owner="model_owner",
+    model_name="model_name",
+)
+page = page.results[0]
+print(page.id)
+```
+
+Docs: https://replicate.com/docs/reference/http#models.versions.list
+
+---
+
+### `models.versions.delete`
+
+Delete a model version
+
+
+```python
+replicate.models.versions.delete(
+    model_owner="model_owner",
+    model_name="model_name",
+    version_id="version_id",
 )
 ```
 
-Methods:
+Docs: https://replicate.com/docs/reference/http#models.versions.delete
 
-- <code title="post /models/{model_owner}/{model_name}/versions/{version_id}/trainings">replicate.trainings.<a href="./src/replicate/resources/trainings.py">create</a>(\*, model_owner, model_name, version_id, \*\*<a href="src/replicate/types/training_create_params.py">params</a>) -> <a href="./src/replicate/types/training_create_response.py">TrainingCreateResponse</a></code>
-- <code title="get /trainings">replicate.trainings.<a href="./src/replicate/resources/trainings.py">list</a>() -> <a href="./src/replicate/types/training_list_response.py">SyncCursorURLPage[TrainingListResponse]</a></code>
-- <code title="post /trainings/{training_id}/cancel">replicate.trainings.<a href="./src/replicate/resources/trainings.py">cancel</a>(\*, training_id) -> <a href="./src/replicate/types/training_cancel_response.py">TrainingCancelResponse</a></code>
-- <code title="get /trainings/{training_id}">replicate.trainings.<a href="./src/replicate/resources/trainings.py">get</a>(\*, training_id) -> <a href="./src/replicate/types/training_get_response.py">TrainingGetResponse</a></code>
+---
 
-# Webhooks
+### `collections.get`
 
-## Default
+Get a collection of models
 
-### Secret
-
-Types:
 
 ```python
-from replicate.types.webhooks.default import SecretGetResponse
+collection = replicate.collections.get(
+    collection_slug="collection_slug",
+)
+print(collection.description)
 ```
 
-Methods:
+Docs: https://replicate.com/docs/reference/http#collections.get
 
-- <code title="get /webhooks/default/secret">replicate.webhooks.default.secret.<a href="./src/replicate/resources/webhooks/default/secret.py">get</a>() -> <a href="./src/replicate/types/webhooks/default/secret_get_response.py">SecretGetResponse</a></code>
+---
 
-# Files
+### `collections.list`
 
-Types:
+List collections of models
+
 
 ```python
-from replicate.types import FileCreateResponse, FileListResponse, FileGetResponse
+page = replicate.collections.list()
+page = page.results[0]
+print(page.description)
 ```
+
+Docs: https://replicate.com/docs/reference/http#collections.list
+
+---
+
+### `deployments.create`
+
+Create a deployment
+
+
+```python
+deployment = replicate.deployments.create(
+    hardware="hardware",
+    max_instances=0,
+    min_instances=0,
+    model="model",
+    name="name",
+    version="version",
+)
+print(deployment.current_release)
+```
+
+Docs: https://replicate.com/docs/reference/http#deployments.create
+
+---
+
+### `deployments.get`
+
+Get a deployment
+
+
+```python
+deployment = replicate.deployments.get(
+    deployment_owner="deployment_owner",
+    deployment_name="deployment_name",
+)
+print(deployment.current_release)
+```
+
+Docs: https://replicate.com/docs/reference/http#deployments.get
+
+---
+
+### `deployments.list`
+
+List deployments
+
+
+```python
+page = replicate.deployments.list()
+page = page.results[0]
+print(page.current_release)
+```
+
+Docs: https://replicate.com/docs/reference/http#deployments.list
+
+---
+
+### `deployments.update`
+
+Update a deployment
+
+
+```python
+deployment = replicate.deployments.update(
+    deployment_owner="deployment_owner",
+    deployment_name="deployment_name",
+)
+print(deployment.current_release)
+```
+
+Docs: https://replicate.com/docs/reference/http#deployments.update
+
+---
+
+### `deployments.delete`
+
+Delete a deployment
+
+
+```python
+replicate.deployments.delete(
+    deployment_owner="deployment_owner",
+    deployment_name="deployment_name",
+)
+```
+
+Docs: https://replicate.com/docs/reference/http#deployments.delete
+
+---
+
+### `deployments.predictions.create`
+
+Create a prediction using a deployment
+
+
+```python
+prediction = replicate.deployments.predictions.create(
+    deployment_owner="deployment_owner",
+    deployment_name="deployment_name",
+    input={
+        "prompt": "Tell me a joke",
+        "system_prompt": "You are a helpful assistant",
+    },
+)
+print(prediction.id)
+```
+
+Docs: https://replicate.com/docs/reference/http#deployments.predictions.create
+
+---
+
+### `files.list`
+
+List files
+
+
+```python
+page = replicate.files.list()
+page = page.results[0]
+print(page.id)
+```
+
+Docs: https://replicate.com/docs/reference/http#files.list
+
+---
+
+### `files.create`
+
+Create a file
+
+
+```python
+file = replicate.files.create(
+    content=b"raw file contents",
+)
+print(file.id)
+```
+
+Docs: https://replicate.com/docs/reference/http#files.create
+
+---
+
+### `files.delete`
+
+Delete a file
+
+
+```python
+replicate.files.delete(
+    file_id="file_id",
+)
+```
+
+Docs: https://replicate.com/docs/reference/http#files.delete
+
+---
+
+### `files.get`
+
+Get a file
+
+
+```python
+file = replicate.files.get(
+    file_id="file_id",
+)
+print(file.id)
+```
+
+Docs: https://replicate.com/docs/reference/http#files.get
+
+---
+
+### `files.download`
+
+Download a file
+
+
+```python
+response = replicate.files.download(
+    file_id="file_id",
+    expiry=0,
+    owner="owner",
+    signature="signature",
+)
+print(response)
+content = response.read()
+print(content)
+```
+
+Docs: https://replicate.com/docs/reference/http#files.download
+
+---
+
+### `trainings.create`
+
+Create a training
+
+
+```python
+training = replicate.trainings.create(
+    model_owner="model_owner",
+    model_name="model_name",
+    version_id="version_id",
+    destination="destination",
+    input={},
+)
+print(training.id)
+```
+
+Docs: https://replicate.com/docs/reference/http#trainings.create
+
+---
+
+### `trainings.get`
+
+Get a training
+
+
+```python
+training = replicate.trainings.get(
+    training_id="training_id",
+)
+print(training.id)
+```
+
+Docs: https://replicate.com/docs/reference/http#trainings.get
+
+---
+
+### `trainings.list`
+
+List trainings
+
+
+```python
+page = replicate.trainings.list()
+page = page.results[0]
+print(page.id)
+```
+
+Docs: https://replicate.com/docs/reference/http#trainings.list
+
+---
+
+### `trainings.cancel`
+
+Cancel a training
+
+
+```python
+response = replicate.trainings.cancel(
+    training_id="training_id",
+)
+print(response.id)
+```
+
+Docs: https://replicate.com/docs/reference/http#trainings.cancel
+
+---
+
+### `hardware.list`
+
+List available hardware for models
+
+
+```python
+hardware = replicate.hardware.list()
+print(hardware)
+```
+
+Docs: https://replicate.com/docs/reference/http#hardware.list
+
+---
+
+### `account.get`
+
+Get the authenticated account
+
+
+```python
+account = replicate.account.get()
+print(account.type)
+```
+
+Docs: https://replicate.com/docs/reference/http#account.get
+
+---
+
+### `webhooks.default.secret.get`
+
+Get the signing secret for the default webhook
+
+
+```python
+secret = replicate.webhooks.default.secret.get()
+print(secret.key)
+```
+
+Docs: https://replicate.com/docs/reference/http#webhooks.default.secret.get
+
+---
+
+
+## Low-level API
+
+For cases where you need to make direct API calls not covered by the SDK methods, you can use the low-level request interface:
+
+### Making custom requests
+
+```python
+import replicate
+
+client = replicate.Replicate()
+
+# Make a custom GET request
+response = client.get("/custom/endpoint")
+
+# Make a custom POST request with data
+response = client.post(
+    "/custom/endpoint",
+    json={"key": "value"}
+)
+
+# Make a custom request with all options
+response = client.request(
+    method="PATCH",
+    url="/custom/endpoint",
+    json={"key": "value"},
+    headers={"X-Custom-Header": "value"}
+)
+```
+
+See the [README](https://github.com/replicate/replicate-python-stainless/blob/main/README.md) for more details about response handing, error handling, pagination, async support, and more.
