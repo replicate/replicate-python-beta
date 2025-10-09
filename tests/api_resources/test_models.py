@@ -14,6 +14,7 @@ from replicate.types import (
     ModelListResponse,
     ModelCreateResponse,
     ModelSearchResponse,
+    ModelUpdateResponse,
 )
 from replicate.pagination import SyncCursorURLPage, AsyncCursorURLPage
 
@@ -81,6 +82,73 @@ class TestModels:
             assert_matches_type(ModelCreateResponse, model, path=["response"])
 
         assert cast(Any, response.is_closed) is True
+
+    @pytest.mark.skip(reason="Prism tests are disabled")
+    @parametrize
+    def test_method_update(self, client: Replicate) -> None:
+        model = client.models.update(
+            model_owner="model_owner",
+            model_name="model_name",
+        )
+        assert_matches_type(ModelUpdateResponse, model, path=["response"])
+
+    @pytest.mark.skip(reason="Prism tests are disabled")
+    @parametrize
+    def test_method_update_with_all_params(self, client: Replicate) -> None:
+        model = client.models.update(
+            model_owner="model_owner",
+            model_name="model_name",
+            description="Detect hot dogs in images",
+            github_url="https://github.com/alice/hot-dog-detector",
+            license_url="license_url",
+            paper_url="https://arxiv.org/abs/2504.17639",
+            readme="# Updated README\n\nNew content here",
+            weights_url="https://huggingface.co/alice/hot-dog-detector",
+        )
+        assert_matches_type(ModelUpdateResponse, model, path=["response"])
+
+    @pytest.mark.skip(reason="Prism tests are disabled")
+    @parametrize
+    def test_raw_response_update(self, client: Replicate) -> None:
+        response = client.models.with_raw_response.update(
+            model_owner="model_owner",
+            model_name="model_name",
+        )
+
+        assert response.is_closed is True
+        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+        model = response.parse()
+        assert_matches_type(ModelUpdateResponse, model, path=["response"])
+
+    @pytest.mark.skip(reason="Prism tests are disabled")
+    @parametrize
+    def test_streaming_response_update(self, client: Replicate) -> None:
+        with client.models.with_streaming_response.update(
+            model_owner="model_owner",
+            model_name="model_name",
+        ) as response:
+            assert not response.is_closed
+            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+
+            model = response.parse()
+            assert_matches_type(ModelUpdateResponse, model, path=["response"])
+
+        assert cast(Any, response.is_closed) is True
+
+    @pytest.mark.skip(reason="Prism tests are disabled")
+    @parametrize
+    def test_path_params_update(self, client: Replicate) -> None:
+        with pytest.raises(ValueError, match=r"Expected a non-empty value for `model_owner` but received ''"):
+            client.models.with_raw_response.update(
+                model_owner="",
+                model_name="model_name",
+            )
+
+        with pytest.raises(ValueError, match=r"Expected a non-empty value for `model_name` but received ''"):
+            client.models.with_raw_response.update(
+                model_owner="model_owner",
+                model_name="",
+            )
 
     @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
@@ -321,6 +389,73 @@ class TestAsyncModels:
             assert_matches_type(ModelCreateResponse, model, path=["response"])
 
         assert cast(Any, response.is_closed) is True
+
+    @pytest.mark.skip(reason="Prism tests are disabled")
+    @parametrize
+    async def test_method_update(self, async_client: AsyncReplicate) -> None:
+        model = await async_client.models.update(
+            model_owner="model_owner",
+            model_name="model_name",
+        )
+        assert_matches_type(ModelUpdateResponse, model, path=["response"])
+
+    @pytest.mark.skip(reason="Prism tests are disabled")
+    @parametrize
+    async def test_method_update_with_all_params(self, async_client: AsyncReplicate) -> None:
+        model = await async_client.models.update(
+            model_owner="model_owner",
+            model_name="model_name",
+            description="Detect hot dogs in images",
+            github_url="https://github.com/alice/hot-dog-detector",
+            license_url="license_url",
+            paper_url="https://arxiv.org/abs/2504.17639",
+            readme="# Updated README\n\nNew content here",
+            weights_url="https://huggingface.co/alice/hot-dog-detector",
+        )
+        assert_matches_type(ModelUpdateResponse, model, path=["response"])
+
+    @pytest.mark.skip(reason="Prism tests are disabled")
+    @parametrize
+    async def test_raw_response_update(self, async_client: AsyncReplicate) -> None:
+        response = await async_client.models.with_raw_response.update(
+            model_owner="model_owner",
+            model_name="model_name",
+        )
+
+        assert response.is_closed is True
+        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+        model = await response.parse()
+        assert_matches_type(ModelUpdateResponse, model, path=["response"])
+
+    @pytest.mark.skip(reason="Prism tests are disabled")
+    @parametrize
+    async def test_streaming_response_update(self, async_client: AsyncReplicate) -> None:
+        async with async_client.models.with_streaming_response.update(
+            model_owner="model_owner",
+            model_name="model_name",
+        ) as response:
+            assert not response.is_closed
+            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+
+            model = await response.parse()
+            assert_matches_type(ModelUpdateResponse, model, path=["response"])
+
+        assert cast(Any, response.is_closed) is True
+
+    @pytest.mark.skip(reason="Prism tests are disabled")
+    @parametrize
+    async def test_path_params_update(self, async_client: AsyncReplicate) -> None:
+        with pytest.raises(ValueError, match=r"Expected a non-empty value for `model_owner` but received ''"):
+            await async_client.models.with_raw_response.update(
+                model_owner="",
+                model_name="model_name",
+            )
+
+        with pytest.raises(ValueError, match=r"Expected a non-empty value for `model_name` but received ''"):
+            await async_client.models.with_raw_response.update(
+                model_owner="model_owner",
+                model_name="",
+            )
 
     @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize

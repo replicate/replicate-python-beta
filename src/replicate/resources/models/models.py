@@ -14,7 +14,7 @@ from .readme import (
     ReadmeResourceWithStreamingResponse,
     AsyncReadmeResourceWithStreamingResponse,
 )
-from ...types import model_list_params, model_create_params, model_search_params
+from ...types import model_list_params, model_create_params, model_search_params, model_update_params
 from ..._types import Body, Omit, Query, Headers, NoneType, NotGiven, omit, not_given
 from ..._utils import maybe_transform, async_maybe_transform
 from .examples import (
@@ -55,6 +55,7 @@ from ...types.model_get_response import ModelGetResponse
 from ...types.model_list_response import ModelListResponse
 from ...types.model_create_response import ModelCreateResponse
 from ...types.model_search_response import ModelSearchResponse
+from ...types.model_update_response import ModelUpdateResponse
 
 __all__ = ["ModelsResource", "AsyncModelsResource"]
 
@@ -204,6 +205,99 @@ class ModelsResource(SyncAPIResource):
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
             cast_to=ModelCreateResponse,
+        )
+
+    def update(
+        self,
+        *,
+        model_owner: str,
+        model_name: str,
+        description: str | Omit = omit,
+        github_url: str | Omit = omit,
+        license_url: str | Omit = omit,
+        paper_url: str | Omit = omit,
+        readme: str | Omit = omit,
+        weights_url: str | Omit = omit,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> ModelUpdateResponse:
+        """
+        Update select properties of an existing model.
+
+        You can update the following properties:
+
+        - `description` - Model description
+        - `readme` - Model README content
+        - `github_url` - GitHub repository URL
+        - `paper_url` - Research paper URL
+        - `weights_url` - Model weights URL
+        - `license_url` - License URL
+
+        Example cURL request:
+
+        ```console
+        curl -X PATCH \\
+          https://api.replicate.com/v1/models/your-username/your-model-name \\
+          -H "Authorization: Token $REPLICATE_API_TOKEN" \\
+          -H "Content-Type: application/json" \\
+          -d '{
+            "description": "Detect hot dogs in images",
+            "readme": "# Hot Dog Detector\n\n🌭 Ketchup, mustard, and onions...",
+            "github_url": "https://github.com/alice/hot-dog-detector",
+            "paper_url": "https://arxiv.org/abs/2504.17639",
+            "weights_url": "https://huggingface.co/alice/hot-dog-detector",
+            "license_url": "https://choosealicense.com/licenses/mit/"
+          }'
+        ```
+
+        The response will be the updated model object with all of its properties.
+
+        Args:
+          description: A description of the model.
+
+          github_url: A URL for the model's source code on GitHub.
+
+          license_url: A URL for the model's license.
+
+          paper_url: A URL for the model's paper.
+
+          readme: The README content of the model.
+
+          weights_url: A URL for the model's weights.
+
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        if not model_owner:
+            raise ValueError(f"Expected a non-empty value for `model_owner` but received {model_owner!r}")
+        if not model_name:
+            raise ValueError(f"Expected a non-empty value for `model_name` but received {model_name!r}")
+        return self._patch(
+            f"/models/{model_owner}/{model_name}",
+            body=maybe_transform(
+                {
+                    "description": description,
+                    "github_url": github_url,
+                    "license_url": license_url,
+                    "paper_url": paper_url,
+                    "readme": readme,
+                    "weights_url": weights_url,
+                },
+                model_update_params.ModelUpdateParams,
+            ),
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=ModelUpdateResponse,
         )
 
     def list(
@@ -651,6 +745,99 @@ class AsyncModelsResource(AsyncAPIResource):
             cast_to=ModelCreateResponse,
         )
 
+    async def update(
+        self,
+        *,
+        model_owner: str,
+        model_name: str,
+        description: str | Omit = omit,
+        github_url: str | Omit = omit,
+        license_url: str | Omit = omit,
+        paper_url: str | Omit = omit,
+        readme: str | Omit = omit,
+        weights_url: str | Omit = omit,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> ModelUpdateResponse:
+        """
+        Update select properties of an existing model.
+
+        You can update the following properties:
+
+        - `description` - Model description
+        - `readme` - Model README content
+        - `github_url` - GitHub repository URL
+        - `paper_url` - Research paper URL
+        - `weights_url` - Model weights URL
+        - `license_url` - License URL
+
+        Example cURL request:
+
+        ```console
+        curl -X PATCH \\
+          https://api.replicate.com/v1/models/your-username/your-model-name \\
+          -H "Authorization: Token $REPLICATE_API_TOKEN" \\
+          -H "Content-Type: application/json" \\
+          -d '{
+            "description": "Detect hot dogs in images",
+            "readme": "# Hot Dog Detector\n\n🌭 Ketchup, mustard, and onions...",
+            "github_url": "https://github.com/alice/hot-dog-detector",
+            "paper_url": "https://arxiv.org/abs/2504.17639",
+            "weights_url": "https://huggingface.co/alice/hot-dog-detector",
+            "license_url": "https://choosealicense.com/licenses/mit/"
+          }'
+        ```
+
+        The response will be the updated model object with all of its properties.
+
+        Args:
+          description: A description of the model.
+
+          github_url: A URL for the model's source code on GitHub.
+
+          license_url: A URL for the model's license.
+
+          paper_url: A URL for the model's paper.
+
+          readme: The README content of the model.
+
+          weights_url: A URL for the model's weights.
+
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        if not model_owner:
+            raise ValueError(f"Expected a non-empty value for `model_owner` but received {model_owner!r}")
+        if not model_name:
+            raise ValueError(f"Expected a non-empty value for `model_name` but received {model_name!r}")
+        return await self._patch(
+            f"/models/{model_owner}/{model_name}",
+            body=await async_maybe_transform(
+                {
+                    "description": description,
+                    "github_url": github_url,
+                    "license_url": license_url,
+                    "paper_url": paper_url,
+                    "readme": readme,
+                    "weights_url": weights_url,
+                },
+                model_update_params.ModelUpdateParams,
+            ),
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=ModelUpdateResponse,
+        )
+
     def list(
         self,
         *,
@@ -956,6 +1143,9 @@ class ModelsResourceWithRawResponse:
         self.create = to_raw_response_wrapper(
             models.create,
         )
+        self.update = to_raw_response_wrapper(
+            models.update,
+        )
         self.list = to_raw_response_wrapper(
             models.list,
         )
@@ -992,6 +1182,9 @@ class AsyncModelsResourceWithRawResponse:
 
         self.create = async_to_raw_response_wrapper(
             models.create,
+        )
+        self.update = async_to_raw_response_wrapper(
+            models.update,
         )
         self.list = async_to_raw_response_wrapper(
             models.list,
@@ -1030,6 +1223,9 @@ class ModelsResourceWithStreamingResponse:
         self.create = to_streamed_response_wrapper(
             models.create,
         )
+        self.update = to_streamed_response_wrapper(
+            models.update,
+        )
         self.list = to_streamed_response_wrapper(
             models.list,
         )
@@ -1066,6 +1262,9 @@ class AsyncModelsResourceWithStreamingResponse:
 
         self.create = async_to_streamed_response_wrapper(
             models.create,
+        )
+        self.update = async_to_streamed_response_wrapper(
+            models.update,
         )
         self.list = async_to_streamed_response_wrapper(
             models.list,
