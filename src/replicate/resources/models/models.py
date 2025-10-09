@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from typing import overload
 from typing_extensions import Literal
 
 import httpx
@@ -297,9 +298,36 @@ class ModelsResource(SyncAPIResource):
             cast_to=NoneType,
         )
 
+    @overload
     def get(
         self,
-        model_or_owner: str | NotGiven = NOT_GIVEN,  # Legacy positional arg
+        model_owner_and_name: str,
+        *,
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+    ) -> ModelGetResponse:
+        """Legacy format: models.get("owner/name")"""
+        ...
+
+    @overload
+    def get(
+        self,
+        *,
+        model_owner: str,
+        model_name: str,
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+    ) -> ModelGetResponse:
+        """New format: models.get(model_owner="owner", model_name="name")"""
+        ...
+
+    def get(
+        self,
+        model_owner_and_name: str | NotGiven = NOT_GIVEN,
         *,
         model_owner: str | NotGiven = NOT_GIVEN,
         model_name: str | NotGiven = NOT_GIVEN,
@@ -390,7 +418,7 @@ class ModelsResource(SyncAPIResource):
         - New: models.get(model_owner="owner", model_name="name")
 
         Args:
-          model_or_owner: Legacy format string "owner/name" (positional argument)
+          model_owner_and_name: Legacy format string "owner/name" (positional argument)
           model_owner: Model owner (keyword argument)
           model_name: Model name (keyword argument)
           extra_headers: Send extra headers
@@ -399,24 +427,32 @@ class ModelsResource(SyncAPIResource):
           timeout: Override the client-level default timeout for this request, in seconds
         """
         # Handle legacy format: models.get("owner/name")
-        if model_or_owner is not NOT_GIVEN:
+        if model_owner_and_name is not NOT_GIVEN:
             if model_owner is not NOT_GIVEN or model_name is not NOT_GIVEN:
                 raise ValueError(
                     "Cannot specify both positional and keyword arguments. "
                     "Use either models.get('owner/name') or models.get(model_owner='owner', model_name='name')"
                 )
 
-            # Parse the owner/name format
-            if "/" not in model_or_owner:
-                raise ValueError(f"Invalid model reference '{model_or_owner}'. Expected format: 'owner/name'")
+            # Type narrowing - at this point model_owner_and_name must be a string
+            if not isinstance(model_owner_and_name, str):
+                raise TypeError("model_owner_and_name must be a string")
 
-            parts = model_or_owner.split("/", 1)
+            # Parse the owner/name format
+            if "/" not in model_owner_and_name:
+                raise ValueError(f"Invalid model reference '{model_owner_and_name}'. Expected format: 'owner/name'")
+
+            parts = model_owner_and_name.split("/", 1)
             model_owner = parts[0]
             model_name = parts[1]
 
         # Validate required parameters
         if model_owner is NOT_GIVEN or model_name is NOT_GIVEN:
             raise ValueError("model_owner and model_name are required")
+
+        # Type narrowing - at this point both must be strings
+        if not isinstance(model_owner, str) or not isinstance(model_name, str):
+            raise TypeError("model_owner and model_name must be strings")
 
         if not model_owner:
             raise ValueError(f"Expected a non-empty value for `model_owner` but received {model_owner!r}")
@@ -721,9 +757,36 @@ class AsyncModelsResource(AsyncAPIResource):
             cast_to=NoneType,
         )
 
+    @overload
     async def get(
         self,
-        model_or_owner: str | NotGiven = NOT_GIVEN,  # Legacy positional arg
+        model_owner_and_name: str,
+        *,
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+    ) -> ModelGetResponse:
+        """Legacy format: models.get("owner/name")"""
+        ...
+
+    @overload
+    async def get(
+        self,
+        *,
+        model_owner: str,
+        model_name: str,
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+    ) -> ModelGetResponse:
+        """New format: models.get(model_owner="owner", model_name="name")"""
+        ...
+
+    async def get(
+        self,
+        model_owner_and_name: str | NotGiven = NOT_GIVEN,
         *,
         model_owner: str | NotGiven = NOT_GIVEN,
         model_name: str | NotGiven = NOT_GIVEN,
@@ -814,7 +877,7 @@ class AsyncModelsResource(AsyncAPIResource):
         - New: models.get(model_owner="owner", model_name="name")
 
         Args:
-          model_or_owner: Legacy format string "owner/name" (positional argument)
+          model_owner_and_name: Legacy format string "owner/name" (positional argument)
           model_owner: Model owner (keyword argument)
           model_name: Model name (keyword argument)
           extra_headers: Send extra headers
@@ -823,24 +886,32 @@ class AsyncModelsResource(AsyncAPIResource):
           timeout: Override the client-level default timeout for this request, in seconds
         """
         # Handle legacy format: models.get("owner/name")
-        if model_or_owner is not NOT_GIVEN:
+        if model_owner_and_name is not NOT_GIVEN:
             if model_owner is not NOT_GIVEN or model_name is not NOT_GIVEN:
                 raise ValueError(
                     "Cannot specify both positional and keyword arguments. "
                     "Use either models.get('owner/name') or models.get(model_owner='owner', model_name='name')"
                 )
 
-            # Parse the owner/name format
-            if "/" not in model_or_owner:
-                raise ValueError(f"Invalid model reference '{model_or_owner}'. Expected format: 'owner/name'")
+            # Type narrowing - at this point model_owner_and_name must be a string
+            if not isinstance(model_owner_and_name, str):
+                raise TypeError("model_owner_and_name must be a string")
 
-            parts = model_or_owner.split("/", 1)
+            # Parse the owner/name format
+            if "/" not in model_owner_and_name:
+                raise ValueError(f"Invalid model reference '{model_owner_and_name}'. Expected format: 'owner/name'")
+
+            parts = model_owner_and_name.split("/", 1)
             model_owner = parts[0]
             model_name = parts[1]
 
         # Validate required parameters
         if model_owner is NOT_GIVEN or model_name is NOT_GIVEN:
             raise ValueError("model_owner and model_name are required")
+
+        # Type narrowing - at this point both must be strings
+        if not isinstance(model_owner, str) or not isinstance(model_name, str):
+            raise TypeError("model_owner and model_name must be strings")
 
         if not model_owner:
             raise ValueError(f"Expected a non-empty value for `model_owner` but received {model_owner!r}")
