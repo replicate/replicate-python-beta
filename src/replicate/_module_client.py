@@ -82,6 +82,7 @@ if TYPE_CHECKING:
     __client: Replicate = cast(Replicate, {})
     run = __client.run
     use = __client.use
+    stream = __client.stream  # pyright: ignore[reportDeprecated]
 else:
 
     def _run(*args, **kwargs):
@@ -100,8 +101,21 @@ else:
 
         return use(Replicate, ref, hint=hint, streaming=streaming, **kwargs)
 
+    def _stream(ref, *, input, use_async=False):
+        from .lib._stream import stream
+
+        if use_async:
+            from ._client import AsyncReplicate
+
+            return stream(AsyncReplicate, ref, input=input)
+
+        from ._client import Replicate
+
+        return stream(Replicate, ref, input=input)
+
     run = _run
     use = _use
+    stream = _stream
 
 files: FilesResource = FilesResourceProxy().__as_proxied__()
 models: ModelsResource = ModelsResourceProxy().__as_proxied__()

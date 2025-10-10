@@ -110,9 +110,24 @@ output = replicate.run("...", input={...}, wait=False)
 
 When `wait=False`, the method returns immediately after creating the prediction, and you'll need to poll for the result manually.
 
+## Streaming output
+
+For models that support streaming (particularly language models), use `replicate.use()` with `streaming=True` to stream the output response as it's generated:
+
+```python
+import replicate
+
+claude = replicate.use("anthropic/claude-4.5-sonnet", streaming=True)
+
+for event in claude(input={"prompt": "Please write a haiku about streaming Python."}):
+    print(str(event), end="")
+```
+
+> **Note:** The [legacy `replicate.stream()` method](https://github.com/replicate/replicate-python/blob/d2956ff9c3e26ef434bc839cc5c87a50c49dfe20/README.md#run-a-model-and-stream-its-output) is also available for backwards compatibility with the v1 SDK, but is deprecated and will be removed in a future version.
+
 ## Async usage
 
-Simply import `AsyncReplicate` instead of `Replicate` and use `await` with each API call:
+To use the Replicate client asynchronously, import `AsyncReplicate` instead of `Replicate` and use `await` with each API call:
 
 ```python
 import os
@@ -135,34 +150,6 @@ asyncio.run(main())
 ```
 
 Functionality between the synchronous and asynchronous clients is otherwise identical.
-
-### Async run() and stream()
-
-The async client also supports `run()` and `stream()` methods:
-
-```python
-import asyncio
-from replicate import AsyncReplicate
-
-replicate = AsyncReplicate()
-
-
-async def main():
-    # Run a model
-    output = await replicate.run(
-        "black-forest-labs/flux-schnell", input={"prompt": "astronaut riding a rocket like a horse"}
-    )
-    print(output)
-
-    # Stream a model's output
-    async for event in replicate.stream(
-        "meta/meta-llama-3-70b-instruct", input={"prompt": "Write a haiku about coding"}
-    ):
-        print(str(event), end="")
-
-
-asyncio.run(main())
-```
 
 ### With aiohttp
 
