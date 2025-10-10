@@ -36,8 +36,8 @@ classifiers = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/replicate/replicate-python-stainless"
-Repository = "https://github.com/replicate/replicate-python-stainless"
+Homepage = "https://github.com/replicate/replicate-python-beta"
+Repository = "https://github.com/replicate/replicate-python-beta"
 
 [project.optional-dependencies]
 aiohttp = ["aiohttp", "httpx_aiohttp>=0.1.8"]
@@ -125,7 +125,7 @@ path = "README.md"
 [[tool.hatch.metadata.hooks.fancy-pypi-readme.substitutions]]
 # replace relative links with absolute links
 pattern = '\[(.+?)\]\(((?!https?://)\S+?)\)'
-replacement = '[\1](https://github.com/replicate/replicate-python-stainless/tree/main/\g<2>)'
+replacement = '[\1](https://github.com/replicate/replicate-python-beta/tree/main/\g<2>)'
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
