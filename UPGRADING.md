@@ -6,9 +6,9 @@ This doc is intended for both humans and agents.
 
 If you're using an AI tool to assist with the upgrade process, you can provide it with this entire document as context.
 
-## Installation
+## Installing the v2 SDK    
 
-Use pip to install the latest pre-release version of the SDK:
+Use pip to install the latest pre-release version of the v2 SDK:
 
 ```sh
 pip install --pre replicate
@@ -86,7 +86,7 @@ Streaming works differently in v2. Prediction objects no longer have a `stream()
 ```python
 # Top-level streaming
 for event in replicate.stream(
-    "meta/meta-llama-3-70b-instruct",
+    "anthropic/claude-4.5-sonnet",
     input={"prompt": "Write a haiku"}
 ):
     print(str(event), end="")
@@ -101,7 +101,7 @@ for event in prediction.stream():
 
 ```python
 # Use replicate.use() with streaming=True
-model = replicate.use("meta/meta-llama-3-70b-instruct", streaming=True)
+model = replicate.use("anthropic/claude-4.5-sonnet", streaming=True)
 for event in model(prompt="Write a haiku"):
     print(str(event), end="")
 
