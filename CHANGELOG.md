@@ -1,5 +1,28 @@
 # Changelog
 
+## 2.0.0-alpha.29 (2025-10-10)
+
+Full Changelog: [v2.0.0-alpha.28...v2.0.0-alpha.29](https://github.com/replicate/replicate-python-stainless/compare/v2.0.0-alpha.28...v2.0.0-alpha.29)
+
+### Features
+
+* add deprecated `replicate.stream()` for v1 compatibility ([#79](https://github.com/replicate/replicate-python-stainless/issues/79)) ([79b69bd](https://github.com/replicate/replicate-python-stainless/commit/79b69bd84448ceb55e7f683eea54dbc98cb3d9b2))
+* **api:** add models.update() operation ([2605ecc](https://github.com/replicate/replicate-python-stainless/commit/2605ecc5201017d6ec0769b39860b9e78ab950d7))
+
+
+### Chores
+
+* **internal:** detect missing future annotations with ruff ([26638e7](https://github.com/replicate/replicate-python-stainless/commit/26638e7a26c66b578a643e6491966edaf0ade528))
+* update OpenAPI spec and rebuild SDKs ([384c14f](https://github.com/replicate/replicate-python-stainless/commit/384c14fdeaebcbcc0ea41ec0376ab8037e8843cc))
+* update OpenAPI spec and rebuild SDKs ([51336e2](https://github.com/replicate/replicate-python-stainless/commit/51336e2509de93fa22a4029ae50cc78e95b40728))
+* update OpenAPI spec and rebuild SDKs ([7deb277](https://github.com/replicate/replicate-python-stainless/commit/7deb277d4b1723babf4ce1ddfd15aa2dcc7a55c9))
+* update OpenAPI spec and rebuild SDKs ([d5ee9ad](https://github.com/replicate/replicate-python-stainless/commit/d5ee9adef946014f0d192515f948cc40f69b9942))
+
+
+### Documentation
+
+* add migration guide for upgrading from v1 to v2 ([#76](https://github.com/replicate/replicate-python-stainless/issues/76)) ([5f57722](https://github.com/replicate/replicate-python-stainless/commit/5f5772200a03012bb11c8c12a6e7a0f7d683d0cf))
+
 ## 2.0.0-alpha.28 (2025-10-07)
 
 Full Changelog: [v2.0.0-alpha.27...v2.0.0-alpha.28](https://github.com/replicate/replicate-python-stainless/compare/v2.0.0-alpha.27...v2.0.0-alpha.28)
