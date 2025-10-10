@@ -90,9 +90,9 @@ class PredictionCreateParamsWithoutVersion(TypedDict, total=False):
     sent regardless of throttling.
     """
 
-    prefer: Annotated[str, PropertyInfo(alias="Prefer")]
+    cancel_after: Annotated[str, PropertyInfo(alias="Cancel-After")]
 
-    replicate_max_lifetime: Annotated[str, PropertyInfo(alias="Replicate-Max-Lifetime")]
+    prefer: Annotated[str, PropertyInfo(alias="Prefer")]
 
 
 class PredictionCreateParams(PredictionCreateParamsWithoutVersion):

@@ -119,7 +119,7 @@ import replicate
 
 claude = replicate.use("anthropic/claude-4.5-sonnet", streaming=True)
 
-for event in claude(prompt="Write a haiku about streaming output."):
+for event in claude(input={"prompt": "Please write a haiku about streaming Python."}):
     print(str(event), end="")
 ```
 
