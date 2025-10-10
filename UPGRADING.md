@@ -77,7 +77,7 @@ The `api_token` parameter is still accepted for backward compatibility, but `bea
 
 ## Streaming output
 
-Streaming works similarly, but prediction objects no longer have a `stream()` method.
+Streaming works differently in v2. Prediction objects no longer have a `stream()` method. Use `replicate.use()` with `streaming=True` for streaming output.
 
 ### Before (v1)
 
@@ -98,20 +98,17 @@ for event in prediction.stream():
 ### After (v2)
 
 ```python
-# Top-level streaming (same)
-for event in replicate.stream(
-    "meta/meta-llama-3-70b-instruct",
-    input={"prompt": "Write a haiku"}
-):
+# Use replicate.use() with streaming=True
+model = replicate.use("meta/meta-llama-3-70b-instruct", streaming=True)
+for event in model(prompt="Write a haiku"):
     print(str(event), end="")
 
-# Streaming from prediction requires using stream() function
+# Streaming from prediction object is not available
 prediction = replicate.predictions.create(...)
 # prediction.stream() is not available in v2
-# Use replicate.stream() instead
 ```
 
-To stream a specific prediction in v2, use the top-level `stream()` function.
+Note: `replicate.stream()` still works in v2 but is deprecated and will be removed in a future version.
 
 ## Predictions
 
