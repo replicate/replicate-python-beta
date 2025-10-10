@@ -2,7 +2,13 @@
 
 This guide helps you migrate from the v1 Replicate Python SDK to v2. The v2 SDK is a complete rewrite generated from Replicate's OpenAPI specification, providing better type safety, more consistent error handling, and improved async support.
 
+This doc is intended for both humans and agents.
+
+If you're using an AI tool to assist with the upgrade process, you can provide it with this entire document as context.
+
 ## Installation
+
+Use pip to install the latest pre-release version of the SDK:
 
 ```sh
 pip install --pre replicate
@@ -12,7 +18,7 @@ The v2 SDK requires Python 3.8 or higher, same as v1.
 
 ## Pinning to 1.x
 
-You are not required to upgrade to the new 2.x version. If you're already using the 1.x version and want to continue using it, pin the version number in your dependency file.
+You are not required to upgrade to the new 2.x version. If you're already using the 1.x version and want to continue using it, pin the version number in your dependency files.
 
 Here's an example `requirements.txt`:
 
@@ -39,38 +45,34 @@ dependencies = [
 
 ## Client initialization and authentication
 
-The client class name and parameter names have changed.
+In both the v1 and v2 SDKs, the simplest usage pattern is to import the `replicate` module and use the module-level functions like `replicate.run()`, which automatically uses the `REPLICATE_API_TOKEN` environment variable, without explicitly instantiating a client:
+
+```python
+import replicate
+
+output = replicate.run(...)
+```
+
+For cases where you need to instantiate a client (e.g., for custom configuration or async support), the client class name and parameter names have changed in v2:
 
 ### Before (v1)
 
 ```python
+import os
 import replicate
 from replicate import Client
 
-# Using environment variable
-client = Client()
-
-# Explicit token
-client = Client(api_token="r8_...")
-
-# Module-level usage
-output = replicate.run(...)
+client = Client(api_token=os.environ["REPLICATE_API_TOKEN"])
 ```
 
 ### After (v2)
 
 ```python
+import os
 import replicate
 from replicate import Replicate
 
-# Using environment variable (REPLICATE_API_TOKEN)
-client = Replicate()
-
-# Explicit token (note: bearer_token, not api_token)
-client = Replicate(bearer_token="r8_...")
-
-# Module-level usage (still works)
-output = replicate.run(...)
+client = Replicate(bearer_token=os.environ["REPLICATE_API_TOKEN"])
 ```
 
 The `api_token` parameter is still accepted for backward compatibility, but `bearer_token` is preferred.
