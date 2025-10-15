@@ -1,47 +1,193 @@
-# Replicate Python API library
+# Replicate Python API SDK
 
 <!-- prettier-ignore -->
 [![PyPI version](https://img.shields.io/pypi/v/replicate.svg?label=pypi%20(stable))](https://pypi.org/project/replicate/)
 
-The Replicate Python library provides convenient access to the Replicate REST API from any Python 3.8+
-application. The library includes type definitions for all request params and response fields,
-and offers both synchronous and asynchronous clients powered by [httpx](https://github.com/encode/httpx).
+This is the repo for Replicate's official v2 Python SDK, which provides access to Replicate's HTTP API from any Python 3.8+
+application.
 
-It is generated with [Stainless](https://www.stainless.com/).
+## Docs
 
-## Documentation
+- https://sdks.replicate.com/python
+- https://replicate.com/docs/reference/http
 
-The REST API documentation can be found on [replicate.com](https://replicate.com/docs/reference/http). The full API of this library can be found in [api.md](api.md).
 
 ## Installation
 
+The [`replicate`](https://pypi.org/project/replicate/) package is available on PyPI. Install it with [pip](https://pip.pypa.io/en/stable/):
+
 ```sh
-# install from PyPI
 pip install --pre replicate
 ```
 
 ## Usage
 
-The full API of this library can be found in [api.md](api.md).
+Start by getting a [Replicate API token](https://replicate.com/account/api-tokens), then set it as `REPLICATE_API_TOKEN` in your environment:
+
+```sh
+export REPLICATE_API_TOKEN="r8_..."
+```
+
+Then in your Python code, import the library and use it:
+
+```python
+import replicate
+
+claude = replicate.use("anthropic/claude-4.5-sonnet")
+seedream = replicate.use("bytedance/seedream-4")
+veo = replicate.use("google/veo-3-fast")
+
+# Enhance a simple prompt
+image_prompt = claude(prompt="bananas wearing cowboy hats", system_prompt="turn prompts into image prompts")
+
+# Generate an image from the enhanced prompt
+images = seedream(prompt=image_prompt)
+
+# Generate a video from the image
+video = veo(prompt="dancing bananas", image_input=images[0])
+
+open(video)
+```
+
+### Initialization and authentication
+
+The library uses the `REPLICATE_API_TOKEN` environment variable by default to implicitly initialize a client, but you can also initialize a client explicitly and set the `bearer_token` parameter:
 
 ```python
 import os
 from replicate import Replicate
 
-replicate = Replicate(
-    bearer_token=os.environ.get("REPLICATE_API_TOKEN"),  # This is the default and can be omitted
+client = Replicate(
+    bearer_token=os.environ.get("REPLICATE_API_TOKEN")
 )
-
-prediction = replicate.predictions.get(
-    prediction_id="gm3qorzdhgbfurvjtvhg6dckhu",
-)
-print(prediction.id)
 ```
 
-While you can provide a `bearer_token` keyword argument,
-we recommend using [python-dotenv](https://pypi.org/project/python-dotenv/)
-to add `REPLICATE_API_TOKEN="My Bearer Token"` to your `.env` file
-so that your Bearer Token is not stored in source control.
+## Using `replicate.use()`
+
+The `use()` method provides a more concise way to call Replicate models as functions, offering a more pythonic approach to running models:
+
+```python
+import replicate
+
+# Create a model function
+flux_dev = replicate.use("black-forest-labs/flux-dev")
+
+# Call it like a regular Python function
+outputs = flux_dev(
+    prompt="a cat wearing a wizard hat, digital art",
+    num_outputs=1,
+    aspect_ratio="1:1",
+    output_format="webp",
+)
+
+# outputs is a list of URLPath objects that auto-download when accessed
+for output in outputs:
+    print(output)  # e.g., Path(/tmp/a1b2c3/output.webp)
+```
+
+### Language models with streaming
+
+Many models, particularly language models, support streaming output. Use the `streaming=True` parameter to get results as they're generated:
+
+```python
+import replicate
+
+# Create a streaming language model function
+claude = replicate.use("anthropic/claude-4.5-sonnet", streaming=True)
+
+# Stream the output
+output = claude(prompt="Write a haiku about Python programming", max_tokens=50)
+
+for chunk in output:
+    print(chunk, end="", flush=True)
+```
+
+### Chaining models
+
+You can easily chain models together by passing the output of one model as input to another:
+
+```python
+import replicate
+
+# Create two model functions
+flux_dev = replicate.use("black-forest-labs/flux-dev")
+claude = replicate.use("anthropic/claude-4.5-sonnet")
+
+# Generate an image
+images = flux_dev(prompt="a mysterious ancient artifact")
+
+# Describe the image
+description = claude(
+    prompt="Describe this image in detail",
+    image=images[0],  # Pass the first image directly
+)
+
+print(description)
+```
+
+### Async support
+
+For async/await patterns, use the `use_async=True` parameter:
+
+```python
+import asyncio
+import replicate
+
+
+async def main():
+    # Create an async model function
+    flux_dev = replicate.use("black-forest-labs/flux-dev", use_async=True)
+
+    # Await the result
+    outputs = await flux_dev(prompt="futuristic city at sunset")
+
+    for output in outputs:
+        print(output)
+
+
+asyncio.run(main())
+```
+
+### Accessing URLs without downloading
+
+If you need the URL without downloading the file, use the `get_path_url()` helper:
+
+```python
+import replicate
+from replicate.lib._predictions_use import get_path_url
+
+flux_dev = replicate.use("black-forest-labs/flux-dev")
+outputs = flux_dev(prompt="a serene landscape")
+
+for output in outputs:
+    url = get_path_url(output)
+    print(f"URL: {url}")  # https://replicate.delivery/...
+```
+
+### Creating predictions without waiting
+
+To create a prediction without waiting for it to complete, use the `create()` method:
+
+```python
+import replicate
+
+claude = replicate.use("anthropic/claude-4.5-sonnet")
+
+# Start the prediction
+run = claude.create(prompt="Explain quantum computing")
+
+# Check logs while it's running
+print(run.logs())
+
+# Get the output when ready
+result = run.output()
+print(result)
+```
+
+### Current limitations
+
+- The `use()` method must be called at the module level (not inside functions or classes)
+- Type hints are limited compared to the standard client interface
 
 ## Run a model
 
@@ -515,137 +661,6 @@ with Replicate() as replicate:
 
 # HTTP client is now closed
 ```
-
-## Experimental: Using `replicate.use()`
-
-> [!WARNING]
-> The `replicate.use()` interface is experimental and subject to change. We welcome your feedback on this new API design.
-
-The `use()` method provides a more concise way to call Replicate models as functions. This experimental interface offers a more pythonic approach to running models:
-
-```python
-import replicate
-
-# Create a model function
-flux_dev = replicate.use("black-forest-labs/flux-dev")
-
-# Call it like a regular Python function
-outputs = flux_dev(
-    prompt="a cat wearing a wizard hat, digital art",
-    num_outputs=1,
-    aspect_ratio="1:1",
-    output_format="webp",
-)
-
-# outputs is a list of URLPath objects that auto-download when accessed
-for output in outputs:
-    print(output)  # e.g., Path(/tmp/a1b2c3/output.webp)
-```
-
-### Language models with streaming
-
-Many models, particularly language models, support streaming output. Use the `streaming=True` parameter to get results as they're generated:
-
-```python
-import replicate
-
-# Create a streaming language model function
-llama = replicate.use("meta/meta-llama-3-8b-instruct", streaming=True)
-
-# Stream the output
-output = llama(prompt="Write a haiku about Python programming", max_tokens=50)
-
-for chunk in output:
-    print(chunk, end="", flush=True)
-```
-
-### Chaining models
-
-You can easily chain models together by passing the output of one model as input to another:
-
-```python
-import replicate
-
-# Create two model functions
-flux_dev = replicate.use("black-forest-labs/flux-dev")
-llama = replicate.use("meta/meta-llama-3-8b-instruct")
-
-# Generate an image
-images = flux_dev(prompt="a mysterious ancient artifact")
-
-# Describe the image
-description = llama(
-    prompt="Describe this image in detail",
-    image=images[0],  # Pass the first image directly
-)
-
-print(description)
-```
-
-### Async support
-
-For async/await patterns, use the `use_async=True` parameter:
-
-```python
-import asyncio
-import replicate
-
-
-async def main():
-    # Create an async model function
-    flux_dev = replicate.use("black-forest-labs/flux-dev", use_async=True)
-
-    # Await the result
-    outputs = await flux_dev(prompt="futuristic city at sunset")
-
-    for output in outputs:
-        print(output)
-
-
-asyncio.run(main())
-```
-
-### Accessing URLs without downloading
-
-If you need the URL without downloading the file, use the `get_path_url()` helper:
-
-```python
-import replicate
-from replicate.lib._predictions_use import get_path_url
-
-flux_dev = replicate.use("black-forest-labs/flux-dev")
-outputs = flux_dev(prompt="a serene landscape")
-
-for output in outputs:
-    url = get_path_url(output)
-    print(f"URL: {url}")  # https://replicate.delivery/...
-```
-
-### Creating predictions without waiting
-
-To create a prediction without waiting for it to complete, use the `create()` method:
-
-```python
-import replicate
-
-llama = replicate.use("meta/meta-llama-3-8b-instruct")
-
-# Start the prediction
-run = llama.create(prompt="Explain quantum computing")
-
-# Check logs while it's running
-print(run.logs())
-
-# Get the output when ready
-result = run.output()
-print(result)
-```
-
-### Current limitations
-
-- The `use()` method must be called at the module level (not inside functions or classes)
-- Type hints are limited compared to the standard client interface
-- This is an experimental API and may change in future releases
 
 ## Versioning
 
