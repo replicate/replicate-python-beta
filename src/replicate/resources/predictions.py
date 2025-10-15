@@ -37,7 +37,7 @@ class PredictionsResource(SyncAPIResource):
         This property can be used as a prefix for any HTTP method call to return
         the raw response object instead of the parsed content.
 
-        For more information, see https://www.github.com/replicate/replicate-python-stainless#accessing-raw-response-data-eg-headers
+        For more information, see https://www.github.com/replicate/replicate-python-beta#accessing-raw-response-data-eg-headers
         """
         return PredictionsResourceWithRawResponse(self)
 
@@ -46,7 +46,7 @@ class PredictionsResource(SyncAPIResource):
         """
         An alternative to `.with_raw_response` that doesn't eagerly read the response body.
 
-        For more information, see https://www.github.com/replicate/replicate-python-stainless#with_streaming_response
+        For more information, see https://www.github.com/replicate/replicate-python-beta#with_streaming_response
         """
         return PredictionsResourceWithStreamingResponse(self)
 
@@ -66,8 +66,8 @@ class PredictionsResource(SyncAPIResource):
         stream: bool | Omit = omit,
         webhook: str | Omit = omit,
         webhook_events_filter: List[Literal["start", "output", "logs", "completed"]] | Omit = omit,
+        cancel_after: str | Omit = omit,
         prefer: str | Omit = omit,
-        replicate_max_lifetime: str | Omit = omit,
         file_encoding_strategy: Optional["FileEncodingStrategy"] = None,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -190,8 +190,8 @@ class PredictionsResource(SyncAPIResource):
         extra_headers = {
             **strip_not_given(
                 {
+                    "Cancel-After": cancel_after,
                     "Prefer": prefer,
-                    "Replicate-Max-Lifetime": replicate_max_lifetime,
                 }
             ),
             **(extra_headers or {}),
@@ -499,7 +499,7 @@ class AsyncPredictionsResource(AsyncAPIResource):
         This property can be used as a prefix for any HTTP method call to return
         the raw response object instead of the parsed content.
 
-        For more information, see https://www.github.com/replicate/replicate-python-stainless#accessing-raw-response-data-eg-headers
+        For more information, see https://www.github.com/replicate/replicate-python-beta#accessing-raw-response-data-eg-headers
         """
         return AsyncPredictionsResourceWithRawResponse(self)
 
@@ -508,7 +508,7 @@ class AsyncPredictionsResource(AsyncAPIResource):
         """
         An alternative to `.with_raw_response` that doesn't eagerly read the response body.
 
-        For more information, see https://www.github.com/replicate/replicate-python-stainless#with_streaming_response
+        For more information, see https://www.github.com/replicate/replicate-python-beta#with_streaming_response
         """
         return AsyncPredictionsResourceWithStreamingResponse(self)
 
@@ -528,8 +528,8 @@ class AsyncPredictionsResource(AsyncAPIResource):
         stream: bool | Omit = omit,
         webhook: str | Omit = omit,
         webhook_events_filter: List[Literal["start", "output", "logs", "completed"]] | Omit = omit,
+        cancel_after: str | Omit = omit,
         prefer: str | Omit = omit,
-        replicate_max_lifetime: str | Omit = omit,
         file_encoding_strategy: Optional["FileEncodingStrategy"] = None,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -652,8 +652,8 @@ class AsyncPredictionsResource(AsyncAPIResource):
         extra_headers = {
             **strip_not_given(
                 {
+                    "Cancel-After": cancel_after,
                     "Prefer": prefer,
-                    "Replicate-Max-Lifetime": replicate_max_lifetime,
                 }
             ),
             **(extra_headers or {}),
