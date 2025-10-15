@@ -96,7 +96,7 @@ import replicate
 claude = replicate.use("anthropic/claude-4.5-sonnet", streaming=True)
 
 # Stream the output
-output = claude(prompt="Write a haiku about Python programming", max_tokens=50)
+output = claude(prompt="Write a haiku about Python programming")
 
 for chunk in output:
     print(chunk, end="", flush=True)
