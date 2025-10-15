@@ -1,5 +1,14 @@
 # Changelog
 
+## 2.0.0-alpha.30 (2025-10-15)
+
+Full Changelog: [v2.0.0-alpha.29...v2.0.0-alpha.30](https://github.com/replicate/replicate-python-beta/compare/v2.0.0-alpha.29...v2.0.0-alpha.30)
+
+### Documentation
+
+* quick fix to claude 4.5 sonnet example ([99b3616](https://github.com/replicate/replicate-python-beta/commit/99b36169d442043905aa8d0bbb8603403e7302e1))
+* Spruce up README ([#85](https://github.com/replicate/replicate-python-beta/issues/85)) ([51d6fad](https://github.com/replicate/replicate-python-beta/commit/51d6fad2d2271cdf45eb8b43d6a981d25eb43ba5))
+
 ## 2.0.0-alpha.29 (2025-10-15)
 
 Full Changelog: [v2.0.0-alpha.28...v2.0.0-alpha.29](https://github.com/replicate/replicate-python-beta/compare/v2.0.0-alpha.28...v2.0.0-alpha.29)
