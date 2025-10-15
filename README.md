@@ -1,47 +1,66 @@
-# Replicate Python API library
+# Replicate Python API SDK
 
 <!-- prettier-ignore -->
 [![PyPI version](https://img.shields.io/pypi/v/replicate.svg?label=pypi%20(stable))](https://pypi.org/project/replicate/)
 
-The Replicate Python library provides convenient access to the Replicate REST API from any Python 3.8+
-application. The library includes type definitions for all request params and response fields,
-and offers both synchronous and asynchronous clients powered by [httpx](https://github.com/encode/httpx).
+This is the repo for Replicate's official v2 Python SDK, which provides access to Replicate's HTTP API from any Python 3.8+
+application.
 
-It is generated with [Stainless](https://www.stainless.com/).
+## Docs
 
-## Documentation
+- https://sdks.replicate.com/python
+- https://replicate.com/docs/reference/http
 
-The REST API documentation can be found on [replicate.com](https://replicate.com/docs/reference/http). The full API of this library can be found in [api.md](api.md).
 
 ## Installation
 
+The [`replicate`](https://pypi.org/project/replicate/) package is available on PyPI. Install it with [pip](https://pip.pypa.io/en/stable/):
+
 ```sh
-# install from PyPI
 pip install --pre replicate
 ```
 
 ## Usage
 
-The full API of this library can be found in [api.md](api.md).
+Start by getting a [Replicate API token](https://replicate.com/account/api-tokens), then set it as `REPLICATE_API_TOKEN` in your environment:
+
+```sh
+export REPLICATE_API_TOKEN="r8_..."
+```
+
+Then in your Python code, import the library and use it:
+
+```python
+import replicate
+
+claude = replicate.use("anthropic/claude-4.5-sonnet")
+seedream = replicate.use("bytedance/seedream-4")
+veo = replicate.use("google/veo-3-fast")
+
+# Enhance a simple prompt
+image_prompt = claude(prompt="bananas wearing cowboy hats", system_prompt="turn prompts into image prompts")
+
+# Generate an image from the enhanced prompt
+images = seedream(prompt=image_prompt)
+
+# Generate a video from the image
+video = veo(prompt="dancing bananas", image_input=images[0])
+
+open(video)
+```
+
+### Initialization and authentication
+
+The library uses the `REPLICATE_API_TOKEN` environment variable by default to implicitly initialize a client, but you can also initialize a client explicitly and set the `bearer_token` parameter:
 
 ```python
 import os
 from replicate import Replicate
 
-replicate = Replicate(
-    bearer_token=os.environ.get("REPLICATE_API_TOKEN"),  # This is the default and can be omitted
+client = Replicate(
+    bearer_token=os.environ.get("REPLICATE_API_TOKEN")
 )
-
-prediction = replicate.predictions.get(
-    prediction_id="gm3qorzdhgbfurvjtvhg6dckhu",
-)
-print(prediction.id)
 ```
-
-While you can provide a `bearer_token` keyword argument,
-we recommend using [python-dotenv](https://pypi.org/project/python-dotenv/)
-to add `REPLICATE_API_TOKEN="My Bearer Token"` to your `.env` file
-so that your Bearer Token is not stored in source control.
 
 ## Run a model
 
