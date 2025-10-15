@@ -1,5 +1,29 @@
 # Changelog
 
+## 2.0.0-alpha.29 (2025-10-15)
+
+Full Changelog: [v2.0.0-alpha.28...v2.0.0-alpha.29](https://github.com/replicate/replicate-python-beta/compare/v2.0.0-alpha.28...v2.0.0-alpha.29)
+
+### Features
+
+* add deprecated `replicate.stream()` for v1 compatibility ([#79](https://github.com/replicate/replicate-python-beta/issues/79)) ([79b69bd](https://github.com/replicate/replicate-python-beta/commit/79b69bd84448ceb55e7f683eea54dbc98cb3d9b2))
+
+
+### Bug Fixes
+
+* **repo:** update repo naming ([#83](https://github.com/replicate/replicate-python-beta/issues/83)) ([0b61ae6](https://github.com/replicate/replicate-python-beta/commit/0b61ae6be254305bd49049083f7b11ed8de5e488))
+
+
+### Chores
+
+* change production repo to replicate/replicate-python-beta ([b59e930](https://github.com/replicate/replicate-python-beta/commit/b59e93046143ab717f3ce81ca9148fcb0880b651))
+* sync repo ([24fe88a](https://github.com/replicate/replicate-python-beta/commit/24fe88a1f1460656b5be97a09faa16b1ee076b6e))
+
+
+### Documentation
+
+* fix streaming docs in readme ([#81](https://github.com/replicate/replicate-python-beta/issues/81)) ([027744d](https://github.com/replicate/replicate-python-beta/commit/027744d7ea17a08af65d200f21064f836d08f442))
+
 ## 2.0.0-alpha.28 (2025-10-07)
 
 Full Changelog: [v2.0.0-alpha.27...v2.0.0-alpha.28](https://github.com/replicate/replicate-python-stainless/compare/v2.0.0-alpha.27...v2.0.0-alpha.28)
