@@ -1,5 +1,13 @@
 # Changelog
 
+## 2.0.0-alpha.31 (2025-10-17)
+
+Full Changelog: [v2.0.0-alpha.30...v2.0.0-alpha.31](https://github.com/replicate/replicate-python-beta/compare/v2.0.0-alpha.30...v2.0.0-alpha.31)
+
+### Chores
+
+* bump `httpx-aiohttp` version to 0.1.9 ([d187919](https://github.com/replicate/replicate-python-beta/commit/d18791936a7cc3658f34d168d070eec8945cef9d))
+
 ## 2.0.0-alpha.30 (2025-10-15)
 
 Full Changelog: [v2.0.0-alpha.29...v2.0.0-alpha.30](https://github.com/replicate/replicate-python-beta/compare/v2.0.0-alpha.29...v2.0.0-alpha.30)
