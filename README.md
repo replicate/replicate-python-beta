@@ -1,20 +1,22 @@
-# Replicate Python API SDK
+# Replicate Python API SDK (beta)
 
-<!-- prettier-ignore -->
-[![PyPI version](https://img.shields.io/pypi/v/replicate.svg?label=pypi%20(stable))](https://pypi.org/project/replicate/)
+This is the repo for Replicate's official v2 Python SDK, which provides access to Replicate's HTTP API from any Python 3.8+ application.
 
-This is the repo for Replicate's official v2 Python SDK, which provides access to Replicate's HTTP API from any Python 3.8+
-application.
+⚠️ The v2 SDK is currently in public beta. Check out the [release notes](https://github.com/replicate/replicate-python-beta/releases/tag/v2.0.0-beta.1) and leave feedback on the [GitHub discussion](https://github.com/replicate/replicate-python-beta/discussions/89).
+
+🤔 Looking for the legacy v1 Python client? Find it [here](https://github.com/replicate/replicate-python).
 
 ## Docs
 
-- https://sdks.replicate.com/python
-- https://replicate.com/docs/reference/http
-
+- v2 beta release notes: https://github.com/replicate/replicate-python-beta/releases/tag/v2.0.0-beta.1
+- v2 beta migration guide: https://github.com/replicate/replicate-python-beta/blob/main/UPGRADING.md
+- v2 beta SDK reference: https://sdks.replicate.com/python
+- v2 beta GitHub discussion: https://github.com/replicate/replicate-python-beta/discussions/89
+- HTTP API reference: https://replicate.com/docs/reference/http
 
 ## Installation
 
-The [`replicate`](https://pypi.org/project/replicate/) package is available on PyPI. Install it with [pip](https://pip.pypa.io/en/stable/):
+The [`replicate`](https://pypi.org/project/replicate/) package is available on PyPI. Install it with [pip](https://pip.pypa.io/en/stable/) (using the `--pre` flag to get the latest beta version):
 
 ```sh
 pip install --pre replicate
