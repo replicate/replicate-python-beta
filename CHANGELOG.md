@@ -1,5 +1,13 @@
 # Changelog
 
+## 2.0.0-beta.1 (2025-10-23)
+
+Full Changelog: [v2.0.0-alpha.31...v2.0.0-beta.1](https://github.com/replicate/replicate-python-beta/compare/v2.0.0-alpha.31...v2.0.0-beta.1)
+
+### Chores
+
+* **ci:** trigger ([5191bfa](https://github.com/replicate/replicate-python-beta/commit/5191bfa522f8eaba37a612b49b4ea3ffc36fdbdd))
+
 ## 2.0.0-alpha.31 (2025-10-17)
 
 Full Changelog: [v2.0.0-alpha.30...v2.0.0-alpha.31](https://github.com/replicate/replicate-python-beta/compare/v2.0.0-alpha.30...v2.0.0-alpha.31)
