@@ -13,9 +13,9 @@ If you encounter any issues, please [share feedback on the GitHub Discussions pa
 - v2 beta GitHub discussion: https://github.com/replicate/replicate-python-beta/discussions/89
 - HTTP API reference: https://replicate.com/docs/reference/http
 
-## Installing the v2 SDK    
+## Installing the v2 SDK
 
-Use pip to install the latest pre-release version of the v2 SDK from PyPI using pip:
+Install the latest pre-release version of the v2 SDK from PyPI using pip:
 
 ```sh
 pip install --pre replicate
@@ -612,7 +612,7 @@ print(response.http_response.status_code)
 prediction = response.parse()
 ```
 
-The response object is an [`APIResponse`](https://github.com/replicate/replicate-python-stainless/tree/main/src/replicate/_response.py) instance. See the [README](https://github.com/replicate/replicate-python-stainless#accessing-raw-response-data-eg-headers) for full documentation.
+The response object is an [`APIResponse`](https://github.com/replicate/replicate-python-beta/tree/main/src/replicate/_response.py) instance. See the [README](https://github.com/replicate/replicate-python-beta#accessing-raw-response-data-eg-headers) for full documentation.
 
 ### Streaming response wrapper
 
