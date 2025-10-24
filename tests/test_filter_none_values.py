@@ -99,7 +99,7 @@ def test_encode_json_nested_none_filtering(client: Replicate):
 async def test_async_encode_json_filters_none(async_client):  # type: ignore[no-untyped-def]
     """Test that async_encode_json filters None values from dicts."""
     input_dict = {"prompt": "banana", "seed": None, "width": 512}
-    result = await async_encode_json(input_dict, async_client)
+    result = await async_encode_json(input_dict, async_client)  # type: ignore[arg-type]
     assert result == {"prompt": "banana", "width": 512}
     assert "seed" not in result
 
@@ -111,7 +111,7 @@ async def test_async_encode_json_nested_none_filtering(async_client):  # type: i
         "config": {"seed": None, "temperature": 0.8},
         "metadata": {"user": "test", "session": None},
     }
-    result = await async_encode_json(input_dict, async_client)
+    result = await async_encode_json(input_dict, async_client)  # type: ignore[arg-type]
     assert result == {
         "prompt": "banana",
         "config": {"temperature": 0.8},
