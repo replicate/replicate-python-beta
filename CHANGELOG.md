@@ -1,5 +1,13 @@
 # Changelog
 
+## 2.0.0-beta.2 (2025-10-23)
+
+Full Changelog: [v2.0.0-beta.1...v2.0.0-beta.2](https://github.com/replicate/replicate-python-beta/compare/v2.0.0-beta.1...v2.0.0-beta.2)
+
+### Documentation
+
+* update readme and upgrading guide for v2 beta ([#90](https://github.com/replicate/replicate-python-beta/issues/90)) ([8ca8600](https://github.com/replicate/replicate-python-beta/commit/8ca86000735069f7a1bdc5b96c85097b5bfa0cd0))
+
 ## 2.0.0-beta.1 (2025-10-23)
 
 Full Changelog: [v2.0.0-alpha.31...v2.0.0-beta.1](https://github.com/replicate/replicate-python-beta/compare/v2.0.0-alpha.31...v2.0.0-beta.1)
