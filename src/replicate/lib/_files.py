@@ -19,6 +19,30 @@ if TYPE_CHECKING:
 FileEncodingStrategy = Literal["base64", "url"]
 
 
+def filter_none_values(obj: Any) -> Any:  # noqa: ANN401
+    """
+    Recursively filter out None values from dictionaries.
+
+    This preserves the legacy behavior where None-valued inputs are removed
+    before making API requests.
+
+    Args:
+        obj: The object to filter.
+
+    Returns:
+        The object with None values removed from all nested dictionaries.
+    """
+    if isinstance(obj, dict):
+        return {
+            key: filter_none_values(value)
+            for key, value in obj.items()  # type: ignore[misc]
+            if value is not None
+        }
+    if isinstance(obj, (list, tuple)):
+        return type(obj)(filter_none_values(item) for item in obj)  # type: ignore[arg-type, misc]
+    return obj
+
+
 try:
     import numpy as np  # type: ignore
 
@@ -35,12 +59,15 @@ def encode_json(
 ) -> Any:  # noqa: ANN401
     """
     Return a JSON-compatible version of the object.
+
+    None values are filtered out from dictionaries to prevent API errors.
     """
 
     if isinstance(obj, dict):
         return {
             key: encode_json(value, client, file_encoding_strategy)
             for key, value in obj.items()  # type: ignore
+            if value is not None
         }  # type: ignore
     if isinstance(obj, (list, set, frozenset, GeneratorType, tuple)):
         return [encode_json(value, client, file_encoding_strategy) for value in obj]  # type: ignore
@@ -70,12 +97,15 @@ async def async_encode_json(
 ) -> Any:  # noqa: ANN401
     """
     Asynchronously return a JSON-compatible version of the object.
+
+    None values are filtered out from dictionaries to prevent API errors.
     """
 
     if isinstance(obj, dict):
         return {
             key: (await async_encode_json(value, client, file_encoding_strategy))
             for key, value in obj.items()  # type: ignore
+            if value is not None
         }  # type: ignore
     if isinstance(obj, (list, set, frozenset, GeneratorType, tuple)):
         return [

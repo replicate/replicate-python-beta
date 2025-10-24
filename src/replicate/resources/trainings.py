@@ -18,6 +18,7 @@ from .._response import (
     async_to_raw_response_wrapper,
     async_to_streamed_response_wrapper,
 )
+from ..lib._files import filter_none_values
 from ..pagination import SyncCursorURLPage, AsyncCursorURLPage
 from .._base_client import AsyncPaginator, make_request_options
 from ..types.training_get_response import TrainingGetResponse
@@ -187,7 +188,7 @@ class TrainingsResource(SyncAPIResource):
             body=maybe_transform(
                 {
                     "destination": destination,
-                    "input": input,
+                    "input": filter_none_values(input),
                     "webhook": webhook,
                     "webhook_events_filter": webhook_events_filter,
                 },
@@ -573,7 +574,7 @@ class AsyncTrainingsResource(AsyncAPIResource):
             body=await async_maybe_transform(
                 {
                     "destination": destination,
-                    "input": input,
+                    "input": filter_none_values(input),
                     "webhook": webhook,
                     "webhook_events_filter": webhook_events_filter,
                 },
