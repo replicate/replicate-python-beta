@@ -17,6 +17,7 @@ from ..._response import (
     async_to_raw_response_wrapper,
     async_to_streamed_response_wrapper,
 )
+from ...lib._files import filter_none_values
 from ..._base_client import make_request_options
 from ...types.prediction import Prediction
 from ...types.deployments import prediction_create_params
@@ -176,7 +177,7 @@ class PredictionsResource(SyncAPIResource):
             f"/deployments/{deployment_owner}/{deployment_name}/predictions",
             body=maybe_transform(
                 {
-                    "input": input,
+                    "input": filter_none_values(input),
                     "stream": stream,
                     "webhook": webhook,
                     "webhook_events_filter": webhook_events_filter,
@@ -342,7 +343,7 @@ class AsyncPredictionsResource(AsyncAPIResource):
             f"/deployments/{deployment_owner}/{deployment_name}/predictions",
             body=await async_maybe_transform(
                 {
-                    "input": input,
+                    "input": filter_none_values(input),
                     "stream": stream,
                     "webhook": webhook,
                     "webhook_events_filter": webhook_events_filter,
