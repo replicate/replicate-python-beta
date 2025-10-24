@@ -33,9 +33,13 @@ def filter_none_values(obj: Any) -> Any:  # noqa: ANN401
         The object with None values removed from all nested dictionaries.
     """
     if isinstance(obj, dict):
-        return {key: filter_none_values(value) for key, value in obj.items() if value is not None}
+        return {
+            key: filter_none_values(value)
+            for key, value in obj.items()  # type: ignore[misc]
+            if value is not None
+        }
     if isinstance(obj, (list, tuple)):
-        return type(obj)(filter_none_values(item) for item in obj)
+        return type(obj)(filter_none_values(item) for item in obj)  # type: ignore[arg-type, misc]
     return obj
 
 
