@@ -1,5 +1,18 @@
 # Changelog
 
+## 2.0.0-beta.3 (2025-10-30)
+
+Full Changelog: [v2.0.0-beta.2...v2.0.0-beta.3](https://github.com/replicate/replicate-python-beta/compare/v2.0.0-beta.2...v2.0.0-beta.3)
+
+### Bug Fixes
+
+* **client:** close streams without requiring full consumption ([73bd0ab](https://github.com/replicate/replicate-python-beta/commit/73bd0ab734be57dab38fe3c59d43e016429f16ed))
+
+
+### Chores
+
+* **internal/tests:** avoid race condition with implicit client cleanup ([2e35773](https://github.com/replicate/replicate-python-beta/commit/2e3577300dcb0222c1d1d9e830e63d34b3c13296))
+
 ## 2.0.0-beta.2 (2025-10-23)
 
 Full Changelog: [v2.0.0-beta.1...v2.0.0-beta.2](https://github.com/replicate/replicate-python-beta/compare/v2.0.0-beta.1...v2.0.0-beta.2)
