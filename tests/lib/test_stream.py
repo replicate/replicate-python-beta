@@ -101,8 +101,9 @@ def test_stream_returns_iterator():
 
 def test_stream_works_same_as_use_with_streaming():
     """Test that stream() produces the same output as use() with streaming=True."""
-    with patch("replicate.lib._stream.use") as mock_stream_use, \
-         patch("replicate.lib._predictions_use.use") as mock_predictions_use:
+    with patch("replicate.lib._stream.use") as mock_stream_use, patch(
+        "replicate.lib._predictions_use.use"
+    ) as mock_predictions_use:
         # Create a mock function that returns an iterator
         mock_function = Mock()
         expected_output = ["Test", " ", "output"]
