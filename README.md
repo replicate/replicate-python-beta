@@ -83,6 +83,7 @@ pip install --pre replicate[aiohttp]
 Then you can enable it by instantiating the client with `http_client=DefaultAioHttpClient()`:
 
 ```python
+import os
 import asyncio
 from replicate import DefaultAioHttpClient
 from replicate import AsyncReplicate
@@ -90,7 +91,9 @@ from replicate import AsyncReplicate
 
 async def main() -> None:
     async with AsyncReplicate(
-        bearer_token="My Bearer Token",
+        bearer_token=os.environ.get(
+            "REPLICATE_API_TOKEN"
+        ),  # This is the default and can be omitted
         http_client=DefaultAioHttpClient(),
     ) as replicate:
         prediction = await replicate.predictions.get(
