@@ -10,6 +10,8 @@ __all__ = ["TrainingCancelResponse", "Metrics", "Output", "URLs"]
 
 
 class Metrics(BaseModel):
+    """Metrics about the training process"""
+
     predict_time: Optional[float] = None
     """The amount of CPU or GPU time, in seconds, that the training used while running"""
 
@@ -18,6 +20,8 @@ class Metrics(BaseModel):
 
 
 class Output(BaseModel):
+    """The output of the training process"""
+
     version: Optional[str] = None
     """The version of the model created by the training"""
 
@@ -26,6 +30,8 @@ class Output(BaseModel):
 
 
 class URLs(BaseModel):
+    """URLs for interacting with the training"""
+
     cancel: Optional[str] = None
     """URL to cancel the training"""
 

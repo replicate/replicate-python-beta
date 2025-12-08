@@ -12,6 +12,8 @@ __all__ = ["Prediction", "URLs", "Metrics"]
 
 
 class URLs(BaseModel):
+    """URLs for working with the prediction"""
+
     cancel: str
     """Cancel the prediction via API"""
 
@@ -26,6 +28,8 @@ class URLs(BaseModel):
 
 
 class Metrics(BaseModel):
+    """Additional metrics associated with the prediction"""
+
     total_time: Optional[float] = None
     """The total time, in seconds, that the prediction took to complete"""
 

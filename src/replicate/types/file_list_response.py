@@ -9,16 +9,22 @@ __all__ = ["FileListResponse", "Checksums", "URLs"]
 
 
 class Checksums(BaseModel):
+    """A dictionary of checksums for the file keyed by the algorithm name"""
+
     sha256: Optional[str] = None
     """SHA256 checksum of the file"""
 
 
 class URLs(BaseModel):
+    """A dictionary of URLs associated with the file resource"""
+
     get: Optional[str] = None
     """A URL to the file resource"""
 
 
 class FileListResponse(BaseModel):
+    """A file resource"""
+
     id: str
     """A unique, randomly-generated identifier for the file resource"""
 
