@@ -1,5 +1,26 @@
 # Changelog
 
+## 2.0.0-beta.4 (2025-11-27)
+
+Full Changelog: [v2.0.0-beta.3...v2.0.0-beta.4](https://github.com/replicate/replicate-python-beta/compare/v2.0.0-beta.3...v2.0.0-beta.4)
+
+### Features
+
+* **api:** manual updates ([1a88ecc](https://github.com/replicate/replicate-python-beta/commit/1a88ecc6bb12b509f78662bcd23e46952ef745a0))
+
+
+### Bug Fixes
+
+* ensure streams are always closed ([88c596d](https://github.com/replicate/replicate-python-beta/commit/88c596dd9b09101b63f6c90862b6f7f144e0c54d))
+* uv v0.8.11 only has python 3.14rc, which causes issues with pydantic 2 ([e7267be](https://github.com/replicate/replicate-python-beta/commit/e7267be73de9ccc5cc0a644a07a333538a6df8a3))
+
+
+### Chores
+
+* formatting ([6d6a349](https://github.com/replicate/replicate-python-beta/commit/6d6a349435fc178d8b4b788a25c96a0593c79288))
+* **internal:** codegen related update ([ab0983f](https://github.com/replicate/replicate-python-beta/commit/ab0983f58f734a55f2c3cd55adfd4af564aec660))
+* pin mypy to 1.17 due to regression ([19ac33c](https://github.com/replicate/replicate-python-beta/commit/19ac33cf0005ac99cd719e44cae6b5b27833fbbf))
+
 ## 2.0.0-beta.3 (2025-11-11)
 
 Full Changelog: [v2.0.0-beta.2...v2.0.0-beta.3](https://github.com/replicate/replicate-python-beta/compare/v2.0.0-beta.2...v2.0.0-beta.3)

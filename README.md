@@ -40,7 +40,9 @@ seedream = replicate.use("bytedance/seedream-4")
 veo = replicate.use("google/veo-3-fast")
 
 # Enhance a simple prompt
-image_prompt = claude(prompt="bananas wearing cowboy hats", system_prompt="turn prompts into image prompts")
+image_prompt = claude(
+    prompt="bananas wearing cowboy hats", system_prompt="turn prompts into image prompts"
+)
 
 # Generate an image from the enhanced prompt
 images = seedream(prompt=image_prompt)
@@ -59,9 +61,7 @@ The library uses the `REPLICATE_API_TOKEN` environment variable by default to im
 import os
 from replicate import Replicate
 
-client = Replicate(
-    bearer_token=os.environ.get("REPLICATE_API_TOKEN")
-)
+client = Replicate(bearer_token=os.environ.get("REPLICATE_API_TOKEN"))
 ```
 
 ## Using `replicate.use()`
