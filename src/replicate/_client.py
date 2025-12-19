@@ -319,7 +319,7 @@ class Replicate(SyncAPIClient):
         from .lib._predictions_use import use as _use
 
         # TODO: Fix mypy overload matching for streaming parameter
-        return _use(self, ref, hint=hint, streaming=streaming)  # type: ignore[call-overload, no-any-return]
+        return _use(self.__class__, ref, hint=hint, streaming=streaming)  # type: ignore[call-overload, no-any-return]
 
     @deprecated("replicate.stream() is deprecated. Use replicate.use() with streaming=True instead")
     def stream(
@@ -726,7 +726,7 @@ class AsyncReplicate(AsyncAPIClient):
         from .lib._predictions_use import use as _use
 
         # TODO: Fix mypy overload matching for streaming parameter
-        return _use(self, ref, hint=hint, streaming=streaming)  # type: ignore[call-overload, no-any-return]
+        return _use(self.__class__, ref, hint=hint, streaming=streaming)  # type: ignore[call-overload, no-any-return]
 
     @deprecated("replicate.stream() is deprecated. Use replicate.use() with streaming=True instead")
     async def stream(

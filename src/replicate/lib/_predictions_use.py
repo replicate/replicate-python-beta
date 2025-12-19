@@ -14,6 +14,7 @@ from typing import (
     Union,
     Generic,
     Literal,
+    Mapping,
     TypeVar,
     Callable,
     Iterator,
@@ -26,6 +27,7 @@ from typing import (
 )
 from pathlib import Path
 from functools import cached_property
+from collections.abc import Iterable, AsyncIterable
 from typing_extensions import ParamSpec, override
 
 import httpx
@@ -456,21 +458,34 @@ class Function(Generic[Input, Output]):
         """
         Start a prediction with the specified inputs.
         """
+
         # Process inputs to convert concatenate SyncOutputIterators to strings and URLPath to URLs
-        processed_inputs = {}
-        for key, value in inputs.items():
+        def _process_input(value: Any) -> Any:
+            if isinstance(value, bytes) or isinstance(value, str):
+                return value
+
             if isinstance(value, SyncOutputIterator):
                 if value.is_concatenate:
                     # TODO: Fix type inference for str() conversion of generic iterator
-                    processed_inputs[key] = str(value)  # type: ignore[arg-type]
-                else:
-                    # TODO: Fix type inference for SyncOutputIterator iteration
-                    processed_inputs[key] = list(value)  # type: ignore[arg-type, misc, assignment]
-            elif url := get_path_url(value):
-                processed_inputs[key] = url
-            else:
-                # TODO: Fix type inference for generic value assignment
-                processed_inputs[key] = value  # type: ignore[assignment]
+                    return str(value)  # type: ignore[arg-type]
+
+                # TODO: Fix type inference for SyncOutputIterator iteration
+                return [_process_input(v) for v in value]
+
+            if isinstance(value, Mapping):
+                return {k: _process_input(v) for k, v in value.items()}
+
+            if isinstance(value, Iterable):
+                return [_process_input(v) for v in value]
+
+            if url := get_path_url(value):
+                return url
+
+            return value
+
+        processed_inputs = {}
+        for key, value in inputs.items():
+            processed_inputs[key] = _process_input(value)
 
         version = self._version
 
@@ -731,15 +746,31 @@ class AsyncFunction(Generic[Input, Output]):
         """
         # Process inputs to convert concatenate AsyncOutputIterators to strings and URLPath to URLs
         processed_inputs = {}
-        for key, value in inputs.items():
+
+        async def _process_input(value: Any) -> Any:
+            if isinstance(value, bytes) or isinstance(value, str):
+                return value
+
             if isinstance(value, AsyncOutputIterator):
                 # TODO: Fix type inference for AsyncOutputIterator await
-                processed_inputs[key] = await value  # type: ignore[misc]
-            elif url := get_path_url(value):
-                processed_inputs[key] = url
-            else:
-                # TODO: Fix type inference for generic value assignment
-                processed_inputs[key] = value  # type: ignore[assignment]
+                return await _process_input(await value)
+
+            if isinstance(value, Mapping):
+                return {k: await _process_input(v) for k, v in value.items()}
+
+            if isinstance(value, Iterable):
+                return [await _process_input(v) for v in value]
+
+            if isinstance(value, AsyncIterable):
+                return [await _process_input(v) async for v in value]
+
+            if url := get_path_url(value):
+                return url
+
+            return value
+
+        for key, value in inputs.items():
+            processed_inputs[key] = await _process_input(value)
 
         version = await self._version()
 
