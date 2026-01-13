@@ -26,7 +26,7 @@ The REST API documentation can be found on [replicate.com](https://replicate.com
 
 ```sh
 # install from PyPI
-pip install --pre replicate
+pip install '--pre replicate'
 ```
 
 ## Usage
@@ -86,7 +86,7 @@ You can enable this by installing `aiohttp`:
 
 ```sh
 # install from PyPI
-pip install --pre replicate[aiohttp]
+pip install '--pre replicate[aiohttp]'
 ```
 
 Then you can enable it by instantiating the client with `http_client=DefaultAioHttpClient()`:
