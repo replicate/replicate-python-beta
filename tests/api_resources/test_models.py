@@ -291,7 +291,7 @@ class TestModels:
                 model_name="",
             )
 
-    @pytest.mark.skip(reason="Mock server doesn't support query methods yet")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_method_search(self, client: Replicate) -> None:
         model = client.models.search(
@@ -299,7 +299,7 @@ class TestModels:
         )
         assert_matches_type(SyncCursorURLPage[ModelSearchResponse], model, path=["response"])
 
-    @pytest.mark.skip(reason="Mock server doesn't support query methods yet")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_raw_response_search(self, client: Replicate) -> None:
         response = client.models.with_raw_response.search(
@@ -311,7 +311,7 @@ class TestModels:
         model = response.parse()
         assert_matches_type(SyncCursorURLPage[ModelSearchResponse], model, path=["response"])
 
-    @pytest.mark.skip(reason="Mock server doesn't support query methods yet")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_streaming_response_search(self, client: Replicate) -> None:
         with client.models.with_streaming_response.search(
@@ -598,7 +598,7 @@ class TestAsyncModels:
                 model_name="",
             )
 
-    @pytest.mark.skip(reason="Mock server doesn't support query methods yet")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_method_search(self, async_client: AsyncReplicate) -> None:
         model = await async_client.models.search(
@@ -606,7 +606,7 @@ class TestAsyncModels:
         )
         assert_matches_type(AsyncCursorURLPage[ModelSearchResponse], model, path=["response"])
 
-    @pytest.mark.skip(reason="Mock server doesn't support query methods yet")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_raw_response_search(self, async_client: AsyncReplicate) -> None:
         response = await async_client.models.with_raw_response.search(
@@ -618,7 +618,7 @@ class TestAsyncModels:
         model = await response.parse()
         assert_matches_type(AsyncCursorURLPage[ModelSearchResponse], model, path=["response"])
 
-    @pytest.mark.skip(reason="Mock server doesn't support query methods yet")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_streaming_response_search(self, async_client: AsyncReplicate) -> None:
         async with async_client.models.with_streaming_response.search(
