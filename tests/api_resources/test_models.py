@@ -24,7 +24,7 @@ base_url = os.environ.get("TEST_API_BASE_URL", "http://127.0.0.1:4010")
 class TestModels:
     parametrize = pytest.mark.parametrize("client", [False, True], indirect=True, ids=["loose", "strict"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_method_create(self, client: Replicate) -> None:
         model = client.models.create(
@@ -35,7 +35,7 @@ class TestModels:
         )
         assert_matches_type(ModelCreateResponse, model, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_method_create_with_all_params(self, client: Replicate) -> None:
         model = client.models.create(
@@ -51,7 +51,7 @@ class TestModels:
         )
         assert_matches_type(ModelCreateResponse, model, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_raw_response_create(self, client: Replicate) -> None:
         response = client.models.with_raw_response.create(
@@ -66,7 +66,7 @@ class TestModels:
         model = response.parse()
         assert_matches_type(ModelCreateResponse, model, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_streaming_response_create(self, client: Replicate) -> None:
         with client.models.with_streaming_response.create(
@@ -83,7 +83,7 @@ class TestModels:
 
         assert cast(Any, response.is_closed) is True
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_method_update(self, client: Replicate) -> None:
         model = client.models.update(
@@ -92,7 +92,7 @@ class TestModels:
         )
         assert_matches_type(ModelUpdateResponse, model, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_method_update_with_all_params(self, client: Replicate) -> None:
         model = client.models.update(
@@ -107,7 +107,7 @@ class TestModels:
         )
         assert_matches_type(ModelUpdateResponse, model, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_raw_response_update(self, client: Replicate) -> None:
         response = client.models.with_raw_response.update(
@@ -120,7 +120,7 @@ class TestModels:
         model = response.parse()
         assert_matches_type(ModelUpdateResponse, model, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_streaming_response_update(self, client: Replicate) -> None:
         with client.models.with_streaming_response.update(
@@ -135,7 +135,7 @@ class TestModels:
 
         assert cast(Any, response.is_closed) is True
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_path_params_update(self, client: Replicate) -> None:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `model_owner` but received ''"):
@@ -150,13 +150,13 @@ class TestModels:
                 model_name="",
             )
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_method_list(self, client: Replicate) -> None:
         model = client.models.list()
         assert_matches_type(SyncCursorURLPage[ModelListResponse], model, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_method_list_with_all_params(self, client: Replicate) -> None:
         model = client.models.list(
@@ -165,7 +165,7 @@ class TestModels:
         )
         assert_matches_type(SyncCursorURLPage[ModelListResponse], model, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_raw_response_list(self, client: Replicate) -> None:
         response = client.models.with_raw_response.list()
@@ -175,7 +175,7 @@ class TestModels:
         model = response.parse()
         assert_matches_type(SyncCursorURLPage[ModelListResponse], model, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_streaming_response_list(self, client: Replicate) -> None:
         with client.models.with_streaming_response.list() as response:
@@ -187,7 +187,7 @@ class TestModels:
 
         assert cast(Any, response.is_closed) is True
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_method_delete(self, client: Replicate) -> None:
         model = client.models.delete(
@@ -196,7 +196,7 @@ class TestModels:
         )
         assert model is None
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_raw_response_delete(self, client: Replicate) -> None:
         response = client.models.with_raw_response.delete(
@@ -209,7 +209,7 @@ class TestModels:
         model = response.parse()
         assert model is None
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_streaming_response_delete(self, client: Replicate) -> None:
         with client.models.with_streaming_response.delete(
@@ -224,7 +224,7 @@ class TestModels:
 
         assert cast(Any, response.is_closed) is True
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_path_params_delete(self, client: Replicate) -> None:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `model_owner` but received ''"):
@@ -239,7 +239,7 @@ class TestModels:
                 model_name="",
             )
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_method_get(self, client: Replicate) -> None:
         model = client.models.get(
@@ -248,7 +248,7 @@ class TestModels:
         )
         assert_matches_type(ModelGetResponse, model, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_raw_response_get(self, client: Replicate) -> None:
         response = client.models.with_raw_response.get(
@@ -261,7 +261,7 @@ class TestModels:
         model = response.parse()
         assert_matches_type(ModelGetResponse, model, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_streaming_response_get(self, client: Replicate) -> None:
         with client.models.with_streaming_response.get(
@@ -276,7 +276,7 @@ class TestModels:
 
         assert cast(Any, response.is_closed) is True
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_path_params_get(self, client: Replicate) -> None:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `model_owner` but received ''"):
@@ -291,7 +291,7 @@ class TestModels:
                 model_name="",
             )
 
-    @pytest.mark.skip(reason="Prism doesn't support query methods yet")
+    @pytest.mark.skip(reason="Mock server doesn't support query methods yet")
     @parametrize
     def test_method_search(self, client: Replicate) -> None:
         model = client.models.search(
@@ -299,7 +299,7 @@ class TestModels:
         )
         assert_matches_type(SyncCursorURLPage[ModelSearchResponse], model, path=["response"])
 
-    @pytest.mark.skip(reason="Prism doesn't support query methods yet")
+    @pytest.mark.skip(reason="Mock server doesn't support query methods yet")
     @parametrize
     def test_raw_response_search(self, client: Replicate) -> None:
         response = client.models.with_raw_response.search(
@@ -311,7 +311,7 @@ class TestModels:
         model = response.parse()
         assert_matches_type(SyncCursorURLPage[ModelSearchResponse], model, path=["response"])
 
-    @pytest.mark.skip(reason="Prism doesn't support query methods yet")
+    @pytest.mark.skip(reason="Mock server doesn't support query methods yet")
     @parametrize
     def test_streaming_response_search(self, client: Replicate) -> None:
         with client.models.with_streaming_response.search(
@@ -331,7 +331,7 @@ class TestAsyncModels:
         "async_client", [False, True, {"http_client": "aiohttp"}], indirect=True, ids=["loose", "strict", "aiohttp"]
     )
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_method_create(self, async_client: AsyncReplicate) -> None:
         model = await async_client.models.create(
@@ -342,7 +342,7 @@ class TestAsyncModels:
         )
         assert_matches_type(ModelCreateResponse, model, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_method_create_with_all_params(self, async_client: AsyncReplicate) -> None:
         model = await async_client.models.create(
@@ -358,7 +358,7 @@ class TestAsyncModels:
         )
         assert_matches_type(ModelCreateResponse, model, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_raw_response_create(self, async_client: AsyncReplicate) -> None:
         response = await async_client.models.with_raw_response.create(
@@ -373,7 +373,7 @@ class TestAsyncModels:
         model = await response.parse()
         assert_matches_type(ModelCreateResponse, model, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_streaming_response_create(self, async_client: AsyncReplicate) -> None:
         async with async_client.models.with_streaming_response.create(
@@ -390,7 +390,7 @@ class TestAsyncModels:
 
         assert cast(Any, response.is_closed) is True
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_method_update(self, async_client: AsyncReplicate) -> None:
         model = await async_client.models.update(
@@ -399,7 +399,7 @@ class TestAsyncModels:
         )
         assert_matches_type(ModelUpdateResponse, model, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_method_update_with_all_params(self, async_client: AsyncReplicate) -> None:
         model = await async_client.models.update(
@@ -414,7 +414,7 @@ class TestAsyncModels:
         )
         assert_matches_type(ModelUpdateResponse, model, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_raw_response_update(self, async_client: AsyncReplicate) -> None:
         response = await async_client.models.with_raw_response.update(
@@ -427,7 +427,7 @@ class TestAsyncModels:
         model = await response.parse()
         assert_matches_type(ModelUpdateResponse, model, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_streaming_response_update(self, async_client: AsyncReplicate) -> None:
         async with async_client.models.with_streaming_response.update(
@@ -442,7 +442,7 @@ class TestAsyncModels:
 
         assert cast(Any, response.is_closed) is True
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_path_params_update(self, async_client: AsyncReplicate) -> None:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `model_owner` but received ''"):
@@ -457,13 +457,13 @@ class TestAsyncModels:
                 model_name="",
             )
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_method_list(self, async_client: AsyncReplicate) -> None:
         model = await async_client.models.list()
         assert_matches_type(AsyncCursorURLPage[ModelListResponse], model, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_method_list_with_all_params(self, async_client: AsyncReplicate) -> None:
         model = await async_client.models.list(
@@ -472,7 +472,7 @@ class TestAsyncModels:
         )
         assert_matches_type(AsyncCursorURLPage[ModelListResponse], model, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_raw_response_list(self, async_client: AsyncReplicate) -> None:
         response = await async_client.models.with_raw_response.list()
@@ -482,7 +482,7 @@ class TestAsyncModels:
         model = await response.parse()
         assert_matches_type(AsyncCursorURLPage[ModelListResponse], model, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_streaming_response_list(self, async_client: AsyncReplicate) -> None:
         async with async_client.models.with_streaming_response.list() as response:
@@ -494,7 +494,7 @@ class TestAsyncModels:
 
         assert cast(Any, response.is_closed) is True
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_method_delete(self, async_client: AsyncReplicate) -> None:
         model = await async_client.models.delete(
@@ -503,7 +503,7 @@ class TestAsyncModels:
         )
         assert model is None
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_raw_response_delete(self, async_client: AsyncReplicate) -> None:
         response = await async_client.models.with_raw_response.delete(
@@ -516,7 +516,7 @@ class TestAsyncModels:
         model = await response.parse()
         assert model is None
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_streaming_response_delete(self, async_client: AsyncReplicate) -> None:
         async with async_client.models.with_streaming_response.delete(
@@ -531,7 +531,7 @@ class TestAsyncModels:
 
         assert cast(Any, response.is_closed) is True
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_path_params_delete(self, async_client: AsyncReplicate) -> None:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `model_owner` but received ''"):
@@ -546,7 +546,7 @@ class TestAsyncModels:
                 model_name="",
             )
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_method_get(self, async_client: AsyncReplicate) -> None:
         model = await async_client.models.get(
@@ -555,7 +555,7 @@ class TestAsyncModels:
         )
         assert_matches_type(ModelGetResponse, model, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_raw_response_get(self, async_client: AsyncReplicate) -> None:
         response = await async_client.models.with_raw_response.get(
@@ -568,7 +568,7 @@ class TestAsyncModels:
         model = await response.parse()
         assert_matches_type(ModelGetResponse, model, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_streaming_response_get(self, async_client: AsyncReplicate) -> None:
         async with async_client.models.with_streaming_response.get(
@@ -583,7 +583,7 @@ class TestAsyncModels:
 
         assert cast(Any, response.is_closed) is True
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_path_params_get(self, async_client: AsyncReplicate) -> None:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `model_owner` but received ''"):
@@ -598,7 +598,7 @@ class TestAsyncModels:
                 model_name="",
             )
 
-    @pytest.mark.skip(reason="Prism doesn't support query methods yet")
+    @pytest.mark.skip(reason="Mock server doesn't support query methods yet")
     @parametrize
     async def test_method_search(self, async_client: AsyncReplicate) -> None:
         model = await async_client.models.search(
@@ -606,7 +606,7 @@ class TestAsyncModels:
         )
         assert_matches_type(AsyncCursorURLPage[ModelSearchResponse], model, path=["response"])
 
-    @pytest.mark.skip(reason="Prism doesn't support query methods yet")
+    @pytest.mark.skip(reason="Mock server doesn't support query methods yet")
     @parametrize
     async def test_raw_response_search(self, async_client: AsyncReplicate) -> None:
         response = await async_client.models.with_raw_response.search(
@@ -618,7 +618,7 @@ class TestAsyncModels:
         model = await response.parse()
         assert_matches_type(AsyncCursorURLPage[ModelSearchResponse], model, path=["response"])
 
-    @pytest.mark.skip(reason="Prism doesn't support query methods yet")
+    @pytest.mark.skip(reason="Mock server doesn't support query methods yet")
     @parametrize
     async def test_streaming_response_search(self, async_client: AsyncReplicate) -> None:
         async with async_client.models.with_streaming_response.search(
