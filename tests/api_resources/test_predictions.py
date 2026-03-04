@@ -82,6 +82,7 @@ class TestPredictions:
         prediction = client.predictions.list(
             created_after=parse_datetime("2025-01-01T00:00:00Z"),
             created_before=parse_datetime("2025-02-01T00:00:00Z"),
+            source="web",
         )
         assert_matches_type(SyncCursorURLPageWithCreatedFilters[Prediction], prediction, path=["response"])
 
@@ -260,6 +261,7 @@ class TestAsyncPredictions:
         prediction = await async_client.predictions.list(
             created_after=parse_datetime("2025-01-01T00:00:00Z"),
             created_before=parse_datetime("2025-02-01T00:00:00Z"),
+            source="web",
         )
         assert_matches_type(AsyncCursorURLPageWithCreatedFilters[Prediction], prediction, path=["response"])
 

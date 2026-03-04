@@ -73,8 +73,14 @@ class TrainingCreateResponse(BaseModel):
     started_at: Optional[datetime] = None
     """The time when the training started"""
 
-    status: Optional[Literal["starting", "processing", "succeeded", "failed", "canceled"]] = None
-    """The current status of the training"""
+    status: Optional[Literal["starting", "processing", "succeeded", "failed", "canceled", "aborted"]] = None
+    """The current status of the training.
+
+    `canceled` means the training was canceled (either by the user or because it
+    reached its deadline while running). `aborted` means the training was terminated
+    before it started running (for example, when a deadline is reached before the
+    training starts).
+    """
 
     urls: Optional[URLs] = None
     """URLs for interacting with the training"""

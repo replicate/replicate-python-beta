@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from typing import Union
 from datetime import datetime
-from typing_extensions import Annotated, TypedDict
+from typing_extensions import Literal, Annotated, TypedDict
 
 from .._utils import PropertyInfo
 
@@ -19,3 +19,12 @@ class PredictionListParams(TypedDict, total=False):
 
     created_before: Annotated[Union[str, datetime], PropertyInfo(format="iso8601")]
     """Include only predictions created before this date-time, in ISO 8601 format."""
+
+    source: Literal["web"]
+    """Filter predictions by how they were created. Currently only `web` is supported.
+
+    If no value is set, the API returns predictions from both API and web sources.
+
+    When filtering by `source=web`, results are limited to predictions created in
+    the last 14 days.
+    """

@@ -70,7 +70,14 @@ class Prediction(BaseModel):
     the model
     """
 
-    status: Literal["starting", "processing", "succeeded", "failed", "canceled"]
+    status: Literal["starting", "processing", "succeeded", "failed", "canceled", "aborted"]
+    """The prediction status.
+
+    `canceled` means the prediction was canceled (either by the user or because it
+    reached its deadline while running). `aborted` means the prediction was
+    terminated before it started running (for example, when a deadline is reached
+    before the prediction starts).
+    """
 
     urls: URLs
     """URLs for working with the prediction"""
@@ -95,6 +102,9 @@ class Prediction(BaseModel):
 
     metrics: Optional[Metrics] = None
     """Additional metrics associated with the prediction"""
+
+    source: Optional[Literal["web", "api"]] = None
+    """Indicates how the prediction was created"""
 
     started_at: Optional[datetime] = None
     """The time that the model began the prediction"""

@@ -206,6 +206,7 @@ class PredictionsResource(SyncAPIResource):
         *,
         created_after: Union[str, datetime] | Omit = omit,
         created_before: Union[str, datetime] | Omit = omit,
+        source: Literal["web"] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -290,6 +291,13 @@ class PredictionsResource(SyncAPIResource):
 
           created_before: Include only predictions created before this date-time, in ISO 8601 format.
 
+          source: Filter predictions by how they were created. Currently only `web` is supported.
+
+              If no value is set, the API returns predictions from both API and web sources.
+
+              When filtering by `source=web`, results are limited to predictions created in
+              the last 14 days.
+
           extra_headers: Send extra headers
 
           extra_query: Add additional query parameters to the request
@@ -310,6 +318,7 @@ class PredictionsResource(SyncAPIResource):
                     {
                         "created_after": created_after,
                         "created_before": created_before,
+                        "source": source,
                     },
                     prediction_list_params.PredictionListParams,
                 ),
@@ -410,6 +419,7 @@ class PredictionsResource(SyncAPIResource):
           "error": null,
           "status": "succeeded",
           "created_at": "2023-09-08T16:19:34.765994Z",
+          "source": "api",
           "data_removed": false,
           "started_at": "2023-09-08T16:19:34.779176Z",
           "completed_at": "2023-09-08T16:19:34.791859Z",
@@ -423,6 +433,9 @@ class PredictionsResource(SyncAPIResource):
           }
         }
         ```
+
+        `source` will indicate how the prediction was created. Possible values are `web`
+        or `api`.
 
         `status` will be one of:
 
@@ -659,6 +672,7 @@ class AsyncPredictionsResource(AsyncAPIResource):
         *,
         created_after: Union[str, datetime] | Omit = omit,
         created_before: Union[str, datetime] | Omit = omit,
+        source: Literal["web"] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -743,6 +757,13 @@ class AsyncPredictionsResource(AsyncAPIResource):
 
           created_before: Include only predictions created before this date-time, in ISO 8601 format.
 
+          source: Filter predictions by how they were created. Currently only `web` is supported.
+
+              If no value is set, the API returns predictions from both API and web sources.
+
+              When filtering by `source=web`, results are limited to predictions created in
+              the last 14 days.
+
           extra_headers: Send extra headers
 
           extra_query: Add additional query parameters to the request
@@ -763,6 +784,7 @@ class AsyncPredictionsResource(AsyncAPIResource):
                     {
                         "created_after": created_after,
                         "created_before": created_before,
+                        "source": source,
                     },
                     prediction_list_params.PredictionListParams,
                 ),
@@ -863,6 +885,7 @@ class AsyncPredictionsResource(AsyncAPIResource):
           "error": null,
           "status": "succeeded",
           "created_at": "2023-09-08T16:19:34.765994Z",
+          "source": "api",
           "data_removed": false,
           "started_at": "2023-09-08T16:19:34.779176Z",
           "completed_at": "2023-09-08T16:19:34.791859Z",
@@ -876,6 +899,9 @@ class AsyncPredictionsResource(AsyncAPIResource):
           }
         }
         ```
+
+        `source` will indicate how the prediction was created. Possible values are `web`
+        or `api`.
 
         `status` will be one of:
 
