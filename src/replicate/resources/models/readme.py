@@ -5,6 +5,7 @@ from __future__ import annotations
 import httpx
 
 from ..._types import Body, Query, Headers, NotGiven, not_given
+from ..._utils import path_template
 from ..._compat import cached_property
 from ..._resource import SyncAPIResource, AsyncAPIResource
 from ..._response import (
@@ -84,7 +85,7 @@ class ReadmeResource(SyncAPIResource):
             raise ValueError(f"Expected a non-empty value for `model_name` but received {model_name!r}")
         extra_headers = {"Accept": "text/plain", **(extra_headers or {})}
         return self._get(
-            f"/models/{model_owner}/{model_name}/readme",
+            path_template("/models/{model_owner}/{model_name}/readme", model_owner=model_owner, model_name=model_name),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
@@ -158,7 +159,7 @@ class AsyncReadmeResource(AsyncAPIResource):
             raise ValueError(f"Expected a non-empty value for `model_name` but received {model_name!r}")
         extra_headers = {"Accept": "text/plain", **(extra_headers or {})}
         return await self._get(
-            f"/models/{model_owner}/{model_name}/readme",
+            path_template("/models/{model_owner}/{model_name}/readme", model_owner=model_owner, model_name=model_name),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),

@@ -16,7 +16,7 @@ from .readme import (
 )
 from ...types import model_list_params, model_create_params, model_search_params, model_update_params
 from ..._types import Body, Omit, Query, Headers, NoneType, NotGiven, omit, not_given
-from ..._utils import maybe_transform, async_maybe_transform
+from ..._utils import path_template, maybe_transform, async_maybe_transform
 from .examples import (
     ExamplesResource,
     AsyncExamplesResource,
@@ -282,7 +282,7 @@ class ModelsResource(SyncAPIResource):
         if not model_name:
             raise ValueError(f"Expected a non-empty value for `model_name` but received {model_name!r}")
         return self._patch(
-            f"/models/{model_owner}/{model_name}",
+            path_template("/models/{model_owner}/{model_name}", model_owner=model_owner, model_name=model_name),
             body=maybe_transform(
                 {
                     "description": description,
@@ -430,7 +430,7 @@ class ModelsResource(SyncAPIResource):
             raise ValueError(f"Expected a non-empty value for `model_name` but received {model_name!r}")
         extra_headers = {"Accept": "*/*", **(extra_headers or {})}
         return self._delete(
-            f"/models/{model_owner}/{model_name}",
+            path_template("/models/{model_owner}/{model_name}", model_owner=model_owner, model_name=model_name),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
@@ -538,7 +538,7 @@ class ModelsResource(SyncAPIResource):
         if not model_name:
             raise ValueError(f"Expected a non-empty value for `model_name` but received {model_name!r}")
         return self._get(
-            f"/models/{model_owner}/{model_name}",
+            path_template("/models/{model_owner}/{model_name}", model_owner=model_owner, model_name=model_name),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
@@ -820,7 +820,7 @@ class AsyncModelsResource(AsyncAPIResource):
         if not model_name:
             raise ValueError(f"Expected a non-empty value for `model_name` but received {model_name!r}")
         return await self._patch(
-            f"/models/{model_owner}/{model_name}",
+            path_template("/models/{model_owner}/{model_name}", model_owner=model_owner, model_name=model_name),
             body=await async_maybe_transform(
                 {
                     "description": description,
@@ -968,7 +968,7 @@ class AsyncModelsResource(AsyncAPIResource):
             raise ValueError(f"Expected a non-empty value for `model_name` but received {model_name!r}")
         extra_headers = {"Accept": "*/*", **(extra_headers or {})}
         return await self._delete(
-            f"/models/{model_owner}/{model_name}",
+            path_template("/models/{model_owner}/{model_name}", model_owner=model_owner, model_name=model_name),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
@@ -1076,7 +1076,7 @@ class AsyncModelsResource(AsyncAPIResource):
         if not model_name:
             raise ValueError(f"Expected a non-empty value for `model_name` but received {model_name!r}")
         return await self._get(
-            f"/models/{model_owner}/{model_name}",
+            path_template("/models/{model_owner}/{model_name}", model_owner=model_owner, model_name=model_name),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),

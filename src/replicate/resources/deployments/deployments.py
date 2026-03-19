@@ -6,7 +6,7 @@ import httpx
 
 from ...types import deployment_create_params, deployment_update_params
 from ..._types import Body, Omit, Query, Headers, NoneType, NotGiven, omit, not_given
-from ..._utils import maybe_transform, async_maybe_transform
+from ..._utils import path_template, maybe_transform, async_maybe_transform
 from ..._compat import cached_property
 from ..._resource import SyncAPIResource, AsyncAPIResource
 from ..._response import (
@@ -247,7 +247,11 @@ class DeploymentsResource(SyncAPIResource):
         if not deployment_name:
             raise ValueError(f"Expected a non-empty value for `deployment_name` but received {deployment_name!r}")
         return self._patch(
-            f"/deployments/{deployment_owner}/{deployment_name}",
+            path_template(
+                "/deployments/{deployment_owner}/{deployment_name}",
+                deployment_owner=deployment_owner,
+                deployment_name=deployment_name,
+            ),
             body=maybe_transform(
                 {
                     "hardware": hardware,
@@ -373,7 +377,11 @@ class DeploymentsResource(SyncAPIResource):
             raise ValueError(f"Expected a non-empty value for `deployment_name` but received {deployment_name!r}")
         extra_headers = {"Accept": "*/*", **(extra_headers or {})}
         return self._delete(
-            f"/deployments/{deployment_owner}/{deployment_name}",
+            path_template(
+                "/deployments/{deployment_owner}/{deployment_name}",
+                deployment_owner=deployment_owner,
+                deployment_name=deployment_name,
+            ),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
@@ -444,7 +452,11 @@ class DeploymentsResource(SyncAPIResource):
         if not deployment_name:
             raise ValueError(f"Expected a non-empty value for `deployment_name` but received {deployment_name!r}")
         return self._get(
-            f"/deployments/{deployment_owner}/{deployment_name}",
+            path_template(
+                "/deployments/{deployment_owner}/{deployment_name}",
+                deployment_owner=deployment_owner,
+                deployment_name=deployment_name,
+            ),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
@@ -666,7 +678,11 @@ class AsyncDeploymentsResource(AsyncAPIResource):
         if not deployment_name:
             raise ValueError(f"Expected a non-empty value for `deployment_name` but received {deployment_name!r}")
         return await self._patch(
-            f"/deployments/{deployment_owner}/{deployment_name}",
+            path_template(
+                "/deployments/{deployment_owner}/{deployment_name}",
+                deployment_owner=deployment_owner,
+                deployment_name=deployment_name,
+            ),
             body=await async_maybe_transform(
                 {
                     "hardware": hardware,
@@ -792,7 +808,11 @@ class AsyncDeploymentsResource(AsyncAPIResource):
             raise ValueError(f"Expected a non-empty value for `deployment_name` but received {deployment_name!r}")
         extra_headers = {"Accept": "*/*", **(extra_headers or {})}
         return await self._delete(
-            f"/deployments/{deployment_owner}/{deployment_name}",
+            path_template(
+                "/deployments/{deployment_owner}/{deployment_name}",
+                deployment_owner=deployment_owner,
+                deployment_name=deployment_name,
+            ),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
@@ -863,7 +883,11 @@ class AsyncDeploymentsResource(AsyncAPIResource):
         if not deployment_name:
             raise ValueError(f"Expected a non-empty value for `deployment_name` but received {deployment_name!r}")
         return await self._get(
-            f"/deployments/{deployment_owner}/{deployment_name}",
+            path_template(
+                "/deployments/{deployment_owner}/{deployment_name}",
+                deployment_owner=deployment_owner,
+                deployment_name=deployment_name,
+            ),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),

@@ -5,6 +5,7 @@ from __future__ import annotations
 import httpx
 
 from ..._types import Body, Query, Headers, NoneType, NotGiven, not_given
+from ..._utils import path_template
 from ..._compat import cached_property
 from ..._resource import SyncAPIResource, AsyncAPIResource
 from ..._response import (
@@ -94,7 +95,9 @@ class VersionsResource(SyncAPIResource):
         if not model_name:
             raise ValueError(f"Expected a non-empty value for `model_name` but received {model_name!r}")
         return self._get_api_list(
-            f"/models/{model_owner}/{model_name}/versions",
+            path_template(
+                "/models/{model_owner}/{model_name}/versions", model_owner=model_owner, model_name=model_name
+            ),
             page=SyncCursorURLPage[VersionListResponse],
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
@@ -158,7 +161,12 @@ class VersionsResource(SyncAPIResource):
             raise ValueError(f"Expected a non-empty value for `version_id` but received {version_id!r}")
         extra_headers = {"Accept": "*/*", **(extra_headers or {})}
         return self._delete(
-            f"/models/{model_owner}/{model_name}/versions/{version_id}",
+            path_template(
+                "/models/{model_owner}/{model_name}/versions/{version_id}",
+                model_owner=model_owner,
+                model_name=model_name,
+                version_id=version_id,
+            ),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
@@ -252,7 +260,12 @@ class VersionsResource(SyncAPIResource):
         if not version_id:
             raise ValueError(f"Expected a non-empty value for `version_id` but received {version_id!r}")
         return self._get(
-            f"/models/{model_owner}/{model_name}/versions/{version_id}",
+            path_template(
+                "/models/{model_owner}/{model_name}/versions/{version_id}",
+                model_owner=model_owner,
+                model_name=model_name,
+                version_id=version_id,
+            ),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
@@ -333,7 +346,9 @@ class AsyncVersionsResource(AsyncAPIResource):
         if not model_name:
             raise ValueError(f"Expected a non-empty value for `model_name` but received {model_name!r}")
         return self._get_api_list(
-            f"/models/{model_owner}/{model_name}/versions",
+            path_template(
+                "/models/{model_owner}/{model_name}/versions", model_owner=model_owner, model_name=model_name
+            ),
             page=AsyncCursorURLPage[VersionListResponse],
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
@@ -397,7 +412,12 @@ class AsyncVersionsResource(AsyncAPIResource):
             raise ValueError(f"Expected a non-empty value for `version_id` but received {version_id!r}")
         extra_headers = {"Accept": "*/*", **(extra_headers or {})}
         return await self._delete(
-            f"/models/{model_owner}/{model_name}/versions/{version_id}",
+            path_template(
+                "/models/{model_owner}/{model_name}/versions/{version_id}",
+                model_owner=model_owner,
+                model_name=model_name,
+                version_id=version_id,
+            ),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
@@ -491,7 +511,12 @@ class AsyncVersionsResource(AsyncAPIResource):
         if not version_id:
             raise ValueError(f"Expected a non-empty value for `version_id` but received {version_id!r}")
         return await self._get(
-            f"/models/{model_owner}/{model_name}/versions/{version_id}",
+            path_template(
+                "/models/{model_owner}/{model_name}/versions/{version_id}",
+                model_owner=model_owner,
+                model_name=model_name,
+                version_id=version_id,
+            ),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),

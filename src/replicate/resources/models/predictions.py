@@ -8,7 +8,7 @@ from typing_extensions import Literal
 import httpx
 
 from ..._types import Body, Omit, Query, Headers, NotGiven, omit, not_given
-from ..._utils import maybe_transform, strip_not_given, async_maybe_transform
+from ..._utils import path_template, maybe_transform, strip_not_given, async_maybe_transform
 from ..._compat import cached_property
 from ..._resource import SyncAPIResource, AsyncAPIResource
 from ..._response import (
@@ -177,7 +177,9 @@ class PredictionsResource(SyncAPIResource):
             **(extra_headers or {}),
         }
         return self._post(
-            f"/models/{model_owner}/{model_name}/predictions",
+            path_template(
+                "/models/{model_owner}/{model_name}/predictions", model_owner=model_owner, model_name=model_name
+            ),
             body=maybe_transform(
                 {
                     "input": input,
@@ -347,7 +349,9 @@ class AsyncPredictionsResource(AsyncAPIResource):
             **(extra_headers or {}),
         }
         return await self._post(
-            f"/models/{model_owner}/{model_name}/predictions",
+            path_template(
+                "/models/{model_owner}/{model_name}/predictions", model_owner=model_owner, model_name=model_name
+            ),
             body=await async_maybe_transform(
                 {
                     "input": input,
